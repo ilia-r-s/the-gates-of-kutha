@@ -375,8 +375,9 @@ function endSelf(r, won = true, last = null) {
 }
 // the end you chose, and which of the season's lines about you it already tells
 const LAST_CODA = { deed: 'deed', wronged: 'wronged', friends: 'grave', tablets: 'read', horrors: 'horrors' };
+// (its words drawn on a key of their own: the roll that chose it was below last.max, and would draw the first line only)
 const lastSaid = last =>
-  last ? `<p>${bi(...fateOf(FATE_YOU_LAST[last.k][last.where], 'you', 'last')(last.d))}</p>` : '';
+  last ? `<p>${bi(...fateOf(FATE_YOU_LAST[last.k][last.where], 'you', 'lastLine')(last.d))}</p>` : '';
 // ---------- the end you chose ----------
 // Rarely, what the season left in you is more than you can carry, and in the end you end it yourself (RULES.fates.last;
 // the words: data/fates.js, FATE_YOU_LAST): mostly after a mind that broke (the quiet ward), seldom after a season won,

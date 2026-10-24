@@ -74,11 +74,12 @@ listen('ask', k => {
 });
 // ---------- music ----------
 listen('newgame', () => {
-  // (what is playing, or about to: a change still under way, or asked for while the sound slept, counts as made)
-  const playing = AU.want || (AU.cur ? AU.cur.id : null);
-  dealPlaylist(playing && DAY_TRACKS.includes(playing) ? playing : null);
-  if (playing && playing !== AU.playlist[0]) musicChange(AU.playlist[0], 'daybreak');
-  else if (!playing) AU.want = AU.playlist[0]; // nothing playing: the new season's first theme, when the sound wakes
+  // A new expedition deals a new set of day themes, and whatever is playing (or about to: a change still under way, or
+  // asked for while the sound slept) gives way to the first of them at once; the new set never opens with it.
+  const playing = [AU.want, AU.cur && AU.cur.id].filter(Boolean);
+  dealPlaylist(playing);
+  if (playing.length) musicChange(AU.playlist[0], null, true);
+  else AU.want = AU.playlist[0]; // nothing playing: the new season's first theme, when the sound wakes
 });
 listen('dawn', () => musicChange(trackNow(), 'daybreak'));
 listen('descent', () => musicChange('deep', 'descent'));

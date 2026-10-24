@@ -540,16 +540,15 @@ function npUpdate() {
   const n = AU.cur && AU.on.music ? TRACK_NAMES[AU.cur.id] : '';
   el.innerHTML = n ? '\u266A ' + twin(n, R(n)) : '';
 }
-function dealPlaylist(keep) {
+// Five of the day themes in a new order, one for each day; never opening with any of avoid (what was playing).
+function dealPlaylist(avoid = []) {
   const a = DAY_TRACKS.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(rnd() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
-  if (keep && a.indexOf(keep) > 0) {
-    a.splice(a.indexOf(keep), 1);
-    a.unshift(keep);
-  }
+  const first = a.findIndex(id => !avoid.includes(id));
+  if (first > 0) [a[0], a[first]] = [a[first], a[0]];
   AU.playlist = a.slice(0, 5);
 }
 dealPlaylist();
@@ -614,8 +613,9 @@ function auTick() {
 // for the theme already playing, brings its volume back); AU.changing marks a change under way, which a click must not
 // cut short (auGesture). Asked for while the sound sleeps (a hidden page, the system's own pause, a click that is still
 // waking it), the theme that was playing is stopped then and there, so that it cannot sound again for a moment as the
-// sound wakes, and the change is made as it wakes, cue and all (musicCatchUp).
-function musicChange(id, cue) {
+// sound wakes, and the change is made as it wakes, cue and all (musicCatchUp). quick: the old theme stops at once and
+// the new one follows straight after (a new expedition).
+function musicChange(id, cue, quick = false) {
   const ep = ++AU.epoch;
   AU.want = id;
   AU.changing = null;
@@ -632,14 +632,14 @@ function musicChange(id, cue) {
     return;
   }
   AU.changing = ep;
-  if (AU.cur) AU.mbus.gain.setTargetAtTime(0.0001, c.currentTime, 0.45);
+  if (AU.cur) AU.mbus.gain.setTargetAtTime(0.0001, c.currentTime, quick ? 0.06 : 0.45);
   setTimeout(
     () => {
       if (ep !== AU.epoch) return;
       musicHalt();
       if (cue) sfx(cue);
     },
-    AU.cur ? 1500 : 50
+    AU.cur ? (quick ? 250 : 1500) : 50
   );
   setTimeout(
     () => {
@@ -647,7 +647,7 @@ function musicChange(id, cue) {
       AU.changing = null;
       if (AU.on.music) musicPlay(id);
     },
-    cue ? 4600 : 1700
+    quick ? 400 : cue ? 4600 : 1700
   );
 }
 function setMood(m) {
