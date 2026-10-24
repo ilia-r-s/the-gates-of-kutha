@@ -9,7 +9,10 @@ season has a mood of its own (still, uneasy, haunted, full of talk, or full of c
 season goes and decides how much happens of itself: some seasons are quiet and close, others crowded with horrors,
 quarrels or news.
 
-The rules of the game, in words and with every number, are in [RULES.md](RULES.md).
+The rules of the game, in words and with every number, are in [RULES.md](RULES.md), written for whoever tunes the game:
+each number is named as it is in the code. [The Complete Rulebook](docs/rulebook.md) tells the same rules for a reader,
+with how often each ending comes; it is a copy of the rulebook doc on claude.ai
+(https://claude.ai/artifact/EkqSDY5vtcA6RnGVHxyUjf), taken at build 26.1.0.
 
 ## Building
 
@@ -21,7 +24,9 @@ node build.js --check         # build in memory only: parse the script, refuse d
 node test/lint.js             # read the whole script for undefined, unused and hidden names   (npm run lint)
 ```
 
-The game is one HTML page with one script. `build.js` lists the modules in the order they are concatenated. All
+The game is one HTML page with one script, and no other files: every picture is drawn as SVG by `src/ui/art.js` and
+`src/ui/art-end.js`, and the music and sounds are synthesized as they play, through Web Audio, by `src/ui/audio.js`
+(only the fonts come from Google Fonts). `build.js` lists the modules in the order they are concatenated. All
 modules share one global scope, so the build refuses a name declared twice at top level: a second function of the same
 name would otherwise silently replace the first. The pages carry the script without its comments and spare whitespace
 (Terser, with no compression and no renaming: the code runs exactly as written), which keeps the page small enough for
