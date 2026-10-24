@@ -1,0 +1,11 @@
+# laid out by hand as tables, with aligned comments
+src/rules.js
+build.js
+# page fragments (the build wraps the style sheet and the markup), and the built pages
+src/page/
+*.html
+# the documents, written by hand
+*.md
+# recordings
+test/golden/
+node_modules/

@@ -1,0 +1,33 @@
+<div class="app">
+  <header class="top">
+    <div class="brand-row"><div class="brand"><span class="dingir" aria-hidden="true">𒀭</span><span class="twin"><span class="tw tw-en" lang="en">The Gates of Kutha</span><span class="tw tw-ru" lang="ru">Врата Куты</span></span><span class="build" id="build"><span class="twin"><span class="tw tw-en" lang="en">build {{version}}</span><span class="tw tw-ru" lang="ru">сборка {{version}}</span></span></span></div>
+      <div class="sound"><button type="button" class="snd" id="musicBtn" aria-pressed="true">Music on</button><button type="button" class="snd" id="sfxBtn" aria-pressed="true">Sound on</button><span class="np" id="nowPlaying" title="Now playing"></span></div></div>
+    <div class="meters" id="meters" role="group" aria-label="Your condition"></div>
+  </header>
+  <main class="layout">
+    <section class="stage" id="stage">
+      <div class="scene-art" id="sceneArt"></div>
+      <div aria-live="polite"><div class="kicker" id="kicker"></div>
+      <h1 id="sceneTitle"></h1>
+      <div class="scene-sub" id="sceneSub" hidden></div>
+      <div class="prose" id="sceneText"></div>
+      </div>
+      <div class="choices" id="choices"></div>
+    </section>
+    <aside class="side">
+      <figure class="plan">
+        <svg id="map" viewBox="0 0 400 300" role="group" aria-label="Site plan of Tell Ibrahim showing the seven places you can visit"></svg>
+        <figcaption>Tell Ibrahim, ancient Kutha · site plan, spring 1926 · initials show who is where</figcaption>
+      </figure>
+      <section class="casebook" aria-label="Casebook">
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab" role="tab" data-tab="people"><span class="twin"><span class="tw tw-en" lang="en">People</span><span class="tw tw-ru" lang="ru">Люди</span></span></button>
+          <button type="button" class="tab" role="tab" data-tab="evidence"><span class="twin"><span class="tw tw-en" lang="en">Evidence</span><span class="tw tw-ru" lang="ru">Улики</span></span></button>
+          <button type="button" class="tab" role="tab" data-tab="omens"><span class="twin"><span class="tw tw-en" lang="en">Omens</span><span class="tw tw-ru" lang="ru">Знамения</span></span></button>
+          <button type="button" class="tab" role="tab" data-tab="kit"><span class="twin"><span class="tw tw-en" lang="en">Kit</span><span class="tw tw-ru" lang="ru">Вещи</span></span></button>
+        </div>
+        <div id="tabPanel" role="tabpanel"></div>
+      </section>
+    </aside>
+  </main>
+</div>

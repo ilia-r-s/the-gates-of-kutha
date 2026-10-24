@@ -1,0 +1,8 @@
+# dependencies (npm install)
+node_modules/
+# the built pages (node build.js writes them; the playable file is handed out separately)
+kutha.html
+standalone.html
+Gates of Kutha.html
+# screenshots the visual tests take
+test/shots/
