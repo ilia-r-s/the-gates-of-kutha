@@ -147,23 +147,44 @@ const SAY = {
       `${ru.c(c)} ${ru.gs(c, 'сказал', 'сказала')} сегодня всё, что ${ru.gs(c, 'собирался', 'собиралась')}.`
     ],
     c => [`There is nothing more to be had from ${c.short} today.`, `Больше от ${ru.c(c, 'g')} сегодня ничего не добиться.`],
-    c => [`${c.short} glances at the work waiting, and you take the hint.`, `${ru.c(c)} поглядывает на ждущую работу, и вы понимаете намёк.`],
+    c => [
+      `${c.short} glances at the work waiting, and you take the hint.`,
+      `${ru.c(c)} поглядывает на ждущую работу, и вы понимаете намёк.`
+    ],
     () => ['The talk has gone as far as it will go today.', 'Сегодня разговор дальше не пойдёт.']
   ],
   longer: [
     c => [`${c.short} is in no hurry today.`, `${ru.c(c)} сегодня никуда не торопится.`],
+    c => [`${c.short} lingers, as if there were more to say.`, `${ru.c(c)} медлит, будто хочет сказать что-то ещё.`],
     c => [
-      `${c.short} seems glad of the company, and in no rush to get back to work.`,
-      `${ru.c(c)}, похоже, ${ru.gs(c, 'рад', 'рада')} компании и не спешит возвращаться к работе.`
+      `${c.short} settles in: there is time for one more question.`,
+      `${ru.c(c)} устраивается поудобнее: время ещё на один вопрос есть.`
+    ]
+  ],
+  // ... the same, after a cold or hurried word (ui/talk.js, st.cool): only that they have not sent you away yet
+  longerCool: [
+    c => [
+      `${c.short} has not sent you away yet: there is time for one more question.`,
+      `${ru.c(c)} всё ещё не ${ru.gs(c, 'прогнал', 'прогнала')} вас: время ещё на один вопрос есть.`
     ],
-    c => [`${c.short} settles in: there is time for one more question.`, `${ru.c(c)} устраивается поудобнее: время ещё на один вопрос есть.`]
+    c => [
+      `${c.short} says nothing more, but does not turn away either: there is time for one more question.`,
+      `${ru.c(c)} больше ничего не говорит, но и не отворачивается: время ещё на один вопрос есть.`
+    ],
+    c => [
+      `For all that, ${c.short} is still there: there is time for one more question.`,
+      `И всё же ${ru.c(c)} никуда не уходит: время ещё на один вопрос есть.`
+    ]
   ],
   shorter: [
     c => [`${c.short} has little time today.`, `У ${ru.c(c, 'g')} сегодня мало времени.`],
     c => [`${c.short} is already turning back to the work.`, `${ru.c(c)} уже снова поворачивается к работе.`],
     c => [`That is all the time ${c.short} has for you today.`, `Больше времени у ${ru.c(c, 'g')} для вас сегодня нет.`]
   ],
-  // you take your leave
+  // you take your leave (leaveClash, by place in the list: the partings each telling would gainsay, as ui/talk.js tells
+  // them after the parting look: their going back to what they were doing, or a nod on your way, after a back turned on
+  // you; a nod, or your leaving them where you found them, after they walked you to the light railway)
+  leaveClash: [[], [], [], ['cold'], ['cold', 'walk'], ['walk']],
   leave: [
     c => [`You leave ${c.short} to ${c.pp} thoughts.`, `Вы оставляете ${ru.c(c, 'a')} наедине с ${ru.gs(c, 'его', 'её')} мыслями.`],
     c => [`You leave ${c.short} to ${c.pp} work.`, `Вы оставляете ${ru.c(c, 'a')} за работой.`],
@@ -175,11 +196,11 @@ const SAY = {
     c => [`You take your leave, and ${c.short} nods you on your way.`, `Вы прощаетесь, и ${ru.c(c)} кивает вам на прощание.`],
     c => [`You leave ${c.short} where you found ${EP.him(c)}.`, `Вы оставляете ${ru.c(c, 'a')} там же, где ${ru.gs(c, 'его', 'её')} нашли.`]
   ],
-  // a talk that warmed them to you; pressing them that cooled them
+  // a talk that warmed them to you (said as it happens: the conversation may well go on); pressing them that cooled them
   warmer: [
-    ['You part on warmer terms.', 'Вы расстаётесь теплее, чем встретились.'],
+    ['The talk has brought you a little closer.', 'Разговор вас немного сблизил.'],
     ['Something between you has eased.', 'Что-то между вами оттаяло.'],
-    ['You part as something more like friends.', 'Расстаётесь вы почти друзьями.'],
+    ['You are on something more like friendly terms now.', 'Теперь вы почти на дружеской ноге.'],
     ['Things are warmer between you now.', 'Отношения между вами стали теплее.']
   ],
   thinner: [
@@ -251,7 +272,10 @@ const SAY = {
   distrust: [
     ['Is there anyone here you don’t trust?', 'Есть здесь кто-нибудь, кому вы не доверяете?'],
     ['Who here would you keep an eye on?', 'За кем бы вы здесь присматривали?'],
-    ['If you had to name one person to watch, who would it be?', 'Если бы пришлось назвать одного человека, за которым стоит присматривать, — кто бы это был?'],
+    [
+      'If you had to name one person to watch, who would it be?',
+      'Если бы пришлось назвать одного человека, за которым стоит присматривать, — кто бы это был?'
+    ],
     ['Between ourselves: who here worries you?', 'Между нами: кто здесь вас тревожит?'],
     ['Whom would you not turn your back on?', 'К кому вы не стали бы поворачиваться спиной?']
   ],
@@ -289,7 +313,10 @@ const SAY = {
   askPress: [
     ['You’re not telling me everything about that night.', 'Вы рассказываете мне о той ночи не всё.'],
     ['I think you know more than you’ve said.', 'По-моему, вы знаете больше, чем говорите.'],
-    ['There is something you are keeping back. I would rather hear it from you.', 'Вы что-то недоговариваете. Лучше бы мне услышать это от вас.'],
+    [
+      'There is something you are keeping back. I would rather hear it from you.',
+      'Вы что-то недоговариваете. Лучше бы мне услышать это от вас.'
+    ],
     ['Let us try that again, and this time the whole of it.', 'Давайте ещё раз — и на этот раз всё целиком.']
   ],
   claimYou: [
@@ -304,8 +331,14 @@ const SAY = {
   ],
   // examining a scene; sitting down to a fragment
   examine: [
-    ['You read the ground the way you were taught, a hand’s breadth at a time.', 'Вы читаете землю так, как вас учили, — по ладони за раз.'],
-    ['You crouch over the ground with a lens and a trowel, and take your time.', 'Вы склоняетесь над землёй с лупой и совком и не торопитесь.'],
+    [
+      'You read the ground the way you were taught, a hand’s breadth at a time.',
+      'Вы читаете землю так, как вас учили, — по ладони за раз.'
+    ],
+    [
+      'You crouch over the ground with a lens and a trowel, and take your time.',
+      'Вы склоняетесь над землёй с лупой и совком и не торопитесь.'
+    ],
     [
       'You make the workmen stand back, and go over every mark in the dust on your knees.',
       'Вы велите рабочим отойти и на коленях осматриваете каждую отметину в пыли.'

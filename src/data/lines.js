@@ -91,7 +91,11 @@ const GREET_COLD = {
     'Make it quick. The light won’t wait, and neither will I.'
   ],
   ashby: ['Doctor. I trust this is important.', 'Ah. You again.', 'Doctor. I have reports to write. One of them may be about you.'],
-  yusuf: ['Doctor. The tea is finished, I am afraid.', 'Business is slow today, Doctor. Very slow.', 'Doctor. My prices have gone up. For you especially.'],
+  yusuf: [
+    'Doctor. The tea is finished, I am afraid.',
+    'Business is slow today, Doctor. Very slow.',
+    'Doctor. My prices have gone up. For you especially.'
+  ],
   ilse: ['What do you want?', 'I have nothing to say to you, Doctor. But say what you came to say.', 'You again. Ask, then go.'],
   zahrun: ['Doctor. Say what you must.', 'You have come again. Speak, then.', 'Doctor. I am listening. That is all.']
 };
@@ -164,6 +168,9 @@ const JOKES = new Set([
   'In Berlin they ask me why a woman would dig in the desert. I tell them the men here are four thousand years old, and quiet.',
   'Four times my mother has found me a bride in Amara. Four times I have found a reason to be in Baghdad.'
 ]);
+// Plain greetings in a hurry: after one of them, a third question allowed is not told as their being in no hurry today
+// (ui/talk.js, talkAfter).
+const HURRIED = new Set(['Doctor. I am busy, but go on.', 'Doctor. Quickly, please: the clay is drying.']);
 const WIT = {
   hob: 'hobnails on the brick',
   riding: 'soft boots, riding boots I think',

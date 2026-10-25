@@ -124,18 +124,21 @@ function claimTell(c) {
 // (cultDream), lying only where a lie pays; a dream made up is dreamt once a night, and told again the same day (at
 // breakfast, asked, or in parting) it is the same dream. Told, a dream speaks their claim and is noted for or against
 // the one dreamt of.
-// d: { t: the one dreamt of, cult: guilty }
-const dreamEn = (tn, cult) =>
-  cult
-    ? `${tn} stood inside the seventh, and the god’s hand was on ${tn}’s shoulder.`
-    : `${tn} stood outside them, weeping. Whatever ${tn} is, ${tn} is not one of theirs.`;
+// d: { t: the one dreamt of, cult: guilty }. t: the one dreamt of (or their short name, as some callers still give it),
+// told with their own pronoun after the name, as the Russian does
+const dreamEn = (t, cult) => {
+  const w = typeof t === 'string' ? CHARS.find(c => c.short === t) : t;
+  return cult
+    ? `${w.short} stood inside the seventh, and the god’s hand was on ${w.pp} shoulder.`
+    : `${w.short} stood outside them, weeping. Whatever ${w.p} is, ${w.p} is not one of theirs.`;
+};
 const dreamRu = (t, cult) =>
   cult
     ? `${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} за седьмыми, и рука бога лежала у ${ru.gs(t, 'него', 'неё')} на плече.`
     : `${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} снаружи и ${ru.gs(t, 'плакал', 'плакала')}. Кем бы ${ru.gs(t, 'он ни был', 'она ни была')}, ${ru.gs(t, 'он', 'она')} не из них.`;
 // a dream as told at breakfast, by c: [English, Russian]
 const dreamSaid = (c, d) => [
-  `“I dreamt of the seven gates,” ${c.short} says. “${dreamEn(d.t.short, d.cult)}”`,
+  `“I dreamt of the seven gates,” ${c.short} says. “${dreamEn(d.t, d.cult)}”`,
   `«Мне снились семь врат, — говорит ${ru.c(c)}. — ${dreamRu(d.t, d.cult)}»`
 ];
 function tellDream(c, d) {

@@ -621,7 +621,7 @@ function musicChange(id, cue, quick = false) {
   AU.changing = null;
   if (!AU.ctx || AU.ctx.state !== 'running') {
     if (AU.cur && AU.cur.id !== id) musicHalt();
-    if (cue) AU.cueOnWake = cue;
+    AU.cueOnWake = cue || null; // (the latest change asked for decides: a cue of one it replaced is not played)
     return;
   }
   AU.cueOnWake = null;
@@ -774,6 +774,7 @@ function auSession() {
 // the music that should be playing, once the sound is awake again: a change asked for while it slept is made now (with
 // its cue, if it had one); one under way is left to finish
 function musicCatchUp() {
+  if (!AU.on.music) AU.cueOnWake = null; // (with the music off, a change's cue would only sound later, out of its time)
   if (!AU.on.music || AU.changing || (AU.cur && (!AU.want || AU.cur.id === AU.want))) return;
   const id = AU.want || trackNow(),
     cue = AU.cueOnWake;

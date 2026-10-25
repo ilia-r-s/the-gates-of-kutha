@@ -171,8 +171,8 @@ const DREAD = {
       ],
       [
         [
-          'There is a fresh grave among the Parthian rows, the earth still loose. No one has died.',
-          'Среди парфянских рядов — свежая могила, земля ещё рыхлая. Никто не умирал.'
+          'There is a fresh grave among the Parthian rows, the earth still loose. No one in the village has died.',
+          'Среди парфянских рядов — свежая могила, земля ещё рыхлая. В деревне никто не умирал.'
         ]
       ],
       [

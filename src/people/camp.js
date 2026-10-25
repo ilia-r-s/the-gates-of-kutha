@@ -166,7 +166,8 @@ const STIRS = {
     }
   },
   // you exposed a cultist: someone who had suspected them says so (or one of the cult, to be seen on the right side);
-  // those who doubted them warm to you, and a friend of the exposed may not forgive you for being right
+  // those who doubted them warm to you, and a friend of the exposed may not forgive you for being right, unless they
+  // raised a hand with you against them themselves (o.backed: game/inquiry.js)
   praised: {
     speaker: (o, pr) => {
       const pool = freeChars().filter(c => c.id !== o.about);
@@ -178,7 +179,9 @@ const STIRS = {
     spoke: sp => spokeStep(sp, 1),
     react: (l, o, pr) =>
       ofPair(l, o.about) >= 1
-        ? ['trust', null, -1, pr.grudge]
+        ? (o.backed || []).includes(l.id)
+          ? null
+          : ['trust', null, -1, pr.grudge]
         : ['trust', null, 1, pr.p + (sus(l.id, o.about) >= 1 || ofPair(l, o.about) <= -1 ? pr.doubted : 0)],
     open: (sp, o) => {
       const a = C(o.about);

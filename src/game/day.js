@@ -104,14 +104,14 @@ function goTo(l) {
   const L = LOCS[l],
     ppl = (S.here[l] || []).map(C).filter(isFree),
     told = S.told;
-  // (how the place looks, and that nobody else is there, told otherwise from one visit to the next, and the same while
-  // you stay: counted as you arrive)
+  // (how the place looks, told otherwise from one visit to the place to the next, and that nobody else is there, from one
+  // empty place to the next; the same while you stay: counted as you arrive)
   if (fresh) {
     told['at-' + l] = (told['at-' + l] || 0) + 1;
-    told.visits = (told.visits || 0) + 1;
+    if (!ppl.length) told.empty = (told.empty || 0) + 1;
   }
   const looks = tellAt('place-' + l, [...L.desc.map(d => [d, R(d)]), ...SAY.places[l]], (told['at-' + l] || 1) - 1),
-    nobody = tellAt('nobody', SAY.nobody, (told.visits || 1) - 1);
+    nobody = tellAt('nobody', SAY.nobody, (told.empty || 1) - 1);
   const body = [
     `<p>${bi(...looks)}</p>`,
     `<p class="dim">${ppl.length ? bi('Here: ' + listNames(ppl.map(c => c.name)) + '.', 'Здесь: ' + ru.list(ppl.map(c => ru.cf(c))) + '.') : bi(...nobody)}</p>`
@@ -119,11 +119,19 @@ function goTo(l) {
   const ch = [];
   const crimeHere = S.crime && S.crime.loc === l && !S.crime.examined;
   if (crimeHere) {
+    // (both traces, where a careless attacker left two, as the night's page told them)
+    const cl = S.crime.clue,
+      more = S.crime.more;
     body.push(
-      bi(
-        `<p class="warn">${S.day === 1 ? 'Where Crane was found, a trace remains' : 'Last night’s trace is still here'}: ${clueText(S.crime.clue)}.</p>`,
-        `<p class="warn">${S.day === 1 ? 'Там, где нашли Крейна, остался след' : 'След прошлой ночи всё ещё здесь'}: ${clueTextRu(S.crime.clue)}.</p>`
-      )
+      more
+        ? bi(
+            `<p class="warn">${S.day === 1 ? 'Where Crane was found, two traces remain' : 'Last night’s traces are still here'}: ${clueText(cl)}, and beside it ${clueText(more)}.</p>`,
+            `<p class="warn">${S.day === 1 ? 'Там, где нашли Крейна, остались следы' : 'Следы прошлой ночи всё ещё здесь'}: ${clueTextRu(cl)}, а рядом — ${clueTextRu(more)}.</p>`
+          )
+        : bi(
+            `<p class="warn">${S.day === 1 ? 'Where Crane was found, a trace remains' : 'Last night’s trace is still here'}: ${clueText(cl)}.</p>`,
+            `<p class="warn">${S.day === 1 ? 'Там, где нашли Крейна, остался след' : 'След прошлой ночи всё ещё здесь'}: ${clueTextRu(cl)}.</p>`
+          )
     );
     ch.push({
       label: bi('Examine the scene', 'Осмотреть место'),
@@ -371,9 +379,7 @@ function studyPick() {
   show({
     kicker: dayStamp(),
     title: bi('Translation', 'Перевод'),
-    body: [
-      `<p>${bi(...tellOne('read', SAY.read))}</p>`
-    ],
+    body: [`<p>${bi(...tellOne('read', SAY.read))}</p>`],
     choices: t
       .map(x => ({ label: x.label, sub: x.sub, fn: () => doStudy(x) }))
       .concat([
@@ -563,16 +569,24 @@ function tracePlanted(cr, cl) {
       : '')
   );
 }
-// someone's who had been there earlier, by day, or that night by ill luck
+// someone's who had been there earlier, by day, or that night by ill luck (or, the ground misleading you, the attacker's
+// own, and then both of a careless attacker's two: they lie side by side)
 function traceStray(cr, cl) {
+  const two = !!cr.more;
   cl.status = 'stray';
+  if (two) cr.more.status = 'stray';
   journal(
-    bi(
-      `${nightEn(cl.day)}: someone had been ${LOCS[cr.loc].at} earlier. That trace was not the attacker’s.`,
-      `${nightRu(cl.day)}: кто-то побывал ${R(LOCS[cr.loc].at)} раньше. Этот след оставил не нападавший.`
-    )
+    two
+      ? bi(
+          `${nightEn(cl.day)}: someone had been ${LOCS[cr.loc].at} earlier. Neither trace was the attacker’s.`,
+          `${nightRu(cl.day)}: кто-то побывал ${R(LOCS[cr.loc].at)} раньше. Оба следа оставил не нападавший.`
+        )
+      : bi(
+          `${nightEn(cl.day)}: someone had been ${LOCS[cr.loc].at} earlier. That trace was not the attacker’s.`,
+          `${nightRu(cl.day)}: кто-то побывал ${R(LOCS[cr.loc].at)} раньше. Этот след оставил не нападавший.`
+        )
   );
-  return `<p>${bi(EXAMINE_STRAY)}</p>`;
+  return `<p>${bi(two ? EXAMINE_STRAY_TWO : tellOne('examineStray', EXAMINE_STRAY))}</p>`;
 }
 // a thief's, come to rob the place
 function traceThief(cr, cl) {
@@ -583,5 +597,5 @@ function traceThief(cr, cl) {
       `${nightRu(cl.day)}: ${R(LOCS[cr.loc].at)} побывал вор. Этот след оставил не нападавший.`
     )
   );
-  return `<p>${bi(EXAMINE_THIEF)}</p>`;
+  return `<p>${bi(tellOne('examineThief', EXAMINE_THIEF))}</p>`;
 }

@@ -104,8 +104,8 @@ const TENOR_SAY = {
         'Солнце уже высоко и печёт. Землекопы работают молча: слышен каждый удар кирки.'
       ],
       [
-        'The sun is up and already hot. Nothing moves on the plain but the heat.',
-        'Солнце уже высоко и печёт. На равнине не движется ничего, кроме зноя.'
+        'Nothing moves on the plain but the heat, and the sun barely up.',
+        'На равнине не движется ничего, кроме зноя, а солнце едва поднялось.'
       ],
       [
         'First light, and already the heat stands on the tell. The pickmen swing in time, and nobody speaks.',
@@ -125,7 +125,7 @@ const TENOR_SAY = {
         'The sun is up and already hot. The diggers’ songs carry from the tell.',
         'Солнце только встало, а уже печёт. С телля доносятся песни землекопов.'
       ],
-      ['The sun is up and already hot. The diggers sing, but not for long.', 'Солнце уже высоко и печёт. Землекопы поют — но недолго.'],
+      ['Already hot. The diggers sing as they start, but not for long.', 'Уже жарко. Землекопы начинают с песней, но поют недолго.'],
       [
         'Morning, bright and hot. The pickmen sing as they climb the tell, though one or two do not join in.',
         'Утро, яркое и жаркое. Землекопы поют, поднимаясь на телль, хотя кое-кто не подпевает.'
@@ -167,8 +167,8 @@ const TENOR_SAY = {
         'Солнце уже высоко и печёт. В траншее опять спорят — и замолкают, стоит вам подойти.'
       ],
       [
-        'The sun is up and already hot. Two of the pickmen fall silent as you pass, and laugh behind your back.',
-        'Солнце уже высоко и печёт. Двое землекопов умолкают, когда вы проходите мимо, и смеются вам в спину.'
+        'Two of the pickmen fall silent as you pass this morning, and laugh behind your back.',
+        'Этим утром двое землекопов умолкают, когда вы проходите мимо, и смеются вам в спину.'
       ],
       [
         'Morning. By the tea urn three people stop talking at once as you come up.',
@@ -189,8 +189,8 @@ const TENOR_SAY = {
         'Солнце уже высоко и печёт. Над дорогой из Хиллы столб пыли: к лагерю опять кто-то едет.'
       ],
       [
-        'The sun is up and already hot. Somewhere a motor horn, and the diggers straighten up to look.',
-        'Солнце уже высоко и печёт. Где-то гудит клаксон, и землекопы распрямляются, чтобы посмотреть.'
+        'Early, a motor horn somewhere on the road, and the diggers straighten up to look.',
+        'С утра где-то на дороге гудит клаксон, и землекопы распрямляются, чтобы посмотреть.'
       ],
       [
         'Morning, and the post-boy from Hillah already at the gate, with letters nobody expected.',
@@ -208,7 +208,7 @@ const TENOR_SAY = {
   },
   // the first light of a short day, whatever the mood: the diggers will not dig, or the dust stops them
   short: {
-    strike: ['The sun is up and already hot. The trenches stand empty.', 'Солнце уже высоко и печёт. Траншеи пусты.'],
+    strike: ['Morning, and the trenches stand empty.', 'Утро, а траншеи пусты.'],
     dust: [
       'The sun is a white coin behind the dust, and the tents strain at their ropes.',
       'Солнце — белая монетка за пеленой пыли, палатки рвутся с растяжек.'

@@ -55,11 +55,7 @@ const CHARS = [
     init: 'HS',
     p: 'he',
     pp: 'his',
-    job: 'Foreman of the Sherqati diggers',
-    bio: [
-      `Hamid learned to dig with the Germans at Assur before the war. He reads a trench section the way a banker reads a ledger.`,
-      `“The men will dig anywhere but under the ziggurat after dark,” Hamid says. “I do not blame them.”`
-    ]
+    job: 'Foreman of the Sherqati diggers'
   },
   {
     id: 'anselm',
@@ -68,11 +64,7 @@ const CHARS = [
     init: 'AD',
     p: 'he',
     pp: 'his',
-    job: 'Epigrapher, École Biblique',
-    bio: [
-      `A Dominican from Jerusalem, Anselm reads Old Babylonian faster than you read the Times.`,
-      `Anselm keeps a rosary and a copy of the Song of Erra in the same pocket, and will not say which he trusts more.`
-    ]
+    job: 'Epigrapher, École Biblique'
   },
   {
     id: 'constance',
@@ -81,11 +73,7 @@ const CHARS = [
     init: 'CP',
     p: 'she',
     pp: 'her',
-    job: 'Expedition photographer',
-    bio: [
-      `Constance has photographed three wars and a Durbar. She says the mound is the only subject that will not sit still.`,
-      `Her plates from last week show a figure on the ziggurat that nobody remembers standing there.`
-    ]
+    job: 'Expedition photographer'
   },
   {
     id: 'ashby',
@@ -94,11 +82,7 @@ const CHARS = [
     init: 'LA',
     p: 'he',
     pp: 'his',
-    job: 'Political officer, Baghdad',
-    bio: [
-      `The High Commission sent Ashby to watch the dig. He says “jolly good” in a tone that means the opposite.`,
-      `Ashby keeps the camp’s wireless set and the second key to the finds magazine.`
-    ]
+    job: 'Political officer, Baghdad'
   },
   {
     id: 'yusuf',
@@ -107,11 +91,7 @@ const CHARS = [
     init: 'YS',
     p: 'he',
     pp: 'his',
-    job: 'Interpreter and dealer',
-    bio: [
-      `A Baghdadi who knows the price of everything under the earth and most things above it.`,
-      `Yusuf says he came for the tablets. He does not say for whom.`
-    ]
+    job: 'Interpreter and dealer'
   },
   {
     id: 'ilse',
@@ -120,11 +100,7 @@ const CHARS = [
     init: 'IB',
     p: 'she',
     pp: 'her',
-    job: 'Assyriologist',
-    bio: [
-      `Ilse dug at Babylon under Koldewey until the war ended it, and has not forgiven anyone for that.`,
-      `Ilse sleeps beside the finds magazine, she says, to keep it safe from amateurs.`
-    ]
+    job: 'Assyriologist'
   },
   {
     id: 'zahrun',
@@ -133,11 +109,7 @@ const CHARS = [
     init: 'ZS',
     p: 'he',
     pp: 'his',
-    job: 'Mandaean silversmith',
-    bio: [
-      `A silversmith from Amara, Zahrun washes in running water every dawn and prays to the Great Life.`,
-      `Zahrun calls the mound “a house of darkness with its door ajar”.`
-    ]
+    job: 'Mandaean silversmith'
   }
 ];
 
@@ -579,7 +551,7 @@ const ITEMS = {
   },
   bowl: {
     name: 'Incantation bowl',
-    desc: 'Aramaic spirals around a bound demon. Absorbs one attack on you at night.',
+    desc: 'Aramaic spirals around a bound demon. It may turn aside an attack on you at night; used, such bowls mostly break.',
     find: `An Aramaic incantation bowl, buried face-down as such bowls always were, a demon bound in its spiral of text.`
   },
   brandy: {
@@ -697,7 +669,10 @@ const FRAG_FIND = {
     `You prise a fragment of unbaked tablet from the spoil, the signs as crisp as the day they were pressed.`,
     `Under a fallen brick lies a broken tablet, its edge inscribed in a cramped, hurried hand.`
   ],
-  store: [`In a cigar box with no field number is a fragment someone hid here on purpose.`],
+  store: [
+    `In a cigar box with no field number is a fragment someone hid here on purpose.`,
+    `Behind a row of boxed pottery lies a tablet fragment that nobody ever entered in the register.`
+  ],
   village: [`A boy sells you a tablet fragment for two annas and runs off before you can ask where he found it.`]
 };
 const NOTHING = [
@@ -834,12 +809,13 @@ const SLOT_INTRO = {
   2: `The light goes copper, then violet. Lamps are lit in the camp.`
 };
 
+// ({t}: whom they distrust; {tpp}: his or her)
 const T = {
   chill: `As {n} speaks, the lamp gutters, and you feel a cold that has nothing to do with the night.`,
   distrust: [
     `“Watch {t}. I have seen a lamp go out to the mound after dark.”`,
     `“{t} knew Crane was dead before the runner came. Ask how.”`,
-    `“{t} talks in sleep now, and not in any language I know.”`,
+    `“{t} talks in {tpp} sleep now, and not in any language I know.”`,
     `“{t} smiles too much. Since the tablets came up, {t} smiles too much.”`
   ],
   // the impressions of those who will not invent a fact (people/dialog.js)
@@ -852,10 +828,19 @@ const T = {
 
 const STUDY_OK = [
   `By lamplight you work the signs out one by one, Anselm’s sign list propped against the lamp.`,
-  `The wedges resolve into words. The words resolve into something you wish they had not.`
+  `The wedges resolve into words. The words resolve into something you wish they had not.`,
+  `Sign by sign, the clay gives way. You have it before the lamp needs trimming.`
 ];
-const STUDY_FAIL = [`The signs swim. After two hours you have a verb, a broken name, and a headache.`];
-const STUDY_COST = [`When you blow out the lamp, the words keep going in the dark behind your eyes.`];
+const STUDY_FAIL = [
+  `The signs swim. After two hours you have a verb, a broken name, and a headache.`,
+  `The clay has worn away just where it matters. By midnight you have a few signs, and none of them in order.`,
+  `The scribe wrote small and badly, and in a hurry. You give it up before the lamp does.`
+];
+const STUDY_COST = [
+  `When you blow out the lamp, the words keep going in the dark behind your eyes.`,
+  `Long after you have put the fragment away, its signs go on pressing themselves into the dark.`,
+  `You read too long. When you look up, the lamp has burned low and your hands are cold.`
+];
 // a translation that costs you dearly; signs that would not come clear and cost you all the same; the words at night
 const STUDY_COST_BAD = [
   `You read the last line twice, and the second time it reads you back. You do not remember putting out the lamp.`,
@@ -868,9 +853,21 @@ const WORDS_NIGHT = [
   `The lines you copied keep you company all night, saying themselves over in the dark.`
 ];
 const EXAMINE_OK = [`You go over the ground on hands and knees, as you would a burial.`];
-const EXAMINE_FAIL = [`The wind and the workmen have had the scene before you. Whatever it said, it says no longer.`];
-const EXAMINE_THIEF = `Looking closer, that trace was made later, by someone rifling the scene for valuables. A thief’s, not the attacker’s.`;
-const EXAMINE_STRAY = `Looking closer, that trace is older than the rest: the dust had settled on it before the struggle. Someone passed this way earlier. Not the attacker.`;
+const EXAMINE_FAIL = [
+  `The wind and the workmen have had the scene before you. Whatever it said, it says no longer.`,
+  `Too many boots have been over it since dawn. The ground tells you nothing you can trust.`,
+  `You look until your eyes ache, and the ground gives you nothing back.`
+];
+const EXAMINE_THIEF = [
+  `Looking closer, that trace was made later, by someone rifling the scene for valuables. A thief’s, not the attacker’s.`,
+  `Looking closer, that trace goes from one thing worth taking to the next, and was made after the struggle. A thief’s, not the attacker’s.`
+];
+const EXAMINE_STRAY = [
+  `Looking closer, that trace is older than the rest: the dust had settled on it before the struggle. Someone passed this way earlier. Not the attacker.`,
+  `Looking closer, the struggle runs right across that trace and scuffs it: it was there first. Someone passed this way earlier. Not the attacker.`,
+  `Looking closer, there is wind-blown sand in that trace, and none in the scuffing round it: it was there before. Someone passed this way earlier. Not the attacker.`
+];
+const EXAMINE_STRAY_TWO = `Looking closer, both traces are older than the struggle: the dust had settled on them before it. Someone passed this way earlier. Not the attacker.`;
 
 const GATES = {
   one: `Behind a loose brick panel at the foot of E-meslam, a stair goes down into the tell. The first gate is a doorway of baked brick stamped with a name you were warned never to read aloud.`,

@@ -122,6 +122,31 @@ const ruN = (n, one, few, many) => {
     b = n % 100;
   return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 10 || b >= 20) ? few : many;
 };
-const enTimes = n => (n === 1 ? 'once' : n === 2 ? 'twice' : `${n} times`);
-const ruTimes = n => `${n} ${ruN(n, 'раз', 'раза', 'раз')}`;
+// how many times, in words up to ten (as a reader would write it), in figures beyond
+const TIMES_EN = [
+    'once',
+    'twice',
+    'three times',
+    'four times',
+    'five times',
+    'six times',
+    'seven times',
+    'eight times',
+    'nine times',
+    'ten times'
+  ],
+  TIMES_RU = [
+    'один раз',
+    'два раза',
+    'три раза',
+    'четыре раза',
+    'пять раз',
+    'шесть раз',
+    'семь раз',
+    'восемь раз',
+    'девять раз',
+    'десять раз'
+  ];
+const enTimes = n => TIMES_EN[n - 1] || `${n} times`;
+const ruTimes = n => TIMES_RU[n - 1] || `${n} ${ruN(n, 'раз', 'раза', 'раз')}`;
 const EP = { He: c => (c.p === 'she' ? 'She' : 'He'), him: c => (c.p === 'she' ? 'her' : 'him') };

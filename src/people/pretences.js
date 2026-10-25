@@ -270,7 +270,7 @@ const morningLead = (c, aside) =>
     ? bi(`Before breakfast, ${c.short} takes you aside. “`, `Ещё до завтрака ${ru.c(c)} отводит вас в сторону. «`)
     : bi(`Before breakfast is over, ${c.short} stands up. “`, `Завтрак ещё не закончен, когда ${ru.c(c)} встаёт. «`);
 const inquiryLead = c =>
-  bi(`Before anyone else can speak, ${c.short} stands up. “`, `Прежде чем кто-нибудь успевает заговорить, ${ru.c(c)} встаёт. «`);
+  bi(`Before you can lay out your case, ${c.short} stands up. “`, `Не успеваете вы изложить своё дело, как ${ru.c(c)} встаёт. «`);
 // a pretender drops a pretence of their own accord at breakfast: to you alone, or before everyone
 function morningConfession(c) {
   const aside = chance(RULES.confess.aside);
@@ -279,7 +279,9 @@ function morningConfession(c) {
     (aside ? '' : stir('confessed', { about: c.id }))
   );
 }
-// at an inquiry, with the whole camp watching, one keeping up a story may get in first (the cult's among them)
+// at an inquiry, with the whole camp watching, one keeping up a story may get in first (the cult's among them): once
+// you have named the one you accuse, before the camp answers (game/inquiry.js, accuse), so that calling the camp together
+// and thinking better of it learns you nothing
 function inquiryConfession() {
   if (S.inqConf === S.day) return '';
   S.inqConf = S.day;

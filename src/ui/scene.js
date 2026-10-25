@@ -281,7 +281,7 @@ function testPits(L, n) {
   return s;
 }
 // " · searched twice"
-const searchedSay = n => bi(` · searched ${enTimes(n)}`, ` · обыскано: ${ruTimes(n)}`);
+const searchedSay = n => bi(` · searched ${enTimes(n)}`, ` · обыскано ${ruTimes(n)}`);
 function mapGo(l) {
   if (!S || !(S.phase === 'plan' || S.phase === 'loc')) return;
   if (S.phase === 'loc' && S.loc === l) return; // (where you are already)

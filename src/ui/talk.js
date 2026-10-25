@@ -36,18 +36,14 @@ function talkScene(c, st, after, choices) {
 }
 // from a choice among several (a title to ask about, a thing to show), back to the conversation
 const backToTalk = (c, st) => ({ label: bi('Back to the conversation', 'Вернуться к разговору'), cls: 'minor', fn: () => talk(c.id, st) });
-// The start of a conversation: their greeting, and the truth from someone who hid their part and now trusts you. (It
-// counts as a conversation once you ask something: thinking better of it before then is no conversation.)
+// The start of a conversation: their greeting (the slot's own: people/manner.js), and the truth from someone who hid
+// their part and now trusts you. (It counts as a conversation once you ask something: thinking better of it before then
+// is no conversation, and how long it would have run is not settled until the first question: askThem.)
 function meet(c) {
-  // (two questions, as a rule; now and then they have time for a third, or none for a second: talk.longer, shorter)
-  const RT = RULES.talk,
-    g = greeting(c),
-    st = {
-      asked: [],
-      lines: [{ who: 'them', text: g.text }],
-      chill: false,
-      limit: RT.questions + (chance(RT.longer) ? 1 : chance(RT.shorter) ? -1 : 0)
-    };
+  // (cool: a cold or hurried greeting, or a curt answer since, so that a third question allowed is not told as their
+  // being in no hurry: talkAfter)
+  const g = greeting(c),
+    st = { asked: [], lines: [{ who: 'them', text: g.text }], chill: false, limit: null, cool: !!g.cool || c.rapport <= -1 };
   S.cv = { youE: 'neutral', themE: g.face, speaking: 'them' };
   S.act = 'talk';
   const rc = recantTrust(c);
@@ -60,11 +56,17 @@ function meet(c) {
 // A question asked and answered, with whatever you notice as they answer; an occultist may feel a chill near them,
 // once a conversation.
 function askThem(c, st, k, arg) {
-  if (!st.asked.length) S.log.talk++;
+  if (!st.asked.length) {
+    S.log.talk++;
+    // two questions, as a rule; now and then they have time for a third, or none for a second (talk.longer, shorter)
+    const RT = RULES.talk;
+    st.limit = RT.questions + (chance(RT.longer) ? 1 : chance(RT.shorter) ? -1 : 0);
+  }
   st.asked.push(k);
   S.log[k] = (S.log[k] || 0) + 1;
   emit('ask', k);
   const r = DIALOG[k].run(c, arg);
+  if (r.cool) st.cool = true;
   st.lines.push({ who: 'you', text: r.you });
   if (r.pre) st.lines.push({ who: 'note', text: r.pre });
   st.lines.push({ who: 'them', text: r.them });
@@ -72,7 +74,10 @@ function askThem(c, st, k, arg) {
   if (!st.chill && S.bg === 'occultist') {
     st.chill = true;
     if (chance(c.role === 'cult' ? RULES.talk.chillCult : RULES.talk.chillOther)) {
-      st.lines.push({ who: 'note', text: bi(...tellOne('chill', [x => [fmt(T.chill, P(x)), fmtR(R(T.chill), { n: x })], ...SAY.chill])(c)) });
+      st.lines.push({
+        who: 'note',
+        text: bi(...tellOne('chill', [x => [fmt(T.chill, P(x)), fmtR(R(T.chill), { n: x })], ...SAY.chill])(c))
+      });
       addTest(c.id, c.id, 'chill', 'cult');
     }
   }
@@ -88,7 +93,7 @@ function talk(id, st) {
     .filter(k => DIALOG[k])
     .filter(k => !st.asked.includes(k) && !(DIALOG[k].off && DIALOG[k].off(c)));
   const ask = (k, arg) => askThem(c, st, k, arg),
-    over = st.asked.length >= st.limit;
+    over = st.limit != null && st.asked.length >= st.limit;
   const choices = !over
     ? opts.map(k => ({
         label: DIALOG[k].label(c),
@@ -115,10 +120,11 @@ function talk(id, st) {
 }
 // The line under the conversation: that it has run its course (and, if it was a short one, that they had little time
 // today); or, the second question asked with a third still to come, as now and then there is, that they are in no hurry
-// today. Told once a conversation, and the same each time the screen is drawn.
+// today (or, after a cold or hurried word, only that they have not sent you away yet). Told once a conversation, and the
+// same each time the screen is drawn.
 function talkAfter(c, st, over) {
   const Q = RULES.talk.questions,
-    k = over ? (st.limit < Q ? 'shorter' : 'over') : st.limit > Q && st.asked.length >= Q ? 'longer' : null;
+    k = over ? (st.limit < Q ? 'shorter' : 'over') : st.limit > Q && st.asked.length >= Q ? (st.cool ? 'longerCool' : 'longer') : null;
   if (!k) return '';
   const said = (st.said = st.said || {}),
     t = said[k] || (said[k] = tellOne(k, SAY[k])(c));
@@ -131,7 +137,7 @@ function talkLeave(c, st) {
     st.lines.push({
       who: 'them',
       text: bi(
-        'Before you go. I dreamt of the seven gates. ' + dreamEn(d.t.short, d.cult),
+        'Before you go. I dreamt of the seven gates. ' + dreamEn(d.t, d.cult),
         'Пока вы не ушли. Мне снились семь врат. ' + dreamRu(d.t, d.cult)
       )
     });
@@ -144,10 +150,15 @@ function talkLeave(c, st) {
     st.lines.push({ who: 'note', text: last[0] });
     S.cv.themE = last[1];
   }
-  endSlot(
-    transcript(c, st) + `<p class="dim">${bi(...tellOne('leave', SAY.leave)(c))}</p>`,
-    bi(c.name, capS(ru.cf(c)))
-  );
+  endSlot(transcript(c, st) + `<p class="dim">${bi(...leaveSay(last && last[2])(c))}</p>`, bi(c.name, capS(ru.cf(c))));
+}
+// how you take your leave, the next of its tellings that does not gainsay how they saw you go (kind: a back turned on
+// you, cold; a walk to the light railway, walk: data/variety.js, leaveClash)
+function leaveSay(kind) {
+  let say = tellOne('leave', SAY.leave);
+  for (let i = 1; i < SAY.leave.length && kind && (SAY.leaveClash[SAY.leave.indexOf(say)] || []).includes(kind); i++)
+    say = tellOne('leave', SAY.leave);
+  return say;
 }
 function showPick(c, st, ask) {
   talkScene(

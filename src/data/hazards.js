@@ -39,8 +39,8 @@ const PERILS = {
       1
     ],
     [
-      'The light goes while you are still among the graves, and it is an hour before you find the path again, an hour of stepping on what gives.',
-      'Свет уходит, пока вы ещё среди могил, и проходит час, прежде чем вы снова находите тропу, — час шагов по тому, что проседает под ногой.',
+      'You lose the path among the graves, and it is an hour before you find it again, an hour of stepping on what gives.',
+      'Среди могил вы сбиваетесь с тропы, и проходит час, прежде чем вы снова её находите, — час шагов по тому, что проседает под ногой.',
       1,
       0
     ]
@@ -89,8 +89,8 @@ const PERILS = {
   ],
   camp: [
     [
-      'A tent pole gives way in the afternoon wind and brings the wet canvas down on you, pole and all.',
-      'Палаточный шест не выдерживает послеполуденного ветра и обрушивает на вас мокрый брезент — вместе с собой.',
+      'A gust takes a tent pole as you pass, and brings the canvas down on you, pole and all.',
+      'Порыв ветра вырывает палаточный шест, когда вы проходите мимо, и на вас обрушивается брезент — вместе с шестом.',
       0,
       1
     ],

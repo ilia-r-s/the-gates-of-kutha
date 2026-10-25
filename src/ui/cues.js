@@ -34,6 +34,11 @@ function artFor(sc) {
       const ids = freeChars().map(c => c.id);
       return { bg: 'camp', time: 'evening', cast: ids, moods: moodsOf(ids, inquiryMood) };
     }
+    // the deed is settled of an evening in camp (game/deed.js); the knock at your tent pole comes late, in the dark
+    // (people/visit.js)
+    case 'deed':
+      return { bg: 'camp', time: 'evening' };
+    case 'visit':
     case 'night':
       return { bg: 'camp', time: 'night' };
     case 'finale':
@@ -42,6 +47,7 @@ function artFor(sc) {
       return { bg: 'gate', time: 'deep', cast: S.fin ? withYou() : [] };
     case 'sanctum':
       return { bg: 'sanctum', time: 'deep', aspect: S.aspectOf[S.patron], cast: freeCult().map(c => c.id) };
+    // the arrival, at dawn (every other phase is named above; the ending brings its own picture: sc.art)
     default:
       return { bg: 'vista', time: 'morning' };
   }

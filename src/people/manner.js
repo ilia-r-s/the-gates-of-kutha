@@ -2,8 +2,9 @@
 // A feeling does not always show, in the face or in what is said. How readily it shows depends on how strong it is
 // (RULES.manner), on temperament (MANNER: the honest and the light-headed wear theirs openly, the calculating and the
 // detached hardly at all), and on the moment: anyone can have a good or a bad day for reasons that have nothing to do
-// with you. The cult, courting your trust, may put on a warm face it does not feel. None of this changes what anyone
-// feels: the casebook's word for their trust always tells the truth.
+// with you. Anyone who feels nothing much either way about you may put on a pleasant face, the cult, courting your
+// trust, a little more readily. None of this changes what anyone feels: the casebook's word for their trust always tells
+// the truth.
 const showMul = c => MANNER[temperOf(c)].shows;
 // the chance that how someone feels about you shows just now: warmth, coldness, or a flirtatious look
 function showP(c, kind) {
@@ -17,43 +18,77 @@ function showP(c, kind) {
   return Math.min(RULES.scale.most, base * showMul(c));
 }
 const shows = (c, kind) => chance(showP(c, kind));
-// a cultist's warm mask: put on for you while it courts your trust, when it feels nothing much either way
-const courting = c => c.role === 'cult' && c.rapport >= 0 && c.rapport < 2;
-const masks = c => courting(c) && chance(MANNER[temperOf(c)].mask);
+// What shows of someone this slot, fixed without the dice (k: what it decides): the face in the picture of the place and
+// the greeting you get if you go up to them agree, and neither changes when the picture is drawn again or the
+// conversation opened again (thinking better of it before you ask anything is no conversation, and learns you nothing).
+const slotRoll = (c, k) => hash01(S.salt, c.id, S.day, S.slot, k);
+// a chance fixed for the slot (no surer than scale.surest, no rarer than scale.rarest, as any chance)
+const slotChance = (c, k, p) => p > 0 && slotRoll(c, k) < Math.min(RULES.scale.surest, Math.max(RULES.scale.rarest, p));
+// one of some faces by weight, fixed for the slot
+function slotPick(c, k, w) {
+  let r = slotRoll(c, k) * Object.values(w).reduce((a, b) => a + b, 0);
+  for (const f in w) if ((r -= w[f]) < 0) return f;
+  return Object.keys(w)[0];
+}
+// A pleasant face put on for you without the feeling behind it, by anyone who feels nothing much either way about you
+// (trust 0 or 1), as readily as their temperament puts on faces (MANNER.mask: the calculating and the liar the most, the
+// honest hardly ever). One of the cult, courting your trust, puts it on as anyone of its temperament might and then, as
+// it were, a second time over: a little more readily than anyone, never twice as readily, so that a pleasant face from
+// someone who feels nothing for you says little of what they are. roll(k): a number in [0, 1) for each try (k: mask,
+// court), from the dice or fixed for the slot.
+const courteous = c => c.rapport >= 0 && c.rapport < 2;
+function masked(c, roll) {
+  if (!courteous(c)) return false;
+  const m = Math.min(RULES.scale.surest, Math.max(RULES.scale.rarest, MANNER[temperOf(c)].mask));
+  return roll('mask') < m || (c.role === 'cult' && roll('court') < m);
+}
+const masks = c => masked(c, () => rand());
 // the faces of flirting: coy mostly, but now and then another (a smile, a sly look, a wink); and of a joke about love and
 // marriage: sly mostly. A priest's vows keep the flirtation out of it.
-const flirtFace = c => wpick(temperOf(c) === 'lightheaded' ? { ...FACES.flirt, wink: FACES.winkLight } : FACES.flirt);
-const jokeFace = c => wpick(VOWS.includes(c.id) ? FACES.jokeVows : FACES.joke);
+const flirtFaces = c => (temperOf(c) === 'lightheaded' ? { ...FACES.flirt, wink: FACES.winkLight } : FACES.flirt),
+  jokeFaces = c => (VOWS.includes(c.id) ? FACES.jokeVows : FACES.joke);
+const flirtFace = c => wpick(flirtFaces(c));
+const jokeFace = c => wpick(jokeFaces(c));
 
 // ---------- greetings, answers and partings ----------
 // How they greet you, and the face they greet you with. A flirtatious word now and then, from a woman with a soft spot
-// for you; warm words from anyone who likes you, cold ones from someone against you, if they let it show; a warm mask
-// from the cult; a good or a bad day, from anyone (warm words, or cold); otherwise an ordinary greeting, though a feeling
-// held back may show in the face.
+// for you; warm words from anyone who likes you, cold ones from someone against you, if they let it show; a pleasant face
+// put on (above); a good or a bad day, from anyone (warm words, or cold); otherwise an ordinary greeting, though a
+// feeling held back may show in the face. Settled once a slot, for the slot (above): a conversation opened again, after
+// thinking better of it, opens the same way. cool: a cold greeting, or one in a hurry (ui/talk.js).
 function greeting(c) {
+  const at = S.day + ':' + S.slot;
+  if (!c.greeted || c.greeted.at !== at) c.greeted = { at, g: greetNow(c) };
+  return c.greeted.g;
+}
+function greetNow(c) {
   const M = RULES.manner;
-  if (flirtsWithYou(c) && chance(RULES.flirt.greet * showMul(c) * talkSoft())) return { text: flirtGreet(c), face: flirtFace(c) };
+  if (flirtsWithYou(c) && slotChance(c, 'flirt', RULES.flirt.greet * showMul(c) * talkSoft()))
+    return { text: flirtGreet(c), face: slotPick(c, 'face', flirtFaces(c)) };
   // (each person's greetings of each kind gone through in turn, none twice running: core/text.js, tellOne)
   const warm = () => bi(tellOne('greetWarm-' + c.id, GREET_WARM[c.id])),
     cold = () => bi(tellOne('greetCold-' + c.id, GREET_COLD[c.id]));
-  if (c.rapport >= 1 && shows(c, 'warm')) return { text: warm(), face: wpick(FACES.warm) };
-  if (c.rapport <= -1 && shows(c, 'cold')) return { text: cold(), face: c.rapport <= -2 && chance(FACES.angry) ? 'angry' : 'cold' };
-  if (masks(c)) return { text: warm(), face: wpick(FACES.mask) };
+  if (c.rapport >= 1 && slotChance(c, 'warm', showP(c, 'warm'))) return { text: warm(), face: slotPick(c, 'face', FACES.warm) };
+  if (c.rapport <= -1 && slotChance(c, 'cold', showP(c, 'cold')))
+    return { text: cold(), face: c.rapport <= -2 && slotChance(c, 'angry', FACES.angry) ? 'angry' : 'cold', cool: true };
+  if (masked(c, k => slotRoll(c, k))) return { text: warm(), face: slotPick(c, 'face', FACES.mask) };
   // a good day or a bad one, whatever they feel about you: a friend can be curt, and someone against you civil
-  if (chance(M.whim * showMul(c)))
-    return chance(FACES.goodDay) ? { text: warm(), face: wpick(FACES.good) } : { text: cold(), face: wpick(FACES.bad) };
+  if (slotChance(c, 'whim', M.whim * showMul(c)))
+    return slotChance(c, 'goodDay', FACES.goodDay)
+      ? { text: warm(), face: slotPick(c, 'face', FACES.good) }
+      : { text: cold(), face: slotPick(c, 'face', FACES.bad), cool: true };
   const line = tellOne('greet-' + c.id, GREET[c.id]);
-  return { text: bi(line), face: plainFace(c, line) };
+  return { text: bi(line), face: plainFace(c, line), cool: HURRIED.has(line) };
 }
 function plainFace(c, line) {
   const M = RULES.manner;
-  if (JOKES.has(line) && chance(M.joke)) return jokeFace(c);
-  if (c.rapport >= 2) return chance(M.leak * showMul(c)) ? 'warm' : 'smile';
-  if (c.rapport <= -1) return chance(M.leak * showMul(c)) ? 'cold' : 'neutral';
+  if (JOKES.has(line) && slotChance(c, 'joke', M.joke)) return slotPick(c, 'face', jokeFaces(c));
+  if (c.rapport >= 2) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'warm' : 'smile';
+  if (c.rapport <= -1) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'cold' : 'neutral';
   return c.rapport >= 1 ? 'smile' : 'neutral';
 }
 // The face they make as they answer: the answer's own, warmed or cooled by how they feel about you if it shows, now and
-// then a flirtatious look, the cult's warm mask, or a good day or a bad one (anyone's, as at a greeting).
+// then a flirtatious look, a pleasant face put on (above), or a good day or a bad one (anyone's, as at a greeting).
 function faceFor(c, e) {
   if (e === 'smile' || e === 'neutral') {
     if (flirtsWithYou(c) && chance(RULES.flirt.face * showMul(c))) return flirtFace(c);
@@ -88,27 +123,32 @@ const COLD_PARTING = [
   c => bi(`${c.short} does not watch you go.`, `${ru.c(c)} не смотрит вам вслед.`)
 ];
 // A last look as you go, if anything shows: a lingering one from someone sweet on you, a warm one from a friend, none at
-// all from someone against you. Returns [the note, the face], or null.
+// all from someone against you. Returns [the note, the face, its kind (flirt, warm, walk: they walk you to the railway,
+// cold), for the leave line not to gainsay it: ui/talk.js], or null.
 function parting(c) {
-  if (flirtsWithYou(c) && chance(RULES.flirt.parting * showMul(c))) return [pick(FLIRT_PARTING)(c), flirtFace(c)];
-  if (c.rapport >= 2 && chance(RULES.manner.parting * showMul(c))) return [pick(WARM_PARTING)(c), 'warm'];
-  if (c.rapport <= -1 && chance(RULES.talk.coldParting * showMul(c))) return [pick(COLD_PARTING)(c), 'cold'];
+  if (flirtsWithYou(c) && chance(RULES.flirt.parting * showMul(c))) return [pick(FLIRT_PARTING)(c), flirtFace(c), 'flirt'];
+  if (c.rapport >= 2 && chance(RULES.manner.parting * showMul(c))) {
+    const w = pick(WARM_PARTING);
+    return [w(c), 'warm', w === WARM_PARTING[0] ? 'walk' : 'warm'];
+  }
+  if (c.rapport <= -1 && chance(RULES.talk.coldParting * showMul(c))) return [pick(COLD_PARTING)(c), 'cold', 'cold'];
   return null;
 }
 
 // ---------- the faces drawn about the dig ----------
-// Decided without the dice (a picture may be redrawn at any moment), fixed for the slot: whom someone is sweet on, what
-// the camp suspects of them, how they feel about you, the cult's mask, or the mood of the moment.
+// Decided without the dice (a picture may be redrawn at any moment), fixed for the slot (slotRoll, above: the same rolls
+// as the greeting's, so that the face in the picture is the face they greet you with): whom someone is sweet on, what
+// the camp suspects of them, how they feel about you, a pleasant face put on, or the mood of the moment.
 function castMood(c) {
-  const h = k => hash01(S.salt, c.id, S.day, S.slot, k),
+  const h = k => slotRoll(c, k),
     M = RULES.manner;
   if (flirtsWithYou(c) && h('flirt') < M.flirt * showMul(c) * FACES.castFlirt)
     return hashPick(FACES.castFlirtFaces, S.salt, c.id, S.day, S.slot);
   if (suspectedBy(c.id).length >= 2 && h('sus') < FACES.suspected * showMul(c)) return h('fear') < FACES.sad ? 'sad' : 'fear';
-  if (c.rapport >= 1 && h('warm') < showP(c, 'warm')) return 'warm';
-  if (c.rapport <= -1 && h('cold') < showP(c, 'cold')) return 'cold';
-  if (courting(c) && h('mask') < MANNER[temperOf(c)].mask) return 'smile';
-  if (h('whim') < M.whim * showMul(c)) return hashPick(FACES.castWhim, S.salt, c.id, S.day, S.slot, 'whimFace'); // (its own key: the whim's would always pick the first)
+  if (c.rapport >= 1 && slotChance(c, 'warm', showP(c, 'warm'))) return 'warm';
+  if (c.rapport <= -1 && slotChance(c, 'cold', showP(c, 'cold'))) return 'cold';
+  if (masked(c, h)) return slotPick(c, 'face', FACES.mask);
+  if (slotChance(c, 'whim', M.whim * showMul(c))) return hashPick(FACES.castWhim, S.salt, c.id, S.day, S.slot, 'whimFace'); // (its own key: the whim's would always pick the first)
   return 'neutral';
 }
 // at an inquiry: your friends worried; everyone else grim, mostly (the faces never tell who the camp suspects: what

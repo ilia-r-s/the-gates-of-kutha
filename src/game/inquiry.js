@@ -13,7 +13,6 @@ function inquiryScene() {
   S.phase = 'inquiry';
   if (S.inqDay !== S.day) S.log.inq++; // called again the same evening after thinking better of it: the same inquiry
   S.inqDay = S.day;
-  const conf = inquiryConfession(); // before the names, so that what they say of each is already of what was said here
   const ch = freeChars().map(c => ({
     label: bi(`Accuse ${c.name}`, `Обвинить ${ru.cf(c, 'a')}`),
     sub: () => markSay(c), // (as your mark stands; never how strong the case looks: that is for you to judge)
@@ -32,7 +31,7 @@ function inquiryScene() {
     kicker: dayStamp(),
     title: bi('An inquiry', 'Дознание'),
     body: [
-      `<p>${bi('You call the whole camp into the mess tent. Lamps, cigarette smoke, the wireless hissing in the corner. Everyone knows why they are here.', 'Вы собираете весь лагерь в столовой палатке. Лампы, табачный дым, шипение радиоприёмника в углу. Все знают, зачем их позвали.')}</p>${conf}${angerSay()}<p class="dim">${bi('Nobody is sent away on your word alone: the camp must back you, and a thin case, or a doctor it has stopped trusting, it may well refuse. A correct accusation exposes a cultist and sets the rite back. A wrong one sends an innocent away, costs you nerve and lets the rite gain ground. A refused one costs you nerve too, and whoever you accused in vain will not forget it; if they are of the cult, the cult may learn that you are close. Every innocent sent away, and every inquiry the camp refuses, angers it, and for an evening or two after it wants more before it backs you; anger it enough, and it may hold no more. One inquiry per evening.', 'Никого не отошлют по одному вашему слову: лагерь должен вас поддержать, а слабым уликам и доктору, которому перестали доверять, он может и отказать. Верное обвинение разоблачает сектанта и отбрасывает обряд назад. Неверное изгоняет невиновного, стоит вам нервов и даёт обряду набрать силу. Отвергнутое тоже стоит нервов, и тот, кого вы обвинили понапрасну, этого не забудет; а если это сектант, секта может понять, что вы близко. Каждый изгнанный невиновный и каждое дознание, которое лагерь отверг, его злят, и вечер-другой после этого ему нужно больше, чтобы вас поддержать; разозлите его довольно — и дознаний может больше не быть. Одно дознание за вечер.')}</p>`
+      `<p>${bi('You call the whole camp into the mess tent. Lamps, cigarette smoke, the wireless hissing in the corner. Everyone knows why they are here.', 'Вы собираете весь лагерь в столовой палатке. Лампы, табачный дым, шипение радиоприёмника в углу. Все знают, зачем их позвали.')}</p>${angerSay()}<p class="dim">${bi('Nobody is sent away on your word alone: the camp must back you, and a thin case, or a doctor it has stopped trusting, it may well refuse. A correct accusation exposes a cultist and sets the rite back. A wrong one sends an innocent away, costs you nerve and lets the rite gain ground. A refused one costs you nerve too, and whoever you accused in vain will not forget it; if they are of the cult, the cult may learn that you are close. Every innocent sent away, and every inquiry the camp refuses, angers it, and for an evening or two after it wants more before it backs you; anger it enough, and it may hold no more. One inquiry per evening.', 'Никого не отошлют по одному вашему слову: лагерь должен вас поддержать, а слабым уликам и доктору, которому перестали доверять, он может и отказать. Верное обвинение разоблачает сектанта и отбрасывает обряд назад. Неверное изгоняет невиновного, стоит вам нервов и даёт обряду набрать силу. Отвергнутое тоже стоит нервов, и тот, кого вы обвинили понапрасну, этого не забудет; а если это сектант, секта может понять, что вы близко. Каждый изгнанный невиновный и каждое дознание, которое лагерь отверг, его злят, и вечер-другой после этого ему нужно больше, чтобы вас поддержать; разозлите его довольно — и дознаний может больше не быть. Одно дознание за вечер.')}</p>`
     ],
     choices: ch
   });
@@ -41,9 +40,12 @@ function accuse(id) {
   const c = C(id);
   S.inquiryDone = true;
   S.act = 'accuse';
-  // the camp's verdict first: if it will not do it, the one accused stays, and nothing is known for certain
-  const vote = campVote(c),
-    hands = voteLine(vote);
+  // someone keeping up a story may come clean first, before everyone (people/pretences.js), so that the hands are raised
+  // on what was said here; then the camp's verdict: if it will not do it, the one accused stays, and nothing is known for
+  // certain
+  const conf = inquiryConfession(),
+    vote = campVote(c),
+    hands = conf + voteLine(vote);
   if (!vote.passed) {
     emit('refused');
     endSlot(hands + refusedInquiry(c, vote), bi('The inquiry', 'Дознание'));
@@ -87,7 +89,7 @@ function unmasked(c, vote, hands0 = '') {
   // them before everyone is settled
   weighWord(c, vote, 'right');
   pullTo('still', TENOR.pulls.right); // the camp breathes again
-  return out + stoodWithYou(vote) + stir('praised', { about: c.id }) + settleSaid(c.id) + angerAfter(true);
+  return out + stoodWithYou(vote) + stir('praised', { about: c.id, backed: vote.back }) + settleSaid(c.id) + angerAfter(true);
 }
 // The last of the cult unmasked, at an inquiry or in the night (people/visit.js): the season is won, all but always; now
 // and then the rite has gone too far to die with its priests (inquiry.tooLate, × tooLateNear once it is close), and the
@@ -127,6 +129,7 @@ function sentAway(c, vote) {
   c.status = 'dismissed';
   S.stats.wrong++;
   S.doom += vary(RULES.inquiry.doomWrong);
+  const watched = freeChars().length > 0; // (anyone left at the dig to see it: else the corporal took your word alone)
   let out =
     c.role === 'smuggler'
       ? bi(
@@ -134,8 +137,8 @@ function sentAway(c, vote) {
           `<p>${ru.c(c)} — ${ru.gs(c, 'не сектант, а всего лишь вор', 'не сектантка, а всего лишь воровка')}. Под ${ru.gs(c, 'его', 'её')} походной постелью шесть табличек, приготовленных для багдадского рынка. ${ru.c(c, 'a')} отсылают прочь. Где-то на холме кто-то доволен.</p>`
         )
       : bi(
-          `<p>${c.short} answers every question, and every answer is true. By the time you understand that, it is too late. ${c.short} leaves the dig in disgrace, and fewer people will meet your eye.</p>`,
-          `<p>${ru.c(c)} отвечает на каждый вопрос, и каждый ответ правдив. Когда вы это понимаете, уже слишком поздно. ${ru.c(c)} с позором покидает раскопки, а вам теперь всё реже смотрят в глаза.</p>`
+          `<p>${c.short} answers every question, and every answer is true. By the time you understand that, it is too late. ${c.short} leaves the dig in disgrace${watched ? ', and fewer people will meet your eye' : ''}.</p>`,
+          `<p>${ru.c(c)} отвечает на каждый вопрос, и каждый ответ правдив. Когда вы это понимаете, уже слишком поздно. ${ru.c(c)} с позором покидает раскопки${watched ? ', а вам теперь всё реже смотрят в глаза' : ''}.</p>`
         ) + hurt(RULES.inquiry.nerveWrong, 0);
   journal(
     bi(`${c.name} was sent away after your inquiry.`, `${capS(ru.cf(c))}: ${ru.gs(c, 'отослан', 'отослана')} после вашего дознания.`)
@@ -148,5 +151,5 @@ function sentAway(c, vote) {
   // the camp takes it in: someone calls you out, others follow, or stand by you
   weighWord(c, vote, 'wrong');
   pullTo('tongues', TENOR.pulls.wrong); // the camp turns on itself
-  return out + stir('calledOut', { about: c.id, thief: c.role === 'smuggler' }) + settleSaid(c.id) + angerAfter(false);
+  return out + (watched ? stir('calledOut', { about: c.id, thief: c.role === 'smuggler' }) : '') + settleSaid(c.id) + angerAfter(false);
 }

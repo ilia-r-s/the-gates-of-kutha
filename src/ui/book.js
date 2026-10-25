@@ -346,8 +346,13 @@ function evTraces() {
         nm = c => (c.status === 'taken' ? bi(`${c.short} (dead)`, `${ru.c(c)} (${ru.gs(c, 'погиб', 'погибла')})`) : bi(c.short, ru.c(c)));
       const fits = pool.filter(c => c.known[cl.cat] === cl.val);
       const unk = pool.filter(c => !c.known[cl.cat]);
-      const stt =
-        cl.status === 'genuine'
+      // (one found by your tent pole, after harm meant you in the night, is no scene, and nothing to examine:
+      // game/hazards.js)
+      const tent = cl.source === 'spite',
+        where = tent ? bi('By your tent pole', 'У шеста вашей палатки') : bi(LOCS[cl.loc].name);
+      const stt = tent
+        ? ''
+        : cl.status === 'genuine'
           ? `<span class="chip bad">${bi('Genuine', 'Подлинный')}</span>`
           : cl.status === 'thief'
             ? `<span class="chip">${bi('A thief’s', 'Воровской')}</span>`
@@ -357,8 +362,8 @@ function evTraces() {
                 ? `<span class="chip warnc">${bi('Planted', 'Подброшен')}</span>`
                 : `<span class="chip dimc">${bi('Unverified', 'Не проверен')}</span>`;
       if (bare())
-        return `<div class="clue"><div class="c-top"><span class="c-day">${nightLabel(cl.day)} · ${bi(LOCS[cl.loc].name)}</span>${stt}</div><div class="c-trace">${bi(TRAITS[cl.cat].vals[cl.val].clue)}</div></div>`;
-      return `<div class="clue"><div class="c-top"><span class="c-day">${nightLabel(cl.day)} · ${bi(LOCS[cl.loc].name)}</span>${stt}</div><div class="c-trace">${bi(TRAITS[cl.cat].vals[cl.val].clue)}</div>
+        return `<div class="clue"><div class="c-top"><span class="c-day">${nightLabel(cl.day)} · ${where}</span>${stt}</div><div class="c-trace">${bi(TRAITS[cl.cat].vals[cl.val].clue)}</div></div>`;
+      return `<div class="clue"><div class="c-top"><span class="c-day">${nightLabel(cl.day)} · ${where}</span>${stt}</div><div class="c-trace">${bi(TRAITS[cl.cat].vals[cl.val].clue)}</div>
       <div class="c-fit"><span>${bi('Fits:', 'Совпадения:')}</span> ${fits.length ? fits.map(nm).join(', ') : `<span class="dim">${bi('no one you know of', 'никого из известных вам')}</span>`}${unk.length ? ` <span class="dim">${bi('· unchecked: ', '· не проверены: ')}${unk.map(nm).join(', ')}</span>` : ''}</div></div>`;
     })
     .join('');
@@ -439,34 +444,49 @@ function evSightings() {
 // Who claims which part in Crane's diary, and where two claim the same one.
 function evClaims() {
   let h = '';
+  // (each by the day their present claim was made: the day they took back an earlier one, if they did)
+  const since = c => {
+    const cl = claimOf(c);
+    return cl.recanted != null && cl.claimed !== false ? cl.recanted : cl.said;
+  };
   const said = castOrder(S.order)
     .map(C)
     .filter(c => claimOf(c).said != null)
-    .sort((x, y) => claimOf(x).said - claimOf(y).said);
+    .sort((x, y) => since(x) - since(y));
   const claimPhrase = c => {
     const r = claimOf(c).role;
     return r === 'seer'
-      ? bi('says they dream true', 'говорит, что видит вещие сны')
+      ? bi(`says ${c.p} dreams true`, 'говорит, что видит вещие сны')
       : r === 'warden'
-        ? bi('says they keep watch at night', 'говорит, что по ночам стоит на страже')
+        ? bi(`says ${c.p} keeps watch at night`, 'говорит, что по ночам стоит на страже')
         : r === 'evade'
           ? bi(
-              'will not say what part, if any, they play',
+              `will not say what part, if any, ${c.p} plays`,
               `не говорит, какая роль ${ru.gs(c, 'ему', 'ей')} отведена, если отведена вообще`
             )
-          : bi('says they have no part in the diary', `говорит, что ${ru.gs(c, 'непричастен', 'непричастна')} к дневнику`);
+          : bi(`says ${c.p} has no part in the diary`, `говорит, что ${ru.gs(c, 'непричастен', 'непричастна')} к дневнику`);
   };
   const backPhrase = c => {
     const cl = claimOf(c),
-      d = cl.recanted;
-    if (d == null || cl.claimed === false) return ''; // (one who had said nothing before had nothing to take back)
+      d = cl.said;
+    if (cl.recanted == null || cl.claimed === false) return ''; // (one who had said nothing before had nothing to take back)
     // before everyone, as anyone saw it (a cultist's retreat before everyone looks the same)
-    return ` <span class="dim">${cl.how === 'confess' || cl.how === 'public' || cl.aloud ? bi(`(came clean of an earlier story on day ${d})`, `(${ru.gs(c, 'сам признался', 'сама призналась')} в прежней лжи в день ${d})`) : bi(`(took back an earlier claim on day ${d})`, `(отказ${ru.gs(c, 'ался', 'алась')} от прежних слов в день ${d})`)}</span>`;
+    return ` <span class="dim">${
+      cl.how === 'confess' || cl.how === 'public' || cl.aloud
+        ? bi(
+            `(said otherwise on day ${d}, and came clean of it)`,
+            `(в день ${d} ${ru.gs(c, 'говорил', 'говорила')} иное — и ${ru.gs(c, 'сам признался', 'сама призналась')} во лжи)`
+          )
+        : bi(
+            `(said otherwise on day ${d}, and took it back)`,
+            `(в день ${d} ${ru.gs(c, 'говорил', 'говорила')} иное — и ${ru.gs(c, 'отказался', 'отказалась')} от своих слов)`
+          )
+    }</span>`;
   };
   h +=
     `<h4>${bi('Claims', 'Кто кем себя называет')}</h4>` +
     (said.length
-      ? `<ul class="tlog">${said.map(c => `<li><span class="c-day">${dayLabel(claimOf(c).said)}</span> <b>${bi(c.short, ru.c(c))}</b> ${claimPhrase(c)}${backPhrase(c)}</li>`).join('')}</ul>`
+      ? `<ul class="tlog">${said.map(c => `<li><span class="c-day">${dayLabel(since(c))}</span> <b>${bi(c.short, ru.c(c))}</b> ${claimPhrase(c)}${backPhrase(c)}</li>`).join('')}</ul>`
       : `<p class="dim">${bi('Ask people about Crane’s diary. One of them dreams true, one keeps watch, one is a thief, and not everyone will tell you the truth.', 'Спрашивайте людей о дневнике Крейна. Один из них видит вещие сны, другой стоит на страже, третий — вор, и не каждый скажет вам правду.')}</p>`);
   [
     ['seer', 'dream true', 'видят вещие сны', 'one Dreamer', 'одного сновидца'],

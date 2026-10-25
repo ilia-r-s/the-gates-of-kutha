@@ -48,7 +48,8 @@ function curtTalk(c, hostile = true) {
       ['У меня работа, доктор.', 'Спросите кого-нибудь, кто любит поговорить.'][k]
     ),
     themE: 'stern',
-    note: bi(...tellOne(hostile ? 'curtHostile' : 'curtOff', SAY.curt[hostile ? 'hostile' : 'off'])(c))
+    note: bi(...tellOne(hostile ? 'curtHostile' : 'curtOff', SAY.curt[hostile ? 'hostile' : 'off'])(c)),
+    cool: true // (ui/talk.js: no 'in no hurry today' after this)
   };
 }
 // what you learn as you talk: one of their habits you did not know yet, mostly (talk.habit), then a glimpse of their manner; then, with
@@ -96,9 +97,9 @@ function scholarTalk(c) {
         ][k]
       ) +
       ' ' +
-      bi('“', '„') +
+      bi('‘', '„') +
       S.facts[l].text +
-      bi('”', '“'),
+      bi('’', '“'),
     themE: 'thoughtful',
     note
   };
@@ -197,9 +198,11 @@ const DIALOG = {
       // (a line from your notebook is not a thing to handle: words, not relics)
       const words = t.id === 'line';
       addTest(c.id, c.id, words ? 'words' : 'react', r);
-      let them = bi(tellOne('react-' + (words ? 'words-' : '') + r, (words ? REACT_WORDS_SAY : REACT_SAY)[r]));
+      let them = bi(tellOne('react-' + (words ? 'words-' : '') + r, (words ? REACT_WORDS_SAY : REACT_SAY)[r])),
+        cool = false;
       if (CHARMS.includes(t.id) && SCHOLARS.includes(c.id)) {
         if (c.rapport <= -1 ? chance(RULES.talk.refuse) : offDay(c)) {
+          cool = true;
           them +=
             ' ' +
             bi(
@@ -224,7 +227,8 @@ const DIALOG = {
         pre: bi(`You set ${t.name} on the table between you.`, `Вы кладёте на стол ${showRu(t, 'a')}.`),
         them,
         themE: r === 'fear' ? 'uneasy' : r === 'greed' ? 'smile' : 'thoughtful',
-        note: bi(fmt(tn, { ...P(c), it: many ? 'them' : 'it', they: many ? 'they' : 'it' }), fmtR(R(tn), { n: c }))
+        note: bi(fmt(tn, { ...P(c), it: many ? 'them' : 'it', they: many ? 'they' : 'it' }), fmtR(R(tn), { n: c })),
+        cool
       };
     }
   },
@@ -413,6 +417,7 @@ function rebuff(c, you, before) {
     youE: 'stern',
     them: bi(en, rus),
     themE: 'stern',
+    cool: true,
     note:
       before > c.rapport
         ? bi(...tellOne('thinner', SAY.thinner))
@@ -434,19 +439,19 @@ DIALOG.distrust = {
     if (!others.length) return say(bi('There is nobody left to distrust.', 'Не доверять больше некому.'), 'grave');
     // some will not say: not to you (one turned against you, mostly; anyone on a bad day, now and then: offDay)
     if (c.rapport <= -1 ? chance(RULES.talk.hostileSilence) : offDay(c))
-      return say(
-        bi(
-          'If there were, I would not tell you, Doctor.',
-          `Будь здесь такой человек — вам бы я не ${ru.gs(c, 'сказал', 'сказала')}, доктор.`
-        )
-      );
+      return {
+        ...say(
+          bi(
+            'If there were, I would not tell you, Doctor.',
+            `Будь здесь такой человек — вам бы я не ${ru.gs(c, 'сказал', 'сказала')}, доктор.`
+          )
+        ),
+        cool: true
+      };
     // dreams first: the true Dreamer, those who pretend to dream, and the cult's false Dreamer
     const d = dreamToTell(c);
     if (d)
-      return say(
-        bi('I dreamt of the seven gates. ' + dreamEn(d.t.short, d.cult), 'Мне снились семь врат. ' + dreamRu(d.t, d.cult)),
-        'grave'
-      );
+      return say(bi('I dreamt of the seven gates. ' + dreamEn(d.t, d.cult), 'Мне снились семь врат. ' + dreamRu(d.t, d.cult)), 'grave');
     // the thief who saw something will not say so, but hints at it; now and then he names them outright
     const w = thiefSaw(c);
     if (w && chance(RULES.thief.outright))
@@ -478,7 +483,7 @@ DIALOG.distrust = {
       (temperOf(c) === 'honest') === chance(RULES.talk.ownWay) ? T.distrustVague : T.distrust.concat(T.distrustVague.slice(0, 2))
     );
     return say(
-      bi(fmt(td, { t: b.target.short }).replace(/^“|”$/g, ''), fmtR(R(td), { t: b.target, s: c })),
+      bi(fmt(td, { t: b.target.short, tpp: b.target.pp }).replace(/^“|”$/g, ''), fmtR(R(td), { t: b.target, s: c })),
       likes(c.id, b.target.id) <= -1 ? 'cold' : 'stern'
     );
   }
@@ -551,7 +556,7 @@ DIALOG.title = {
   run(c, e) {
     e = e || titlesToAsk(c)[0];
     const you = bi(
-      `What does “${ttEn(e)}” mean? The title keeps turning up in the tablets.`,
+      `What does ‘${ttEn(e)}’ mean? The title keeps turning up in the tablets.`,
       `Что значит „${ttRu(e)}“? Этот титул всё время попадается в табличках.`
     );
     const hostile = c.rapport <= -1;
@@ -561,6 +566,7 @@ DIALOG.title = {
         youE: 'neutral',
         them: bi('Look it up yourself, Doctor. I am not your dictionary.', 'Посмотрите сами, доктор. Я вам не словарь.'),
         themE: 'stern',
+        cool: true,
         note: hostile
           ? bi('Between the two of you, trust is too thin for favours.', 'Между вами слишком мало доверия для одолжений.')
           : bi('It is not a good day to ask favours of anyone.', 'Сегодня не тот день, чтобы просить кого-то об одолжении.')
@@ -570,20 +576,20 @@ DIALOG.title = {
       G = GODS[gl.g].name,
       Gr = k => ru.god(gl.g, k),
       Title = capS(ttEn(e)),
-      TitleRu = capS(ttRu(e)); // inside speech, Russian quotes nest as „…“
+      TitleRu = capS(ttRu(e)); // inside speech, quotes nest as ‘…’ in English and „…“ in Russian
     journal(glossNote(gl));
     S.log.readings++;
     const them = {
       anselm: bi(
-        `“${Title}”? That is ${G}. The Kutha hymns use the title constantly; one grows tired of it.`,
+        `‘${Title}’? That is ${G}. The Kutha hymns use the title constantly; one grows tired of it.`,
         `„${TitleRu}“? Это ${Gr()}. В кутских гимнах этот титул встречается постоянно, от него даже устаёшь.`
       ),
       ilse: bi(
-        `${G}. Obviously. “${Title}” is the commonest title for ${G} in the late texts.`,
+        `${G}. Obviously. ‘${Title}’ is the commonest title for ${G} in the late texts.`,
         `${Gr()}. Разумеется. „${TitleRu}“ — самый частый титул ${Gr('g')} в поздних текстах.`
       ),
       zahrun: bi(
-        `My grandmother still said it. “${Title}” is ${G}. We say it quietly, and never near water.`,
+        `My grandmother still said it. ‘${Title}’ is ${G}. We say it quietly, and never near water.`,
         `Моя бабушка ещё так говорила. „${TitleRu}“ — это ${Gr()}. Мы произносим это тихо и никогда — у воды.`
       )
     }[c.id];

@@ -161,25 +161,19 @@ function voteLine(v) {
   const n = ids => nameList(ids),
     nr = ids => nameListRu(ids);
   const nobody = !v.back.length && !v.against.length && !v.silent.length;
+  // (with nobody left at the dig to raise a hand, it is the police corporal from Hillah who decides: campVote)
+  if (nobody)
+    return `<p class="notice">${bi(
+      `You lay out your case. There is nobody left at the dig to raise a hand, and it falls to the police corporal from Hillah to decide.${v.passed ? ' He takes your word for it.' : ''}`,
+      `Вы излагаете всё, что у вас есть. Поднять руку на раскопе уже некому, и решать приходится капралу из Хиллы.${v.passed ? ' Он верит вам на слово.' : ''}`
+    )}</p>`;
   const en = [
-      nobody
-        ? v.passed
-          ? 'There is nobody left to raise a hand against it.'
-          : 'There is nobody left to raise a hand at all.'
-        : v.back.length
-          ? `${n(v.back)} ${v.back.length > 1 ? 'side' : 'sides'} with you.`
-          : 'Nobody sides with you.',
+      v.back.length ? `${n(v.back)} ${v.back.length > 1 ? 'side' : 'sides'} with you.` : 'Nobody sides with you.',
       v.against.length ? `${n(v.against)} ${v.against.length > 1 ? 'speak' : 'speaks'} against it.` : '',
       v.silent.length ? `${n(v.silent)} ${v.silent.length > 1 ? 'say' : 'says'} nothing.` : ''
     ],
     rus = [
-      nobody
-        ? v.passed
-          ? 'Возразить уже некому.'
-          : 'Поднять руку уже некому.'
-        : v.back.length
-          ? `На вашей стороне: ${nr(v.back)}.`
-          : 'На вашу сторону не встаёт никто.',
+      v.back.length ? `На вашей стороне: ${nr(v.back)}.` : 'На вашу сторону не встаёт никто.',
       v.against.length ? `Против: ${nr(v.against)}.` : '',
       v.silent.length ? `${v.silent.length > 1 ? 'Молчат' : 'Молчит'}: ${nr(v.silent)}.` : ''
     ];
@@ -197,12 +191,22 @@ function refusedInquiry(x, v) {
   S.log.refusedInq.push({ id: x.id, day: S.day });
   weighWord(x, v, 'refused');
   pullTo('tongues', TENOR.pulls.refused);
-  const half = grudgeOf(x);
+  const grudge = grudgeOf(x);
   if (x.role === 'cult' && chance(RULES.verdict.alerts)) S.alerted = true;
-  const sp = C(
-    v.against.slice().sort((a, b) => likes(b, x.id) - likes(a, x.id))[0] ||
-      v.silent.slice().sort((a, b) => likes(b, x.id) - likes(a, x.id))[0]
-  );
+  // who says it: the fondest of the accused among those who spoke against it, for all of them (or, the only one there
+  // besides you and the accused, for themself); else, nobody having spoken against it, one of those who said nothing,
+  // breaking the silence
+  const likedBest = ids => ids.slice().sort((a, b) => likes(b, x.id) - likes(a, x.id))[0],
+    against = likedBest(v.against),
+    sp = C(against || likedBest(v.silent)),
+    many = v.back.length + v.against.length + v.silent.length > 1,
+    says = !sp
+      ? null
+      : against
+        ? many
+          ? [`${sp.short} says it for all of them:`, `${ru.c(sp)} говорит за всех:`]
+          : [`${sp.short} says it plainly:`, `${ru.c(sp)} говорит прямо:`]
+        : [`At last ${sp.short} breaks the silence:`, `Наконец ${ru.c(sp)} нарушает молчание:`];
   const wronged = S.log.accused.filter(a => !a.right).map(a => C(a.id));
   let line;
   if (wronged.length) {
@@ -232,23 +236,22 @@ function refusedInquiry(x, v) {
   return (
     `<p>${
       sp
-        ? bi('The camp will not do it.', 'Лагерь на это не пойдёт.') +
-          ' ' +
-          bi(`${sp.short} says it for all of them: ${line[0]}`, `${ru.c(sp)} говорит за всех: ${line[1]}`)
-        : v.back.length
-          ? bi('The camp will not do it.', 'Лагерь на это не пойдёт.')
-          : bi(
-              'The police corporal from Hillah will not take anyone away on your word alone.',
-              'Капрал из Хиллы не станет никого увозить с одних ваших слов.'
-            )
+        ? bi('The camp will not do it.', 'Лагерь на это не пойдёт.') + ' ' + bi(`${says[0]} ${line[0]}`, `${says[1]} ${line[1]}`)
+        : // (nobody left to say it: campVote, voteLine)
+          bi('He will not take anyone away on your word alone.', 'Никого не станет он увозить с одних ваших слов.')
     }</p>` +
     `<p>${
-      half
+      grudge === 'none'
         ? bi(
-            `${x.short} stays at the dig. It will be some time before ${x.p} can forgive you this.`,
-            `${ru.c(x)} остаётся в лагере. Пройдёт немало времени, прежде чем ${ru.gs(x, 'он', 'она')} сможет вам это простить.`
+            `${x.short} stays at the dig, and seems, strangely, to bear you no grudge for it.`,
+            `${ru.c(x)} остаётся в лагере — и, как ни странно, будто бы не держит на вас зла.`
           )
-        : bi(`${x.short} stays at the dig, and will not forgive you this.`, `${ru.c(x)} остаётся в лагере — и этого вам не простит.`)
+        : grudge === 'half'
+          ? bi(
+              `${x.short} stays at the dig. It will be some time before ${x.p} can forgive you this.`,
+              `${ru.c(x)} остаётся в лагере. Пройдёт немало времени, прежде чем ${ru.gs(x, 'он', 'она')} сможет вам это простить.`
+            )
+          : bi(`${x.short} stays at the dig, and will not forgive you this.`, `${ru.c(x)} остаётся в лагере — и этого вам не простит.`)
     }</p>` +
     hurt(RULES.inquiry.nerveRefused, 0) +
     walkoutIf()
@@ -256,17 +259,18 @@ function refusedInquiry(x, v) {
 }
 // One accused in vain holds it against you: for good, mostly (grudge); otherwise as one turned against you; now and then
 // only a step, for they half understand (forgive; twice as readily for the honest and the conscientious, and for a
-// friend).
-// Returns whether they half understood.
+// friend); and, hardly ever (scale.rarest: nothing is certain), not at all.
+// Returns how it went: 'none', 'half' (they half understood) or 'full'.
 function grudgeOf(c) {
   const VR = RULES.verdict,
     soft = ['honest', 'conscientious'].includes(temperOf(c)) || c.rapport >= 2;
+  if (chance(RULES.scale.rarest)) return 'none';
   if (chance(VR.forgive * (soft ? 2 : 1))) {
     trustDown(c);
-    return true;
+    return 'half';
   }
   c.rapport = chance(VR.grudge) ? -2 : Math.min(c.rapport, -1);
-  return false;
+  return 'full';
 }
 // after an inquiry: the camp's anger moves, about so far; after a wrong one, an angry camp may hold no more
 function angerAfter(right) {
