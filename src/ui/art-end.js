@@ -627,8 +627,21 @@ const END_ART = {
       bird(620, 70, 0.7)
   },
   'fallen-night': {
+    // a.inBed: you died in your own cot, of a bad wound, a blade, or spite (data/endings.js, nightDeath), and nothing came
+    // through the canvas: the tent whole, a sheet drawn up over the cot, the lamp still burning at first light, and none
+    // of the power's marks
     draw: (tm, u, a) =>
-      sky(tm, 'night') +
+      a.inBed
+        ? sky(tm, 'morning') +
+          ground(tm, 232) +
+          tent(150, 248, 0.6) +
+          palm(730, 240, 0.9) +
+          tent(380, 270, 1.35) +
+          cot(560, 300, 0.9) +
+          shroud(562, 284, 0.92) +
+          lamp(470, 316, 0.8, true) +
+          helmet(660, 318, 0.7, -10)
+        : sky(tm, 'night') +
       ground(tm, 232) +
       stars() +
       tent(150, 248, 0.6) +
@@ -674,7 +687,7 @@ const END_ART = {
         plague: flies(386, 226, 60, 44, 44) + flies(522, 283, 24, 6, 12),
         madness: handMirror(300, 320, 0.9, -70) + scrawl(404, 226, 36) + scrawl(406, 240, 48) + scrawl(408, 254, 60)
       }[a.aspect] || ''),
-    lights: u => glow(u, 250, 300, 40)
+    lights: (u, a) => (a.inBed ? glow(u, 470, 298, 46) : glow(u, 250, 300, 40))
   },
   'fallen-below': {
     draw: () =>

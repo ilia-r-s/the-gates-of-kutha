@@ -162,7 +162,7 @@ const BELOW = {
               )
             : price(
                 hline(
-                  'Its hand comes out of the dust and closes on your arm, and lets go only when you have bled.',
+                  'Its hand comes out of its wrappings and closes on your arm, and lets go only when you have bled.',
                   'Из-под покрова высовывается рука, смыкается на вашей руке и отпускает, лишь когда у вас выступает кровь.'
                 ),
                 dearer(0, ['bold']),
@@ -409,7 +409,10 @@ const BELOW = {
       if (c)
         a.push({
           label: bi(`Let ${c.short} talk you past them`, `Пусть ${ru.c(c)} уведёт вас мимо них`),
-          sub: bi(`${c.short} is steadier than you are`, `${ru.c(c)} держится твёрже вас`),
+          sub: bi(
+            `${c.short} is steadier than you are, unless ${c.p} stops to answer them`,
+            `${ru.c(c)} держится твёрже вас — если только не остановится им ответить`
+          ),
           go: () => {
             const beside = loyal().filter(x => x.id !== c.id).length; // (loyal company besides C helps, as at the gates)
             if (tried(B_().lead, ['company'], louder + RULES.descent.companion * beside))
@@ -555,7 +558,10 @@ const BELOW = {
       if (has('torch'))
         a.push({
           label: bi('Light the way with the torch', 'Осветить путь фонариком'),
-          sub: bi('Electric light, where none has ever been', 'Электрический свет — там, где его никогда не бывало'),
+          sub: bi(
+            'Electric light, where none has ever been; the torch may not last',
+            'Электрический свет — там, где его никогда не бывало; но фонарик может и не выдержать'
+          ),
           go: () => {
             if (tried(B_().torch, ['light']))
               return favour(

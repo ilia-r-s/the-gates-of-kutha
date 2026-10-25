@@ -131,15 +131,23 @@ const endTier = (won, s, t = RULES.reckoning.tiers, blood = false) =>
     : s >= t.close
       ? 'close'
       : 'far';
-// How it went, in one paragraph: a win, told by how clean it was; a near thing; or a rout.
-function endConduct(won, tier, r) {
+// How it went, in one paragraph: a win, told by how clean it was; a near thing; or a rout; or a loss that came after
+// the cult was finished (id: the ending).
+function endConduct(won, tier, r, id) {
   const ward = S.wardOf[S.patron],
-    found = S.log.charms.includes(ward);
-  return won ? endConductWon(tier, r) : tier === 'close' ? endConductClose(r, ward, found) : endConductFar(r, ward, found);
+    found = S.log.charms.includes(ward),
+    done = r.cult.every(x => C(x).status !== 'present'); // (none of it left at large: unmasked, or dead)
+  return won
+    ? endConductWon(tier, r, id)
+    : done
+      ? endConductDone(r, id)
+      : tier === 'close'
+        ? endConductClose(r, ward, found)
+        : endConductFar(r, ward, found);
 }
 // A win: how it is remembered, how soon you had the first of them, who did not live to see it, whom you wronged, and
 // what the camp made of you.
-function endConductWon(tier, r) {
+function endConductWon(tier, r, id) {
   const open = {
     clean: ['It was clean work, by any measure.', 'По любым меркам это была чистая работа.'],
     steady: [
@@ -169,8 +177,11 @@ function endConductWon(tier, r) {
   }[tier];
   const t = r.dead,
     w = r.wrong.map(a => a.id);
+  // (a shot, or the fire, kills whoever of the cult it takes: data/endings.js; those are not the night's dead)
   const dead = !t.length
-    ? bi('No one else died at Kutha after you came.', 'После вашего приезда в Куте больше никто не умер.')
+    ? id === 'shot' || id === 'burned'
+      ? bi('Apart from the cult, no one died at Kutha after you came.', 'Кроме сектантов, после вашего приезда в Куте никто не умер.')
+      : bi('No one else died at Kutha after you came.', 'После вашего приезда в Куте больше никто не умер.')
     : t.length === 1
       ? bi(
           `${C(t[0]).name} did not live to see the end of it.`,
@@ -241,8 +252,27 @@ function endBody(r) {
       : [', and with your nerve whole.', ', и нервы ваши целы.']
     : r.frayed
       ? [', though there was a night when your nerve all but went.', ', хотя была ночь, когда нервы едва не сдали.']
-      : [', if not unshaken.', ', пусть и не без потрясений.'];
+      : [', and with your nerve shaken.', ', а нервы у вас расшатаны.'];
   return bi(en + mind[0], rus + mind[1]);
+}
+// A loss that came after the cult was finished, every one of it unmasked or dead: it was not the cult that beat you,
+// but Kutha by itself, or the camp that sent you away for the deed (id: 'truck').
+function endConductDone(r, id) {
+  const ex = r.inq.map(a => a.id).concat(r.gate, r.night),
+    had = ex.length
+      ? bi(`You had unmasked ${endNames(ex)}.`, `Вы разоблачили ${endNamesRu(ex, 'a')}.`)
+      : bi('None of them was unmasked, but none of them was left.', 'Никого из них вы не разоблачили, но и не осталось никого.'),
+    then =
+      id === 'truck'
+        ? bi(
+            'It was the camp that finished you, for the way you went about it.',
+            'Вас погубил лагерь — за то, как вы этого добились.'
+          )
+        : bi(
+            'Kutha did the rest by itself, as it had before there was anyone to serve it.',
+            'Остальное Кута сделала сама — как делала и прежде, задолго до того, как появилось кому ей служить.'
+          );
+  return `<p>${bi('By the end there was nobody of the cult left at large, and it was not the cult that beat you.', 'Под конец на свободе не осталось никого из секты — и одолела вас не она.')} ${had} ${then}</p>`;
 }
 // A near thing: what you had, and how little was missing.
 function endConductClose(r, ward, found) {
@@ -421,12 +451,13 @@ function ending(kind, how) {
     seen = endSeen(id);
   const mad = ['bethlem', 'canal', 'counting'].includes(id),
     haunt = mad ? 0 : endHaunt(),
-    last = yourLast(won); // (rarely, the end you chose: game/fates.js)
+    later = afterDeaths(), // (deaths that came later, decided once: game/fates.js; nobody is written to who is dead by then)
+    last = yourLast(won, later); // (rarely, the end you chose: game/fates.js)
   const body = endStory(id, how);
   if (won && id !== 'burned') body.push(`<p>${bi(END_CALM[asp][0], END_CALM[asp][1])}</p>`);
-  body.push(endConduct(won, tier, r));
+  body.push(endConduct(won, tier, r, id));
   body.push(`<p>${bi(st[won ? 'win' : 'lose'][0], st[won ? 'win' : 'lose'][1])}</p>`);
-  body.push(endSelf(r, won, last)); // (lost, only what the season left in you, if anything)
+  body.push(endSelf(r, won, last, later)); // (lost, only what the season left in you, if anything)
   if (!won && haunt === 2)
     body.push(
       `<p class="omen">${bi('By the end you could read the wedges in the dark, without a lamp. That should have told you something.', 'Под конец вы могли читать клинья в темноте, без лампы. Это должно было вас насторожить.')}</p>`
@@ -441,7 +472,7 @@ function ending(kind, how) {
     );
   body.push(lastSaid(last));
   body.push(
-    `<div class="debrief"><h3>${bi('What became of them', 'Что стало с ними')}</h3>${endAfter(id, won)}` +
+    `<div class="debrief"><h3>${bi('What became of them', 'Что стало с ними')}</h3>${endAfter(id, won, later)}` +
       `<h3>${bi('What shaped this ending', 'Что привело к этому финалу')}</h3>${endFactors(id, r, haunt, won)}` +
       `<h4>${bi(`Dr ${enName()}’s season in numbers`, `Сезон доктора ${ru.name()} в цифрах`)}</h4>${endNumbers(r)}` +
       (seen
@@ -450,6 +481,7 @@ function ending(kind, how) {
       `<h3>${bi('What was true', 'Как всё было на самом деле')}</h3>${endTruth()}</div>`
   );
   const n = END_IDS.indexOf(id) + 1,
+    inBed = id === 'fallen-night' && NIGHT_IN_BED.includes(nightDeath()),
     how_ = won ? (kind === 'pyrrhic' ? ['a hard victory', 'трудная победа'] : ['victory', 'победа']) : ['defeat', 'поражение'];
   show({
     kicker: bi(
@@ -458,7 +490,10 @@ function ending(kind, how) {
     ),
     title: endTitle(id),
     sub: bi(`${END_TIER[tier][0]} · ${st.name[0]}`, `${END_TIER[tier][1]} · ${st.name[1]}`),
-    art: { bg: 'end', end: id, aspect: asp, time: END_TIME[id] },
+    // (a death in your own cot, with nothing torn open, at first light: data/endings.js, nightDeath)
+    art: inBed
+      ? { bg: 'end', end: id, aspect: asp, time: 'dawn', inBed: true }
+      : { bg: 'end', end: id, aspect: asp, time: END_TIME[id] },
     body,
     choices: [
       {

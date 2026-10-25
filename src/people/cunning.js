@@ -291,12 +291,11 @@ function turnAtTheEnd() {
     held = f.g3 && f.g3.kind === 'comp' ? f.g3.id : null,
     cult = f.comp.map(C).filter(c => c.role === 'cult' && isFree(c) && (!f.left.includes(c.id) || c.id === held)),
     turned = cult.filter(c => chance(D.turn * (c.rapport >= 2 ? 1 - D.turnFond : 1)));
-  // one of them you left behind on the way goes down to the circle by another way, all but always; now and then it does
-  // not come at all (stayedAway)
-  f.stayedAway = f.comp
-    .map(C)
-    .filter(c => c.role === 'cult' && isFree(c) && f.left.includes(c.id) && c.id !== held && !chance(D.turn))
-    .map(c => c.id);
+  // one of them you left behind on the way goes down to the circle by another way, all but always (cameBack: the
+  // ending tells it); now and then it does not come at all (stayedAway)
+  const behind = f.comp.map(C).filter(c => c.role === 'cult' && isFree(c) && f.left.includes(c.id) && c.id !== held);
+  f.stayedAway = behind.filter(() => !chance(D.turn)).map(c => c.id);
+  f.cameBack = behind.map(c => c.id).filter(id => !f.stayedAway.includes(id));
   f.heldBack = cult
     .filter(c => !turned.includes(c))
     .map(c => c.id)
@@ -307,7 +306,7 @@ function turnAtTheEnd() {
     .map(t =>
       bi(
         `<p>${t.short} stops at the edge of the light, and looks at the circle a long time, and then at you. ${capS(t.p)} does not go to them.</p>`,
-        `<p>${ru.c(t)} останавливается на краю света и долго смотрит на круг, а потом на вас — и не идёт к ним.</p>`
+        `<p>${ru.c(t)} останавливается на границе света и долго смотрит на круг, а потом на вас — и не идёт к ним.</p>`
       )
     )
     .join('');

@@ -8,6 +8,9 @@ function finaleIntro(early, why = null) {
   const atNight = S.phase === 'night'; // (the last of the cult unmasked in the night, and the gate opened of itself)
   S.phase = 'finale';
   S.slot = 2;
+  // (the night's growth may carry the rite past its top, where the gate opens and the meter says only that it is
+  // complete: the descent starts from the top, and only what you do below can cost you more)
+  S.doom = Math.min(S.doom, S.doomMax);
   S.fin = {
     early,
     why,
@@ -115,7 +118,7 @@ function companionScene(said) {
     title: n ? bi('One more?', 'Кто-нибудь ещё?') : bi('Who comes with you?', 'Кто пойдёт с вами?'),
     body: [
       (said || '') +
-        `<p>${n ? bi(C(f.comp[0]).short + ' is lacing up boots and checking a lamp. Do you want anyone else?', `${ru.c(f.comp[0])} зашнуровывает ботинки и проверяет лампу. Взять ещё кого-нибудь?`) : bi('You can take up to two people down. Loyal company makes every step safer. A cultist at your back will betray you, sooner or later. Not everyone will follow you.', 'С собой можно взять не больше двоих. С верными спутниками каждый шаг безопаснее. Сектант за спиной рано или поздно вас предаст. И не каждый согласится пойти за вами.')}</p>`
+        `<p>${n ? bi(`${C(f.comp[0]).short} is lacing up ${C(f.comp[0]).pp} boots and checking a lamp. Do you want anyone else?`, `${ru.c(f.comp[0])} зашнуровывает ботинки и проверяет лампу. Взять ещё кого-нибудь?`) : bi('You can take up to two people down. Loyal company makes every step safer. A cultist at your back will betray you, sooner or later. Not everyone will follow you.', 'С собой можно взять не больше двоих. С верными спутниками каждый шаг безопаснее. Сектант за спиной рано или поздно вас предаст. И не каждый согласится пойти за вами.')}</p>`
     ],
     choices: ch
   });
@@ -384,7 +387,7 @@ function gate3(said = '') {
   const G7 = RULES.descent.gate7,
     spurned = S.fin.spurned || [];
   const ch = S.items
-    .filter(it => !spurned.includes(it))
+    .filter(it => !spurned.includes(it) && it !== 'torch') // (the torch has done its work by the last gate: it is no price)
     .map(it => ({
       label: bi(`Leave ${theItem(it)}`, `Оставить ${ru.item(it, 'a')}`),
       sub: ITEMS[it].ward ? bi('An old charm. You might need it below', 'Древний амулет. Внизу может пригодиться') : bi(ITEMS[it].desc),
@@ -411,7 +414,7 @@ function gate3(said = '') {
       ch.push({
         label: bi(`Ask ${c.short} to hold the gate`, `Попросить ${ru.c(c, 'a')} удержать врата`),
         sub: bi(
-          'They stay behind, and their help with them',
+          `${EP.He(c)} stays behind, and ${c.pp} help with ${EP.him(c)}`,
           ru.gs(c, 'Он останется здесь, а с ним и его помощь', 'Она останется здесь, а с ней и её помощь')
         ),
         fn: () => {
@@ -597,12 +600,17 @@ function sanctumActs(hier) {
     });
   return ch;
 }
-// how each act fails (act: what you did)
+// how each act fails (act: what you did; the sanctum may be wet or dry, by the power: ASPECTS, sanctum)
 const FAILED = {
-  ward: () =>
+  ward: act =>
     bi(
-      'The words fall dead in the hot air. Whatever you called on is not listening, or is not the one here.',
-      'Слова падают замертво в горячем воздухе. То, к чему вы взывали, не слушает — или здесь не оно.'
+      `You hold ${theItem(act.it)} up to the circle, and nothing answers. Whatever you called on is not listening, or is not the one here.`,
+      `Вы поднимаете ${ru.item(act.it, 'a')} перед кругом — и ничто не отзывается. То, к чему вы взывали, не слушает — или здесь не оно.`
+    ),
+  rite: () =>
+    bi(
+      'The words fall dead as you speak them. Whatever you called on is not listening, or is not the one here.',
+      'Слова падают замертво, едва вы их произносите. То, к чему вы взывали, не слушает — или здесь не оно.'
     ),
   shoot: act => {
     const t = C(act.id),
@@ -618,7 +626,6 @@ const FAILED = {
       'Битум занимается, огонь бежит по нему — и гаснет, будто его сжала чья-то рука. А ваш рукав всё ещё горит.'
     )
 };
-FAILED.rite = FAILED.ward;
 function finalAct(p, kind) {
   const act = S.fin.acts[S.fin.acts.length - 1];
   if (chance(p)) {
@@ -658,7 +665,7 @@ function statusText(c) {
   if (c.status === 'dismissed') return bi('Sent away', ru.gs(c, 'Отослан', 'Отослана'));
   if (S.fin && S.fin.acts.some(a => a.kind === 'shoot' && a.ok && a.id === c.id))
     return bi('Shot below', ru.gs(c, 'Застрелен внизу', 'Застрелена внизу'));
-  if (S.fin && (S.fin.betrayed.includes(c.id) || (S.fin.turned || []).includes(c.id)))
+  if (S.fin && [S.fin.betrayed, S.fin.turned || [], S.fin.cameBack || []].some(l => l.includes(c.id)))
     return bi('Betrayed you', ru.gs(c, 'Предал вас', 'Предала вас'));
   if (c.role === 'cult') return bi('Never unmasked', ru.gs(c, 'Не разоблачён', 'Не разоблачена'));
   return bi('Survived', ru.gs(c, 'Выжил', 'Выжила'));

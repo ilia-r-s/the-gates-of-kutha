@@ -120,7 +120,8 @@ function fxCompany({ f, add }) {
     );
 }
 // The cult on the stair: one you took down at the fourth gate, a knife in your back there, one who walked beside you
-// to the end and joined the circle, and the true ward taken from you on the way.
+// to the end and joined the circle, one you left behind who joined it all the same, and the true ward taken from you
+// on the way.
 function fxTreachery({ f, r, add }) {
   if (!f) return;
   r.gate.forEach(x => {
@@ -150,6 +151,15 @@ function fxTreachery({ f, r, add }) {
       `${capS(ru.cf(c))} ${ru.gs(c, 'шёл', 'шла')} рядом с вами всю дорогу вниз, а в конце ${ru.gs(c, 'занял', 'заняла')} место в круге культа.${h[1]}`
     );
   });
+  (f.cameBack || []).forEach(x => {
+    const c = C(x),
+      h = fxHier(c);
+    add(
+      'm',
+      `${c.name} was left behind on the way down, but went down to the circle by another way, and took ${c.pp} place in it.${h[0]}`,
+      `${capS(ru.cf(c))} ${ru.gs(c, 'остался', 'осталась')} позади на пути вниз, но другой дорогой ${ru.gs(c, 'спустился', 'спустилась')} к кругу и ${ru.gs(c, 'занял', 'заняла')} в нём своё место.${h[1]}`
+    );
+  });
   (f.heldBack || []).forEach(x => {
     const c = C(x),
       h = fxHier(c);
@@ -171,6 +181,13 @@ function fxTreachery({ f, r, add }) {
       'm',
       `${capS(theItem(f.stolen))}, the true ward, ${V(f.stolen, 'was', 'were')} taken from you on the way down, and burned before your eyes.`,
       `${ru.Item(f.stolen)}, истинный оберег, ${ru.ig(f.stolen, 'был украден', 'была украдена', 'было украдено', 'были украдены')} у вас по дороге вниз и ${ru.ig(f.stolen, 'сожжён', 'сожжена', 'сожжено', 'сожжены')} у вас на глазах.`
+    );
+  // (another charm burned in the ward's place: people/cunning.js, turnAtTheEnd)
+  if (f.feint)
+    add(
+      'n',
+      `${capS(theItem(f.feint))} ${V(f.feint, 'was', 'were')} taken from you on the way down and burned before your eyes: not the ward at all, but a feint, to make you give up the rest.`,
+      `${ru.Item(f.feint)} ${ru.ig(f.feint, 'был украден', 'была украдена', 'было украдено', 'были украдены')} у вас по дороге вниз и ${ru.ig(f.feint, 'сожжён', 'сожжена', 'сожжено', 'сожжены')} у вас на глазах — вовсе не оберег, а уловка, чтобы вы отказались от остальных.`
     );
 }
 // What you paid the seventh gate.
@@ -342,7 +359,10 @@ function fxCult({ f, r, add }) {
   const shotDead = f && f.acts.find(a => a.kind === 'shoot' && a.ok);
   r.cult
     .filter(
-      x => C(x).status === 'present' && !(shotDead && shotDead.id === x) && !(f && (f.betrayed.includes(x) || (f.turned || []).includes(x)))
+      x =>
+        C(x).status === 'present' &&
+        !(shotDead && shotDead.id === x) &&
+        !(f && (f.betrayed.includes(x) || (f.turned || []).includes(x) || (f.cameBack || []).includes(x)))
     )
     .forEach(x => {
       const c = C(x);
@@ -422,11 +442,12 @@ function fxCunning({ add }) {
     .forEach(cl => {
       const o = C(cl.owner),
         by = C(cl.by),
-        seen = cl.status === 'planted';
+        seen = cl.status === 'planted',
+        [on, onRu] = onNight(cl.day).map(capS);
       add(
         seen ? 'p' : 'n',
-        `On night ${cl.day} ${by.name} laid ${o.name}’s trace at the scene${seen ? ', and you saw through it' : ', to be found'}.`,
-        `В ночь ${cl.day} ${ru.cf(by)} ${ru.gs(by, 'подбросил', 'подбросила')} на место нападения след ${ru.cf(o, 'g')}${seen ? ' — и вы это раскусили' : ', чтобы его нашли'}.`
+        `${on} ${by.name} laid ${o.name}’s trace at the scene${seen ? ', and you saw through it' : ', to be found'}.`,
+        `${onRu} ${ru.cf(by)} ${ru.gs(by, 'подбросил', 'подбросила')} на место нападения след ${ru.cf(o, 'g')}${seen ? ' — и вы это раскусили' : ', чтобы его нашли'}.`
       );
     });
   S.log.keptWatch.forEach(k => {
@@ -450,12 +471,13 @@ function fxCunning({ add }) {
   // the attacker who owned being out near the place, when you asked
   S.nights.forEach((rec, n) => {
     const c = rec && C(rec.actor),
-      said = c && S.claims.find(x => x.night === n && x.id === c.id);
+      said = c && S.claims.find(x => x.night === n && x.id === c.id),
+      [on, onRu] = onNight(n).map(capS);
     if (said && wasThere(said))
       add(
         'n',
-        `On night ${n} ${c.name} owned being out ${PLACE_SHORT[said.loc]}, rather than be caught lying, and it was ${c.p} who did it.`,
-        `В ночь ${n} ${ru.cf(c)} не ${ru.gs(c, 'стал', 'стала')} скрывать, что ${ru.gs(c, 'был', 'была')} ${PLACE_RU[said.loc]}, чтобы не попасться на лжи, — и это ${ru.gs(c, 'он', 'она')} всё и ${ru.gs(c, 'сделал', 'сделала')}.`
+        `${on} ${c.name} owned being out ${PLACE_SHORT[said.loc]}, rather than be caught lying, and it was ${c.p} who did it.`,
+        `${onRu} ${ru.cf(c)} не ${ru.gs(c, 'стал', 'стала')} скрывать, что ${ru.gs(c, 'был', 'была')} ${PLACE_RU[said.loc]}, чтобы не попасться на лжи, — и это ${ru.gs(c, 'он', 'она')} всё и ${ru.gs(c, 'сделал', 'сделала')}.`
       );
   });
   betrayalLines().forEach(([en, rus]) => add('n', en, rus));
@@ -469,9 +491,11 @@ function fxCunning({ add }) {
       `В день ${b.day} ${ru.cf(c)} ${ru.gs(c, 'назвал', 'назвала')} ${ru.cf(o, 'a')}, ${ru.gs(o, 'своего же собрата', 'свою же сестру')} по культу, когда ${ru.gs(o, 'тот', 'та')} уже ${ru.gs(o, 'казался обречённым', 'казалась обречённой')}: одного отдали, чтобы спасти остальных.`
     );
   });
-  // how the cult read your way of hunting it, and turned its craft against it (people/cunning.js, cultTurns)
+  // how the cult read your way of hunting it, and turned its craft against it (people/cunning.js, cultTurns), in the
+  // order it did
   Object.entries(S.turned || {})
     .filter(([, t]) => t.day != null)
+    .sort(([, a], [, b]) => a.day - b.day)
     .forEach(([k, t]) => {
       const [en, rus] = {
         sleuth: [
@@ -560,38 +584,41 @@ function fxMisfortune({ add }) {
     .filter(cl => cl.source === 'stray' && !cl.extra)
     .forEach(cl => {
       const o = C(cl.owner),
-        seen = cl.status === 'stray';
+        seen = cl.status === 'stray',
+        [on, onRu] = onNight(cl.day).map(capS);
       add(
         'n',
-        `On night ${cl.day} the trace at the scene was ${o.name}’s, left there earlier${seen ? ', as you found out' : ''}.`,
-        `В ночь ${cl.day} след на месте нападения ${ru.gs(o, 'оставил', 'оставила')} ${ru.cf(o)} — раньше, до того как всё случилось${seen ? ', и вы это выяснили' : ''}.`
+        `${on} the trace at the scene was ${o.name}’s, left there earlier${seen ? ', as you found out' : ''}.`,
+        `${onRu} след на месте нападения ${ru.gs(o, 'оставил', 'оставила')} ${ru.cf(o)} — раньше, до того как всё случилось${seen ? ', и вы это выяснили' : ''}.`
       );
     });
   // what the ground misled you about
   S.clues
     .filter(cl => cl.misread)
     .forEach(cl => {
-      const o = C(cl.owner);
+      const o = C(cl.owner),
+        [on, onRu] = onNight(cl.day).map(capS);
       add(
         'n',
         cl.source === 'cult'
-          ? `On night ${cl.day} the attacker’s own trace looked older than it was, and you set it aside: it was ${o.name}’s.`
-          : `On night ${cl.day} ${o.name}’s trace looked fresh, and you took it for the attacker’s. It was not.`,
+          ? `${on} the attacker’s own trace looked older than it was, and you set it aside: it was ${o.name}’s.`
+          : `${on} ${o.name}’s trace looked fresh, and you took it for the attacker’s. It was not.`,
         cl.source === 'cult'
-          ? `В ночь ${cl.day} след самого нападавшего показался вам старше, чем был, и вы его отбросили: это был след ${ru.cf(o, 'g')}.`
-          : `В ночь ${cl.day} след ${ru.cf(o, 'g')} показался вам свежим, и вы приняли его за след нападавшего. Это было не так.`
+          ? `${onRu} след самого нападавшего показался вам старше, чем был, и вы его отбросили: это был след ${ru.cf(o, 'g')}.`
+          : `${onRu} след ${ru.cf(o, 'g')} показался вам свежим, и вы приняли его за след нападавшего. Это было не так.`
       );
     });
   S.nights.forEach((rec, n) => {
     if (!rec) return;
-    const asked = id => S.claims.some(x => x.night === n && x.id === id);
+    const asked = id => S.claims.some(x => x.night === n && x.id === id),
+      [on, onRu] = onNight(n).map(capS);
     (rec.afraid || []).filter(asked).forEach(id => {
       const c = C(id),
         there = wasAbout(rec, id);
       add(
         'n',
-        `On night ${n} ${c.name} lied about where ${c.p} had been, out of fear${there ? `: ${c.p} had been where it happened` : ''}.`,
-        `В ночь ${n} ${ru.cf(c)} ${ru.gs(c, 'солгал', 'солгала')} о том, где ${ru.gs(c, 'был', 'была')}, — из страха${there ? `: ${ru.gs(c, 'он был', 'она была')} там, где всё случилось` : ''}.`
+        `${on} ${c.name} lied about where ${c.p} had been, out of fear${there ? `: ${c.p} had been where it happened` : ''}.`,
+        `${onRu} ${ru.cf(c)} ${ru.gs(c, 'солгал', 'солгала')} о том, где ${ru.gs(c, 'был', 'была')}, — из страха${there ? `: ${ru.gs(c, 'он был', 'она была')} там, где всё случилось` : ''}.`
       );
     });
     (rec.secret || []).filter(asked).forEach(id => {
@@ -599,8 +626,8 @@ function fxMisfortune({ add }) {
         t = rec.truth[id];
       add(
         'n',
-        `On night ${n} ${c.name} said ${c.p} had been asleep; ${c.p} had been out ${PLACE_SHORT[t.loc]} with ${C(t.with).name}.`,
-        `В ночь ${n} ${ru.cf(c)} ${ru.gs(c, 'сказал', 'сказала')}, что ${ru.gs(c, 'спал', 'спала')}; на самом деле ${ru.gs(c, 'он был', 'она была')} ${PLACE_RU[t.loc]} с ${ru.cf(t.with, 'i')}.`
+        `${on} ${c.name} said ${c.p} had been asleep; ${c.p} had been out ${PLACE_SHORT[t.loc]} with ${C(t.with).name}.`,
+        `${onRu} ${ru.cf(c)} ${ru.gs(c, 'сказал', 'сказала')}, что ${ru.gs(c, 'спал', 'спала')}; на самом деле ${ru.gs(c, 'он был', 'она была')} ${PLACE_RU[t.loc]} с ${ru.cf(t.with, 'i')}.`
       );
     });
     Object.keys(rec.saw)
@@ -609,8 +636,8 @@ function fxMisfortune({ add }) {
         const c = C(id);
         add(
           'n',
-          `On night ${n} ${c.name} said ${c.p} had seen someone in the dark; ${c.p} had seen nothing, and wanted the camp to listen.`,
-          `В ночь ${n} ${ru.cf(c)} ${ru.gs(c, 'сказал', 'сказала')}, что ${ru.gs(c, 'видел', 'видела')} кого-то в темноте; ${ru.gs(c, 'он не видел', 'она не видела')} ничего — ${ru.gs(c, 'ему', 'ей')} просто хотелось, чтобы лагерь прислушался.`
+          `${on} ${c.name} said ${c.p} had seen someone in the dark; ${c.p} had seen nothing, and wanted the camp to listen.`,
+          `${onRu} ${ru.cf(c)} ${ru.gs(c, 'сказал', 'сказала')}, что ${ru.gs(c, 'видел', 'видела')} кого-то в темноте; ${ru.gs(c, 'он не видел', 'она не видела')} ничего — ${ru.gs(c, 'ему', 'ей')} просто хотелось, чтобы лагерь прислушался.`
         );
       });
   });
@@ -1016,7 +1043,13 @@ function fxVictims({ add }) {
     else if (say) add('n', `The cult chose ${v.name} on night ${n}: ${say[0]}.`, `Сектанты выбрали ${ru.cf(v, 'a')} в ночь ${n}: ${say[1]}.`);
   });
 }
-// The dead, and the nights they came for you.
+// Whether what came on night n came by itself, with nobody of the cult left at large (game/night.js, priestless): its
+// scene had no attacker of flesh; or, the night that killed you, whose record was never written, nobody of it was free.
+const powerAt = n => {
+  const rec = S.nights[n];
+  return rec ? !!rec.crimeLoc && !rec.actor : n === S.day && S.ended === 'death' && !freeCult().length;
+};
+// The dead, and the nights they came for you (or the power below came, by itself).
 function fxNights({ r, L, add }) {
   // (and at the last, you: dead in the night, whatever did it; the dig itself by day is no night's doing)
   const taken = r.dead.slice().sort((a, b) => C(a).takenDay - C(b).takenDay),
@@ -1031,11 +1064,16 @@ function fxNights({ r, L, add }) {
   else if (you) add('n', 'After you came, the night took no one but you.', 'После вашего приезда ночь не забрала никого, кроме вас.');
   else add(died ? 'n' : 'p', 'After you came, the night took no one.', 'После вашего приезда ночь не забрала никого.');
   L.attacks.forEach(a => {
+    const pw = powerAt(a.day);
     if (a.how === 'hurt')
       add(
         'm',
-        `On night ${a.day} they came for you, and you bled for it.`,
-        `В ночь ${a.day} они пришли за вами — и вы поплатились кровью.`
+        pw
+          ? `On night ${a.day} the power below came for you by itself, and you bled for it.`
+          : `On night ${a.day} they came for you, and you bled for it.`,
+        pw
+          ? `В ночь ${a.day} сила из-под земли сама пришла за вами — и вы поплатились кровью.`
+          : `В ночь ${a.day} они пришли за вами — и вы поплатились кровью.`
       );
     else if (a.how === 'bowl')
       add(
@@ -1056,8 +1094,12 @@ function fxNights({ r, L, add }) {
     else if (a.how === 'woke')
       add(
         'n',
-        `On night ${a.day} they came for you, and you woke in time.`,
-        `В ночь ${a.day} они пришли за вами — но вы вовремя проснулись.`
+        pw
+          ? `On night ${a.day} the power below came for you by itself, and you woke in time.`
+          : `On night ${a.day} they came for you, and you woke in time.`,
+        pw
+          ? `В ночь ${a.day} сила из-под земли сама пришла за вами — но вы вовремя проснулись.`
+          : `В ночь ${a.day} они пришли за вами — но вы вовремя проснулись.`
       );
   });
   L.quiet.forEach(d => {
@@ -1093,11 +1135,16 @@ function fxNights({ r, L, add }) {
   L.spared
     .filter(x => !x.away && !S.betrayals.some(b => b.day === x.day))
     .forEach(x => {
-      const c = C(x.id);
+      const c = C(x.id),
+        pw = powerAt(x.day);
       add(
         'n',
-        `On night ${x.day} they came for ${c.name}, and the camp’s dogs woke everyone first.`,
-        `В ночь ${x.day} они пришли за ${ru.cf(c, 'i')}, но собаки перебудили лагерь раньше.`
+        pw
+          ? `On night ${x.day} the power below came for ${c.name} by itself, and the camp’s dogs woke everyone first.`
+          : `On night ${x.day} they came for ${c.name}, and the camp’s dogs woke everyone first.`,
+        pw
+          ? `В ночь ${x.day} сила из-под земли сама пришла за ${ru.cf(c, 'i')}, но собаки перебудили лагерь раньше.`
+          : `В ночь ${x.day} они пришли за ${ru.cf(c, 'i')}, но собаки перебудили лагерь раньше.`
       );
     });
 }
@@ -1182,11 +1229,17 @@ function fxDeed({ add }) {
     );
   }
   if (S.log.attacks.some(a => a.day === d.day && a.how === 'out'))
-    add(
-      'n',
-      'That night the cult came for you, and found your tent empty.',
-      'В ту ночь культ приходил за вами — и нашёл вашу палатку пустой.'
-    );
+    powerAt(d.day)
+      ? add(
+          'n',
+          'That night the power below came for you by itself, and found your tent empty.',
+          'В ту ночь сила из-под земли сама приходила за вами — и нашла вашу палатку пустой.'
+        )
+      : add(
+          'n',
+          'That night the cult came for you, and found your tent empty.',
+          'В ту ночь культ приходил за вами — и нашёл вашу палатку пустой.'
+        );
   if (d.vote)
     add(
       d.vote.passed ? 'm' : 'n',
@@ -1200,7 +1253,10 @@ function fxVisit({ add }) {
   if (!v) return;
   const h = C(v.id),
     cult = h.role === 'cult',
-    was = cult ? [' She was one of them.', ' Она была одной из них.'] : [' She was what she seemed.', ' Она была той, кем казалась.'];
+    was = cult ? [' She was one of them.', ' Она была одной из них.'] : [' She was what she seemed.', ' Она была той, кем казалась.'],
+    // (what came that night: the cult, or the power below by itself; either feminine in Russian, «секта», «сила»)
+    pw = powerAt(v.day),
+    it = pw ? ['the power below', 'сила из-под земли'] : ['the cult', 'секта'];
   if (!v.agreed) {
     add(
       cult ? 'p' : 'n',
@@ -1236,30 +1292,30 @@ function fxVisit({ add }) {
   if (v.empty)
     add(
       'n',
-      'That night the cult came for her, and found her tent empty.',
-      'В ту ночь секта приходила за ней — и нашла её палатку пустой.'
+      `That night ${it[0]} came for her, and found her tent empty.`,
+      `В ту ночь ${it[1]} приходила за ней — и нашла её палатку пустой.`
     );
   if (v.found)
     add(
       v.found === 'dead' ? 'm' : 'n',
       v.found === 'dead'
-        ? 'That night the cult came for her, knew where she slept, and killed her beside you in your sleep.'
+        ? `That night ${it[0]} came for her, knew where she slept, and killed her beside you in your sleep.`
         : v.found === 'watch'
-          ? 'That night the cult came for her at your tent, and the Watcher drove it off.'
-          : 'That night the cult came for her at your tent, and the dogs woke the camp first.',
+          ? `That night ${it[0]} came for her at your tent, and the Watcher drove it off.`
+          : `That night ${it[0]} came for her at your tent, and the dogs woke the camp first.`,
       v.found === 'dead'
-        ? 'В ту ночь секта приходила за ней, знала, где она спит, — и убила её рядом с вами, пока вы спали.'
+        ? `В ту ночь ${it[1]} приходила за ней, знала, где она спит, — и убила её рядом с вами, пока вы спали.`
         : v.found === 'watch'
-          ? 'В ту ночь секта приходила за ней к вашей палатке — и Страж её прогнал.'
-          : 'В ту ночь секта приходила за ней к вашей палатке — но собаки перебудили лагерь раньше.'
+          ? `В ту ночь ${it[1]} приходила за ней к вашей палатке — и Страж её прогнал.`
+          : `В ту ночь ${it[1]} приходила за ней к вашей палатке — но собаки перебудили лагерь раньше.`
     );
   if (v.through === 'her')
-    add('m', 'That night the cult came for you, and took her instead.', 'В ту ночь секта приходила за вами — а забрала её.');
+    add('m', `That night ${it[0]} came for you, and took her instead.`, `В ту ночь ${it[1]} приходила за вами — а забрала её.`);
   else if (v.through === 'hurt')
     add(
       'n',
-      'That night the cult came for you; she screamed, and it fled.',
-      `В ту ночь секта приходила за вами; ${ru.c(h)} закричала, и они бежали.`
+      `That night ${it[0]} came for you; she screamed, and it fled.`,
+      `В ту ночь ${it[1]} приходила за вами; ${ru.c(h)} закричала, и ${pw ? 'сила отступила' : 'они бежали'}.`
     );
   if (v.chill)
     add(

@@ -89,6 +89,24 @@ const END_TRACE = {
     'ваше зеркальце для бритья повёрнуто к стене, и по всему холсту снова и снова, задом наперёд, вашей же рукой написано ваше имя'
   ]
 };
+// How the night ended you, as the ending tells it (by what hurt you last, and who was in your tent that evening: people/
+// visit.js): 'visit', she did the cult's work herself; 'wrist', you caught her wrist and not her blade; 'you', they came
+// and took only you; 'both', they came and found the two of you; 'deed', the cut from the night you went out yourself
+// (game/deed.js); 'peril', the dig; 'spite', someone who could not stand you (game/hazards.js); else 'taken', they came
+// for you, and the tell kept you. In NIGHT_FOUND you were found where you lay; in NIGHT_IN_BED, in a tent nothing had
+// torn open (the picture: ui/art-end.js).
+function nightDeath() {
+  const v = S.log.visit,
+    hers = !!v && v.day === S.day;
+  if (hers && S.hurtBy === 'visit') return 'visit';
+  if (hers && S.hurtBy === 'wrist') return 'wrist';
+  if (hers && v.agreed && (v.through === 'you' || v.through === 'both')) return v.through;
+  if (S.hurtBy === 'deed' && S.log.deed) return 'deed';
+  if (S.hurtBy === 'peril' || S.hurtBy === 'spite') return S.hurtBy;
+  return 'taken';
+}
+const NIGHT_IN_BED = ['visit', 'wrist', 'deed', 'peril', 'spite'],
+  NIGHT_FOUND = NIGHT_IN_BED.concat(['both']);
 function endStory(id, how) {
   const E = ENDINGS,
     p = t => `<p>${t}</p>`,
@@ -177,7 +195,7 @@ function endStory(id, how) {
           ...S.log.accused.filter(a => a.right).map(a => a.day),
           ...(S.log.visit && S.log.visit.struck === 'failed' ? [S.log.visit.day] : [])
         ),
-        buried = !!mine && mine.takenDay >= lastUnmasked,
+        buried = !!mine && mine.takenDay >= lastUnmasked, // (dead by your hand: buried wherever its grave is, END_GRAVE)
         last = fin.caught
           ? bi(
               'the last voice it had is lying bound at the fourth gate, still murmuring a verse it will never reach.',
@@ -186,7 +204,7 @@ function endStory(id, how) {
           : back
             ? bi(
                 `the last voice it had is standing beside you at the edge of the light, and will not go to it.`,
-                `а последний голос, что у него был, стоит рядом с вами на краю света и не идёт к нему.`
+                `а последний голос, что у него был, стоит рядом с вами на границе света и не идёт к нему.`
               )
             : away
               ? bi(
@@ -195,8 +213,8 @@ function endStory(id, how) {
                 )
               : buried
                 ? bi(
-                    'the last voice it had is in the ground at Kutha, and you put it there.',
-                    'а последний голос, что у него был, лежит в земле Куты — и положили его туда вы.'
+                    'the last voice it had was silenced in the night, and by your own hand.',
+                    'а последний голос, что у него был, умолк в ночи — и от вашей руки.'
                   )
                 : bi(
                     'the last of its voices is on the road to Hillah under guard. It came this far on its own, and there is nobody to finish it.',
@@ -264,14 +282,21 @@ function endStory(id, how) {
                 `${ru.Item(a.it)} ${ru.ig(a.it, 'трескается', 'трескается', 'трескается', 'трескаются')} у вас в руке и ничего не ${ru.ig(a.it, 'сковывает', 'сковывает', 'сковывает', 'сковывают')} — но пение всё равно сбивается.`
               )
           : how === 'falter'
-            ? bi(
-                'You have nothing left to raise and nothing left to say. You stand in the light and watch, and on the very last line the hierophant’s voice cracks, and does not mend.',
-                'Вам больше нечего поднять и нечего сказать. Вы стоите в круге света и смотрите — и на самой последней строке голос иерофанта срывается и уже не возвращается.'
+            ? // (whoever leads it: the hierophant may be in a cell by now)
+              bi(
+                'You have nothing left to raise and nothing left to say. You stand in the light and watch, and on the very last line the voice leading the chant cracks, and does not mend.',
+                'Вам больше нечего поднять и нечего сказать. Вы стоите в круге света и смотрите — и на самой последней строке голос, ведущий пение, срывается и уже не возвращается.'
               )
-            : bi(
-                'Your voice gives out on the last line, but the last line is spoken.',
-                'На последней строке голос вам изменяет, но последняя строка произнесена.'
-              );
+            : act('rite') && act('rite').g !== S.patron
+              ? // the counter-rite against the wrong power, and the rite broke all the same (RULES.descent.wrongRite)
+                bi(
+                  'Your voice gives out on the last line, and the name you spoke was the wrong one; but the last line is spoken, and the chant falters all the same.',
+                  'На последней строке голос вам изменяет, и имя вы назвали не то; но последняя строка произнесена, и пение всё равно сбивается.'
+                )
+              : bi(
+                  'Your voice gives out on the last line, but the last line is spoken.',
+                  'На последней строке голос вам изменяет, но последняя строка произнесена.'
+                );
       const g3 = S.fin.g3,
         with_ = loyal()
           .map(c => c.id)
@@ -298,12 +323,15 @@ function endStory(id, how) {
         who = fr ? [fr.short, ru.c(fr)] : isFree(hm) ? ['Hamid', 'Хамид'] : ['one of the pickmen', 'один из землекопов'],
         tr = END_TRACE[asp] || END_TRACE.fire,
         // (where they found you, only how the Museum put it: where they did not, the tell kept you)
-        museum = p(bi(E.death.text[1]));
+        museum = p(bi(E.death.text[1])),
+        way = nightDeath(),
+        // (with nobody of the cult left at large, what came for you came by itself: game/night.js, priestless)
+        none = !freeCult().length;
       // the one who came to your tent that evening (people/visit.js): she was of the cult and did it herself; or she
       // tried and you caught her wrist, but not her blade; or the cult came for you and found two of you
       const v = S.log.visit,
-        h = v && v.day === S.day && C(v.id);
-      if (h && S.hurtBy === 'visit')
+        h = v && C(v.id);
+      if (way === 'visit')
         return [
           p(
             bi(
@@ -313,7 +341,7 @@ function endStory(id, how) {
           ),
           museum
         ];
-      if (h && S.hurtBy === 'wrist')
+      if (way === 'wrist')
         return [
           p(
             bi(
@@ -323,23 +351,30 @@ function endStory(id, how) {
           ),
           museum
         ];
-      if (h && v.agreed && (v.through === 'you' || v.through === 'both'))
+      if (way === 'you' || way === 'both') {
+        const came = none
+          ? [
+              'Nobody of the cult is left at large, and still something comes for you in the night, and finds two of you in the tent.',
+              'Из секты на свободе не осталось никого — и всё же ночью за вами приходят и находят в палатке двоих.'
+            ]
+          : ['They come for you in the night, and find two of you in the tent.', 'Они приходят за вами ночью и находят в палатке двоих.'];
         return [
           p(
-            v.through === 'you'
+            way === 'you'
               ? bi(
-                  `They come for you in the night, and find two of you in the tent. They take only you. ${h.short} lives to tell it, and for a long time does not tell it to anyone.`,
-                  `Они приходят за вами ночью и находят в палатке двоих. Забирают только вас. ${ru.c(h)} остаётся жива, чтобы рассказать об этом, — и ещё очень долго никому не рассказывает.`
+                  `${came[0]} ${none ? 'It takes' : 'They take'} only you. ${h.short} lives to tell it, and for a long time does not tell it to anyone.`,
+                  `${came[1]} Забирают только вас. ${ru.c(h)} остаётся жива, чтобы рассказать об этом, — и ещё очень долго никому не рассказывает.`
                 )
               : bi(
-                  `They come for you in the night, and find two of you in the tent. In the morning ${who[0]} finds your tent torn open and the two of you on the cot, and ${tr[0]}.`,
-                  `Они приходят за вами ночью и находят в палатке двоих. Утром ${who[1]} находит вашу палатку распоротой, вас обоих — на койке, а ${tr[1]}.`
+                  `${came[0]} In the morning ${who[0]} finds your tent torn open and the two of you on the cot, and ${tr[0]}.`,
+                  `${came[1]} Утром ${who[1]} находит вашу палатку распоротой, вас обоих — на койке, а ${tr[1]}.`
                 )
           )
-        ].concat(v.through === 'you' ? old('death') : [museum]);
+        ].concat(way === 'you' ? old('death') : [museum]);
+      }
       // the night you went out yourself (game/deed.js): whoever you went for woke, and fought
       const d = S.log.deed;
-      if (S.hurtBy === 'deed' && d) {
+      if (way === 'deed') {
         const t = C(d.id);
         return [
           p(
@@ -352,27 +387,32 @@ function endStory(id, how) {
         ];
       }
       // not always the cult: the dig itself, or someone in the camp who could not stand you (game/hazards.js)
-      if (S.hurtBy === 'peril' || S.hurtBy === 'spite')
+      if (way === 'peril' || way === 'spite')
         return [
           p(
-            S.hurtBy === 'peril'
+            way === 'peril'
               ? bi(
                   `In the end it is not the cult that kills you, but the dig. The wound goes bad, as wounds do out here; by midnight you are burning, and before dawn ${who[0]} is sitting by your cot, and then there is no need to sit there any longer.`,
                   `В конце концов вас убивает не культ, а сами раскопки. Рана воспаляется, как это здесь бывает; к полуночи вы горите в жару, а перед рассветом у вашей койки сидит ${who[1]} — и потом сидеть там больше незачем.`
                 )
               : bi(
-                  `In the end it is not the cult that kills you. Someone in the camp who could not stand you does you one harm too many in the night, and the cult has only to wait. In the morning ${who[0]} finds you, and the camp agrees that nobody saw anything.`,
-                  `В конце концов вас убивает не культ. Кто-то в лагере, кто вас не выносил, причиняет вам ночью ещё один, последний вред, и культу остаётся только ждать. Утром вас находит ${who[1]}, и лагерь сходится на том, что никто ничего не видел.`
+                  `In the end it is not the cult that kills you. Someone in the camp who could not stand you does you one harm too many in the night${none ? '' : ', and the cult has only to wait'}. In the morning ${who[0]} finds you, and the camp agrees that nobody saw anything.`,
+                  `В конце концов вас убивает не культ. Кто-то в лагере, кто вас не выносил, причиняет вам ночью ещё один, последний вред${none ? '' : ', и культу остаётся только ждать'}. Утром вас находит ${who[1]}, и лагерь сходится на том, что никто ничего не видел.`
                 )
           ),
           museum
         ];
       return [
         p(
-          bi(
-            `They come for you in the night, and this time nothing stands between you and them. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}.`,
-            `Они приходят за вами ночью, и на этот раз между вами и ними никого нет. Утром ${who[1]} находит вашу палатку распоротой, койку — пустой, а ${tr[1]}.`
-          )
+          none
+            ? bi(
+                `Nobody of the cult is left at large, and still something comes for you in the night, and this time nothing stands between you and it. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}.`,
+                `Из секты на свободе не осталось никого — и всё же ночью за вами приходят, и на этот раз между вами и тем, что пришло, никого нет. Утром ${who[1]} находит вашу палатку распоротой, койку — пустой, а ${tr[1]}.`
+              )
+            : bi(
+                `They come for you in the night, and this time nothing stands between you and them. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}.`,
+                `Они приходят за вами ночью, и на этот раз между вами и ними никого нет. Утром ${who[1]} находит вашу палатку распоротой, койку — пустой, а ${tr[1]}.`
+              )
         )
       ].concat(old('death'));
     }
@@ -418,7 +458,8 @@ function endStory(id, how) {
   if (id === 'truck') {
     const d = S.log.deed,
       t = C(d.id),
-      left = freeCult().length; // (of the cult still at the dig when you go)
+      left = freeCult().length, // (of the cult still at the dig when you go)
+      lastDay = S.day >= RULES.start.days; // (sent away on the last day: one night is left, the dark of the moon)
     return [
       p(
         bi(
@@ -444,10 +485,15 @@ function endStory(id, how) {
       ),
       p(
         left
-          ? bi(
-              'Behind you the camp goes on without you for the nights that are left. On the last of them the moon is dark.',
-              'Лагерь живёт без вас те ночи, что ещё остались. В последнюю из них наступает новолуние.'
-            )
+          ? lastDay
+            ? bi(
+                'Behind you the camp goes on without you for the one night that is left, and that night the moon is dark.',
+                'Лагерь живёт без вас ту единственную ночь, что ещё осталась, — ночь новолуния.'
+              )
+            : bi(
+                'Behind you the camp goes on without you for the nights that are left. On the last of them the moon is dark.',
+                'Лагерь живёт без вас те ночи, что ещё остались. В последнюю из них наступает новолуние.'
+              )
           : bi(
               'Behind you, on the night the moon is dark, nothing at all happens at Kutha. Nobody ever tells you why.',
               'А в Куте, в ночь новолуния, не происходит ровным счётом ничего. Почему — вам так никто и не объяснит.'
@@ -544,8 +590,8 @@ function endStory(id, how) {
       ),
       p(
         bi(
-          'By morning nobody in the camp can remember their own name. By the new moon every clock between the two rivers has stopped at twenty past three, and the last pilot to come back from over Baghdad reports the streets full of people in their nightclothes, standing quite still with their eyes open, smiling at something only they can see.',
-          'К утру никто в лагере не может вспомнить собственного имени. К новолунию все часы между двумя реками стоят на двадцати минутах четвёртого, а последний лётчик, вернувшийся из полёта над Багдадом, докладывает: улицы полны людей в ночных рубашках — они стоят не шелохнувшись, с открытыми глазами и улыбаются чему-то, что видно только им.'
+          'For a day and a night nobody in the camp can remember their own name. By the new moon every clock between the two rivers has stopped at twenty past three, and the last pilot to come back from over Baghdad reports the streets full of people in their nightclothes, standing quite still with their eyes open, smiling at something only they can see.',
+          'Целые сутки никто в лагере не может вспомнить собственного имени. К новолунию все часы между двумя реками стоят на двадцати минутах четвёртого, а последний лётчик, вернувшийся из полёта над Багдадом, докладывает: улицы полны людей в ночных рубашках — они стоят не шелохнувшись, с открытыми глазами и улыбаются чему-то, что видно только им.'
         )
       )
     ]);
@@ -565,36 +611,54 @@ function endStory(id, how) {
   ]);
 }
 
-// How the tell kept you: by what hurt you last below (S.fin.cause).
+// How the tell kept you: by what hurt you last below (S.fin.cause; the power's own passage, by the way it hurts in
+// the power's own manner: game/below.js, passage).
+const PASSAGE_HURT = { fire: 'fire', dust: 'grip', sea: 'grip', teeth: 'bite', plague: 'sickness', madness: 'maze' };
 function fallBelow() {
   const f = S.fin || {},
-    t = f.betrayed && f.betrayed.length ? C(f.betrayed[f.betrayed.length - 1]) : null;
-  if (f.cause === 'knife' && t)
+    t = f.betrayed && f.betrayed.length ? C(f.betrayed[f.betrayed.length - 1]) : null,
+    cause = f.cause === 'passage' ? PASSAGE_HURT[S.aspectOf[S.patron]] || 'grip' : f.cause;
+  if (cause === 'knife' && t)
     return bi(
       `${t.short}’s knife does its work slowly. You sit down on the threshold of the fourth gate to rest a moment, and the eyes in the walls watch you do it.`,
       `Нож ${ru.c(t, 'g')} делает своё дело не спеша. Вы присаживаетесь на порог четвёртых врат — передохнуть минутку, — и глаза в стенах смотрят, как вы садитесь.`
     );
-  if (f.cause === 'stair')
+  if (cause === 'stair')
     return bi(
       'The step that was not there is the last thing you are sure of. After that there is only the stair, going on down without you.',
       'Ступень, которой не оказалось на месте, — последнее, в чём вы уверены. Дальше — только лестница, уходящая вниз уже без вас.'
     );
-  if (f.cause === 'grip' || f.cause === 'passage')
+  if (cause === 'grip')
     return bi(
       'What took hold of you in the dark does not let go. You feel it draw you, quite gently, toward a door you had not seen.',
       'То, что схватило вас в темноте, не отпускает. Вы чувствуете, как оно — почти бережно — тянет вас к двери, которой вы прежде не замечали.'
     );
-  if (f.cause === 'fire')
+  if (cause === 'bite')
+    return bi(
+      'The bite from the wall will not stop bleeding. You go on a little way, and then sit down, and hear the gnawing come along the wall toward you, unhurried.',
+      'Укус из стены никак не перестаёт кровоточить. Вы проходите ещё немного, потом садитесь — и слышите, как вдоль стены к вам, не торопясь, подбирается грызущий звук.'
+    );
+  if (cause === 'sickness')
+    return bi(
+      'By the next gate the sores have spread from your hands to your face, and by the one after, to your throat. You lie down in the passage, and something from behind the sheets comes to sit with you.',
+      'К следующим вратам язвы с ваших рук перебираются на лицо, а к тем, что за ними, — в горло. Вы ложитесь в проходе, и что-то из-за простынь приходит посидеть рядом с вами.'
+    );
+  if (cause === 'maze')
+    return bi(
+      'After the wall, the turns do not end. You walk on with one hand on the brick, for hours or for years, and somewhere along the way you forget that you were ever looking for the way out.',
+      'После той стены повороты не кончаются. Вы идёте дальше, ведя рукой по кирпичу, — часы или годы, — и где-то по дороге забываете, что когда-то искали выход.'
+    );
+  if (cause === 'fire')
     return bi(
       'The burn does not stop at the skin. It goes on down into you, step by step, the way the stair went down into the tell, and at the bottom of it there is no more of you.',
       'Ожог не останавливается на коже. Он уходит вглубь вас, ступень за ступенью, как лестница уходила в глубь холма, — и на дне его вас уже нет.'
     );
-  if (f.cause === 'wing')
+  if (cause === 'wing')
     return bi(
       'The stone wing does not lift again. Under it the dark is very close and very heavy, and after a while it is all there is.',
       'Каменное крыло больше не поднимается. Под ним тьма совсем близко и очень тяжела — и вскоре, кроме неё, ничего не остаётся.'
     );
-  if (f.cause === 'rite')
+  if (cause === 'rite')
     return bi(
       'The rite closes over what you did, and over you. The last thing you see is the celebrants stepping aside to make room for you in the circle.',
       'Обряд смыкается над тем, что вы сделали, — и над вами. Последнее, что вы видите: служители расступаются, освобождая вам место в круге.'

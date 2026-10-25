@@ -367,36 +367,52 @@ const FATE = {
         `Не прошло и месяца, как ${ru.cf(c)} снова в Багдаде и торгует печатями на рынке Сук-ас-Сарай — как ни в чём не бывало.`
       )
   ],
-  // one of the cult, unmasked (not the hierophant)
+  // one of the cult, unmasked (not the hierophant), and the hierophant: each with where it leaves them (end: 'trial',
+  // in a cell to be tried; 'asylum'; 'fled'; 'dead' before any trial), which decides what else can be told of them
+  // (game/fates.js, codaFacts)
   exposed: [
-    c =>
-      bi(
-        `${c.name} is tried in Baghdad for Crane’s murder. Through the whole trial ${c.p} says nothing at all, except once, in Akkadian.`,
-        `${capS(ru.cf(c, 'a'))} судят в Багдаде за убийство Крейна. За весь процесс ${ru.gs(c, 'он', 'она')} не произносит ни слова — лишь однажды, по-аккадски.`
-      ),
-    c =>
-      bi(
-        `${c.name} is sent to the asylum in Baghdad, where ${c.p} spends the days pressing wedges into the bread.`,
-        `${capS(ru.cf(c, 'a'))} отправляют в багдадскую лечебницу для душевнобольных, где ${ru.gs(c, 'он', 'она')} целыми днями выдавливает клинья на хлебе.`
-      ),
-    c =>
-      bi(
-        `${c.name} slips the guards on the train at Samarra and is never seen again. The guards swear the carriage door was locked.`,
-        `Под Самаррой ${ru.cf(c)} ускользает от конвоя прямо из поезда, и больше ${ru.gs(c, 'его', 'её')} никто не видит. Конвойные клянутся, что дверь вагона была заперта.`
-      )
+    {
+      end: 'trial',
+      say: c =>
+        bi(
+          `${c.name} is tried in Baghdad for Crane’s murder. Through the whole trial ${c.p} says nothing at all, except once, in Akkadian.`,
+          `${capS(ru.cf(c, 'a'))} судят в Багдаде за убийство Крейна. За весь процесс ${ru.gs(c, 'он', 'она')} не произносит ни слова — лишь однажды, по-аккадски.`
+        )
+    },
+    {
+      end: 'asylum',
+      say: c =>
+        bi(
+          `${c.name} is sent to the asylum in Baghdad, where ${c.p} spends the days pressing wedges into the bread.`,
+          `${capS(ru.cf(c, 'a'))} отправляют в багдадскую лечебницу для душевнобольных, где ${ru.gs(c, 'он', 'она')} целыми днями выдавливает клинья на хлебе.`
+        )
+    },
+    {
+      end: 'fled',
+      say: c =>
+        bi(
+          `${c.name} slips the guards on the train at Samarra and is never seen again. The guards swear the carriage door was locked.`,
+          `Под Самаррой ${ru.cf(c)} ускользает от конвоя прямо из поезда, и больше ${ru.gs(c, 'его', 'её')} никто не видит. Конвойные клянутся, что дверь вагона была заперта.`
+        )
+    }
   ],
-  // the hierophant, unmasked
   hierophant: [
-    c =>
-      bi(
-        `${c.name}, the hierophant, dies in the lock-up at Hillah before the trial. The guards say ${c.p} died smiling.`,
-        `${capS(ru.cf(c))}, иерофант культа, умирает в арестантской Хиллы, не дождавшись суда. Стражники говорят, что ${ru.gs(c, 'он умер', 'она умерла')} с улыбкой.`
-      ),
-    c =>
-      bi(
-        `${c.name}, the hierophant, is tried in Baghdad and condemned. Asked for any last words, ${c.p} gives a date, a month and a year, and will not explain them.`,
-        `${capS(ru.cf(c, 'a'))}, иерофанта культа, судят в Багдаде и приговаривают. На просьбу сказать последнее слово ${ru.gs(c, 'он', 'она')} называет число, месяц и год — и ничего не объясняет.`
-      )
+    {
+      end: 'dead',
+      say: c =>
+        bi(
+          `${c.name}, the hierophant, dies in the lock-up at Hillah before the trial. The guards say ${c.p} died smiling.`,
+          `${capS(ru.cf(c))}, иерофант культа, умирает в арестантской Хиллы, не дождавшись суда. Стражники говорят, что ${ru.gs(c, 'он умер', 'она умерла')} с улыбкой.`
+        )
+    },
+    {
+      end: 'trial',
+      say: c =>
+        bi(
+          `${c.name}, the hierophant, is tried in Baghdad and condemned. Asked for any last words, ${c.p} gives a date, a month and a year, and will not explain them.`,
+          `${capS(ru.cf(c, 'a'))}, иерофанта культа, судят в Багдаде и приговаривают. На просьбу сказать последнее слово ${ru.gs(c, 'он', 'она')} называет число, месяц и год — и ничего не объясняет.`
+        )
+    }
   ]
 };
 
@@ -555,6 +571,37 @@ const FATE_GONE = {
         )
     ],
     enemy: [c => bi(`${EP.He(c)} never once visits.`, `${ru.gs(c, 'Он', 'Она')} ни разу вас не навещает.`)]
+  },
+  // ... or tried in Baghdad for the one you killed, and kept in the prison there (game/deed.js): nobody marries a
+  // prisoner, or reads a prisoner's monographs
+  jail: {
+    love: [
+      'She comes out to Baghdad for the trial, and stays. Every week, for as long as they let her, she visits you in the prison and talks of England.',
+      'Она приезжает в Багдад на суд — и остаётся. Каждую неделю, пока ей позволяют, она навещает вас в тюрьме и рассказывает об Англии.'
+    ],
+    soft: [
+      'She writes to you in the prison at Baghdad every week, and never once asks what you did.',
+      'Она пишет вам в багдадскую тюрьму каждую неделю — и ни разу не спрашивает, что вы сделали.'
+    ],
+    friend: [
+      c =>
+        bi(
+          `${EP.He(c)} writes to you in the prison at Baghdad every month, and sends the newspapers.`,
+          `Раз в месяц ${ru.gs(c, 'он', 'она')} пишет вам в багдадскую тюрьму и присылает газеты.`
+        ),
+      c =>
+        bi(
+          `${EP.He(c)} speaks for you at the trial, and is not believed, and does not stop.`,
+          `На суде ${ru.gs(c, 'он', 'она')} говорит в вашу защиту, ${ru.gs(c, 'ему', 'ей')} не верят — а ${ru.gs(c, 'он', 'она')} всё не умолкает.`
+        )
+    ],
+    enemy: [
+      c =>
+        bi(
+          `At your trial ${c.p} gives evidence in a level voice, and does not once look at you.`,
+          `На суде ${ru.gs(c, 'он', 'она')} даёт показания ровным голосом и ни разу на вас не смотрит.`
+        )
+    ]
   }
 };
 
@@ -603,11 +650,16 @@ const FATE_YOU = {
   ]
 };
 
+// "on night n", as the ending says it ([English, Russian], in the middle of a sentence): to the code the night Crane
+// died is night 0, but nobody at Kutha ever called it that (ui/book.js, nightLabel)
+const onNight = n => (n === 0 ? ['on the night Crane died', 'в ночь гибели Крейна'] : [`on night ${n}`, `в ночь ${n}`]);
+
 // ---------- what each of them carried away from the season ----------
 // After their fate, now and then a line or two more, drawn from what passed between them and you, or what they did or
 // suffered that season (game/fates.js decides which apply, and picks among them without the dice). Each: a function of
 // the person and what it is about (d), returning [English, Russian]; some by what became of them (alive: still at the
-// dig, or sent away; dead; jailed: one of the cult, exposed; free: one of the cult still at large).
+// dig, or sent away; dead; jailed: one of the cult, exposed, in a cell to be tried; asylum: exposed, and shut away in the
+// asylum instead; free: one of the cult still at large, or fled).
 const FATE_CODA = {
   // you sat with them in their grief (d: the one they mourned)
   consoled: {
@@ -625,6 +677,12 @@ const FATE_CODA = {
       (c, d) => [
         `In the prison at Baghdad ${c.short} asks for nothing but paper, and writes to you once, to thank you for the hour after ${d.short} died.`,
         `В багдадской тюрьме ${ru.c(c)} не просит ничего, кроме бумаги, и пишет вам лишь однажды — поблагодарить за час, проведённый с ${ru.gs(c, 'ним', 'ней')} после смерти ${ru.c(d, 'g')}.`
+      ]
+    ],
+    asylum: [
+      (c, d) => [
+        `From the asylum in Baghdad ${c.short} writes to you once, in a clear hand, to thank you for the hour after ${d.short} died.`,
+        `Из багдадской лечебницы ${ru.c(c)} пишет вам лишь однажды — ясным, ровным почерком, — чтобы поблагодарить за час, проведённый с ${ru.gs(c, 'ним', 'ней')} после смерти ${ru.c(d, 'g')}.`
       ]
     ]
   },
@@ -705,8 +763,8 @@ const FATE_CODA = {
   there: {
     alive: [
       (c, d) => [
-        `${c.short} never tells anyone what ${c.p} was doing ${d.at[0]} on night ${d.n}.`,
-        `${ru.c(c)} никому не рассказывает, что ${ru.gs(c, 'делал', 'делала')} ${d.at[1]} в ночь ${d.n}.`
+        `${c.short} never tells anyone what ${c.p} was doing ${d.at[0]} ${onNight(d.n)[0]}.`,
+        `${ru.c(c)} никому не рассказывает, что ${ru.gs(c, 'делал', 'делала')} ${d.at[1]} ${onNight(d.n)[1]}.`
       ]
     ]
   },
@@ -714,8 +772,8 @@ const FATE_CODA = {
   afraid: {
     alive: [
       (c, d) => [
-        `Years later ${c.short} writes to tell you that ${c.p} lied to you about night ${d}. ${EP.He(c)} had been out, and had seen nothing, and had been afraid.`,
-        `Годы спустя ${ru.c(c)} пишет вам, что ${ru.gs(c, 'солгал', 'солгала')} вам о ночи ${d}: ${ru.gs(c, 'он был', 'она была')} не в лагере, ничего не ${ru.gs(c, 'видел', 'видела')} и очень ${ru.gs(c, 'боялся', 'боялась')}.`
+        `Years later ${c.short} writes to tell you that ${c.p} lied to you about ${d ? `night ${d}` : 'the night Crane died'}. ${EP.He(c)} had been out, and had seen nothing, and had been afraid.`,
+        `Годы спустя ${ru.c(c)} пишет вам, что ${ru.gs(c, 'солгал', 'солгала')} вам о ${d ? `ночи ${d}` : 'ночи гибели Крейна'}: ${ru.gs(c, 'он был', 'она была')} не в лагере, ничего не ${ru.gs(c, 'видел', 'видела')} и очень ${ru.gs(c, 'боялся', 'боялась')}.`
       ]
     ]
   },
@@ -723,8 +781,8 @@ const FATE_CODA = {
   secret: {
     alive: [
       (c, d) => [
-        `${c.short} and ${d.w.short} never told anyone where they had been on night ${d.n}.`,
-        `${ru.c(c)} и ${ru.c(d.w)} так никому и не сказали, где были в ночь ${d.n}.`
+        `${c.short} and ${d.w.short} never told anyone where they had been ${onNight(d.n)[0]}.`,
+        `${ru.c(c)} и ${ru.c(d.w)} так никому и не сказали, где были ${onNight(d.n)[1]}.`
       ]
     ]
   },
@@ -813,23 +871,24 @@ const FATE_CODA = {
   framed: {
     alive: [
       (c, d) => [
-        `${c.short} never learns that the trace at the scene on night ${d} was laid there to hang ${EP.him(c)}.`,
-        `${ru.c(c)} так и не узнаёт, что след на месте нападения в ночь ${d} подбросили, чтобы погубить ${ru.gs(c, 'его', 'её')}.`
+        `${c.short} never learns that the trace at the scene ${onNight(d)[0]} was laid there to hang ${EP.him(c)}.`,
+        `${ru.c(c)} так и не узнаёт, что след на месте нападения ${onNight(d)[1]} подбросили, чтобы погубить ${ru.gs(c, 'его', 'её')}.`
       ]
     ]
   },
-  // the Dreamer who dreamed aloud (d: whether the season was won)
+  // the Dreamer who dreamed aloud (d: whether the season was won): of the telling, not the dreaming, which the
+  // Dreamer's own fate tells already (FATE.seer)
   dreamer: {
     alive: [
       (c, d) =>
         d
           ? [
-              `${c.short} stops dreaming of the seven gates the night it ends, and dreams of rain instead.`,
-              `${ru.c(c)} перестаёт видеть во сне семь врат в ту самую ночь, когда всё кончается, — и видит теперь дождь.`
+              `${c.short} never again tells a dream aloud, not even a kind one.`,
+              `${ru.c(c)} больше никогда не рассказывает снов вслух — даже добрых.`
             ]
           : [
-              `${c.short} still dreams of the seven gates every night, and has stopped telling anyone.`,
-              `${ru.c(c)} по-прежнему каждую ночь видит во сне семь врат — и больше никому об этом не рассказывает.`
+              `${c.short} has stopped telling anyone what ${c.p} dreams.`,
+              `${ru.c(c)} больше никому не рассказывает, что ${ru.gs(c, 'ему', 'ей')} снится.`
             ]
     ]
   },
@@ -842,12 +901,18 @@ const FATE_CODA = {
       ]
     ]
   },
-  // one of the cult with a soft spot for you (d: whether you came home)
+  // one of the cult with a soft spot for you (d: whether you came home; if not, you died where you could be found)
   cultSoft: {
     jailed: [
       c => [
         `From the women’s prison in Baghdad ${c.short} writes to you once. You never open the letter, and never throw it away.`,
         `Из женской тюрьмы в Багдаде ${ru.c(c)} пишет вам один-единственный раз. Вы так и не вскрываете письмо — и так и не выбрасываете его.`
+      ]
+    ],
+    asylum: [
+      c => [
+        `From the asylum in Baghdad ${c.short} writes to you once. You never open the letter, and never throw it away.`,
+        `Из багдадской лечебницы ${ru.c(c)} пишет вам один-единственный раз. Вы так и не вскрываете письмо — и так и не выбрасываете его.`
       ]
     ],
     free: [
@@ -860,22 +925,31 @@ const FATE_CODA = {
           : [`At the very end, it was ${c.short} who closed your eyes.`, `В самом конце именно ${ru.c(c)} закрыла вам глаза.`]
     ]
   },
-  // one of the cult who came to like you (d: whether you came home)
+  // one of the cult who came to like you (d: 'home', you came home; 'doom', the rite was done; 'lost', you did not come
+  // home, and the rite was never done)
   cultFriend: {
     jailed: [
       c => [`At the trial ${c.short} asks for you, and for no one else.`, `На суде ${ru.c(c)} просит позвать вас — и никого больше.`]
     ],
+    asylum: [
+      c => [`In the asylum ${c.short} asks for you, and for no one else.`, `В лечебнице ${ru.c(c)} просит позвать вас — и никого больше.`]
+    ],
     free: [
       (c, d) =>
-        d
+        d === 'home'
           ? [
               `${c.short} sends you a card every New Year, from a different country each time, unsigned.`,
               `Каждый Новый год ${ru.c(c)} присылает вам открытку — всякий раз из другой страны и без подписи.`
             ]
-          : [
-              `${c.short} is said to have wept, once, when the rite was done. Nobody can say for whom.`,
-              `Говорят, когда обряд свершился, ${ru.c(c)} ${ru.gs(c, 'заплакал', 'заплакала')} — один-единственный раз. Никто не может сказать, по ком.`
-            ]
+          : d === 'doom'
+            ? [
+                `${c.short} is said to have wept, once, when the rite was done. Nobody can say for whom.`,
+                `Говорят, когда обряд свершился, ${ru.c(c)} ${ru.gs(c, 'заплакал', 'заплакала')} — один-единственный раз. Никто не может сказать, по ком.`
+              ]
+            : [
+                `${c.short} is said to have wept, once, at the news of you. Nobody can say for whom.`,
+                `Говорят, узнав о вас, ${ru.c(c)} ${ru.gs(c, 'заплакал', 'заплакала')} — один-единственный раз. Никто не может сказать, по ком.`
+              ]
     ]
   },
   // one of the cult who could not stand you
@@ -885,7 +959,8 @@ const FATE_CODA = {
 };
 // what became of you, besides: the things the season left in you, by what you did and what was done to you; each a
 // function of what it is about (d), returning [English, Russian]; told if you came home (home; jail: tried in Baghdad
-// for the one you killed), or if you did not (dead; mad: in a quiet ward; gone: either)
+// for the one you killed, where what has no telling of its own is told as at home, unless a cell rules it out:
+// game/fates.js, youCodas), or if you did not (dead; mad: in a quiet ward; gone: either)
 const FATE_YOU_CODA = {
   // the night you went out yourself (game/deed.js; d: whom, and whether you killed them)
   deed: {
@@ -930,8 +1005,8 @@ const FATE_YOU_CODA = {
     ],
     mad: [
       d => [
-        `In the quiet ward you tell the nurses about the night you went to ${d.t.short}’s tent. They write it down with everything else you imagine.`,
-        `В тихой палате вы рассказываете сёстрам о ночи, когда пошли к палатке ${ru.c(d.t, 'g')}. Они записывают это вместе со всем остальным, что вам мерещится.`
+        `You tell the nurses about the night you went to ${d.t.short}’s tent. They write it down with everything else you imagine.`,
+        `Сёстрам вы рассказываете о ночи, когда пошли к палатке ${ru.c(d.t, 'g')}. Они записывают это вместе со всем остальным, что вам мерещится.`
       ]
     ]
   },
@@ -947,14 +1022,22 @@ const FATE_YOU_CODA = {
         'До конца жизни вы читаете клинопись — и ничего больше — и никому не показываете, что пишете на полях.'
       ]
     ],
+    jail: [
+      () => [
+        'In the prison at Baghdad they let you keep one book. It is a sign list, and you do not let anyone see what you write in the margins.',
+        'В багдадской тюрьме вам разрешают оставить одну книгу. Это список клинописных знаков, и никто не видит, что вы пишете на полях.'
+      ]
+    ],
+    // (after the Museum's word that the notebooks went home unread: data/world.js, ENDINGS.death)
     gone: [
       () => [
-        'Your notebooks go home to your sister, who reads one page, and burns the rest in the kitchen range.',
-        'Ваши записные книжки отправляют домой, сестре; она читает одну страницу, а остальные сжигает в кухонной плите.'
+        'Your sister reads one page of your notebooks, and burns the rest in the kitchen range.',
+        'Сестра читает одну страницу ваших записных книжек, а остальные сжигает в кухонной плите.'
       ]
     ]
   },
-  // what the dig itself did to you (d: where, or the heat)
+  // what the dig itself did to you (d: where, or the heat); not about the wound itself, which the lines on how you came
+  // home tell already (FATE_YOU)
   peril: {
     home: [
       d =>
@@ -969,8 +1052,8 @@ const FATE_YOU_CODA = {
                 'Из всего, что было в Куте, шрам вам оставил сам лагерь: вы до сих пор вздрагиваете от шипения примуса и от скрипа палаточного шеста на ветру.'
               ]
             : [
-                `You walk with a stick for a year, and blame ${PERIL_SAID[d][0]}.`,
-                `Год вы ходите с тростью и вините во всём ${PERIL_SAID[d][1]}.`
+                `Of everything at Kutha, it is ${PERIL_SAID[d][0]} you remember most often, and there is a mercy in that.`,
+                `Из всего, что было в Куте, чаще всего вы вспоминаете ${PERIL_SAID[d][1]} — и в этом есть своё милосердие.`
               ]
     ]
   },
@@ -987,6 +1070,18 @@ const FATE_YOU_CODA = {
               'You never learn who came to your tent in the night. You lock your door now, even at home.',
               'Вы так и не узнаёте, кто приходил ночью к вашей палатке. Теперь вы запираете дверь — даже дома.'
             ]
+    ],
+    jail: [
+      d =>
+        d.caught
+          ? [
+              `You never learn why ${d.c.short} hated you so.`,
+              `Вы так и не узнаёте, за что ${ru.c(d.c)} так вас ${ru.gs(d.c, 'ненавидел', 'ненавидела')}.`
+            ]
+          : [
+              'You never learn who came to your tent in the night. In the prison at Baghdad you sleep with your back to the wall.',
+              'Вы так и не узнаёте, кто приходил ночью к вашей палатке. В багдадской тюрьме вы спите, прижавшись спиной к стене.'
+            ]
     ]
   },
   // an innocent you sent away (d: them)
@@ -998,12 +1093,12 @@ const FATE_YOU_CODA = {
       ]
     ]
   },
-  // a friend the night took (d: them)
+  // a friend the night took (d: them; not every grave is in Iraq: END_GRAVE)
   grave: {
     home: [
       d => [
-        `Whenever you are in Iraq again, you go to ${d.short}’s grave, and stay longer than you meant to.`,
-        `Всякий раз, оказываясь в Ираке, вы приходите на могилу ${ru.c(d, 'g')} — и задерживаетесь дольше, чем собирались.`
+        `Whenever you can, you go to ${d.short}’s grave, and stay longer than you meant to.`,
+        `Всякий раз, когда удаётся, вы приходите на могилу ${ru.c(d, 'g')} — и задерживаетесь дольше, чем собирались.`
       ]
     ]
   },
@@ -1057,13 +1152,13 @@ const FATE_YOU_CODA = {
     ],
     mad: [
       () => [
-        'In the quiet ward they leave a light on for you all night. You asked them to, once, and they remember.',
-        'В тихой палате для вас всю ночь горит свет. Однажды вы об этом попросили, и там помнят.'
+        'They leave a light on for you all night on the ward. You asked them to, once, and they remember.',
+        'Всю ночь у вас в палате горит свет. Однажды вы об этом попросили, и там помнят.'
       ]
     ]
   }
 };
-// what the dig hurt you with, as you would blame it afterwards: [English, Russian (accusative)]
+// what the dig hurt you with, as you would remember it afterwards: [English, Russian (accusative)]
 const PERIL_SAID = {
   trench: ['the shoring in Trench B', 'крепления в траншее Б'],
   ziggurat: ['a fall from the flank of the ziggurat', 'падение со склона зиккурата'],
@@ -1085,7 +1180,7 @@ const FATE_YOU_LAST = {
     home: [
       () => [
         'In the end it is not the tell that finishes you. It is a wet Tuesday in Bloomsbury, years later, with nothing at all the matter. The coroner says ‘while the balance of the mind was disturbed’, and your sister never forgives him the word ‘balance’.',
-        'В конце концов вас губит не телль. Вас губит дождливый вторник в Блумсбери, годы спустя, когда ничего особенного не случилось. Коронер пишет: «в состоянии помрачения рассудка», — и сестра так и не прощает ему этого слова.'
+        'В конце концов вас губит не телль. Вас губит дождливый вторник в Блумсбери, годы спустя, когда ничего особенного не случилось. Коронер пишет: «в состоянии нарушенного душевного равновесия», — и сестра так и не прощает ему слова «равновесие».'
       ],
       () => [
         'You last longer than you expected to, and not as long as your sister hoped. When they find you, every clock in the flat has been stopped at a little after three in the morning, the hour the dogs at Kutha used to start.',
@@ -1156,8 +1251,8 @@ const FATE_YOU_LAST = {
   friends: {
     home: [
       d => [
-        `You go back to Iraq once, to ${d.short}’s grave, and do not come home from it. The Consulate in Baghdad sends home your things, and a letter, unfinished, that begins: ‘I cannot leave ${EP.him(d)} out there alone.’`,
-        `Однажды вы возвращаетесь в Ирак, к могиле ${ru.c(d, 'g')}, — и домой уже не возвращаетесь. Консульство в Багдаде отправляет домой ваши вещи и неоконченное письмо, которое начинается словами: «Не могу оставить ${ru.gs(d, 'его', 'её')} там ${ru.gs(d, 'одного', 'одну')}».`
+        `You go back once, to ${d.short}’s grave, and do not come home from it. Your sister is sent your things, and a letter, unfinished, that begins: ‘I cannot leave ${EP.him(d)} out there alone.’`,
+        `Однажды вы едете к могиле ${ru.c(d, 'g')} — и домой уже не возвращаетесь. Сестре присылают ваши вещи и неоконченное письмо, которое начинается словами: «Не могу оставить ${ru.gs(d, 'его', 'её')} там ${ru.gs(d, 'одного', 'одну')}».`
       ]
     ],
     mad: [
@@ -1237,8 +1332,8 @@ const FATE_AFTER = {
     ],
     grief: [
       (c, d) => [
-        `${c.name} never gets over ${d.short}. On the first anniversary ${c.p} goes out to the grave at Kutha, and does not come back from it; the pickmen who find ${EP.him(c)} say only that ${c.p} had chosen the place.`,
-        `${capS(ru.cf(c))} так и не ${ru.gs(c, 'оправился', 'оправилась')} после смерти ${ru.c(d, 'g')}. В первую годовщину ${ru.gs(c, 'он уходит', 'она уходит')} к могиле в Куте и не возвращается; землекопы, которые ${ru.gs(c, 'его', 'её')} находят, говорят только, что место ${ru.gs(c, 'он выбрал сам', 'она выбрала сама')}.`
+        `${c.name} never gets over ${d.short}. On the first anniversary ${c.p} goes out to Kutha, to the place where ${d.short} was found, and does not come home; the pickmen who find ${EP.him(c)} there say only that ${c.p} had chosen the place.`,
+        `${capS(ru.cf(c))} так и не ${ru.gs(c, 'оправился', 'оправилась')} после смерти ${ru.c(d, 'g')}. В первую годовщину ${ru.gs(c, 'он едет', 'она едет')} в Куту, туда, где нашли ${ru.c(d, 'a')}, и домой уже не возвращается; землекопы, которые ${ru.gs(c, 'его', 'её')} там находят, говорят только, что место ${ru.gs(c, 'он выбрал сам', 'она выбрала сама')}.`
       ],
       (c, d) => [
         `${c.name} keeps ${d.short}’s things for a year, unopened. When ${c.p} opens them at last, ${c.p} writes three letters, one of them to you, and is gone by ${c.pp} own hand before the week is out.`,
@@ -1255,6 +1350,11 @@ const FATE_AFTER = {
       c => [
         `${c.name} does not wait for the trial in Baghdad. In the cell they find seven gates scratched into the plaster, and ${EP.him(c)} beneath the seventh, gone through the only one ${c.p} could reach.`,
         `${capS(ru.cf(c))} не дожидается суда в Багдаде. В камере на штукатурке находят семь выцарапанных врат, а под седьмыми — ${ru.gs(c, 'его самого', 'её саму')}: ${ru.gs(c, 'он ушёл', 'она ушла')} в единственные, до которых ${ru.gs(c, 'смог', 'смогла')} дотянуться.`
+      ],
+      // (a second, so that both of the cult, in their cells, are never told in the same words: game/fates.js)
+      c => [
+        `${c.name} gives no trouble in the lock-up at Hillah, and asks for nothing but a lamp left burning. The night before ${c.p} is to be taken to Baghdad, ${c.p} asks for it to be put out, and by morning ${c.p} has gone the only way left open to ${EP.him(c)}.`,
+        `${capS(ru.cf(c))} не доставляет хлопот в арестантской Хиллы и просит лишь не гасить ${ru.gs(c, 'ему', 'ей')} лампу. Накануне перевода в Багдад ${ru.gs(c, 'он', 'она')} просит её погасить, а к утру ${ru.gs(c, 'его', 'её')} уже нет: ${ru.gs(c, 'он ушёл', 'она ушла')} единственным путём, какой ${ru.gs(c, 'ему', 'ей')} оставался.`
       ]
     ],
     plain: [
