@@ -412,7 +412,12 @@ function attackOnYou(night) {
   }
   const asp = mannerOf(); // (in the power's own manner, all but always)
   if (asp !== S.aspectOf[S.patron]) S.log.manner.push({ day: S.day, id: 'you', asp });
-  const it = `<p class="horror">${bi(tellOne('attack-' + asp, ASPECTS[asp].attack.filter((t, k) => tellableNow((ASPECTS[asp].attackEcho || [])[k]))))}</p>`;
+  const it = `<p class="horror">${bi(
+    tellOne(
+      'attack-' + asp,
+      ASPECTS[asp].attack.filter((t, k) => tellableNow((ASPECTS[asp].attackEcho || [])[k]))
+    )
+  )}</p>`;
   if (night.guest) return pre + guestThrough(night, it); // (and she was in your tent: people/visit.js)
   S.log.attacks.push({ day: S.day, how: 'hurt', power: !!night.power });
   const html = pre + it + hurt(2, 1);
@@ -502,13 +507,7 @@ function sceneTrace(n, loc, actor, target, smugOut = false, at = null) {
     byDay = n === S.day && loc !== 'camp' && S.visits && S.visits.day === S.day ? S.visits.at[loc] || [] : [],
     there = Object.keys(rec.truth).filter(id => (!actor || id !== actor.id) && id !== target && (wasAbout(rec, id) || byDay.includes(id))),
     anyone = actor ? [] : freeChars().filter(c => c.id !== target && c.id !== guestOn(n)),
-    stray = thief
-      ? null
-      : there.length && (!actor || chance(N.strayTrace))
-        ? C(pick(there))
-        : anyone.length
-          ? pick(anyone)
-          : null,
+    stray = thief ? null : there.length && (!actor || chance(N.strayTrace)) ? C(pick(there)) : anyone.length ? pick(anyone) : null,
     framed = thief || stray || !actor ? null : framedBy(actor, target),
     src = thief ? smug : stray || framed || actor;
   if (!src) {

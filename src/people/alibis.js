@@ -36,7 +36,8 @@ function planAlibis(n, crimeLoc, actorId, target = null, how = 'watch') {
   // attacker's habits (glimpse), unless they slept through it
   const attacked = (c, you = false) => {
     rec.truth[c.id] = rec.claim[c.id] = { loc: crimeLoc, with: null, attacked: true, how, ...(you ? { you } : {}) };
-    if (actorId && !(you && how === 'watch') && chance(A.glimpse)) rec.saw[c.id] = { who: actorId, cat: pick(CATS), where: crimeLoc, to: toward };
+    if (actorId && !(you && how === 'watch') && chance(A.glimpse))
+      rec.saw[c.id] = { who: actorId, cat: pick(CATS), where: crimeLoc, to: toward };
   };
   if (saved) attacked(saved);
   // the one who spent the night in your tent (people/visit.js) was there with you, by her own account, whoever she is;

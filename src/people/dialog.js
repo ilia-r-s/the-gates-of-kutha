@@ -141,7 +141,8 @@ const DIALOG = {
       S.day === 1
         ? bi('Ask where they were the night Crane died', 'Спросить про ночь, когда погиб Крейн')
         : bi('Ask where they were last night', 'Спросить про прошлую ночь'),
-    sub: c => bi(`${capS(c.pp)} account, and anything ${c.p} saw`, ru.gs(c, 'Где был, с кем, что заметил', 'Где была, с кем, что заметила')),
+    sub: c =>
+      bi(`${capS(c.pp)} account, and anything ${c.p} saw`, ru.gs(c, 'Где был, с кем, что заметил', 'Где была, с кем, что заметила')),
     off: c => S.claims.some(x => x.night === S.day - 1 && x.id === c.id),
     run(c) {
       const n = S.day - 1,
@@ -552,7 +553,8 @@ function innocentBlames(c, others) {
 }
 DIALOG.title = {
   label: () => bi('Ask what an old title means', 'Спросить, что значит древний титул'),
-  sub: c => bi(`${EP.He(c)} knows the names behind the titles. Unless ${c.p} lies`, `${ru.gs(c, 'Он', 'Она')} знает, чьи это титулы. Если не лжёт`),
+  sub: c =>
+    bi(`${EP.He(c)} knows the names behind the titles. Unless ${c.p} lies`, `${ru.gs(c, 'Он', 'Она')} знает, чьи это титулы. Если не лжёт`),
   off: c => !GLOSSERS.includes(c.id) || !titlesToAsk(c).length,
   run(c, e) {
     e = e || titlesToAsk(c)[0];

@@ -95,7 +95,7 @@ function visitEvening() {
       ) + (v.hurt ? trustNote([], [h.id]) : '');
 }
 // One of the cult in your tent may do the cult's work herself (strike), and mostly she does it (kills: the season ends);
-// if not, you have her wrist in time, and by first light she is in the truck to Hillah, as one of them unmasked. Returns
+// if not, you have her wrist in time, and by first light she is on the lorry to Hillah, as one of them unmasked. Returns
 // what the night tells, or '' if she lets you be.
 function guestStrikes(night) {
   const h = night.guest,

@@ -460,9 +460,7 @@ function griefFor(victim) {
 // they are dead: someone says so aloud (camp.onto), whoever draws the line first. It may be what the cult killed them
 // for, and it may be what it wanted the camp to think (game/night.js, chooseVictim): the line is the same either way.
 function ontoSaid(victim) {
-  const named = S.said.filter(
-    x => x.by === victim && x.verdict === 'cult' && x.how !== 'vote' && isFree(C(x.about))
-  );
+  const named = S.said.filter(x => x.by === victim && x.verdict === 'cult' && x.how !== 'vote' && isFree(C(x.about)));
   return named.length && chance(RULES.camp.onto.odds) ? stir('onto', { about: named.pop().about, dead: victim }) : '';
 }
 // The rest of breakfast: each one of the morning's extras, crowded out by those that came before it (game/tenor.js,

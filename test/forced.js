@@ -1368,7 +1368,16 @@ const SCRIPT = () => {
       L = FATE_YOU_LAST,
       d = { plain: null, deed: { t: him, cult: false }, wronged: her, friends: him, tent: her, tablets: null, horrors: null },
       say = t => `<p>${bi(...t)}</p>`;
-    capHtml('you-last', Object.keys(L).map(k => Object.keys(L[k]).map(w => L[k][w].map(f => say(f(d[k]))).join('')).join('')).join(''));
+    capHtml(
+      'you-last',
+      Object.keys(L)
+        .map(k =>
+          Object.keys(L[k])
+            .map(w => L[k][w].map(f => say(f(d[k]))).join(''))
+            .join('')
+        )
+        .join('')
+    );
     capHtml('you-last-deed', say(L.deed.home[0]({ t: her, cult: true })) + say(L.deed.home[0]({ t: her, cult: false })));
     capHtml(
       'after',

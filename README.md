@@ -94,7 +94,7 @@ rule, the faces people make (`FACES`), and what an ending counts and remarks on 
 
 ## Code style
 
-Formatted with Prettier (`.prettierrc.json`; `npm run format`). `src/rules.js` and `build.js` are laid out by hand as
+Formatted with Prettier (`.prettierrc.json`; `npm run format`), which the test suite checks. `src/rules.js` and `build.js` are laid out by hand as
 tables with aligned comments, and left alone (`.prettierignore`). `test/lint.js` reads the script the way the browser
 does, every module in one global scope, and reports, as `module:line`, any name used but never declared, declared but
 never used, or hiding a name from an outer scope.

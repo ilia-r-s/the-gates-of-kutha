@@ -496,7 +496,7 @@ const youSmall = (x, y, k = 1) =>
 // someone of the camp, far off, standing to watch
 const watcherFar = (x, y, k = 1) => G1(x, y, k, pth('M-6 0L-4 -18Q0 -22 4 -18L6 0Z', '#e8dcc0', 2) + ell(0, -24, 3.5, 4, '#c9946f', 2));
 const END_ART = {
-  // the camp puts you on the truck to Hillah: the tell behind, the camp watching, a guard beside you in the back
+  // the camp puts you on the lorry to Hillah: the tell behind, the camp watching, a guard beside you in the back
   truck: {
     draw: (tm, u) =>
       sky(tm, 'morning') +
@@ -642,51 +642,51 @@ const END_ART = {
           lamp(470, 316, 0.8, true) +
           helmet(660, 318, 0.7, -10)
         : sky(tm, 'night') +
-      ground(tm, 232) +
-      stars() +
-      tent(150, 248, 0.6) +
-      palm(730, 240, 0.9) +
-      G1(
-        380,
-        270,
-        1.35,
-        pth('M-80 0L0 -86L80 0Z', '#f2e8d2', 3.5) +
-          '<path d="M0 -86L80 0H20Z" fill="#d8c9a8"/>' +
-          pth('M-10 -60L8 -40L-4 -22L14 -6L2 0H-40L-22 -24L-36 -40Z', '#1c1420', 3) +
-          ln('M0 -86V-104')
-      ) +
-      cot(560, 300, 0.9) +
-      lamp(250, 312, 0.9, false, -78) +
-      helmet(480, 318, 0.8, 18) +
-      ({
-        fire: [
-          [330, 218],
-          [356, 196],
-          [392, 206],
-          [420, 236],
-          [350, 250],
-          [404, 176],
-          [430, 214]
-        ]
-          .map(([x, y]) => ell(x, y, 7, 5, '#3a1a10', 2) + `<circle cx="${x}" cy="${y}" r="2" fill="#ff8a3a"/>`)
-          .join(''),
-        dust: ell(380, 300, 110, 12, '#b8b2aa', 0, ' opacity=".8"') + owl(380, 132, 0.9),
-        sea: ell(450, 318, 90, 12, '#9cc8cf', 3) + ln('M520 318q40 -2 70 6t70 4', '#9cc8cf', 5, ' opacity=".7"'),
-        teeth:
-          [
-            [300, 318],
-            [330, 326],
-            [600, 322],
-            [630, 330]
-          ]
-            .map(
-              ([x, y]) =>
-                `<g fill="${INK}" opacity=".7"><ellipse cx="${x}" cy="${y}" rx="5" ry="4"/><circle cx="${x - 5}" cy="${y - 6}" r="2"/><circle cx="${x}" cy="${y - 8}" r="2"/><circle cx="${x + 5}" cy="${y - 6}" r="2"/></g>`
-            )
-            .join('') + ln('M380 116l-6 6m6 -6l6 6', INK, 3),
-        plague: flies(386, 226, 60, 44, 44) + flies(522, 283, 24, 6, 12),
-        madness: handMirror(300, 320, 0.9, -70) + scrawl(404, 226, 36) + scrawl(406, 240, 48) + scrawl(408, 254, 60)
-      }[a.aspect] || ''),
+          ground(tm, 232) +
+          stars() +
+          tent(150, 248, 0.6) +
+          palm(730, 240, 0.9) +
+          G1(
+            380,
+            270,
+            1.35,
+            pth('M-80 0L0 -86L80 0Z', '#f2e8d2', 3.5) +
+              '<path d="M0 -86L80 0H20Z" fill="#d8c9a8"/>' +
+              pth('M-10 -60L8 -40L-4 -22L14 -6L2 0H-40L-22 -24L-36 -40Z', '#1c1420', 3) +
+              ln('M0 -86V-104')
+          ) +
+          cot(560, 300, 0.9) +
+          lamp(250, 312, 0.9, false, -78) +
+          helmet(480, 318, 0.8, 18) +
+          ({
+            fire: [
+              [330, 218],
+              [356, 196],
+              [392, 206],
+              [420, 236],
+              [350, 250],
+              [404, 176],
+              [430, 214]
+            ]
+              .map(([x, y]) => ell(x, y, 7, 5, '#3a1a10', 2) + `<circle cx="${x}" cy="${y}" r="2" fill="#ff8a3a"/>`)
+              .join(''),
+            dust: ell(380, 300, 110, 12, '#b8b2aa', 0, ' opacity=".8"') + owl(380, 132, 0.9),
+            sea: ell(450, 318, 90, 12, '#9cc8cf', 3) + ln('M520 318q40 -2 70 6t70 4', '#9cc8cf', 5, ' opacity=".7"'),
+            teeth:
+              [
+                [300, 318],
+                [330, 326],
+                [600, 322],
+                [630, 330]
+              ]
+                .map(
+                  ([x, y]) =>
+                    `<g fill="${INK}" opacity=".7"><ellipse cx="${x}" cy="${y}" rx="5" ry="4"/><circle cx="${x - 5}" cy="${y - 6}" r="2"/><circle cx="${x}" cy="${y - 8}" r="2"/><circle cx="${x + 5}" cy="${y - 6}" r="2"/></g>`
+                )
+                .join('') + ln('M380 116l-6 6m6 -6l6 6', INK, 3),
+            plague: flies(386, 226, 60, 44, 44) + flies(522, 283, 24, 6, 12),
+            madness: handMirror(300, 320, 0.9, -70) + scrawl(404, 226, 36) + scrawl(406, 240, 48) + scrawl(408, 254, 60)
+          }[a.aspect] || ''),
     lights: (u, a) => (a.inBed ? glow(u, 470, 298, 46) : glow(u, 250, 300, 40))
   },
   'fallen-below': {

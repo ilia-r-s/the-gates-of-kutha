@@ -169,8 +169,7 @@ const OWN_UP = {
           );
     if (how === 'trust' || how === 'aside') {
       // (tonight they watch over your tent, if they trust you enough: a promise for one night, as any: game/night.js)
-      const yours =
-        c.rapport >= 2 ? [' Tonight I will keep it by your tent.', ' Этой ночью я посижу с ней у вашей палатки.'] : ['', ''];
+      const yours = c.rapport >= 2 ? [' Tonight I will keep it by your tent.', ' Этой ночью я посижу с ней у вашей палатки.'] : ['', ''];
       return lied
         ? bi(
             `What I told you before was not the truth. I sit up every night with a lamp, walking between the tents.${yours[0]}`,

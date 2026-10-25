@@ -77,9 +77,13 @@ function planScene() {
       // (how the plan works is said on the first day only)
       bi(
         `<p>${slotIntro()[0]}</p>` +
-          (S.day === 1 ? `<p class="dim">Choose a place on the site plan or below. What you do there takes up the ${SLOT_NAMES[S.slot].toLowerCase()}.</p>` : ''),
+          (S.day === 1
+            ? `<p class="dim">Choose a place on the site plan or below. What you do there takes up the ${SLOT_NAMES[S.slot].toLowerCase()}.</p>`
+            : ''),
         `<p>${slotIntro()[1]}</p>` +
-          (S.day === 1 ? `<p class="dim">Выберите место на плане раскопа или в списке ниже. То, чем вы там займётесь, отнимет ${RU_SLOT_SPAN[S.slot]}.</p>` : '')
+          (S.day === 1
+            ? `<p class="dim">Выберите место на плане раскопа или в списке ниже. То, чем вы там займётесь, отнимет ${RU_SLOT_SPAN[S.slot]}.</p>`
+            : '')
       )
     ],
     choices

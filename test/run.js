@@ -1,7 +1,7 @@
 // The test suite, in one command.
-//   node test/run.js          quick: build, lint, top panel, golden transcripts (en, ru), forced branches, claims,
-//                             social layer, puzzle soundness, every ending, the dice rules, a Russian bot  (about a
-//                             minute and a half on two cores)
+//   node test/run.js          quick: build, lint, format, top panel, golden transcripts (en, ru), forced branches,
+//                             claims, social layer, puzzle soundness, every ending, the dice rules, a Russian bot
+//                             (about a minute and a half on two cores)
 //   node test/run.js full     the same with more games, plus the random and cheating bots and the puzzle simulation
 //   JOBS=n node test/run.js   how many steps run at once (one for each processor core unless told otherwise)
 // The build comes first. The other steps then run side by side, the longest first, each in a process (and a browser)
@@ -12,10 +12,18 @@ const os = require('os');
 const path = require('path');
 const full = process.argv[2] === 'full';
 const JOBS = Math.max(1, +process.env.JOBS || os.cpus().length);
+const ROOT = path.join(__dirname, '..');
 const node = (script, ...args) => ['node', [path.join(__dirname, script), ...args]];
 // [name, command, what its report must say, about how many seconds it takes (to start the longest first)]
 const STEPS = [
   ['lint', node('lint.js'), out => /^clean/m.test(out), 2],
+  // (the code as Prettier lays it out: npm run format)
+  [
+    'format',
+    ['node', [path.join(ROOT, 'node_modules', 'prettier', 'bin', 'prettier.cjs'), '--check', '.']],
+    out => /All matched files use Prettier code style/.test(out),
+    3
+  ],
   ['top panel', node('topbar.js'), out => /"problems": 0/.test(out), 2],
   ['golden en', node('golden.js', 'check'), out => /identical/.test(out), 11],
   ['golden ru', node('golden.js', 'check', '--lang=ru'), out => /identical/.test(out), 11],
@@ -59,7 +67,7 @@ function runStep(step) {
   const [cmd, args] = step[1],
     t = Date.now();
   return new Promise(done => {
-    const p = spawn(cmd, args),
+    const p = spawn(cmd, args, { cwd: ROOT }),
       chunks = [];
     p.stdout.on('data', d => chunks.push(d));
     p.stderr.on('data', d => chunks.push(d));

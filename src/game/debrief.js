@@ -1040,7 +1040,8 @@ function fxVictims({ add }) {
         `On night ${n}, with nobody of the cult left at large, the power below came for ${v.name} by itself.`,
         `В ночь ${n}, когда на свободе не осталось никого из секты, сила из-под земли сама пришла за ${ru.cf(v, 'i')}.`
       );
-    else if (say) add('n', `The cult chose ${v.name} on night ${n}: ${say[0]}.`, `Сектанты выбрали ${ru.cf(v, 'a')} в ночь ${n}: ${say[1]}.`);
+    else if (say)
+      add('n', `The cult chose ${v.name} on night ${n}: ${say[0]}.`, `Сектанты выбрали ${ru.cf(v, 'a')} в ночь ${n}: ${say[1]}.`);
   });
 }
 // Whether what came on night n was the power below, come by itself (game/night.js: with nobody of the cult left at

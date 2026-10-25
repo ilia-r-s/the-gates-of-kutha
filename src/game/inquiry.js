@@ -58,7 +58,7 @@ function accuse(id) {
   const out = c.role === 'cult' ? unmasked(c, vote, hands) : sentAway(c, vote);
   if (out != null) endSlot(hands + out, bi('The inquiry', 'Дознание'));
 }
-// One of the cult unmasked before the camp: the rite set back, perhaps a line of the liturgy shouted from the truck,
+// One of the cult unmasked before the camp: the rite set back, perhaps a line of the liturgy shouted from the lorry,
 // and the camp's relief; those who stood with you trust you more for it. The last of them unmasked ends the season (and
 // returns nothing).
 function unmasked(c, vote, hands0 = '') {

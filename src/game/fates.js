@@ -147,7 +147,11 @@ function endFate(c, ctx) {
       // (the second of the lines told when you did not come home has a child in it, and a priest keeps his vows)
       t +=
         ' ' +
-        fateOf(away ? (away === FATE_GONE.dead && VOWS.includes(c.id) ? away.friend.slice(0, 1) : away.friend) : FATE_FRIEND, c.id, 'friend')(c);
+        fateOf(
+          away ? (away === FATE_GONE.dead && VOWS.includes(c.id) ? away.friend.slice(0, 1) : away.friend) : FATE_FRIEND,
+          c.id,
+          'friend'
+        )(c);
     else if (c.rapport <= -1) t += ' ' + fateOf(away ? away.enemy : FATE_ENEMY, c.id, 'enemy')(c);
   }
   love.pairs
@@ -410,8 +414,7 @@ const youInCell = () => S.ended === 'expelled' && !!S.log.deed && S.log.deed.out
 // the end you chose, and which of the season's lines about you it already tells
 const LAST_CODA = { deed: 'deed', wronged: 'wronged', friends: 'grave', tablets: 'read', horrors: 'horrors' };
 // (its words drawn on a key of their own: the roll that chose it was below last.max, and would draw the first line only)
-const lastSaid = last =>
-  last ? `<p>${bi(...fateOf(FATE_YOU_LAST[last.k][last.where], 'you', 'lastLine')(last.d))}</p>` : '';
+const lastSaid = last => (last ? `<p>${bi(...fateOf(FATE_YOU_LAST[last.k][last.where], 'you', 'lastLine')(last.d))}</p>` : '');
 // ---------- the end you chose ----------
 // Rarely, what the season left in you is more than you can carry, and in the end you end it yourself (RULES.fates.last;
 // the words: data/fates.js, FATE_YOU_LAST): mostly after a mind that broke (the quiet ward), seldom after a season won,
@@ -435,7 +438,12 @@ function yourLast(won, later = {}) {
   };
   const t = L.deed && L.deed.outcome === 'killed' ? C(L.deed.id) : null;
   if (t)
-    lay('deed', { t, cult: t.role === 'cult' }, t.role === 'cult' ? F.killedCult : F.killedInnocent, t.role === 'cult' ? F.why.deedCult : F.why.deed);
+    lay(
+      'deed',
+      { t, cult: t.role === 'cult' },
+      t.role === 'cult' ? F.killedCult : F.killedInnocent,
+      t.role === 'cult' ? F.why.deedCult : F.why.deed
+    );
   // (each innocent sent away weighs on you, but it is told by the last of them still alive to be written to)
   const wronged = L.accused.filter(a => !a.right && C(a.id).role !== 'smuggler').map(a => C(a.id)),
     living = wronged.filter(x => !later[x.id]);

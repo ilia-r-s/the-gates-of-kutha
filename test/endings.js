@@ -62,7 +62,15 @@ run(async browser => {
         if (want === 'truck') {
           // the deed done (or tried) on one of the cult, then the camp's judgement (game/deed.js)
           const t = cult()[0];
-          S.log.deed = { day: S.day, id: t.id, means: 'knife', plant: null, outcome: how, morning: true, seenBy: freeChars().find(c => c !== t).id };
+          S.log.deed = {
+            day: S.day,
+            id: t.id,
+            means: 'knife',
+            plant: null,
+            outcome: how,
+            morning: true,
+            seenBy: freeChars().find(c => c !== t).id
+          };
           S.log.deed.caught = S.log.deed.seenBy;
           S.log.deed.vote = { expel: [S.log.deed.seenBy], keep: [], silent: [], passed: true, day: S.day };
           if (how === 'killed') {

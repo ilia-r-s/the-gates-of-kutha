@@ -9,7 +9,7 @@
 // costs your nerve, whatever comes of it. If the cult came for you tonight, it found your tent empty, and the camp will
 // know you were out. By morning the camp has found what was done; whoever knows may say so, or hint, or keep it to
 // themselves (by their trust in you), and the camp's suspicion of you grows (S.onYou); caught, or suspected enough, you
-// are judged by the camp (youVote), which may put you on the truck to Hillah (the ending: 'expelled'). Nothing ever
+// are judged by the camp (youVote), which may put you on the lorry to Hillah (the ending: 'expelled'). Nothing ever
 // tells you whether you were right, but the ending (game/debrief.js). If it was the last of the cult, you carry on in the
 // dark, none the wiser.
 
@@ -361,7 +361,7 @@ function deedDawn() {
 // and more if someone saw you), a friend of the one you went for (and the one you went for, if alive), less for each
 // step of trust in you; the dead so far, the camp's anger, the evening's mood and their own whim; the cult leans on it
 // a little (to be rid of you), as it leans at any inquiry. At least need of them, and more than speak for you, and you
-// are put on the truck to Hillah: the season ends (game/verdict.js, handsRaised: with nobody left at the dig, the police
+// are put on the lorry to Hillah: the season ends (game/verdict.js, handsRaised: with nobody left at the dig, the police
 // corporal from Hillah decides, and takes your word, mostly). Otherwise you stay: those who would have sent you away
 // trust you the less, mostly (sour), the camp is the angrier, about so far (angered), and suspects you about a step less
 // (cleared).
@@ -396,23 +396,23 @@ function youVote() {
         'Судить вас на раскопе уже некому, и решать приходится капралу из Хиллы. Он верит вам на слово.'
       )}</p>`
     : `<p class="notice">${bi(
-    'The camp sits in judgement on you in the mess tent. ' +
-      [
-        out.expel.length ? `${nameList(out.expel)} would put you on the lorry to Hillah.` : 'Nobody would put you on the lorry.',
-        out.keep.length ? `${nameList(out.keep)} ${out.keep.length > 1 ? 'speak' : 'speaks'} for you.` : '',
-        out.silent.length ? `${nameList(out.silent)} ${out.silent.length > 1 ? 'say' : 'says'} nothing.` : ''
-      ]
-        .filter(Boolean)
-        .join(' '),
-    'Лагерь собирается в столовой палатке, чтобы решить вашу судьбу. ' +
-      [
-        out.expel.length ? `Отправить вас грузовиком в Хиллу: ${nameListRu(out.expel)}.` : 'Отправлять вас в Хиллу не хочет никто.',
-        out.keep.length ? `За вас: ${nameListRu(out.keep)}.` : '',
-        out.silent.length ? `${out.silent.length > 1 ? 'Молчат' : 'Молчит'}: ${nameListRu(out.silent)}.` : ''
-      ]
-        .filter(Boolean)
-        .join(' ')
-  )}</p>`;
+        'The camp sits in judgement on you in the mess tent. ' +
+          [
+            out.expel.length ? `${nameList(out.expel)} would put you on the lorry to Hillah.` : 'Nobody would put you on the lorry.',
+            out.keep.length ? `${nameList(out.keep)} ${out.keep.length > 1 ? 'speak' : 'speaks'} for you.` : '',
+            out.silent.length ? `${nameList(out.silent)} ${out.silent.length > 1 ? 'say' : 'says'} nothing.` : ''
+          ]
+            .filter(Boolean)
+            .join(' '),
+        'Лагерь собирается в столовой палатке, чтобы решить вашу судьбу. ' +
+          [
+            out.expel.length ? `Отправить вас грузовиком в Хиллу: ${nameListRu(out.expel)}.` : 'Отправлять вас в Хиллу не хочет никто.',
+            out.keep.length ? `За вас: ${nameListRu(out.keep)}.` : '',
+            out.silent.length ? `${out.silent.length > 1 ? 'Молчат' : 'Молчит'}: ${nameListRu(out.silent)}.` : ''
+          ]
+            .filter(Boolean)
+            .join(' ')
+      )}</p>`;
   if (out.passed) {
     ending('expelled');
     return '';
@@ -424,8 +424,13 @@ function youVote() {
   S.onYou = Math.max(0, (S.onYou || 0) - vary(RULES.deed.cleared));
   return (
     hands +
-    (corporal ? '' : `<p class="notice">${bi('The camp will not send you away. Not today.', 'Лагерь не станет вас отсылать. Не сегодня.')}</p>`) +
-    trustNote([], sour.map(o => o.id))
+    (corporal
+      ? ''
+      : `<p class="notice">${bi('The camp will not send you away. Not today.', 'Лагерь не станет вас отсылать. Не сегодня.')}</p>`) +
+    trustNote(
+      [],
+      sour.map(o => o.id)
+    )
   );
 }
 // the morning after the deed, the camp talks the more readily (people/social.js, socialMorning)

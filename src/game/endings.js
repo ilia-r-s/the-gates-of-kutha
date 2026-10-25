@@ -263,10 +263,7 @@ function endConductDone(r, id) {
       : bi('None of them was unmasked, but none of them was left.', 'Никого из них вы не разоблачили, но и не осталось никого.'),
     then =
       id === 'truck'
-        ? bi(
-            'It was the camp that finished you, for the way you went about it.',
-            'Вас погубил лагерь — за то, как вы этого добились.'
-          )
+        ? bi('It was the camp that finished you, for the way you went about it.', 'Вас погубил лагерь — за то, как вы этого добились.')
         : bi(
             'Kutha did the rest by itself, as it had before there was anyone to serve it.',
             'Остальное Кута сделала сама — как делала и прежде, задолго до того, как появилось кому ей служить.'
@@ -490,9 +487,7 @@ function ending(kind, how) {
     title: endTitle(id),
     sub: bi(`${END_TIER[tier][0]} · ${st.name[0]}`, `${END_TIER[tier][1]} · ${st.name[1]}`),
     // (a death in your own cot, with nothing torn open, at first light: data/endings.js, nightDeath)
-    art: inBed
-      ? { bg: 'end', end: id, aspect: asp, time: 'dawn', inBed: true }
-      : { bg: 'end', end: id, aspect: asp, time: END_TIME[id] },
+    art: inBed ? { bg: 'end', end: id, aspect: asp, time: 'dawn', inBed: true } : { bg: 'end', end: id, aspect: asp, time: END_TIME[id] },
     body,
     choices: [
       {
