@@ -12,7 +12,7 @@ quarrels or news.
 The rules of the game, in words and with every number, are in [RULES.md](RULES.md), written for whoever tunes the game:
 each number is named as it is in the code. [The Complete Rulebook](docs/rulebook.md) tells the same rules for a reader,
 with how often each ending comes; it is a copy of the rulebook doc on claude.ai
-(https://claude.ai/artifact/EkqSDY5vtcA6RnGVHxyUjf), taken at build 26.1.0.
+(https://claude.ai/artifact/EkqSDY5vtcA6RnGVHxyUjf), taken at build 27.0.0.
 
 ## Building
 
@@ -31,7 +31,7 @@ modules share one global scope, so the build refuses a name declared twice at to
 name would otherwise silently replace the first. The pages carry the script without its comments and spare whitespace
 (Terser, with no compression and no renaming: the code runs exactly as written), which keeps the page small enough for
 the artifact host to accept; the tests play these same pages. The build also stamps the version in `package.json` into
-the top panel, beside the title ("build 26.1.0"), so a player can tell which build is on the screen; raise it with
+the top panel, beside the title ("build 27.0.0"), so a player can tell which build is on the screen; raise it with
 each release.
 
 - `kutha.html` is the artifact page (the artifact host adds the document skeleton).
