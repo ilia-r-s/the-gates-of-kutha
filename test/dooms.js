@@ -1,7 +1,8 @@
 // After a doom: what it did to each of the camp (game/fates.js, doomFates), in English and in Russian, and every way it
 // can go turning up. First every line of DOOM_FATE for each of the seven; then doom endings forced from half-played
 // seasons, every nature in turn: the epilogue scanned in both languages, nobody told twice, no line told twice, the dead
-// told as dead, and the ways counted by where the end found each of them.
+// told as dead, and the ways counted by where the end found each of them. A way that comes seldom may not have come in the
+// seasons asked for, by the luck of the deal: then it plays on, to three times as many, until every way has turned up.
 // usage: node test/dooms.js [seasons]
 const { run, open, args } = require('./lib/harness');
 const A = args(),
@@ -46,7 +47,20 @@ run(async browser => {
       tally = (o, k) => (o[k] = (o[k] || 0) + 1);
     let x = 4242;
     const rnd = k => (x = (x * 1103515245 + 12345) % 2147483648) % k;
-    for (let g = 0; g < N; g++) {
+    // every way, by place, that must turn up at least once (but those that come seldom there: helping, of those below
+    // with you)
+    const want = {
+      heart: ['taken', 'marked', 'fled', 'none'],
+      camp: ['taken', 'marked', 'fled', 'helped', 'helpedDied', 'none'],
+      away: ['taken', 'marked', 'fled', 'helped', 'helpedDied', 'none'],
+      cult: ['joined', 'taken', 'waits', 'fled', 'marked', 'none'],
+      cell: ['freed', 'taken', 'none'],
+      dead: ['unburied', 'buried']
+    };
+    const missing = () =>
+      Object.entries(want).flatMap(([pool, kinds]) => kinds.filter(k => !(ways[pool] && ways[pool][k])).map(k => `${k} (${pool})`));
+    let g = 0;
+    for (; g < N || (g < 3 * N && missing().length); g++) {
       __T.start(g % 3);
       // part of a season, any old how (a third of it to most of it), then the end
       const steps = 30 + rnd(200);
@@ -118,21 +132,8 @@ run(async browser => {
       const items = html.split('<li').length - 1;
       if (items !== S.order.length) bad.push(`${nat}: ${items} told of, not ${S.order.length}`);
     }
-    // every way, by place, turning up at least once (but those that come seldom there: helping, of those below with you)
-    const want = {
-      heart: ['taken', 'marked', 'fled', 'none'],
-      camp: ['taken', 'marked', 'fled', 'helped', 'helpedDied', 'none'],
-      away: ['taken', 'marked', 'fled', 'helped', 'helpedDied', 'none'],
-      cult: ['joined', 'taken', 'waits', 'fled', 'marked', 'none'],
-      cell: ['freed', 'taken', 'none'],
-      dead: ['unburied', 'buried']
-    };
-    Object.entries(want).forEach(([pool, kinds]) =>
-      kinds.forEach(k => {
-        if (!(ways[pool] && ways[pool][k])) bad.push(`never: ${k} (${pool})`);
-      })
-    );
-    return { lines, seasons: N, ways, byNature: byNat, problems: bad.length, bad: bad.slice(0, 40) };
+    missing().forEach(m => bad.push(`never: ${m}`));
+    return { lines, seasons: g, asked: N, ways, byNature: byNat, problems: bad.length, bad: bad.slice(0, 40) };
   }, N);
   if (errors.length) res.errors = errors.slice(0, 5);
   return res;

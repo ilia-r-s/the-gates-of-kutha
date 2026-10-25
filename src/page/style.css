@@ -25,6 +25,10 @@ body { min-height: 100dvh; }
 /* each search, drawn on the site plan as a small test pit beside the place */
 #map .pit { fill: var(--line-hi); stroke: var(--clay); stroke-width: .7; }
 .namefield input { -webkit-appearance: none; appearance: none; }
+/* every label as wide as the longest (twelve letters, in either language), so that the boxes start in one line; on a
+   narrow screen each label stands over its box instead, and the boxes still start in one line */
+.namefield label { min-width: 9em; }
+@media (max-width: 460px) { .namefield { flex-direction: column; align-items: flex-start; gap: .45rem; } }
 .namefield input.seed { font-family: var(--f-mono); letter-spacing: .08em; text-transform: uppercase; width: min(100%, 170px); }
 .namefield input.seed::placeholder { text-transform: none; letter-spacing: 0; }
 .seedcode { font-family: var(--f-mono); letter-spacing: .08em; color: var(--clay-hi); }

@@ -1,6 +1,6 @@
 {
   "name": "gates-of-kutha",
-  "version": "27.1.0",
+  "version": "27.1.1",
   "private": true,
   "description": "The Gates of Kutha: a Lovecraftian hidden-role mystery in one HTML page, in English and Russian.",
   "engines": {

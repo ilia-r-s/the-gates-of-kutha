@@ -4,6 +4,14 @@ Every build of _The Gates of Kutha_, newest first. The build number is set in `p
 top panel. Each build pushed to `main` is published on GitHub Pages and as a GitHub Release, with its section of this
 file as the release notes (`.github/workflows/publish.yml`). Builds before 26.1.0 came before this repository.
 
+## 27.1.1 — 2026-10-25
+
+**Fixed.** On the title screen the season-code box starts in line with the surname box, in both languages; on a narrow
+screen each label stands over its box, and the boxes still line up.
+
+**For developers.** `test/dooms.js` plays on past the seasons asked for, to three times as many, until every way a doom
+can go has turned up, so that an unlucky deal no longer fails the quick suite.
+
 ## 27.1.0 — 2026-10-25
 
 **New in the game**
