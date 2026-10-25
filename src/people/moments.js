@@ -3,22 +3,22 @@
 // through, a death. Each of these is a public moment (stir, by its row in ROWS and in RULES.camp), and every onlooker
 // reacts on their own, or not at all: so one moment may move nobody, one person, or several at once (at most
 // RULES.camp.cap each way), in their trust in you, in their suspicion of each other (people/suspicion.js), or in their
-// liking for someone (people/ties.js). Every reaction is odds written as named steps (core/odds.js), the pieces the rows
-// share named once (FOND, DISLIKES, …), each ending in the moment's own: never rarer than the rarest, × a heavy moment,
-// never surer than most. Whoever hears of a thing, at a moment or not (people/gossip.js: talk of you, word of what you
-// did), is moved by one helper, hear. What is said against someone before everyone is remembered (people/suspicion.js);
-// when the truth comes out, those who said it are believed again, or are not, and those who had suspected them think
-// again (settle). The record of the season's moments (S.stirs) is kept here, and the casebook tells it (told,
-// movedSaid).
+// liking for someone (people/ties.js). Every reaction is odds written as named steps (core/odds.js), the pieces the
+// rows share named once (FOND, DISLIKES, …), each ending in the moment's own: never rarer than the rarest, × a heavy
+// moment, never surer than most. Whoever hears of a thing, at a moment or not (people/gossip.js: talk of you, word of
+// what you did), is moved by one helper, hear. What is said against someone before everyone is remembered
+// (people/suspicion.js); when the truth comes out, those who said it are believed again, or are not, and those who had
+// suspected them think again (settle). The record of the season's moments (S.stirs) is kept here, and the casebook
+// tells it (told, movedSaid).
 const Moments = (() => {
   // ---------- one who hears of a thing ----------
   // Each hearer, in turn, may be moved by what they hear, a step or not at all: react(h) gives their reaction ([what:
   // 'trust' in you, 'like' or 'sus' of whom, change: +1 or −1, odds, and anything more the odds are rolled on]), a list
-  // of them, or null; odds of null: decided already, by the reaction's own dice. Each is rolled on its odds (args(h), then
-  // the reaction's own), and moves them if it can; at most cap move the same way, and once as many have, a reaction
-  // still throws its die (rollWhenFull, as at a public moment) or throws none. Returns who moved, by what moved them
-  // ([what, whom, change, [ids], how far suspicion now goes]), and each step in the order it was taken ([id, what, whom,
-  // change]).
+  // of them, or null; odds of null: decided already, by the reaction's own dice. Each is rolled on its odds (args(h),
+  // then the reaction's own), and moves them if it can; at most cap move the same way, and once as many have, a
+  // reaction still throws its die (rollWhenFull, as at a public moment) or throws none. Returns who moved, by what
+  // moved them ([what, whom, change, [ids], how far suspicion now goes]), and each step in the order it was taken ([id,
+  // what, whom, change]).
   function hear(hearers, react, { cap = Infinity, rollWhenFull = true, args = () => [] } = {}) {
     const moved = [],
       steps = [];
@@ -54,12 +54,12 @@ const Moments = (() => {
 
   // ---------- a public moment ----------
   // kind names a row of ROWS (below) and of RULES.camp; o = { by, about, ... }. Every onlooker (everyone free, except
-  // whoever started it and whoever it is about; o.only: those of them it was told to, if it was told to some only) gets a
-  // roll for each reaction it may draw from them, as a rule one: trust in you up or down, suspicion of someone up or
+  // whoever started it and whoever it is about; o.only: those of them it was told to, if it was told to some only) gets
+  // a roll for each reaction it may draw from them, as a rule one: trust in you up or down, suspicion of someone up or
   // down, or liking for someone up or down (a heavy moment, one that comes seldom in the season's mood, moves each
-  // onlooker × RULES.camp.heavy as readily). A reaction whose odds come to nothing or less stays possible, at the rarest
-  // (RULES.scale.rarest): nobody's reaction is ever sure. Returns the moment as the camp sees it, opening line and all
-  // (the opening knows who was moved; o.told: the opening has been told already, with others').
+  // onlooker × RULES.camp.heavy as readily). A reaction whose odds come to nothing or less stays possible, at the
+  // rarest (RULES.scale.rarest): nobody's reaction is ever sure. Returns the moment as the camp sees it, opening line
+  // and all (the opening knows who was moved; o.told: the opening has been told already, with others').
   function stir(kind, o) {
     const K = ROWS[kind],
       pr = RULES.camp[kind],
@@ -80,7 +80,8 @@ const Moments = (() => {
   // a moment of the record, in the casebook's words, as [English, Russian]
   const told = r => ROWS[r.kind].told(r.by && C(r.by), C(r.about), r);
 
-  // what the onlookers did, in a line each; when nobody moved, a moment someone spoke up in says so, the rest say nothing
+  // what the onlookers did, in a line each; when nobody moved, a moment someone spoke up in says so, the rest say
+  // nothing
   function stirNote(r, quiet) {
     const lines = r.moved.map(([what, whom, d, ids, lvl]) => {
       if (what === 'trust') return d < 0 ? trustNote([], ids) : trustNote(ids, []);
@@ -126,25 +127,26 @@ const Moments = (() => {
       ? [`${many ? 'think' : 'thinks'} the less of ${w.short} now`, `теперь хуже ${many ? 'думают' : 'думает'} ${ru.ob(w)}`]
       : [`${many ? 'think' : 'thinks'} the better of ${w.short} now`, `теперь лучше ${many ? 'думают' : 'думает'} ${ru.ob(w)}`];
   }
-  // one reaction, one way or the other (down, the less: −1; up, the more: +1), as the reasons each way weigh against each
-  // other, on odds (rolled on what all the reasons come to); with no reason either way, the way it would go of itself
-  // (d), at the rarest (stir)
+  // one reaction, one way or the other (down, the less: −1; up, the more: +1), as the reasons each way weigh against
+  // each other, on odds (rolled on what all the reasons come to); with no reason either way, the way it would go of
+  // itself (d), at the rarest (stir)
   function eitherWay(on, what, whom, down, up, d) {
     const t = Math.max(0, down) + Math.max(0, up);
     return [what, whom, t > 0 ? (chance(Math.max(0, down) / t) ? -1 : 1) : d, on, t];
   }
   const ofPair = (l, x) => Ties.likes(l.id, x); // how an onlooker feels about someone
   const isSusp = l => temperOf(l) === 'suspicious';
-  // of those who might speak up for or about x, one, the fonder of x the likelier (for: the fond ones' weight, by liking)
+  // of those who might speak up for or about x, one, the fonder of x the likelier (for: the fond ones' weight, by
+  // liking)
   const fondest = (pool, x) =>
     pool.length ? C(wpick(Object.fromEntries(pool.map(c => [c.id, ofPair(c, x) ** 2 || RULES.camp.fondestLeast])))) : null;
   // the one who spoke up moves a step in their trust in you, mostly (camp.spoke)
   const spokeStep = (sp, d) => chance(RULES.camp.spoke) && Ties.moveTrust(sp, d);
 
   // ---------- the odds of a reaction ----------
-  // A reaction's odds: its own steps, then the moment's: never rarer than the rarest, × a heavy moment, never surer than
-  // most. Rolled on the onlooker, the moment and its row of RULES.camp (l, o, pr), and on anything more the reaction
-  // carries.
+  // A reaction's odds: its own steps, then the moment's: never rarer than the rarest, × a heavy moment, never surer
+  // than most. Rolled on the onlooker, the moment and its row of RULES.camp (l, o, pr), and on anything more the
+  // reaction carries.
   const TAIL = [
     ['floor', () => RULES.scale.rarest],
     ['* a heavy moment', (l, o) => (o.heavy ? RULES.camp.heavy : 1)],
@@ -163,8 +165,8 @@ const Moments = (() => {
 
   // ---------- the moments: who speaks, and how each onlooker may take it ----------
   const ROWS = {
-    // you sent an innocent away: their friend calls you out, or someone honest or suspicious does; others may follow, or
-    // stand by you if they had suspected the one sent away themselves
+    // you sent an innocent away: their friend calls you out, or someone honest or suspicious does; others may follow,
+    // or stand by you if they had suspected the one sent away themselves
     calledOut: {
       speaker: (o, pr) => {
         const pool = freeChars().filter(c => c.id !== o.about),
@@ -338,8 +340,8 @@ const Moments = (() => {
     },
     // a dream told aloud that names someone guilty: some believe it and suspect the one named; the friends of the one
     // named, and those who already doubt the dreamer, suspect the dreamer instead, and so does anyone not fond of the
-    // dreamer when the dream only answers one that named them (the more if it is their first dream aloud: answer); the one
-    // named may never forgive it
+    // dreamer when the dream only answers one that named them (the more if it is their first dream aloud: answer); the
+    // one named may never forgive it
     dreamt: {
       odds: {
         back: moment('a dream aloud: suspects the dreamer instead', [
@@ -414,9 +416,9 @@ const Moments = (() => {
       // in the casebook
       told: (b, a) => [`${a.short} came clean before everyone`, `${ru.c(a)} ${ru.gs(a, 'признался', 'призналась')} при всех`]
     },
-    // the dead had named someone guilty before everyone, and now they are dead (people/social.js, ontoSaid): someone says
-    // so aloud, whoever suspects the one named the more likely; those not fond of the one named may suspect them the more
-    // for it, and their friends suspect the speaker
+    // the dead had named someone guilty before everyone, and now they are dead (people/social.js, ontoSaid): someone
+    // says so aloud, whoever suspects the one named the more likely; those not fond of the one named may suspect them
+    // the more for it, and their friends suspect the speaker
     onto: {
       speaker: (o, pr) => {
         const pool = freeChars().filter(c => c.id !== o.about);
@@ -424,7 +426,7 @@ const Moments = (() => {
       },
       spoke: (sp, o) => {
         o.by = sp.id;
-        addTest(sp.id, o.about, 'distrust', 'cult'); // (blame aloud, as any: people/social.js, blameAloud)
+        Record.testify(sp.id, o.about, 'distrust', 'cult'); // (blame aloud, as any: people/social.js, blameAloud)
         Suspicion.sayAloud(sp.id, o.about, 'cult', 'blame');
       },
       odds: {
@@ -468,8 +470,8 @@ const Moments = (() => {
       // in the casebook
       told: (b, a) => [`A trace of ${a.short}’s found by a tent`, `У палатки нашли след ${ru.c(a, 'g')}`]
     },
-    // someone who swore to watch your tent says, the morning after, that they saw someone off (game/night.js, keptSaid):
-    // whoever doubted them may think again
+    // someone who swore to watch your tent says, the morning after, that they saw someone off (game/night.js,
+    // keptSaid): whoever doubted them may think again
     kept: {
       odds: { thinksAgain: moment('a watch kept: thinks again', [['base', (l, o, pr) => pr.p]]) },
       react: (l, o, pr, on) => (Suspicion.wonders(l.id, o.about) ? ['sus', o.about, -1, on.thinksAgain] : null),
@@ -512,11 +514,12 @@ const Moments = (() => {
               `${ru.c(b)} ${ru.gs(b, 'оказался прав', 'оказалась права')} насчёт ${ru.c(a, 'g')}`
             ]
     },
-    // the night a woman spent in your tent, told as gossip, badly or kindly (people/gossip.js, a night in your tent): before
-    // everyone at breakfast (o.before), or to one of the camp (o.only). Each who hears it makes up their mind once
-    // (S.log.visit.heard), about her and about you, by their temperament, a priest's vows, how they feel about her, the
-    // speaker and you, jealousy, and what has passed between them and her (RULES.camp.scandal). Told before her, she holds
-    // it against one who told it badly, or warms to one who told it kindly; and it shows in her face that day.
+    // the night a woman spent in your tent, told as gossip, badly or kindly (people/gossip.js, a night in your tent):
+    // before everyone at breakfast (o.before), or to one of the camp (o.only). Each who hears it makes up their mind
+    // once (S.log.visit.heard), about her and about you, by their temperament, a priest's vows, how they feel about
+    // her, the speaker and you, jealousy, and what has passed between them and her (RULES.camp.scandal). Told before
+    // her, she holds it against one who told it badly, or warms to one who told it kindly; and it shows in her face
+    // that day.
     scandal: {
       odds: {
         her: moment('a night in your tent, told: what they think of her', [['base', (l, o, pr, t) => t]]),
@@ -686,7 +689,8 @@ const Moments = (() => {
   // inquiry, or taken by the night). Whatever was said of them before everyone is settled now: each speaker is proven
   // right or wrong, once, on the last thing they said, and the camp takes up each one still here, those proven wrong
   // first (hands raised the same way the same day are told together). guilty: what the camp now holds them to have
-  // been; the night's dead it takes for innocent, and is fooled when one of the cult killed another (people/cunning.js).
+  // been; the night's dead it takes for innocent, and is fooled when one of the cult killed another
+  // (people/cunning.js).
   function settle(id, guilty = C(id).role === 'cult') {
     const a = C(id),
       all = Suspicion.settle(id, guilty);

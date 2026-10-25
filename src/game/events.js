@@ -139,7 +139,7 @@ const EVENT_DO = {
     // journal as a find does)
     const charm = !!ITEMS[it].ward;
     if (charm)
-      journal(
+      Record.journal(
         bi(
           `Traded a fountain pen for ${theItem(it)} with a dealer passing through.`,
           `${ru.Item(it)} — ${ru.ig(it, 'выменян', 'выменяна', 'выменяно', 'выменяны')} на вечное перо у заезжего торговца.`
@@ -235,7 +235,7 @@ const EVENT_DO = {
     const p = strongPair(-1, 2);
     if (!p) return `<p>${bi('It blows over by noon.', 'К полудню всё утихает.')}</p>`;
     const [a, b] = p;
-    addTest('you', a.id, 'quarrel', b.id);
+    Record.testify('you', a.id, 'quarrel', b.id);
     S.tenor.feud = [a.id, b.id];
     if (heavy) {
       if (chance(RULES.events.heavySus)) Suspicion.move(a.id, b.id, 1);
@@ -253,7 +253,7 @@ const EVENT_DO = {
     let h = '';
     if (p) {
       const [a, b] = p;
-      addTest('you', a.id, 'feast', b.id);
+      Record.testify('you', a.id, 'feast', b.id);
       h = `<p class="notice">${bi(`${a.short} and ${b.short} sit together at the feast, and laugh at the same things.`, `${ru.c(a)} и ${ru.c(b)} сидят на пиру рядом и смеются над одним и тем же.`)}</p>`;
       if (!heavy) return h;
     }

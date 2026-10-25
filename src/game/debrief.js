@@ -473,7 +473,7 @@ function fxCunning({ add }) {
     const c = rec && C(rec.actor),
       said = c && S.claims.find(x => x.night === n && x.id === c.id),
       [on, onRu] = onNight(n).map(capS);
-    if (said && wasThere(said))
+    if (said && Record.wasThere(said))
       add(
         'n',
         `${on} ${c.name} owned being out ${PLACE_SHORT[said.loc]}, rather than be caught lying, and it was ${c.p} who did it.`,

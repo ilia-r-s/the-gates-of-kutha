@@ -26,7 +26,7 @@ function visitScene(h) {
   S.phase = 'visit';
   emit('visit');
   const chill = S.bg === 'occultist' && chance(h.role === 'cult' ? RULES.talk.chillCult : RULES.talk.chillOther);
-  if (chill) addTest(h.id, h.id, 'chill', 'cult');
+  if (chill) Record.testify(h.id, h.id, 'chill', 'cult');
   show({
     kicker: bi(`Day ${S.day} of ${RULES.start.days} · Late evening`, `День ${S.day} из ${RULES.start.days} · Поздний вечер`),
     title: bi('A knock at the tent pole', 'Стук по шесту палатки'),
@@ -63,7 +63,7 @@ function visitAnswer(h, yes, chill) {
     }
     Gossip.wordOf(h, 'turnedAway');
   }
-  journal(
+  Record.journal(
     yes
       ? bi(
           `${h.name} came to your tent as the evening ended, and stayed.`,
@@ -147,7 +147,7 @@ function guestStrikes(night) {
   S.revealed[h.id] = 'cult';
   fixMark(h);
   S.doom = Math.max(0, S.doom - vary(RULES.inquiry.doomRight));
-  journal(
+  Record.journal(
     bi(
       `${h.name} tried to kill you in the night, and was taken away.`,
       `${capS(ru.cf(h))} ${ru.gs(h, 'пытался', 'пыталась')} убить вас ночью, и ${ru.gs(h, 'его', 'её')} увезли.`
@@ -220,7 +220,7 @@ function takenInYourTent(h) {
   S.log.visit.talked = k;
   if (k) Gossip.wordOf(h, 'diedInTent', k);
   if (k > 1) Suspicion.suspectYou(1);
-  journal(bi(`${h.name} was taken in the night, in your tent.`, `Ночь забрала ${ru.cf(h, 'a')} — в вашей палатке.`));
+  Record.journal(bi(`${h.name} was taken in the night, in your tent.`, `Ночь забрала ${ru.cf(h, 'a')} — в вашей палатке.`));
 }
 // The attack on your tent got through, and she was in it: who the night takes (RULES.visit.through), or only the usual
 // harm. Returns what the night tells (nothing more, if you die: the ending tells it).
@@ -237,7 +237,7 @@ function guestThrough(night, it) {
     killYou('night');
     return '';
   }
-  journal(bi('You were attacked in the night.', 'Ночью на вас напали.'));
+  Record.journal(bi('You were attacked in the night.', 'Ночью на вас напали.'));
   if (k === 'hurt')
     return (
       it +

@@ -56,8 +56,8 @@ function spiteNight(k = 1, deed = null) {
       seen = others.length && chance(SP.wrongFace) ? pick(others) : who;
     rec.caught = true;
     if (seen !== who) rec.seen = seen.id;
-    addTest('you', seen.id, 'spite', kind);
-    journal(
+    Record.testify('you', seen.id, 'spite', kind);
+    Record.journal(
       bi(
         `${seen.name} was at your tent in the night, meaning you harm.`,
         `${capS(ru.cf(seen))} ${ru.gs(seen, 'побывал', 'побывала')} ночью у вашей палатки, желая вам зла.`
@@ -65,7 +65,7 @@ function spiteNight(k = 1, deed = null) {
     );
     h += `<p class="notice">${bi(`You wake as someone backs out of your tent, and in the grey light you know them: ${seen.short}. ${EP.He(seen)} does not look back.`, `Вы просыпаетесь, когда кто-то пятится из вашей палатки, и в сером свете узнаёте: ${ru.c(seen)}. ${ru.gs(seen, 'Он', 'Она')} не оглядывается.`)}</p>`;
   } else if (chance(SP.trace)) {
-    const cl = addClue({ owner: who.id, cat: pick(CATS), source: 'spite', loc: 'camp', status: 'unverified' });
+    const cl = Record.addTrace({ owner: who.id, cat: pick(CATS), source: 'spite', loc: 'camp', status: 'unverified' });
     h += bi(`<p>By your tent pole you find ${clueText(cl)}.</p>`, `<p>У шеста вашей палатки вы находите ${clueTextRu(cl)}.</p>`);
   }
   return h;

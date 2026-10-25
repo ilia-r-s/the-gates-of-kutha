@@ -11,52 +11,6 @@
 // down tools for a day. Every hand raised is said before everyone, and remembered until the truth comes out
 // (people/moments.js).
 
-// ---------- the case you can make ----------
-// From what you know: traces at the scenes that fit them, as far as you have seen their habits (a planted or a thief's
-// trace, once seen for what it is, counts for nothing); someone passed in the dark who fits their habits; an account of
-// a night belied by the very person they named; strong words against them (a slip, a slip of the tongue about the
-// night, a witness), dreams of their guilt or innocence, a sworn watch slept through, a flinch at an old charm, a hint
-// at their nights, distrust voiced by others. At most caseCap.
-function caseAgainst(x) {
-  const VR = RULES.verdict;
-  let s =
-    VR.sight * sightedAs(x).length + VR.lie * belied(x).length + VR.there * S.claims.filter(cl => cl.id === x.id && wasThere(cl)).length;
-  S.clues.forEach(cl => {
-    if (notAttackers(cl) || x.known[cl.cat] !== cl.val) return; // (as far as you have noted their habits)
-    // (a trace by your tent pole tells of harm meant you in secret, not of the night's work: as much as being caught at it)
-    s += cl.source === 'spite' ? VR.spite : cl.status === 'genuine' ? VR.genuine : VR.trace;
-  });
-  S.testimony
-    .filter(t => t.about === x.id && !discredited(t))
-    .forEach(t => {
-      if (t.kind === 'slip' || t.kind === 'blurt' || t.kind === 'witness') s += VR.strong;
-      else if (t.kind === 'vision') s += t.verdict === 'cult' ? VR.dream : -VR.dream;
-      else if (t.kind === 'failwatch') s += VR.failwatch;
-      else if (((t.kind === 'react' || t.kind === 'words') && t.verdict === 'fear') || t.kind === 'hint') s += VR.flinch;
-      else if (t.kind === 'distrust') s += VR.distrust;
-      else if (t.kind === 'spite') s += VR.spite;
-    });
-  return Math.max(0, Math.min(VR.caseCap, s));
-}
-// an account of a night that puts them, by their own word, where it happened (not the one attacked there)
-const wasThere = cl => !cl.attacked && cl.loc !== 'camp' && !!S.nights[cl.night] && cl.loc === S.nights[cl.night].crimeLoc;
-// sightings in the dark, by someone else, that fit what you know of someone's habits
-const sightedAs = x => S.sights.filter(sg => sg.id !== x.id && x.known[sg.cat] === sg.val);
-// what the camp no longer weighs: the word of one of the cult unmasked, and the dreams of someone who has owned that
-// they never dreamed
-function discredited(t) {
-  const c = S.chars[t.from];
-  return !!c && ((c.role === 'cult' && c.status === 'exposed') || (t.kind === 'vision' && claimOf(c).role !== 'seer'));
-}
-// the accounts someone gave of a night that the person they named does not bear out: they say they spent the evening
-// with someone who, asked in turn, says otherwise (one who will not say where they were bears out nothing, and belies
-// nothing either)
-const belied = x =>
-  S.claims.filter(cl => {
-    if (cl.id !== x.id || !cl.with) return false;
-    const o = S.claims.find(k => k.night === cl.night && k.id === cl.with);
-    return o && o.loc !== 'evade' && o.with !== x.id;
-  });
 // the camp's mood, at the start of an inquiry, once it has begun to sour, or tires of inquiries that came to nothing
 function angerSay() {
   const a = S.anger || 0,
@@ -161,7 +115,7 @@ function handsRaised(crowd, lean, extra, hi, lo, mine) {
 // Everyone free but the one accused: { back, against, silent } (ids), passed, and the case you made.
 function campVote(x) {
   const VR = RULES.verdict,
-    cs = caseAgainst(x),
+    cs = Record.caseAgainst(x),
     h = handsRaised(
       freeChars().filter(o => o.id !== x.id),
       o => leaning(o, x, cs),

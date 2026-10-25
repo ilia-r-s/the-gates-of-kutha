@@ -107,7 +107,7 @@ function blurt(c, n, scale = 1) {
   const knew = rec.actor === c.id ? null : rec.finder === c.id ? 'found' : wasAbout(rec, c.id) ? 'there' : null;
   if ((rec.actor !== c.id && !knew) || !chance(craft(c).blurt * scale * (knew ? RULES.alibis.knew : 1))) return null;
   rec.blurted = true;
-  addTest(c.id, c.id, 'blurt', knew ? `${n}:${knew}` : String(n));
+  Record.testify(c.id, c.id, 'blurt', knew ? `${n}:${knew}` : String(n));
   const v = rec.target && S.chars[rec.target] ? C(rec.target) : null;
   if (n === 0)
     return bi(

@@ -1,9 +1,9 @@
-// ===================== SUSPICION: who suspects whom, what was said before everyone, who is closing in =====================
+// ===================== SUSPICION: who suspects whom, what was said aloud, who is closing in =====================
 // One machinery for suspicion. It owns each one's suspicion of each other one (S.sus, from 0 to scale.suspicion, in the
 // casebook's words: begins to wonder about them, suspects them in earnest, is all but sure: RULES.suspects); what was
 // said before the whole camp, guilty or clean, until the truth about them comes out (S.said), and whose word has been
-// proven so (S.credit); how far the camp suspects you yourself, after the deed (S.onYou); and whether the cult knows you
-// are onto it (S.alerted). They are dealt once a season (deal), moved only through here (move, sayAloud, settle,
+// proven so (S.credit); how far the camp suspects you yourself, after the deed (S.onYou); and whether the cult knows
+// you are onto it (S.alerted). They are dealt once a season (deal), moved only through here (move, sayAloud, settle,
 // suspectYou, clearYou, alertCult), and asked about by level, so that "suspects in earnest" means one thing everywhere.
 // How lost one of the cult looks, and the seven ways the cult measures who is closing in on it, are read here too. A
 // person or an id may be given wherever one is asked about.
@@ -121,16 +121,16 @@ const Suspicion = (() => {
   // ---------- how lost one of the cult looks, as the cult sees it ----------
   // Looks lost: some case against them, or the camp's suspicion on them (people/claims.js, cornerClaims and mateGamble;
   // people/dialog.js, busFor; game/verdict.js, cultLean). All but caught, more strongly: a strong case, the camp's
-  // suspicion, or an inquiry into them the camp would not back; and clear: no case to speak of, nobody suspecting them in
-  // earnest, no such inquiry (people/cunning.js, betrayal).
+  // suspicion, or an inquiry into them the camp would not back; and clear: no case to speak of, nobody suspecting them
+  // in earnest, no such inquiry (people/cunning.js, betrayal).
   const accusedInVain = c => S.log.refusedInq.some(r => r.id === id(c));
-  const looksLost = c => caseAgainst(c) >= RULES.verdict.someCase || suspected(c),
-    caught = c => caseAgainst(c) >= RULES.verdict.strongCase || suspected(c) || accusedInVain(c),
-    clear = c => caseAgainst(c) < RULES.verdict.someCase && !suspectedBy(c).length && !accusedInVain(c);
+  const looksLost = c => Record.caseAgainst(c) >= RULES.verdict.someCase || suspected(c),
+    caught = c => Record.caseAgainst(c) >= RULES.verdict.strongCase || suspected(c) || accusedInVain(c),
+    clear = c => Record.caseAgainst(c) < RULES.verdict.someCase && !suspectedBy(c).length && !accusedInVain(c);
 
   // ---------- who is closing in on the cult: seven measures, each as it is ----------
-  // Each place the cult weighs the danger it is in measures it in its own way, and each is kept exactly so here, side by
-  // side (28.0.0's second phase makes them one model, each use keeping its own weights):
+  // Each place the cult weighs the danger it is in measures it in its own way, and each is kept exactly so here, side
+  // by side (28.0.0's second phase makes them one model, each use keeping its own weights):
   const threat = {
     // 1. whom to name guilty in its dream (people/claims.js, closingIn): anyone, by each step of suspicion of one of it
     //    at large past the first, and by each dream they told aloud naming one of it guilty, at large or not

@@ -77,7 +77,7 @@ function feudAgain() {
 function blameAloud(s, t, feud = false) {
   const heavy = weighty('talk');
   stirred('talk');
-  addTest(s.id, t.id, 'distrust', 'cult');
+  Record.testify(s.id, t.id, 'distrust', 'cult');
   Suspicion.sayAloud(s.id, t.id, 'cult', 'blame');
   const lead = feud
     ? bi(
@@ -111,7 +111,7 @@ function volunteerSighting() {
   if (!c || !chance(room('talk') * RULES.talk.volunteer)) return '';
   const sw = rec.saw[c.id],
     cl = rec.claim[c.id] || { loc: 'camp', with: null };
-  S.sights.push({ night: n, id: c.id, where: sw.where, to: sw.to, cat: sw.cat, val: sawVal(sw) });
+  Record.addSighting({ night: n, id: c.id, where: sw.where, to: sw.to, cat: sw.cat, val: sawVal(sw) });
   return `<p class="notice">${bi(`Before breakfast, ${c.short} takes you aside. “I did not want to say it in front of the others.`, `Ещё до завтрака ${ru.c(c)} отводит вас в сторону. «Не ${ru.gs(c, 'хотел', 'хотела')} говорить при остальных.`)} ${sightLine(cl, sw, c)}${bi('”', '»')}</p>`;
 }
 const nameList = ids => listNames(ids.map(id => C(id).short)),

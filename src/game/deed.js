@@ -112,7 +112,7 @@ function deedSet(t, means, plant) {
   S.inquiryDone = true;
   S.act = 'deed';
   S.log.deed = { day: S.day, id: t.id, means, plant: plant ? { owner: plant.o.id, cat: plant.cat, val: plant.val } : null };
-  journal(bi(`You resolved to go to ${t.name}’s tent in the night.`, `Вы решили ночью пойти к палатке ${ru.cf(t, 'g')}.`));
+  Record.journal(bi(`You resolved to go to ${t.name}’s tent in the night.`, `Вы решили ночью пойти к палатке ${ru.cf(t, 'g')}.`));
   endSlot(
     bi(
       `<p>You eat with the others and say very little. Afterwards you sit in your tent with the lamp out and listen to the camp go to sleep, one voice at a time.</p>`,
@@ -176,7 +176,7 @@ function deedNight(night) {
     t.takenBy = 'you';
     S.stats.taken++;
     night.deedDead = t.id;
-    journal(bi(`You killed ${t.name} in the night.`, `Ночью вы убили ${ru.cf(t, 'a')}.`));
+    Record.journal(bi(`You killed ${t.name} in the night.`, `Ночью вы убили ${ru.cf(t, 'a')}.`));
     h =
       d.means === 'revolver'
         ? bi(

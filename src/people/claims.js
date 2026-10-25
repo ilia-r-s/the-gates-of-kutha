@@ -43,7 +43,7 @@ function sayClaim(c) {
   const cl = claimOf(c);
   if (!cl) return;
   if (cl.said == null) cl.said = S.day;
-  addTest(c.id, c.id, 'claim', cl.role);
+  Record.testify(c.id, c.id, 'claim', cl.role);
 }
 function claimSay(c, role) {
   const k = pick([0, 1, 2]),
@@ -111,7 +111,7 @@ function claimTell(c) {
         )
       : null;
   if (!chance(lying(c) ? TP(c).tell : temperOf(c) === 'suspicious' ? RULES.talk.tellSuspicious : RULES.talk.tellTruthful)) return null;
-  addTest(c.id, c.id, 'tell', 'quick');
+  Record.testify(c.id, c.id, 'tell', 'quick');
   const k = pick([0, 1]);
   return bi(
     [`${c.short} answers a shade too quickly.`, `${c.short} looks at the lamp, not at you, while answering.`][k],
@@ -140,7 +140,7 @@ const dreamSaid = (c, d) => [
 ];
 function tellDream(c, d) {
   sayClaim(c);
-  addTest(c.id, d.t.id, 'vision', d.cult ? 'cult' : 'clean');
+  Record.testify(c.id, d.t.id, 'vision', d.cult ? 'cult' : 'clean');
   return d;
 }
 // who says they dream and does not: anyone at all, the cult's own as anyone's. Nobody outside can tell them apart by
@@ -306,7 +306,7 @@ function recantPressed(c) {
 function failedWatch(id) {
   const c = C(id);
   if (!isFree(c)) return '';
-  addTest(c.id, c.id, 'failwatch', 'slept');
+  Record.testify(c.id, c.id, 'failwatch', 'slept');
   // owned up to, denied, or not spoken of at all, as their temperament runs (RULES.claims.slept: [own, deny])
   const [own, deny] = RULES.claims.slept[temperOf(c)],
     how = chance(own) ? 'own' : chance(deny / (1 - own)) ? 'deny' : 'avoid',

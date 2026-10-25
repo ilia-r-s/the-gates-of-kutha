@@ -17,28 +17,28 @@ const Gossip = (() => {
   const record = () => S.rumors || [];
 
   // ---------- how true it is ----------
-  // Whether a speaker tells it true: as true as they know it when the talk is heavy (sure); otherwise a die on the truth,
-  // at their temperament's gossipTrue less gossip.likeBias a step of how strongly they feel about whom it is about
-  // (bias), or, for the kinds that go wrong only now and then, a die on a slip, at how untrue their gossip runs × the
-  // kind's own rate (slip). A temperament and what someone thinks of you are told true at gossipTrue less the bias, a
-  // friendship or a feud at gossipTrue; a flirtation is made up (flirt.invent), and a feeling of one's own turned about
-  // (talk.feelFalse), at a slip.
+  // Whether a speaker tells it true: as true as they know it when the talk is heavy (sure); otherwise a die on the
+  // truth, at their temperament's gossipTrue less gossip.likeBias a step of how strongly they feel about whom it is
+  // about (bias), or, for the kinds that go wrong only now and then, a die on a slip, at how untrue their gossip runs ×
+  // the kind's own rate (slip). A temperament and what someone thinks of you are told true at gossipTrue less the bias,
+  // a friendship or a feud at gossipTrue; a flirtation is made up (flirt.invent), and a feeling of one's own turned
+  // about (talk.feelFalse), at a slip.
   function toldTrue(s, { sure = false, bias = 0, slip = null } = {}) {
     if (sure) return true;
     if (slip != null) return !chance((1 - TP(s).gossipTrue) * slip);
     return chance(TP(s).gossipTrue - RULES.gossip.likeBias * bias);
   }
   // What it comes to when it is not told true: where there is nothing much to tell (real null), now and then something
-  // made up (gossip.inventBond); where there is something, now and then turned about (gossip.flipBond); otherwise nothing
-  // is said at all (null).
+  // made up (gossip.inventBond); where there is something, now and then turned about (gossip.flipBond); otherwise
+  // nothing is said at all (null).
   const misread = (real, invented, turned) =>
     real === null ? (chance(RULES.gossip.inventBond) ? invented() : null) : chance(RULES.gossip.flipBond) ? turned() : null;
 
   // ---------- a temperament ----------
   // Of someone they feel strongly about, the more readily, either way (people/ties.js, pickByLike); told wrong, as the
   // speaker leans: someone they dislike, or anyone to the suspicious, a bad temper; someone they like, a good one; else
-  // any other. Now and then an aside about one they are taken with (flirt.aside), or, hardly ever, about one they are not
-  // (flirt.asideFalse): never between the two of the cult.
+  // any other. Now and then an aside about one they are taken with (flirt.aside), or, hardly ever, about one they are
+  // not (flirt.asideFalse): never between the two of the cult.
   function temperGossip(s, g) {
     const t = Ties.pickByLike(s, g.pool, coin() ? -1 : 1),
       l = Ties.likes(s.id, t.id),
@@ -46,7 +46,7 @@ const Gossip = (() => {
       v = toldTrue(s, { sure: g.sure, bias: Math.abs(l) })
         ? real
         : pick((l < 0 || temperOf(s) === 'suspicious' ? NEG : l > 0 ? POS : TEMPER_IDS).filter(k => k !== real));
-    addTest(s.id, t.id, 'temper', v);
+    Record.testify(s.id, t.id, 'temper', v);
     const aside =
       !cultPair(s, t) && (Ties.sweetOn(s.id, t.id) ? chance(RULES.flirt.aside) : Ties.mayFlirt(s, t) && chance(RULES.flirt.asideFalse));
     return { t, text: tellOne('said-' + v, TEMPER_SAID[v])(t) + (aside ? flirtAside(t) : '') };
@@ -77,17 +77,17 @@ const Gossip = (() => {
         () => !close
       );
     if (close === null) return null; // nothing worth saying
-    addTest(s.id, a.id, 'bond', (close ? 'close:' : 'feud:') + b.id);
+    Record.testify(s.id, a.id, 'bond', (close ? 'close:' : 'feud:') + b.id);
     return { t: a, text: bondSay(a, b, close) };
   }
 
   // ---------- what someone thinks of you ----------
   // Gossip about what someone else thinks of you (gossip.you of the time it could be told): a strong feeling, for you
-  // (trust 2 or more: good) or against you (−1 or less: bad), told true at the speaker's gossipTrue, the less so of someone
-  // they feel strongly about (gossip.likeBias); when it is not, misreported, or made up where there is nothing much
-  // either way, leaning as the speaker does (kind to a friend, hard on someone they dislike, the suspicious hard on
-  // anyone), at the odds gossip about a friendship or a feud has (gossip.flipBond, inventBond). Your casebook's word for
-  // their trust always tells the truth: gossip is only as true as the gossip.
+  // (trust 2 or more: good) or against you (−1 or less: bad), told true at the speaker's gossipTrue, the less so of
+  // someone they feel strongly about (gossip.likeBias); when it is not, misreported, or made up where there is nothing
+  // much either way, leaning as the speaker does (kind to a friend, hard on someone they dislike, the suspicious hard
+  // on anyone), at the odds gossip about a friendship or a feud has (gossip.flipBond, inventBond). Your casebook's word
+  // for their trust always tells the truth: gossip is only as true as the gossip.
   const THINKS_SAID = {
     bad: [
       (s, t) => bi(`${t.short} does not trust you, Doctor. Not an inch.`, `${ru.c(t)} вам не доверяет, доктор. Ни на грош.`),
@@ -163,17 +163,17 @@ const Gossip = (() => {
       );
     }
     if (!v) return null; // (nothing worth saying)
-    addTest(s.id, t.id, 'thinks', v);
+    Record.testify(s.id, t.id, 'thinks', v);
     return { t, text: tellOne(`thinks-${v}${g.heard ? '-heard' : ''}`, (g.heard ? THINKS_HEARD : THINKS_SAID)[v])(s, t) };
   }
 
   // ---------- the night someone spent in your tent ----------
-  // Gossip about it (gossip.visit), from the morning the camp knows of it (people/visit.js) while she is still at the dig:
-  // at odds, × fade for each day after the first. Told badly, as a scandal (she hardly knows the Doctor), or kindly, as the
-  // speaker is inclined: badly at bad, + spite a step they dislike her, + jealous if they are sweet on you or on her, + foe
-  // a step they are against you, + their temperament's prudery (TEMPERS prude), + vows for a priest; − friend a step they
-  // like her, − ally a step they are past fond of you. Whoever hears it may make something of it, once each: of her, and
-  // of you (people/moments.js, the scandal).
+  // Gossip about it (gossip.visit), from the morning the camp knows of it (people/visit.js) while she is still at the
+  // dig: at odds, × fade for each day after the first. Told badly, as a scandal (she hardly knows the Doctor), or
+  // kindly, as the speaker is inclined: badly at bad, + spite a step they dislike her, + jealous if they are sweet on
+  // you or on her, + foe a step they are against you, + their temperament's prudery (TEMPERS prude), + vows for a
+  // priest; − friend a step they like her, − ally a step they are past fond of you. Whoever hears it may make something
+  // of it, once each: of her, and of you (people/moments.js, the scandal).
   const VISIT_SAID = {
     bad: [
       h =>
@@ -252,7 +252,7 @@ const Gossip = (() => {
     if (!isFree(h) || h.id === s.id || g.not.includes(h.id) || !TALKED_OF.roll(v)) return null;
     const bad = TOLD_BADLY.roll(s, h, Ties.likes(s.id, h.id), Ties.trust(s)),
       k = bad ? 'bad' : 'kind';
-    addTest(s.id, h.id, 'scandal', k);
+    Record.testify(s.id, h.id, 'scandal', k);
     return {
       t: h,
       text: tellOne(`visit-${k}${g.heard ? '-heard' : ''}`, (g.heard ? VISIT_HEARD : VISIT_SAID)[k])(h),
@@ -356,8 +356,8 @@ const Gossip = (() => {
   }
 
   // ---------- what they say of their own feelings ----------
-  // A word in passing about someone they feel strongly about: fond of them, cannot stand them, or taken with them. True to
-  // their feelings, mostly (now and then a liar's or a light-headed one's word is the opposite of what they feel:
+  // A word in passing about someone they feel strongly about: fond of them, cannot stand them, or taken with them. True
+  // to their feelings, mostly (now and then a liar's or a light-headed one's word is the opposite of what they feel:
   // talk.feelFalse × how untrue their gossip runs), except that nobody in the cult speaks of the other.
   const FEEL_SAY = {
     like: [
@@ -390,8 +390,8 @@ const Gossip = (() => {
         bi(`${t.short} is… good company. That is all I will say.`, `С ${ru.c(t, 'i')}… приятно поговорить. Больше я ничего не скажу.`)
     ]
   };
-  // the face that goes with it, if the feeling shows in the face as well as in the words (as readily as a warm word from a
-  // friend, a cold one from someone against you, or a flirtatious look: RULES.manner)
+  // the face that goes with it, if the feeling shows in the face as well as in the words (as readily as a warm word
+  // from a friend, a cold one from someone against you, or a flirtatious look: RULES.manner)
   const FEEL_FACE = { like: ['warm', 'smile'], dislike: ['cold', 'neutral'], flirt: ['coy', 'thoughtful'] };
   const feelShows = k => ({ like: RULES.manner.warm[1], dislike: RULES.manner.cold[0], flirt: RULES.manner.flirt })[k];
   function feelRemark(c) {
@@ -402,7 +402,7 @@ const Gossip = (() => {
     if (!t) return null;
     const own = Ties.sweetOn(c.id, t.id) ? 'flirt' : Ties.fond(c.id, t.id) ? 'like' : 'dislike',
       k = toldTrue(c, { slip: RULES.talk.feelFalse }) ? own : own === 'dislike' ? 'like' : 'dislike';
-    addTest(c.id, t.id, 'feel', k);
+    Record.testify(c.id, t.id, 'feel', k);
     const face = chance(Math.min(RULES.scale.most, feelShows(k) * showMul(c)))
       ? k === 'flirt'
         ? flirtFace(c)
@@ -426,9 +426,9 @@ const Gossip = (() => {
   };
   // People talk about you, the more readily the stronger they feel about you, for you or against you as they feel (or,
   // now and then, the other way: flip; the indifferent either way), and their friends listen (at most RULES.camp.cap of
-  // them, as at any public moment, though once as many have, the rest are not asked; bad talk a little more readily than
-  // good, and any talk more readily when it is heavy); a calculating cultist talks you down on purpose, whatever face it
-  // shows you.
+  // them, as at any public moment, though once as many have, the rest are not asked; bad talk a little more readily
+  // than good, and any talk more readily when it is heavy); a calculating cultist talks you down on purpose, whatever
+  // face it shows you.
   const HEARS_TALK_OF_YOU = odds('hears talk of you', [
     ['base', bad => (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood)],
     ['* heavy talk', (bad, heavy) => (heavy ? RULES.camp.heavy : 1)],
@@ -461,7 +461,8 @@ const Gossip = (() => {
       (bad ? trustNote([], moved) : trustNote(moved, []))
     );
   }
-  // What you do to one person, their friends and enemies have heard by morning (the same deed to the same person, once).
+  // What you do to one person, their friends and enemies have heard by morning (the same deed to the same person,
+  // once).
   function wordOf(c, kind, strength = 1) {
     if (S.pending && !S.pending.some(r => r.kind === kind && r.about === c.id)) S.pending.push({ day: S.day, kind, about: c.id, strength });
   }
@@ -472,11 +473,12 @@ const Gossip = (() => {
     diedInTent: c => [`that ${c.short} died in your tent`, `что ${ru.c(c)} умерла в вашей палатке`],
     turnedAway: c => [`that you would not let ${c.short} into your tent`, `что вы не пустили ${ru.c(c, 'a')} к себе в палатку`]
   };
-  // how a deed done to someone moves each of the camp who hears of it (o: the one hearing; l: their liking for c; k: how
-  // hard it is talked of)
+  // how a deed done to someone moves each of the camp who hears of it (o: the one hearing; l: their liking for c; k:
+  // how hard it is talked of)
   function deedMoves(kind, o, c, l, k = 1) {
     const U = RULES.rumours;
-    // a death in your tent: her friends, and now and then anyone, think the less of you for it, the harder it is talked of
+    // a death in your tent: her friends, and now and then anyone, think the less of you for it, the harder it is talked
+    // of
     if (kind === 'diedInTent') return chance(Math.min(RULES.scale.most, k * (Math.max(0, l) * U.visitFriend + U.diedAny))) ? -1 : 0;
     if (kind === 'pressed') return l >= 1 && chance(U.pressFriend * l) ? -1 : l <= -1 && chance(U.pressFoe) ? 1 : 0;
     if (kind === 'confided') return l >= 1 && chance(U.confideFriend * l) ? 1 : 0;

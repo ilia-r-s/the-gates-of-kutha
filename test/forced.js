@@ -532,7 +532,7 @@ const SCRIPT = () => {
   S.log.accused = [];
   refuse('refused-nothing');
   doubted.known = keepKnown;
-  addTest(freeChars().find(c => c.id !== doubted.id).id, doubted.id, 'distrust', '');
+  Record.testify(freeChars().find(c => c.id !== doubted.id).id, doubted.id, 'distrust', '');
   S.stats.taken = Math.max(1, S.stats.taken);
   // (each way it is said, in either language)
   [/Not on that|Не на этом основании/, /buried enough|довольно хоронили/].forEach(w =>
@@ -1093,7 +1093,7 @@ const SCRIPT = () => {
     inn.rapport = 1; // (pressing cost trust, again and again)
     RULES.talk.tipWrong = 1;
     const tipT = tipped(inn, thiefP);
-    addTest(inn.id, tipT.id, 'tip', 'thief');
+    Record.testify(inn.id, tipT.id, 'tip', 'thief');
     capHtml('tip-wrong', tipLine(tipT));
     RULES.talk.mienWrong = 99;
     S.testimony = S.testimony.filter(t => !(t.kind === 'mien' && t.from === glosser.id));

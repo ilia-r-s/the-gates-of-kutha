@@ -418,7 +418,7 @@ function attackOnYou(night) {
   if (night.guest) return pre + guestThrough(night, it); // (and she was in your tent: people/visit.js)
   S.log.attacks.push({ day: S.day, how: 'hurt', power: !!night.power });
   const html = pre + it + hurt(2, 1);
-  journal(bi('You were attacked in the night.', 'Ночью на вас напали.'));
+  Record.journal(bi('You were attacked in the night.', 'Ночью на вас напали.'));
   return html;
 }
 // one the night came for and a watcher in the dark saved, as first light tells it (the cult's coming, or your own)
@@ -458,7 +458,7 @@ function attackOnThem(night) {
     shaken = chance(clamp(RULES.night.shaken + RULES.night.shakenTrust * Math.max(0, v.rapport))),
     html = `<p class="horror">${deathText(v, loc, how)}</p>` + (shaken ? hurt(1, 0) : '');
   pullTo(own ? 'haunted' : 'tongues', own ? TENOR.pulls.taken : TENOR.pulls.murder);
-  journal(bi(`${v.name} was taken in the night.`, `Ночь забрала ${ru.cf(v, 'a')}.`));
+  Record.journal(bi(`${v.name} was taken in the night.`, `Ночь забрала ${ru.cf(v, 'a')}.`));
   night.finder = how.f; // (who found them knows what the body looked like: people/cunning.js, blurt)
   return html;
 }
@@ -511,7 +511,7 @@ function sceneTrace(n, loc, actor, target, smugOut = false, at = null) {
     S.crime = { loc, clue: null, examined: true, swept: true };
     return bi(`<p>At the scene, ${atEn}, there is nothing to find.</p>`, `<p>На месте нападения, ${atRu}, искать нечего.</p>`);
   }
-  const clue = addClue({
+  const clue = Record.addTrace({
     owner: src.id,
     cat: pick(CATS),
     source: thief ? 'thief' : stray ? 'stray' : framed ? 'plant' : 'cult',
@@ -522,7 +522,7 @@ function sceneTrace(n, loc, actor, target, smugOut = false, at = null) {
   });
   S.crime = { loc, clue, examined: false };
   if (actor && src === actor && sloppy(actor))
-    S.crime.more = addClue({
+    S.crime.more = Record.addTrace({
       owner: actor.id,
       cat: pick(CATS.filter(k => k !== clue.cat)),
       source: 'cult',
@@ -547,7 +547,7 @@ function findsTray() {
     fm = C('hamid'),
     who = isFree(fm) ? 'Hamid' : 'One of the pickmen';
   gain(w);
-  journal(
+  Record.journal(
     bi(
       `The diggers brought in ${theItem(w)} from ${LOCS[S.wardAt[w]].ref}.`,
       `Землекопы принесли ${ru.item(w, 'a')} ${ru.loc(S.wardAt[w], 'from')}.`
@@ -693,7 +693,7 @@ function answerWith(a, d, c, forOther) {
 // named guilty, someone calls the dream a lie before everyone: the hot-tempered in anger, the cold coldly, the
 // truthful plainly
 function retortAloud(t, c) {
-  addTest(t.id, c.id, 'distrust', 'cult');
+  Record.testify(t.id, c.id, 'distrust', 'cult');
   Suspicion.sayAloud(t.id, c.id, 'cult', 'blame');
   // (the hot-tempered mostly in anger, the cold mostly coldly, the truthful mostly plainly: claims.retortLine)
   const keyed = ['suspicious', 'liar', 'lightheaded'].includes(temperOf(t)) ? 0 : ['calculating', 'detached'].includes(temperOf(t)) ? 1 : 2,

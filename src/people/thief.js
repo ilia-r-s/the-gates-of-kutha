@@ -43,7 +43,7 @@ const thiefSaw = c =>
 function thiefHint(c, w) {
   const a = C(w.actor),
     k = pick([0, 1]);
-  addTest(c.id, a.id, 'distrust', 'cult');
+  Record.testify(c.id, a.id, 'distrust', 'cult');
   return {
     them: bi(
       [
@@ -65,7 +65,7 @@ function thiefHint(c, w) {
 function thiefGossip(c, w) {
   const a = C(w.actor),
     k = pick([0, 1]);
-  addTest(c.id, a.id, 'hint', 'night');
+  Record.testify(c.id, a.id, 'hint', 'night');
   return {
     t: a,
     text: bi(
@@ -98,8 +98,8 @@ function thiefNames(c, lead = ['', '']) {
   S.witnessTold = a.id;
   S.witnessNamed.push(a.id);
   S.witnessMore = chance(RULES.thief.again); // (whether he would name another he saw, later)
-  addTest(c.id, a.id, 'witness', 'cult');
-  journal(
+  Record.testify(c.id, a.id, 'witness', 'cult');
+  Record.journal(
     bi(
       `${c.name} saw ${a.name} near the scene ${en}, and said so at last.`,
       `${capS(ru.cf(c))} ${ru.gs(c, 'видел', 'видела')} ${ru.cf(a, 'a')} у места нападения ${rus} — и наконец ${ru.gs(c, 'сказал', 'сказала')} об этом.`

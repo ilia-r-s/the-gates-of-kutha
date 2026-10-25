@@ -122,7 +122,7 @@ function mienNote(c, p = RULES.talk.mien) {
   if (S.testimony.some(t => t.kind === 'mien' && t.from === c.id) || !chance(p)) return null;
   const own = temperOf(c),
     k = chance(RULES.talk.mienWrong / MANNER[own].shows) ? pick(TEMPER_IDS.filter(x => x !== own)) : own;
-  addTest(c.id, c.id, 'mien', k);
+  Record.testify(c.id, c.id, 'mien', k);
   return pick(TEMPER_SEE[k])(c);
 }
 // ---------- gossip: what people say of each other, true or slanted by their likes ----------

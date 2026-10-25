@@ -78,7 +78,7 @@ function unmasked(c, vote, hands0 = '') {
       ),
       ''
     );
-  journal(
+  Record.journal(
     bi(`${c.name} was exposed as a cultist.`, `${capS(ru.cf(c))}: ${ru.gs(c, 'разоблачён как сектант', 'разоблачена как сектантка')}.`)
   );
   if (!freeCult().length) {
@@ -139,7 +139,7 @@ function sentAway(c, vote) {
           `<p>${c.short} answers every question, and every answer is true. By the time you understand that, it is too late. ${c.short} leaves the dig in disgrace${watched ? ', and fewer people will meet your eye' : ''}.</p>`,
           `<p>${ru.c(c)} отвечает на каждый вопрос, и каждый ответ правдив. Когда вы это понимаете, уже слишком поздно. ${ru.c(c)} с позором покидает раскопки${watched ? ', а вам теперь всё реже смотрят в глаза' : ''}.</p>`
         ) + hurt(RULES.inquiry.nerveWrong, 0);
-  journal(
+  Record.journal(
     bi(`${c.name} was sent away after your inquiry.`, `${capS(ru.cf(c))}: ${ru.gs(c, 'отослан', 'отослана')} после вашего дознания.`)
   );
   if (c.role === 'smuggler' && thiefSaw(c) && chance(RULES.thief.sent))

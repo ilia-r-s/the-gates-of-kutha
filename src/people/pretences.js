@@ -24,8 +24,6 @@ const rivalClaim = c => freeChars().some(o => o.id !== c.id && claimOf(o).role =
 // The chance someone drops a pretence of their own accord tomorrow morning. It is never certain: some keep a lie to
 // the very end. It grows when the story is in danger (someone else claims the same part, a dream named them, a
 // sworn watch failed, people say they are lying) and when they have come to trust you.
-// (the testimony about someone, of one kind)
-const testimonyAbout = (c, f) => S.testimony.filter(t => t.about === c.id && f(t)).length;
 const DROPS_PRETENCE = byCase(
   'drops a pretence',
   c => {
@@ -52,9 +50,9 @@ const DROPS_PRETENCE = byCase(
     'false part': odds('drops a part it claimed', [
       ['base', c => TP(c).confess],
       ['+ another claims the part', c => (rivalClaim(c) ? RULES.confess.rival : 0)],
-      ['+ dreamt guilty', c => (testimonyAbout(c, t => t.kind === 'vision' && t.verdict === 'cult') ? RULES.confess.dreamt : 0)],
-      ['+ slept on a sworn watch', c => (testimonyAbout(c, t => t.kind === 'failwatch') ? RULES.confess.caught : 0)],
-      ['+ two or more distrust it', c => (testimonyAbout(c, t => t.kind === 'distrust') >= 2 ? RULES.confess.blamed : 0)],
+      ['+ dreamt guilty', c => (Record.about(c, t => t.kind === 'vision' && t.verdict === 'cult') ? RULES.confess.dreamt : 0)],
+      ['+ slept on a sworn watch', c => (Record.about(c, t => t.kind === 'failwatch') ? RULES.confess.caught : 0)],
+      ['+ two or more distrust it', c => (Record.about(c, t => t.kind === 'distrust') >= 2 ? RULES.confess.blamed : 0)],
       ['+ trusts you', c => (Ties.friend(c) ? RULES.confess.trusting : 0)],
       ['cap', () => RULES.confess.cap],
       ['* holds a story told for the other of the cult', c => (c.role === 'cult' && claimOf(c).stood ? Math.min(1, TP(c).counter) : 1)]
@@ -82,11 +80,11 @@ function comeClean(c, how) {
   cl.role = k === 'staged' ? 'warden' : trueClaim(c); // (a staged coming clean is a new lie: the Watcher)
   if (k === 'staged') cl.why = c.role === 'cult' ? 'deceit' : 'liked';
   else if (c.role === 'cult') S.log.cultTruth++; // (a false part given up by the cult: a truth, if a calculated one)
-  if (claimed) addTest(c.id, c.id, 'recant', was);
-  addTest(c.id, c.id, 'claim', cl.role);
+  if (claimed) Record.testify(c.id, c.id, 'recant', was);
+  Record.testify(c.id, c.id, 'claim', cl.role);
   const open = how === 'confess' || how === 'public';
   if (open) {
-    addTest(c.id, c.id, 'confess', String(S.day));
+    Record.testify(c.id, c.id, 'confess', String(S.day));
     S.log.confess++;
   }
   return ownUp(c, k, how, { open, lied, evaded });
@@ -102,7 +100,7 @@ function ownUp(c, k, how, { open, lied, evaded }) {
 // The thief owns his trade: it goes on the record, his part comes out on his card (and your mark on it freezes), and
 // now and then he says what he saw out there at night (thief.own); returns what he adds, if anything.
 function ownsTrade(c) {
-  addTest(c.id, c.id, 'thief', 'thief');
+  Record.testify(c.id, c.id, 'thief', 'thief');
   S.revealed[c.id] = 'smuggler';
   fixMark(c);
   return thiefSaw(c) && chance(RULES.thief.own) ? ' ' + thiefNames(c) : '';
@@ -125,7 +123,7 @@ const OWN_UP = {
   },
   // the thief who kept his business quiet owns it, and perhaps what he saw (as when the night watch was his cover)
   thief: (c, how, { g, N, Nr, adm }) => {
-    journal(bi(`${N} admitted to smuggling.`, `${Nr} ${adm} в контрабанде.`));
+    Record.journal(bi(`${N} admitted to smuggling.`, `${Nr} ${adm} в контрабанде.`));
     const named = ownsTrade(c);
     return (
       bi(
@@ -137,7 +135,7 @@ const OWN_UP = {
   'hid-seer': (c, how, { open, lied, evaded, g, N, Nr, adm }) => {
     c.promised = true;
     if (open) S.seerPublic = true;
-    journal(bi(`${N} admitted to being the Dreamer.`, `${Nr} ${adm}, что ${g('он — сновидец', 'она — сновидица')}.`));
+    Record.journal(bi(`${N} admitted to being the Dreamer.`, `${Nr} ${adm}, что ${g('он — сновидец', 'она — сновидица')}.`));
     if (how === 'pressed')
       return bi(
         'Enough. Yes, I dream. I kept it to myself because people here who dream do not last.',
@@ -167,7 +165,7 @@ const OWN_UP = {
     if (how === 'trust' || how === 'aside') {
       S.guardPromise = c.id;
     }
-    journal(bi(`${N} admitted to keeping watch.`, `${Nr} ${adm}, что стоит на страже.`));
+    Record.journal(bi(`${N} admitted to keeping watch.`, `${Nr} ${adm}, что стоит на страже.`));
     if (how === 'pressed')
       return lied
         ? bi(
@@ -203,7 +201,7 @@ const OWN_UP = {
   },
   // the smuggler's night watch was a cover: pressed, only that; otherwise the whole of it, and perhaps what was seen
   cover: (c, how, { g, N, Nr, adm }) => {
-    journal(bi(`${N} admitted the night watch was a cover for smuggling.`, `${Nr} ${adm}, что ночной дозор прикрывал контрабанду.`));
+    Record.journal(bi(`${N} admitted the night watch was a cover for smuggling.`, `${Nr} ${adm}, что ночной дозор прикрывал контрабанду.`));
     if (how === 'pressed')
       return bi(
         'And the night watch was a story. I was moving crates.',
@@ -268,7 +266,7 @@ const DROP_SAY = {
 const dropSay = (c, role) => pick(DROP_SAY[role])((m, f) => ru.gs(c, m, f));
 function dropNote(c, role) {
   const g = (m, f) => ru.gs(c, m, f);
-  journal(
+  Record.journal(
     role === 'seer'
       ? bi(`${c.name} took back the claim to dream true.`, `${capS(ru.cf(c))} ${g('отказался', 'отказалась')} от слов о вещих снах.`)
       : bi(`${c.name} took back the claim to keep watch.`, `${capS(ru.cf(c))} ${g('отказался', 'отказалась')} от слов о ночном дозоре.`)

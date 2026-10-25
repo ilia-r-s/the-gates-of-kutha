@@ -14,9 +14,9 @@ const BEFORE = `globalThis.__was = {
       .sort((a, b) => __was.sus(c.id, b.id) - __was.sus(c.id, a.id) || Ties.likes(c.id, a.id) - Ties.likes(c.id, b.id));
     return top[0] || null;
   },
-  looksLost: c => caseAgainst(c) >= RULES.verdict.someCase || __was.suspectedBy(c.id).length >= 2,
-  caught: k => caseAgainst(k) >= RULES.verdict.strongCase || __was.suspectedBy(k.id).length >= 2 || S.log.refusedInq.some(r => r.id === k.id),
-  clear: k => caseAgainst(k) < RULES.verdict.someCase && !__was.suspectedBy(k.id).length && !S.log.refusedInq.some(r => r.id === k.id),
+  looksLost: c => Record.caseAgainst(c) >= RULES.verdict.someCase || __was.suspectedBy(c.id).length >= 2,
+  caught: k => Record.caseAgainst(k) >= RULES.verdict.strongCase || __was.suspectedBy(k.id).length >= 2 || S.log.refusedInq.some(r => r.id === k.id),
+  clear: k => Record.caseAgainst(k) < RULES.verdict.someCase && !__was.suspectedBy(k.id).length && !S.log.refusedInq.some(r => r.id === k.id),
   closingIn: o =>
     freeCult().reduce((a, k) => a + Math.max(0, __was.sus(o.id, k.id) - 1), 0) +
     S.said.filter(x => x.by === o.id && x.how === 'dream' && x.verdict === 'cult' && C(x.about).role === 'cult').length,

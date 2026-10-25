@@ -100,7 +100,7 @@ function useBrandy() {
   if (!has('brandy')) return;
   lose('brandy');
   regain(RULES.day.brandy);
-  journal(bi('You drank the brandy.', 'Вы выпили бренди.'));
+  Record.journal(bi('You drank the brandy.', 'Вы выпили бренди.'));
 }
 function goTo(l) {
   const fresh = S.loc !== l;
@@ -289,7 +289,7 @@ function doSearch(l) {
   if (ward) {
     gain(ward);
     out = `<p>${bi(ITEMS[ward].find)}</p>` + gained(ward);
-    journal(
+    Record.journal(
       bi(
         `Found ${theItem(ward)} ${LOCS[l].at}.`,
         `${ru.Item(ward)} — ${ru.ig(ward, 'найден', 'найдена', 'найдено', 'найдены')} ${ru.loc(l, 'at')}.`
@@ -520,7 +520,7 @@ function traceGenuine(cr, cl) {
   const two = !!cr.more;
   cl.status = 'genuine';
   if (two) cr.more.status = 'genuine';
-  journal(
+  Record.journal(
     two
       ? bi(
           `${nightEn(cl.day)}: both traces ${LOCS[cr.loc].at} were the attacker’s.`,
@@ -535,7 +535,15 @@ function traceGenuine(cr, cl) {
     c2 =
       tidy(C(cl.owner)) || !chance(RULES.examine.more)
         ? null
-        : addClue({ owner: cl.owner, cat: pick(left), source: cl.source, extra: true, loc: cr.loc, status: 'genuine', day: cl.day });
+        : Record.addTrace({
+            owner: cl.owner,
+            cat: pick(left),
+            source: cl.source,
+            extra: true,
+            loc: cr.loc,
+            status: 'genuine',
+            day: cl.day
+          });
   if (two)
     return c2
       ? bi(
@@ -559,14 +567,21 @@ function traceGenuine(cr, cl) {
 // an innocent's trace, laid there by the cult, and now and then the attacker's own beneath it
 function tracePlanted(cr, cl) {
   cl.status = 'planted';
-  journal(
+  Record.journal(
     bi(
       `${nightEn(cl.day)}: the trace ${LOCS[cr.loc].at} was planted, to be found.`,
       `${nightRu(cl.day)}: след ${R(LOCS[cr.loc].at)} был подброшен, чтобы его нашли.`
     )
   );
   const under = chance(RULES.cunning.underneath)
-    ? addClue({ owner: cl.by, cat: pick(CATS.filter(k => k !== cl.cat)), source: 'cult', loc: cr.loc, status: 'genuine', day: cl.day })
+    ? Record.addTrace({
+        owner: cl.by,
+        cat: pick(CATS.filter(k => k !== cl.cat)),
+        source: 'cult',
+        loc: cr.loc,
+        status: 'genuine',
+        day: cl.day
+      })
     : null;
   return (
     bi(
@@ -587,7 +602,7 @@ function traceStray(cr, cl) {
   const two = !!cr.more;
   cl.status = 'stray';
   if (two) cr.more.status = 'stray';
-  journal(
+  Record.journal(
     two
       ? bi(
           `${nightEn(cl.day)}: someone had been ${LOCS[cr.loc].at} earlier. Neither trace was the attacker’s.`,
@@ -603,7 +618,7 @@ function traceStray(cr, cl) {
 // a thief's, come to rob the place
 function traceThief(cr, cl) {
   cl.status = 'thief';
-  journal(
+  Record.journal(
     bi(
       `${nightEn(cl.day)}: a thief had been ${LOCS[cr.loc].at}. That trace was not the attacker’s.`,
       `${nightRu(cl.day)}: ${R(LOCS[cr.loc].at)} побывал вор. Этот след оставил не нападавший.`

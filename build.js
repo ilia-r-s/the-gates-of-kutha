@@ -31,6 +31,7 @@ const SCRIPT = [
   'world/powers.js',     // the powers below, their signs, titles and charms; the tablets
   'world/deaths.js',     // how the night's dead are found: put together
   'game/state.js',       // the state of a season and the small verbs on it
+  'game/record.js',      // the record: testimony and its kinds, traces, accounts, sightings, the journal; the case
   'game/tenor.js',       // the season's mood: how much happens of itself, and how it drifts
   'people/ties.js',      // who likes whom, how far each trusts you, who is sweet on whom
   'people/suspicion.js', // who suspects whom, what was said before everyone, who is closing in on the cult

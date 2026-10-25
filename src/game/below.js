@@ -1156,7 +1156,7 @@ const BELOW = {
             const ward = S.wardOf[S.patron],
               w = chance(B_().truthful) ? (has(ward) ? ward : null) : pick(charms.filter(x => x !== ward).concat([null]));
             if (w) {
-              journal(
+              Record.journal(
                 bi(
                   `Below, the winged bull lowered its eyes before ${theItem(w)}.`,
                   `Внизу крылатый бык опустил глаза перед ${ru.item(w, 'i')}.`
@@ -1182,7 +1182,7 @@ const BELOW = {
                     ]
               );
             }
-            journal(
+            Record.journal(
               one
                 ? bi(
                     `Below, the winged bull did not lower its eyes before ${theItem(one)}.`,

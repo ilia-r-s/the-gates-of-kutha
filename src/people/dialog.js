@@ -148,7 +148,7 @@ const DIALOG = {
       const n = S.day - 1,
         rec = S.nights[n],
         cl = rec && rec.claim[c.id] ? rec.claim[c.id] : { loc: 'camp', with: null };
-      S.claims.push({ night: n, id: c.id, loc: cl.loc, with: cl.with, attacked: !!cl.attacked });
+      Record.addAccount({ night: n, id: c.id, loc: cl.loc, with: cl.with, attacked: !!cl.attacked });
       let note = null,
         seen = '';
       const sw = rec && rec.saw[c.id],
@@ -162,7 +162,7 @@ const DIALOG = {
             `${ru.c(c)} отвечает, но вам кажется, что ${ru.gs(c, 'он видел', 'она видела')} больше, чем говорит.`
           );
         else {
-          S.sights.push({ night: n, id: c.id, where: sw.where, to: sw.to, cat: sw.cat, val: sawVal(sw) });
+          Record.addSighting({ night: n, id: c.id, where: sw.where, to: sw.to, cat: sw.cat, val: sawVal(sw) });
           seen = ' ' + sightLine(cl, sw, c);
         }
       }
@@ -198,7 +198,7 @@ const DIALOG = {
         r = greedy ? 'greed' : chance(fear[c.role === 'cult' ? 0 : 1]) ? 'fear' : 'calm';
       // (a line from your notebook is not a thing to handle: words, not relics)
       const words = t.id === 'line';
-      addTest(c.id, c.id, words ? 'words' : 'react', r);
+      Record.testify(c.id, c.id, words ? 'words' : 'react', r);
       let them = bi(tellOne('react-' + (words ? 'words-' : '') + r, (words ? REACT_WORDS_SAY : REACT_SAY)[r])),
         cool = false;
       if (CHARMS.includes(t.id) && SCHOLARS.includes(c.id)) {
@@ -216,7 +216,7 @@ const DIALOG = {
           them += ' ' + readingSay(rd);
           if (fresh) {
             S.log.readings++;
-            journal(readingNote(rd));
+            Record.journal(readingNote(rd));
           }
         }
       }
@@ -318,7 +318,7 @@ const DIALOG = {
       // the thief, with more to hide, the more readily)
       if (ok && chance(c.role === 'smuggler' ? RULES.talk.falseSlipThief : RULES.talk.falseSlip)) return slipOut(c, you);
       if (c.role === 'smuggler' && ok) {
-        addTest(c.id, c.id, 'thief', 'thief');
+        Record.testify(c.id, c.id, 'thief', 'thief');
         S.revealed[c.id] = 'smuggler';
         fixMark(c);
         const cover = recantPressed(c), // (a watch that was his cover, given up with it, mostly)
@@ -360,7 +360,7 @@ function pressedCult(c, ok, you, before) {
 }
 // something let slip, pressed hard: the cult's own words, or, from anyone else, words that sound just like them
 function slipOut(c, you) {
-  addTest(c.id, c.id, 'slip', 'cult');
+  Record.testify(c.id, c.id, 'slip', 'cult');
   const k = pick([0, 1]);
   return {
     you,
@@ -386,7 +386,7 @@ function tipped(c, smug) {
 // a press turned aside with a word about the thief
 function turnAside(c, you, smug) {
   smug = tipped(c, smug);
-  addTest(c.id, smug.id, 'tip', 'thief');
+  Record.testify(c.id, smug.id, 'tip', 'thief');
   return {
     you,
     youE: 'stern',
@@ -473,11 +473,11 @@ DIALOG.distrust = {
     const b = whomToBlame(c, others);
     if (b.tip) {
       const t = tipped(c, b.tip);
-      addTest(c.id, t.id, 'tip', 'thief');
+      Record.testify(c.id, t.id, 'tip', 'thief');
       return say(tipLine(t), 'neutral');
     }
     if (!b.target) return proof();
-    addTest(c.id, b.target.id, 'distrust', 'cult');
+    Record.testify(c.id, b.target.id, 'distrust', 'cult');
     // (the honest mostly keep to what they have seen; anyone may put it vaguely)
     const td = pick(
       (temperOf(c) === 'honest') === chance(RULES.talk.ownWay) ? T.distrustVague : T.distrust.concat(T.distrustVague.slice(0, 2))
@@ -573,7 +573,7 @@ DIALOG.title = {
       Gr = k => ru.god(gl.g, k),
       Title = capS(ttEn(e)),
       TitleRu = capS(ttRu(e)); // inside speech, quotes nest as ‘…’ in English and „…“ in Russian
-    journal(glossNote(gl));
+    Record.journal(glossNote(gl));
     S.log.readings++;
     const them = {
       anselm: bi(
@@ -650,7 +650,7 @@ function askOf(c, conv, k, arg) {
     conv.chill = true;
     if (chance(c.role === 'cult' ? RULES.talk.chillCult : RULES.talk.chillOther)) {
       chill = bi(...tellOne('chill', [x => [fmt(T.chill, P(x)), fmtR(R(T.chill), { n: x })], ...SAY.chill])(c));
-      addTest(c.id, c.id, 'chill', 'cult');
+      Record.testify(c.id, c.id, 'chill', 'cult');
     }
   }
   return { ...r, face: faceFor(c, r.themE), chill };

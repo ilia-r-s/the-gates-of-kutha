@@ -56,122 +56,11 @@ const PLACE_RU = {
 };
 const nightLabel = n => (n === 0 ? bi('The night Crane died', 'Ночь гибели Крейна') : bi(`Night ${n}`, `Ночь ${n}`));
 const dayLabel = d => bi(`Day ${d}`, `День ${d}`);
-// How each kind of testimony about someone shows on their card: [chip style, words], or nothing. t is the testimony,
-// a the person it is about, f the speaker's name, fr the speaker's id. A claim shows only as the latest one made; a claim
-// taken back no longer shows once they have come clean.
-const CHIPS = {
-  vision: (t, a, f, fr) =>
-    t.verdict === 'cult'
-      ? ['bad', bi(`${f} dreamt ${EP.him(a)} guilty`, `${ru.c(fr, 'd')} приснилось: ${ru.gs(a, 'виновен', 'виновна')}`)]
-      : ['good', bi(`${f} dreamt ${EP.him(a)} clean`, `${ru.c(fr, 'd')} приснилось: ${ru.gs(a, 'невиновен', 'невиновна')}`)],
-  distrust: (t, a, f, fr) => ['', bi(`${f} distrusts ${EP.him(a)}`, `${ru.c(fr)} ${ru.gs(a, 'ему', 'ей')} не доверяет`)],
-  react: (t, a) =>
-    t.verdict === 'fear'
-      ? ['warnc', bi('Flinched at relics', ru.gs(a, 'Вздрогнул при виде находки', 'Вздрогнула при виде находки'))]
-      : t.verdict === 'greed'
-        ? ['', bi('Eyed relics like a dealer', ru.gs(a, 'Приценивался к находке', 'Приценивалась к находке'))]
-        : ['dimc', bi('Calm at relics', 'Находки не тревожат')],
-  words: (t, a) =>
-    t.verdict === 'fear'
-      ? ['warnc', bi('Flinched at the tablets’ words', ru.gs(a, 'Вздрогнул от слов с табличек', 'Вздрогнула от слов с табличек'))]
-      : t.verdict === 'greed'
-        ? [
-            '',
-            bi('Asked what the tablet would fetch', ru.gs(a, 'Спросил, сколько дадут за табличку', 'Спросила, сколько дадут за табличку'))
-          ]
-        : ['dimc', bi('Calm at the tablets’ words', 'Слова с табличек не тревожат')],
-  slip: (t, a) => ['bad strong', bi('Let something slip', ru.gs(a, 'Проговорился', 'Проговорилась'))],
-  blurt: (t, a) => [
-    'bad strong',
-    bi('Knew what only the attacker could', ru.gs(a, 'Знал то, что знал лишь нападавший', 'Знала то, что знал лишь нападавший'))
-  ],
-  chill: (t, a) => ['warnc', bi(`A chill when ${a.p} spoke`, 'Холодок при разговоре')],
-  spite: (t, a) => [
-    'bad',
-    bi(
-      'Caught at your tent, meaning you harm',
-      ru.gs(a, 'Пойман у вашей палатки: хотел вам навредить', 'Поймана у вашей палатки: хотела вам навредить')
-    )
-  ],
-  thief: (t, a) => ['', bi('Admitted smuggling', ru.gs(a, 'Признался в контрабанде', 'Призналась в контрабанде'))],
-  claim: (t, a) =>
-    S.testimony.filter(x => x.kind === 'claim' && x.from === a.id).pop() !== t
-      ? null
-      : [
-          '',
-          t.verdict === 'seer'
-            ? bi('Claims to dream true', 'Говорит, что видит вещие сны')
-            : t.verdict === 'warden'
-              ? bi('Claims to keep watch', 'Говорит, что стоит на страже')
-              : t.verdict === 'evade'
-                ? bi('Will not say', ru.gs(a, 'Уклонился от ответа', 'Уклонилась от ответа'))
-                : bi('Claims no part', ru.gs(a, 'Говорит, что дневник не о нём', 'Говорит, что дневник не о ней'))
-        ],
-  recant: (t, a) =>
-    S.testimony.some(x => x.kind === 'confess' && x.from === a.id)
-      ? null
-      : ['warnc', bi('Took back a claim', ru.gs(a, 'Взял свои слова назад', 'Взяла свои слова назад'))],
-  confess: (t, a) => ['warnc', bi('Came clean', ru.gs(a, 'Признался сам', 'Призналась сама'))],
-  tell: (t, a) => ['warnc', bi('Answered too quickly', ru.gs(a, 'Ответил слишком поспешно', 'Ответила слишком поспешно'))],
-  failwatch: (t, a) => ['bad', bi('Slept through a sworn watch', ru.gs(a, 'Проспал обещанный дозор', 'Проспала обещанный дозор'))],
-  // what you make of them yourself, and what others say of them
-  mien: (t, a) => ['dimc', bi('Seems: ', 'С виду: ') + temperName(t.verdict, a)],
-  temper: (t, a, f, fr) => ['dimc', bi(`${f}: `, `${ru.c(fr)}: `) + temperName(t.verdict, a)],
-  bond: (t, a, f, fr) => {
-    const [k, b] = t.verdict.split(':');
-    return [
-      'dimc',
-      k === 'close'
-        ? bi(`${f}: close to ${C(b).short}`, `${ru.c(fr)}: дружит с ${ru.c(b, 'i')}`)
-        : bi(`${f}: cannot bear ${C(b).short}`, `${ru.c(fr)}: не выносит ${ru.c(b, 'a')}`)
-    ];
-  },
-  tip: (t, a, f, fr) => ['', bi(`${f}: sells tablets on the side`, `${ru.c(fr)}: приторговывает табличками`)],
-  feel: (t, a, f, fr) => [
-    'dimc',
-    {
-      like: bi(`${f}: fond of ${EP.him(a)}`, `${ru.c(fr)}: ${ru.gs(fr, 'привязан', 'привязана')} к ${ru.gs(a, 'нему', 'ней')}`),
-      dislike: bi(`${f}: cannot stand ${EP.him(a)}`, `${ru.c(fr)}: ${ru.gs(a, 'его', 'её')} не выносит`),
-      flirt: bi(`${f}: rather taken with ${EP.him(a)}`, `${ru.c(fr)}: ${ru.gs(fr, 'увлечён', 'увлечена')} ${ru.gs(a, 'им', 'ею')}`)
-    }[t.verdict]
-  ],
-  flirt: (t, a, f, fr) => [
-    'dimc',
-    t.verdict === 'you'
-      ? bi(`${f}: sweet on you`, `${ru.c(fr)}: ${ru.gs(a, 'неравнодушен', 'неравнодушна')} к вам`)
-      : bi(`${f}: sweet on ${C(t.verdict).short}`, `${ru.c(fr)}: ${ru.gs(a, 'неравнодушен', 'неравнодушна')} к ${ru.c(t.verdict, 'd')}`)
-  ],
-  hint: (t, a, f, fr) => ['warnc', bi(`${f} hints at ${a.pp} nights`, `${ru.c(fr)} намекает на ${ru.gs(a, 'его', 'её')} ночные прогулки`)],
-  // what someone else says this one thinks of you (people/gossip.js, what someone thinks of you); and of the night she spent in your tent
-  thinks: (t, a, f, fr) => [
-    'dimc',
-    t.verdict === 'good'
-      ? bi(`${f}: on your side`, `${ru.c(fr)}: на вашей стороне`)
-      : bi(`${f}: against you`, `${ru.c(fr)}: ${ru.gs(a, 'настроен', 'настроена')} против вас`)
-  ],
-  scandal: (t, a, f, fr) =>
-    t.verdict === 'bad'
-      ? ['warnc', bi(`${f} gossips about her night in your tent`, `${ru.c(fr)} сплетничает о её ночи в вашей палатке`)]
-      : ['dimc', bi(`${f} is kind about her night in your tent`, `${ru.c(fr)} по-доброму говорит о её ночи в вашей палатке`)],
-  // what you saw for yourself
-  quarrel: (t, a) => [
-    'dimc',
-    bi(`Quarrelled with ${C(t.verdict).short}`, `${ru.gs(a, 'Поссорился', 'Поссорилась')} с ${ru.c(t.verdict, 'i')}`)
-  ],
-  feast: (t, a) => [
-    'dimc',
-    bi(`Sat with ${C(t.verdict).short} at the feast`, `${ru.gs(a, 'Сидел', 'Сидела')} рядом с ${ru.c(t.verdict, 'i')} на пиру`)
-  ],
-  witness: (t, a, f, fr) => [
-    'bad strong',
-    bi(`${f} saw ${EP.him(a)} near the scene`, `${ru.c(fr)} ${ru.gs(fr, 'видел', 'видела')} ${ru.gs(a, 'его', 'её')} у места нападения`)
-  ]
-};
 function chipsAbout(id) {
   const a = C(id);
   return S.testimony
-    .filter(t => t.about === id && CHIPS[t.kind])
-    .map(t => CHIPS[t.kind](t, a, S.chars[t.from] ? C(t.from).short : '', t.from))
+    .filter(t => t.about === id && Record.kind(t.kind))
+    .map(t => Record.kind(t.kind).chip(t, a, S.chars[t.from] ? C(t.from).short : '', t.from))
     .filter(Boolean)
     .map(([cls, words]) => `<span class="chip${cls ? ' ' + cls : ''}">${words}</span>`)
     .join('');
@@ -190,59 +79,6 @@ function campChips(c) {
         ? `<span class="chip bad">${bi('Proven wrong before the camp', ru.gs(c, 'Оказался неправ перед всем лагерем', 'Оказалась неправа перед всем лагерем'))}</span>`
         : '')
   );
-}
-// what people say of each other (gossip, tips, their own feelings), and what is said of you
-function sayingLine(t) {
-  const a = C(t.about).short;
-  // what you saw for yourself: a quarrel at breakfast, two who sat together at a feast
-  if (t.kind === 'quarrel' || t.kind === 'feast')
-    return t.kind === 'quarrel'
-      ? bi(`${a} and ${C(t.verdict).short} quarrelled at breakfast`, `${ru.c(t.about)} и ${ru.c(t.verdict)} поссорились за завтраком`)
-      : bi(`${a} and ${C(t.verdict).short} sat together at the feast`, `${ru.c(t.about)} и ${ru.c(t.verdict)} сидели рядом на пиру`);
-  const f = C(t.from).short;
-  if (t.kind === 'feel')
-    return {
-      like: bi(
-        `${f} says ${C(t.from).p} is fond of ${a}`,
-        `${ru.c(t.from)}: ${ru.gs(t.from, 'привязан', 'привязана')} к ${ru.c(t.about, 'd')}`
-      ),
-      dislike: bi(`${f} says ${C(t.from).p} cannot stand ${a}`, `${ru.c(t.from)}: терпеть не может ${ru.c(t.about, 'a')}`),
-      flirt: bi(`${f} speaks of ${a} with a certain warmth`, `${ru.c(t.from)} говорит ${ru.ob(t.about)} с особой теплотой`)
-    }[t.verdict];
-  if (t.kind === 'flirt')
-    return t.verdict === 'you'
-      ? bi(`${f} says ${a} is sweet on you`, `${ru.c(t.from)}: ${ru.c(t.about)} ${ru.gs(t.about, 'неравнодушен', 'неравнодушна')} к вам`)
-      : bi(
-          `${f} says ${a} is sweet on ${C(t.verdict).short}`,
-          `${ru.c(t.from)}: ${ru.c(t.about)} ${ru.gs(t.about, 'неравнодушен', 'неравнодушна')} к ${ru.c(t.verdict, 'd')}`
-        );
-  if (t.kind === 'hint')
-    return bi(`${f} hints that ${a} is out at night`, `${ru.c(t.from)} намекает, что ${ru.c(t.about)} бродит по ночам`);
-  if (t.kind === 'thinks')
-    return t.verdict === 'good'
-      ? bi(`${f} says ${a} speaks well of you`, `${ru.c(t.from)}: ${ru.c(t.about)} хорошо о вас отзывается`)
-      : bi(`${f} says ${a} does not trust you`, `${ru.c(t.from)}: ${ru.c(t.about)} вам не доверяет`);
-  if (t.kind === 'scandal')
-    return t.verdict === 'bad'
-      ? bi(
-          `${f} made a scandal of ${a}’s night in your tent`,
-          `${ru.c(t.from)} ${ru.gs(t.from, 'раздул', 'раздула')} скандал из ночи, которую ${ru.c(t.about)} провела в вашей палатке`
-        )
-      : bi(
-          `${f} spoke kindly of ${a}’s night in your tent`,
-          `${ru.c(t.from)} по-доброму ${ru.gs(t.from, 'отозвался', 'отозвалась')} о ночи, которую ${ru.c(t.about)} провела в вашей палатке`
-        );
-  if (t.kind === 'temper')
-    return bi(
-      `${f} says ${a} is ${TEMPER_NAMES[t.verdict][0]}`,
-      `${ru.c(t.from)}: ${ru.c(t.about)} — ${TEMPER_NAMES[t.verdict][ru.f(t.about) ? 2 : 1]}`
-    );
-  if (t.kind === 'tip')
-    return bi(`${f} says ${a} sells tablets on the side`, `${ru.c(t.from)}: ${ru.c(t.about)} приторговывает табличками`);
-  const [k, b] = t.verdict.split(':');
-  return k === 'close'
-    ? bi(`${f} says ${a} and ${C(b).short} are thick as thieves`, `${ru.c(t.from)}: ${ru.c(t.about)} и ${ru.c(b)} — не разлей вода`)
-    : bi(`${f} says ${a} cannot bear ${C(b).short}`, `${ru.c(t.from)}: ${ru.c(t.about)} терпеть не может ${ru.c(b, 'a')}`);
 }
 function rumorLine(r) {
   const what = Gossip.told(r);
@@ -267,17 +103,15 @@ function bookPeople() {
         const all = S.clues.filter(cl => cl.cat === k && cl.val === c.known[k]),
           tent = all.filter(cl => cl.source === 'spite'),
           hits = all.filter(cl => cl.source !== 'spite'),
-          real = hits.filter(cl => !notAttackers(cl));
+          real = hits.filter(cl => !Record.ruledOut(cl));
         const cls = bare() ? '' : real.length ? ' hit' : hits.length || tent.length ? ' thiefhit' : '',
           where = (real.length ? real : hits).map(cl => `${nightLabel(cl.day)}, ${bi(LOCS[cl.loc].name)}`).join('; '),
           why =
             real.length || !hits.length
               ? ''
-              : hits.some(cl => cl.status === 'planted')
-                ? bi(' (a planted trace)', ' (подброшенный след)')
-                : hits.some(cl => cl.status === 'stray')
-                  ? bi(' (left there earlier)', ' (оставлен там раньше)')
-                  : bi(' (a thief’s trace)', ' (след вора)'),
+              : Record.status(
+                  hits.some(cl => cl.status === 'planted') ? 'planted' : hits.some(cl => cl.status === 'stray') ? 'stray' : 'thief'
+                ).why(),
           title = [
             where ? bi('Also found at a scene: ', 'Также найдено на месте нападения: ') + where + why : '',
             tent.length
@@ -300,53 +134,14 @@ function bookEvidence() {
     .map(section => section())
     .join('');
 }
-// Played hardcore, what you noticed of people yourself is kept here, in the order it happened, as plain record (played
-// the usual way, it shows on their cards instead).
-const NOTICED = {
-  react: (t, a) =>
-    t.verdict === 'fear'
-      ? bi(`${a.short} flinched at something from the tell`, `${ru.c(a)} ${ru.gs(a, 'вздрогнул', 'вздрогнула')} при виде находки`)
-      : t.verdict === 'greed'
-        ? bi(`${a.short} weighed a find like a dealer`, `${ru.c(a)} ${ru.gs(a, 'приценивался', 'приценивалась')} к находке, как торговец`)
-        : bi(`${a.short} took a find calmly`, `${ru.c(a)} спокойно ${ru.gs(a, 'отнёсся', 'отнеслась')} к находке`),
-  words: (t, a) =>
-    t.verdict === 'fear'
-      ? bi(`${a.short} flinched at a line from the tablets`, `${ru.c(a)} ${ru.gs(a, 'вздрогнул', 'вздрогнула')} от строки с табличек`)
-      : t.verdict === 'greed'
-        ? bi(`${a.short} asked what the tablet would fetch`, `${ru.c(a)} ${ru.gs(a, 'спросил', 'спросила')}, сколько дадут за табличку`)
-        : bi(`${a.short} read a line from the tablets calmly`, `${ru.c(a)} спокойно ${ru.gs(a, 'прочёл', 'прочла')} строку с табличек`),
-  slip: (t, a) =>
-    bi(
-      `${a.short} let something slip when pressed`,
-      `${ru.c(a)} ${ru.gs(a, 'проговорился', 'проговорилась')}, когда на ${ru.gs(a, 'него', 'неё')} надавили`
-    ),
-  blurt: (t, a) =>
-    bi(
-      `${a.short} knew something of a night that nobody had told`,
-      `${ru.c(a)} ${ru.gs(a, 'знал', 'знала')} о ночи то, чего никто не рассказывал`
-    ),
-  chill: (t, a) => bi(`A chill as ${a.short} spoke`, `Холодок, пока говорил${ru.gs(a, '', 'а')} ${ru.c(a)}`),
-  spite: (t, a) =>
-    bi(
-      `${a.short} was at your tent in the night, meaning you harm`,
-      `${ru.c(a)} ${ru.gs(a, 'побывал', 'побывала')} ночью у вашей палатки, желая вам зла`
-    ),
-  tell: (t, a) => bi(`${a.short} answered too quickly`, `${ru.c(a)} ${ru.gs(a, 'ответил', 'ответила')} слишком поспешно`),
-  failwatch: (t, a) =>
-    bi(
-      `${a.short} swore to watch your tent, and slept`,
-      `${ru.c(a)} ${ru.gs(a, 'клялся', 'клялась')} стеречь вашу палатку — и ${ru.gs(a, 'проспал', 'проспала')}`
-    ),
-  mien: (t, a) => bi(`${a.short} seems: `, `${ru.c(a)}, с виду: `) + temperName(t.verdict, a)
-};
 function evNoticed() {
   if (!bare()) return '';
-  const seen = S.testimony.filter(t => NOTICED[t.kind] && S.chars[t.about]);
+  const seen = S.testimony.filter(t => (Record.kind(t.kind) || {}).noticed && S.chars[t.about]);
   return seen.length
     ? `<h4>${bi('What you noticed', 'Что вы заметили')}</h4><ul class="tlog">${seen
         .slice()
         .reverse()
-        .map(t => `<li><span class="c-day">${dayLabel(t.day)}</span> ${NOTICED[t.kind](t, C(t.about))}</li>`)
+        .map(t => `<li><span class="c-day">${dayLabel(t.day)}</span> ${Record.kind(t.kind).noticed(t, C(t.about))}</li>`)
         .join('')}</ul>`
     : '';
 }
@@ -368,17 +163,7 @@ function evTraces() {
       // game/hazards.js)
       const tent = cl.source === 'spite',
         where = tent ? bi('By your tent pole', 'У шеста вашей палатки') : bi(LOCS[cl.loc].name);
-      const stt = tent
-        ? ''
-        : cl.status === 'genuine'
-          ? `<span class="chip bad">${bi('Genuine', 'Подлинный')}</span>`
-          : cl.status === 'thief'
-            ? `<span class="chip">${bi('A thief’s', 'Воровской')}</span>`
-            : cl.status === 'stray'
-              ? `<span class="chip">${bi('Left earlier', 'Оставлен раньше')}</span>`
-              : cl.status === 'planted'
-                ? `<span class="chip warnc">${bi('Planted', 'Подброшен')}</span>`
-                : `<span class="chip dimc">${bi('Unverified', 'Не проверен')}</span>`;
+      const stt = tent ? '' : (Record.status(cl.status) || Record.status('unverified')).chip();
       if (bare())
         return `<div class="clue"><div class="c-top"><span class="c-day">${nightLabel(cl.day)} · ${where}</span>${stt}</div><div class="c-trace">${bi(TRAITS[cl.cat].vals[cl.val].clue)}</div></div>`;
       return `<div class="clue"><div class="c-top"><span class="c-day">${nightLabel(cl.day)} · ${where}</span>${stt}</div><div class="c-trace">${bi(TRAITS[cl.cat].vals[cl.val].clue)}</div>
@@ -410,7 +195,7 @@ function evWhereabouts() {
 function whereabouts(x) {
   if (x.attacked) return bi(`attacked ${LOCS[x.loc].at}`, `${ru.gs(x.id, 'на него напали', 'на неё напали')} ${ru.loc(x.loc, 'at')}`);
   if (x.loc === 'evade') return bi('would not say', ru.gs(x.id, 'уклонился от ответа', 'уклонилась от ответа'));
-  const there = !bare() && wasThere(x);
+  const there = !bare() && Record.wasThere(x);
   return bi(
     `${PLACE_SHORT[x.loc]}${x.with ? ', with ' + C(x.with).short : ', alone'}${there ? ': where it happened' : ''}`,
     `${PLACE_RU[x.loc]}${x.with ? ', с ' + ru.c(x.with, 'i') : ru.gs(x.id, ', один', ', одна')}${there ? ': там, где всё случилось' : ''}`
@@ -422,7 +207,7 @@ function beliedOn(n) {
   return castOrder(S.order)
     .map(C)
     .flatMap(x =>
-      belied(x)
+      Record.belied(x)
         .filter(cl => cl.night === n)
         .map(cl => [x, C(cl.with)])
     )
@@ -528,22 +313,14 @@ function evClaims() {
 // Dreams told and distrust spoken, newest first.
 function evTestimony() {
   let h = '';
-  const ts = S.testimony.filter(t => t.kind === 'vision' || t.kind === 'distrust');
+  const ts = S.testimony.filter(t => (Record.kind(t.kind) || {}).testimony);
   h +=
     `<h4>${bi('Testimony', 'Показания')}</h4>` +
     (ts.length
       ? `<ul class="tlog">${ts
           .slice()
           .reverse()
-          .map(
-            t =>
-              `<li><span class="c-day">${dayLabel(t.day)}</span> ${bi(
-                `${C(t.from).short} ${t.kind === 'vision' ? (t.verdict === 'cult' ? 'dreamt guilty:' : 'dreamt clean:') : 'distrusts'} <b>${C(t.about).short}</b>`,
-                t.kind === 'vision'
-                  ? `${ru.c(t.from, 'd')} приснилось, что ${t.verdict === 'cult' ? ru.gs(t.about, 'виновен', 'виновна') : ru.gs(t.about, 'невиновен', 'невиновна')} <b>${ru.c(t.about)}</b>`
-                  : `${ru.c(t.from)} не доверяет <b>${ru.c(t.about, 'd')}</b>`
-              )}</li>`
-          )
+          .map(t => `<li><span class="c-day">${dayLabel(t.day)}</span> ${Record.kind(t.kind).testimony(t)}</li>`)
           .join('')}</ul>`
       : `<p class="dim">${bi('Ask people whom they distrust. Some will tell you about their dreams.', 'Спрашивайте людей, кому они не доверяют. Кто-то расскажет и о своих снах.')}</p>`);
   return h;
@@ -551,14 +328,12 @@ function evTestimony() {
 // What people say of each other: temper, liking, tips.
 function evSayings() {
   let h = '';
-  const says = S.testimony.filter(t =>
-    ['temper', 'bond', 'tip', 'feel', 'flirt', 'hint', 'thinks', 'scandal', 'quarrel', 'feast'].includes(t.kind)
-  );
+  const says = S.testimony.filter(t => (Record.kind(t.kind) || {}).saying);
   if (says.length)
     h += `<h4>${bi('What people say of each other', 'Что люди говорят друг о друге')}</h4><p class="dim rk-rules">${bi('Gossip is only as true as the gossip, and people are kind to their friends.', 'Сплетня правдива ровно настолько, насколько правдив сплетник, а к друзьям люди снисходительны.')}</p><ul class="tlog">${says
       .slice()
       .reverse()
-      .map(t => `<li><span class="c-day">${dayLabel(t.day)}</span> ${sayingLine(t)}</li>`)
+      .map(t => `<li><span class="c-day">${dayLabel(t.day)}</span> ${Record.kind(t.kind).saying(t)}</li>`)
       .join('')}</ul>`;
   return h;
 }

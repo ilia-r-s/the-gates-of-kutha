@@ -91,9 +91,6 @@ function fixMark(c) {
   if (!c.markAt) c.markAt = { mark: c.mark, day: S.day };
 }
 const markOf = c => (c.markAt ? c.markAt.mark : c.mark); // the mark the reckoning counts
-function journal(t) {
-  S.journal.push({ day: S.day, t });
-}
 // you thought better of it (a talk, a translation, an inquiry): counted once a slot, however often you turn back
 function backedDown() {
   const at = S.day + ':' + S.slot;
@@ -371,26 +368,9 @@ function reveal(c) {
   const see = TRAITS[cat].vals[v].see;
   return bi(fmt(see, { n: c.short }), fmtR(R(see), { n: c }));
 }
-// a trace seen not to be the attacker's: a thief's, someone's who passed earlier, or planted
-const notAttackers = cl => cl.status === 'thief' || cl.status === 'stray' || cl.status === 'planted';
 function clueText(cl) {
   return `<b class="trace">${TRAITS[cl.cat].vals[cl.val].clue}</b>`;
 }
 function clueTextRu(cl) {
   return `<b class="trace">${R(TRAITS[cl.cat].vals[cl.val].clue)}</b>`;
-}
-// A trace: of its owner's habit, but for now and then (examine.smudge) one that was not theirs, a borrowed pair of boots,
-// a cadged cigarette, as they were that night (the ending tells it).
-function addClue(o) {
-  emit('clue');
-  const own = C(o.owner).traits[o.cat],
-    smudged = chance(RULES.examine.smudge),
-    cl = { id: S.clues.length, day: S.day, ...o, val: smudged ? pick(Object.keys(TRAITS[o.cat].vals).filter(v => v !== own)) : own };
-  if (smudged) cl.smudged = own;
-  S.clues.push(cl);
-  return cl;
-}
-function addTest(from, about, kind, verdict) {
-  if (S.testimony.some(t => t.from === from && t.about === about && t.kind === kind && t.verdict === verdict)) return;
-  S.testimony.push({ day: S.day, from, about, kind, verdict });
 }

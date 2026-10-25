@@ -79,6 +79,6 @@ function flirtGossip(s, not = [], heard = false) {
   if (!f.length) return null;
   const [a, b] = pick(f),
     A = C(a);
-  addTest(s.id, a, 'flirt', b);
+  Record.testify(s.id, a, 'flirt', b);
   return { t: A, text: b === 'you' ? pick(heard ? FLIRT_HEARD_YOU : FLIRT_SAID_YOU)(s, A) : pick(FLIRT_SAID)(s, A, C(b)) };
 }

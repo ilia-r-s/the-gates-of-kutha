@@ -140,7 +140,7 @@ window.__T = (() => {
     return bs => {
       const find = re => bs.find(b => re.test(text(b)));
       const best = freeCult()
-        .map(c => [c, caseAgainst(c)])
+        .map(c => [c, Record.caseAgainst(c)])
         .sort((a, b) => b[1] - a[1])[0];
       const ready = !!best && best[1] >= 1.25 && !S.walkout && !S.inquiryDone;
       if (S.phase === 'inquiry') return (ready && bs.find(b => text(b).includes(best[0].name))) || find(/Think better/);

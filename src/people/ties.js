@@ -36,8 +36,8 @@ const Ties = (() => {
   // ---------- dealing, once a season ----------
   // Everyone's liking for everyone else, a pair at a time in the season's order (each way at once, or each its own; the
   // two of the cult a little fonder of each other, by their pact); then each one's trust in you as they arrive, by
-  // temperament; then the flirtations: each woman may have a streak toward you, and anyone toward a particular person of
-  // the other sex, the priest excepted. (The order is the order of the dice.)
+  // temperament; then the flirtations: each woman may have a streak toward you, and anyone toward a particular person
+  // of the other sex, the priest excepted. (The order is the order of the dice.)
   function deal() {
     S.like = {};
     S.order.forEach(a => {
@@ -137,9 +137,9 @@ const Ties = (() => {
     return C(wpick(w));
   }
   // What has passed between two of the camp, as far as anyone could see: quarrels between them and feasts they sat
-  // through together (game/events.js), how far a suspects b (people/suspicion.js), and whether either named the other guilty
-  // before everyone (S.said: accused, a named b; accusedBy, b named a). An old score colours how someone takes what they
-  // hear (people/moments.js, the scandal).
+  // through together (game/events.js), how far a suspects b (people/suspicion.js), and whether either named the other
+  // guilty before everyone (S.said: accused, a named b; accusedBy, b named a). An old score colours how someone takes
+  // what they hear (people/moments.js, the scandal).
   function pastBetween(p, q) {
     const a = id(p),
       b = id(q),

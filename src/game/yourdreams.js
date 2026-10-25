@@ -234,7 +234,7 @@ function yourDream(night) {
     const truth = d.sure ? true : d.line != null ? d.line : tru,
       html = d.html || bi(d.en, d.ru); // (a dream's words, in both languages)
     S.you.dreams.push({ night: S.day, kind: k, true: truth, html });
-    journal(html);
+    Record.journal(html);
     emit('yourdream');
     return `<p class="dream">${html}</p>`;
   }
