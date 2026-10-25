@@ -1060,7 +1060,12 @@ const SCRIPT = () => {
     RULES.talk.promise = 0;
     capHtml(
       'promise-general',
-      until(() => (r => /whole camp|за всем лагерем/.test(X(r.them)) && r.them)(DIALOG.confide.run(wardenLike)))
+      // (each confidence taken makes the next less welcome, and a sour refusal costs trust: start each try afresh)
+      until(() => {
+        wardenLike.rapport = 2;
+        S.confided[wardenLike.id] = 0;
+        return (r => /whole camp|за всем лагерем/.test(X(r.them)) && r.them)(DIALOG.confide.run(wardenLike));
+      })
     );
     restore();
     capHtml(
