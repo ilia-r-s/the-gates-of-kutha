@@ -334,8 +334,8 @@ you, speaks against it, or says nothing; the hands are shown by name, and the ca
   them round; two actions; not on the last day, which has no tomorrow). Each dawn after, a camp that walked out may
   think better of it and hear you again (`verdict.relent`, 10%, + `relentDeath`, 15%, the morning after a death).
 
-In the build-26 simulations (How seasons end, below), about three inquiries in ten pass (30%), and as often against one
-of the cult (29.5%) as against anyone else (30.5%).
+In the build-27 simulations (1,750 seasons played as a person would), about three inquiries in ten pass (29.5%), and
+much as often against one of the cult (30.9%) as against anyone else (26.4%).
 
 ## The deed: justice in your own hands
 
@@ -745,8 +745,8 @@ part and temperament and nothing else (`assignClaims` in `people/claims.js`):
   `claims.cornered` (0.12) × `liked`: the cult to cover itself, anyone else in fear. Nobody hears of it until they say
   it. One named guilty in a dream told aloud may claim to dream on the spot (below).
 
-Measured over 700 seasons of build 26, a false claim to dream, once stated, came from the cult 51% of the time, from an
-innocent 38% and from the thief 10%.
+Measured over 700 seasons of build 27, a false claim to dream, once stated, came from the cult 52% of the time, from an
+innocent 37% and from the thief 10%.
 
 **Made-up dreams.** Whoever only says they dream makes a dream up once a day, and tells the same one again that day (at
 breakfast, asked whom they distrust, or as you take your leave). A pretender's names someone guilty at
@@ -1206,30 +1206,30 @@ someone's spite.
 
 ## How seasons end
 
-The odds of the outcomes on build 26.1, from 3,150 simulated seasons: bots that play the real page the way a person
-might, in seven styles (each leaning toward one way of working, on top of the same sensible play), 450 seasons each,
-every background and every season's mood as the dice dealt them. A person who reads the casebook well should do better
-than these bots; one who plays carelessly, worse. The intervals are 95% (Wilson).
+The odds of the outcomes on build 27.0, from 3,150 simulated seasons (`sim/balance.js`): bots that play the real page
+the way a person might, in seven styles (each leaning toward one way of working, on top of the same sensible play), 450
+seasons each, every background and every season's mood as the dice dealt them. A person who reads the casebook well
+should do better than these bots; one who plays carelessly, worse. The intervals are 95% (Wilson).
 
 | Outcome | Odds (95% interval) |
 | --- | --- |
-| **Defeat** | **90.3% (89.3–91.3)** |
-| — madness | 41.6% (39.9–43.3) |
-| — death | 24.1% (22.7–25.7) |
-| — the rite completes | 23.9% (22.4–25.4) |
-| — sent away on the lorry to Hillah | 0.7% (0.5–1.1) |
-| **Hard victory** | **7.3% (6.5–8.3)** |
-| **Clean victory** | **2.3% (1.8–2.9)** |
+| **Defeat** | **90.0% (88.9–91.0)** |
+| — madness | 41.3% (39.6–43.0) |
+| — death | 22.4% (21.0–23.9) |
+| — the rite completes | 25.9% (24.4–27.5) |
+| — sent away on the lorry to Hillah | 0.4% (0.3–0.7) |
+| **Hard victory** | **7.8% (6.9–8.8)** |
+| **Clean victory** | **2.2% (1.7–2.8)** |
 
-No style does markedly better than another: each one's defeats lie between 89.6% and 91.3%, within the noise from one
-run to the next (450 seasons a style are good to about ±3 points). By background: the philologist 90.4%, the soldier
-88.9%, the occultist 91.8% (the soldier dies least and sees the rite complete most; the occultist goes mad half the
-time). By the power's nature, defeat lies between 88.8% (madness) and 91.4% (fire).
+No style does markedly better than another: each one's defeats lie between 88.2% and 92.2%, within the noise from one
+run to the next (450 seasons a style are good to about ±3 points). By background: the philologist 91.0%, the soldier
+87.3%, the occultist 91.7% (the soldier dies least, 10%, and sees the rite complete most, 36%; the occultist goes mad
+about half the time, 48.5%). By the power's nature, defeat lies between 87.5% (fire) and 91.4% (the sea).
 
-The style the ending names: the field director (nothing out of the ordinary) 19.5% of seasons; the delver 14.8%, the
-scholar 13.5%, the inquisitor 13.4%, the confidant 13.4%, the quiet one 12.2%, the sleuth 11.4%; the avenger (the deed
-done) 1.8%. Three seasons in four come to the descent (76%); a season sees about two and a half of the camp taken by
-the night.
+The style the ending names: the field director (nothing out of the ordinary) 22.2% of seasons; the delver 16.0%, the
+scholar 14.7%, the confidant 13.0%, the quiet one 12.5%, the sleuth 11.2%, the inquisitor 8.2%; the avenger (the deed
+done) 2.1%. Three seasons in four come to the descent (77.6%); a season sees about two and a half of the camp taken by
+the night (2.5).
 
-The end you chose comes in about 3½% of seasons, nearly all of them a mind that broke (about 8% of the madness endings);
-a death that came later, in about 18% (two in 1–2%), a third of them by their own hand.
+The end you chose comes in about 4½% of seasons (4.4%), nearly all of them a mind that broke (about 10% of the madness
+endings); a death that came later, in about 18% (17.6%; two in 1.8%), a third of them by their own hand (35%).

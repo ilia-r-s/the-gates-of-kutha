@@ -304,7 +304,7 @@ const ASPECT_TEXT = {
       ],
       [
         'Frogs came up out of the canal in the night, hundreds of them. They are in the tents, in the boots, in the water jars.',
-        'The path from the canal is alive with frogs this morning, all going the same way: toward the mound.',
+        'The path from the canal is alive with frogs this morning, all going the same way: towards the mound.',
         'The village women are sweeping frogs out of their doors. They have never come up so far from the water.'
       ],
       [

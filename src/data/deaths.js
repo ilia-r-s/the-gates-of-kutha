@@ -558,7 +558,7 @@ const DEATH_SIGN = [
     { not: ['water', 'enclosed', 'besideSaid'] }
   ],
   [
-    'The boots have been taken off and set side by side, toes toward the ziggurat.',
+    'The boots have been taken off and set side by side, toes towards the ziggurat.',
     'Ботинки сняты и поставлены рядом, носками к зиккурату.',
     { not: ['bootsOff', 'bootsSaid', 'buried', 'enclosed', 'wrapped', 'water'] }
   ],

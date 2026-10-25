@@ -136,7 +136,7 @@ The measurements behind the numbers in [RULES.md](RULES.md) and the rulebook, ru
 harness and play policies as the tests (`test/lib/`). They report rather than pass or fail, except where noted.
 
 ```
-node sim/balance.js           # how seasons end: 7 ways of playing × 150 seasons × 3 seeds (3,150), about 15 minutes
+node sim/balance.js           # how seasons end: 7 ways of playing × 150 seasons × 3 seeds (3,150), about 5 minutes
 node sim/scan.js              # 360 seasons scanned for anything a reader should never meet
 node sim/tells.js             # what each thing people do says about the cult, as likelihood ratios
 ```
