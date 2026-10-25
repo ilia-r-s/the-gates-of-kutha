@@ -339,10 +339,18 @@ const SCRIPT = () => {
     'flirt-gossip',
     until(() => (flirtGossip(p3, [man.id]) || {}).text)
   );
+  // (a greeting is fixed for the slot by the season's salt: another salt for each try, and the season's own back after)
+  const salt = S.salt;
   capHtml(
     'flirt-greeting',
-    until(() => (g => g.face === 'coy' && g.text)(greeting(woman)))
+    until(() => {
+      S.salt = (S.salt + 7919) % 2147483648;
+      delete woman.greeted;
+      return (g => g.face === 'coy' && g.text)(greeting(woman));
+    })
   );
+  S.salt = salt;
+  delete woman.greeted;
   capHtml('flirt-parting', pick(FLIRT_PARTING)(woman));
   // a friend's sighting, unasked
   // (last night's: the night before this day)
@@ -412,13 +420,18 @@ const SCRIPT = () => {
   p3.status = 'present';
   Object.assign(CRAFT[temperOf(actor)], keepCraft);
   // faces: a flirtatious joke, and the faces of flirting
+  const salt2 = S.salt;
   capHtml(
     'joke',
     until(() => {
+      S.salt = (S.salt + 7919) % 2147483648;
+      delete C('constance').greeted;
       const g = greeting(C('constance'));
       return JOKES.has(g.text.replace(/[\u0001\u0002]/g, '')) && g.face !== 'neutral' && g.text + `<!-- ${g.face} -->`;
     })
   );
+  S.salt = salt2;
+  delete C('constance').greeted;
   // inquiries the camp backs (everyone outside the cult sides with you): against an innocent, the smuggler, a cultist
   S.slot = 2;
   S.loc = 'camp';
