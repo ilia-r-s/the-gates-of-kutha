@@ -2,8 +2,13 @@
 
 Every number here lives in `src/rules.js` (named in `code`); change it there and the game changes. Chances are per event
 unless stated otherwise. "Trust" is how a person feels about you, from −2 (hostile) to 3 (devoted); talk alone, or the
-start of a season, never makes anyone more than fond (2); one person's suspicion of another runs from 0 to 3. The season
-is `start.days` (5) days long.
+start of a season, never makes anyone more than warm (2); one person's suspicion of another runs from 0 to 3. The rules
+ask about them by level, each named once: a friend trusts you at `ties.friend` (2) or more, someone cordial at
+`ties.cordial` (1), someone against you at `ties.against` (−1) or less, someone hostile at `ties.hostile` (−2); one
+person is fond of another at `ties.fond` (1), close at `ties.close` (2), dislikes them at `ties.dislike` (−1) and cannot
+bear them at `ties.cannotBear` (−2); begins to wonder about them at `suspects.wonder` (1), suspects them in earnest at
+`suspects.earnest` (2), is all but sure at `suspects.sure` (3); and `suspects.many` (2) of the camp suspecting someone
+in earnest are the camp's suspicion of them. The season is `start.days` (5) days long.
 
 The game itself never shows a probability. A choice tells you what it risks ("a bad step costs nerve", "if you named the
 right power"), never its odds; the numbers below are for whoever tunes the game.

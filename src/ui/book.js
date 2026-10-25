@@ -178,8 +178,8 @@ function chipsAbout(id) {
 }
 // the camp's view of someone: who suspects them in earnest, and whether what they said before everyone proved true
 function campChips(c) {
-  const by = suspectedBy(c.id),
-    cr = credit(c.id);
+  const by = Suspicion.suspectedBy(c.id),
+    cr = Suspicion.credit(c.id);
   return (
     (by.length && isFree(c)
       ? `<span class="chip warnc">${bi(`Suspected by ${nameList(by)}`, `${ru.gs(c, 'Его', 'Её')} подозревают: ${nameListRu(by)}`)}</span>`

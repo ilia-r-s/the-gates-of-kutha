@@ -238,8 +238,8 @@ const EVENT_DO = {
     addTest('you', a.id, 'quarrel', b.id);
     S.tenor.feud = [a.id, b.id];
     if (heavy) {
-      if (chance(RULES.events.heavySus)) suspect(a.id, b.id, 1);
-      if (chance(RULES.events.heavySus)) suspect(b.id, a.id, 1);
+      if (chance(RULES.events.heavySus)) Suspicion.move(a.id, b.id, 1);
+      if (chance(RULES.events.heavySus)) Suspicion.move(b.id, a.id, 1);
     }
     return (
       `<p class="notice">${bi(`${a.short} and ${b.short}. They do not speak to each other for the rest of the day.`, `${ru.c(a)} и ${ru.c(b)}. До конца дня они не говорят друг с другом ни слова.`)}</p>` +
@@ -284,7 +284,7 @@ const EVENT_DO = {
   song: heavy => {
     const free = freeChars();
     if (free.length < 2) return '';
-    const eyed = c => free.reduce((a, o) => a + sus(o.id, c.id), 0),
+    const eyed = c => free.reduce((a, o) => a + Suspicion.level(o.id, c.id), 0),
       x = C(wpick(Object.fromEntries(free.map(c => [c.id, RULES.events.songAnyone + eyed(c) ** 2]))));
     return (
       `<p class="notice">${bi(`The verse about ${x.short} is not kind.`, `Куплет про ${ru.c(x, 'a')} — недобрый.`)}</p>` +

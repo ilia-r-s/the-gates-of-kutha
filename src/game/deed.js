@@ -284,9 +284,7 @@ function deedMorning() {
     t = C(d.id),
     happened = d.outcome === 'killed' || d.outcome === 'failed' || d.outcome === 'watched';
   let h = '';
-  const up = n => {
-    S.onYou = Math.min(RULES.scale.suspicion, (S.onYou || 0) + n);
-  };
+  const up = Suspicion.suspectYou;
   // whoever knows: the one you went for, the Watcher who drove you off, or someone you passed
   const knower = d.knewBy ? C(d.knewBy) : d.seenBy ? C(d.seenBy) : null;
   if (knower && isFree(knower)) {
@@ -345,17 +343,17 @@ function deedMorning() {
   }
   // the cult hears what the camp hears, and guesses at what it does not, whoever it was you went for: once it knows or
   // guesses it was you, it knows what you are (as if you had confided in it)
-  if (happened && chance(D.cultKnows * (d.caught || d.hinted || d.linked ? 1 : D.unseen))) S.alerted = true;
+  if (happened) Suspicion.alertCult(D.cultKnows * (d.caught || d.hinted || d.linked ? 1 : D.unseen));
   if (d.caught) return h + youVote();
   // (suspected at 2 or more: below that the table's odds are nothing, and no die is thrown)
-  if (happened && chance(D.vote[Math.min(3, Math.floor(S.onYou || 0))])) return h + youVote();
+  if (happened && chance(D.vote[Suspicion.youLevel()])) return h + youVote();
   return h;
 }
 // at a later dawn, a camp that suspects you enough may still sit in judgement on you
 function deedDawn() {
   const d = S.log.deed;
   if (!d || !d.morning || d.judged || S.ended) return '';
-  return chance(RULES.deed.later * RULES.deed.vote[Math.min(3, Math.floor(S.onYou || 0))]) ? youVote() : '';
+  return chance(RULES.deed.later * RULES.deed.vote[Suspicion.youLevel()]) ? youVote() : '';
 }
 // The camp sits in judgement on you. Each takes a side (RULES.deed.judge): how sure the camp is it was you (S.onYou,
 // and more if someone saw you), a friend of the one you went for (and the one you went for, if alive), less for each
@@ -370,7 +368,7 @@ function youVote() {
     J = RULES.deed.judge,
     VR = RULES.verdict,
     crowd = freeChars(),
-    cs = (S.onYou || 0) + (d.caught ? J.caught : 0),
+    cs = Suspicion.onYou() + (d.caught ? J.caught : 0),
     h = handsRaised(
       crowd,
       o =>
@@ -421,7 +419,7 @@ function youVote() {
   const sour = out.expel.map(C).filter(o => o.rapport > RULES.scale.trustMin && chance(RULES.deed.sour));
   sour.forEach(o => Ties.moveTrust(o, -1, 'deed'));
   S.anger = (S.anger || 0) + vary(RULES.deed.angered);
-  S.onYou = Math.max(0, (S.onYou || 0) - vary(RULES.deed.cleared));
+  Suspicion.clearYou(vary(RULES.deed.cleared));
   return (
     hands +
     (corporal

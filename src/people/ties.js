@@ -146,14 +146,13 @@ const Ties = (() => {
   function pastBetween(p, q) {
     const a = id(p),
       b = id(q),
-      pair = t => (t.about === a && t.verdict === b) || (t.about === b && t.verdict === a),
-      named = (x, y) => S.said.some(z => z.by === x && z.about === y && z.verdict === 'cult');
+      pair = t => (t.about === a && t.verdict === b) || (t.about === b && t.verdict === a);
     return {
       quarrels: S.testimony.filter(t => t.kind === 'quarrel' && pair(t)).length,
       feasts: S.testimony.filter(t => t.kind === 'feast' && pair(t)).length,
-      suspects: sus(a, b),
-      accused: named(a, b),
-      accusedBy: named(b, a)
+      suspects: Suspicion.level(a, b),
+      accused: Suspicion.named(a, b),
+      accusedBy: Suspicion.named(b, a)
     };
   }
   // every flirtation showing just now among those still at the dig: [who, whom], whom being 'you' or a person's id

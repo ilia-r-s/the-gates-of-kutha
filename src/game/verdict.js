@@ -111,7 +111,7 @@ function weighWord(x, vote, outcome) {
 function leaning(o, x, cs) {
   const VR = RULES.verdict;
   return (
-    (sawAtIt(o, x) ? RULES.scale.suspicion : sus(o.id, x.id)) +
+    (sawAtIt(o, x) ? RULES.scale.suspicion : Suspicion.level(o.id, x.id)) +
     cs +
     VR.trust * o.rapport +
     word(o) -
@@ -132,7 +132,7 @@ function cultLean(o, x) {
   const k = craft(o),
     VC = RULES.verdict.cult;
   if (x.role !== 'cult') return VC.push * k.push * cultTurns('inquisitor');
-  return looksLost(x) && chance(VC.bus * k.sacrifice) ? VC.give : -VC.defend * k.defend;
+  return Suspicion.looksLost(x) && chance(VC.bus * k.sacrifice) ? VC.give : -VC.defend * k.defend;
 }
 // The camp's hands, at an inquiry or when it sits in judgement on you (game/deed.js, youVote): each of the crowd leans
 // (lean, then the evening's mood, the same for everyone in the tent, their own whim, and last what more they bring:
@@ -172,8 +172,8 @@ function campVote(x) {
     ),
     out = { back: h.for, against: h.against, silent: h.silent, case: cs, passed: h.passed };
   // every raised hand is said before everyone, and settled when the truth about the accused comes out
-  out.back.forEach(id => sayPublic(id, x.id, 'cult', 'vote'));
-  out.against.forEach(id => sayPublic(id, x.id, 'clean', 'vote'));
+  out.back.forEach(id => Suspicion.sayAloud(id, x.id, 'cult', 'vote'));
+  out.against.forEach(id => Suspicion.sayAloud(id, x.id, 'clean', 'vote'));
   S.inquiries.push({ day: S.day, id: x.id, back: out.back, against: out.against, silent: out.silent, passed: out.passed });
   return out;
 }
@@ -213,7 +213,7 @@ function refusedInquiry(x, v) {
   weighWord(x, v, 'refused');
   pullTo('tongues', TENOR.pulls.refused);
   const grudge = grudgeOf(x);
-  if (x.role === 'cult' && chance(RULES.verdict.alerts)) S.alerted = true;
+  if (x.role === 'cult') Suspicion.alertCult(RULES.verdict.alerts);
   // who says it: the fondest of the accused among those who spoke against it, for all of them (or, the only one there
   // besides you and the accused, for themself); else, nobody having spoken against it, one of those who said nothing,
   // breaking the silence

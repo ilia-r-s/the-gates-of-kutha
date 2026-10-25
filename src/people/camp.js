@@ -1,44 +1,14 @@
-// ===================== THE CAMP: suspicion, and moments that move many at once =====================
-// Everyone keeps their own count of whom they suspect, from 0 to 3, apart from whom they like. Some things happen
-// before the whole camp: an accusation at an inquiry, a dream told at breakfast, a watch slept through, a death. Each of
-// these is a public moment, and every onlooker reacts on their own, or not at all: so one moment may move nobody, one
-// person, or several at once (at most RULES.camp.cap each way), in their trust in you or in their suspicion of each
-// other. What is said against someone before everyone is remembered (S.said); when the truth comes out, those who said it
-// are believed again, or are not (S.credit), and those who had suspected them think again.
+// ===================== THE CAMP: moments that move many at once =====================
+// Some things happen before the whole camp: an accusation at an inquiry, a dream told at breakfast, a watch slept
+// through, a death. Each of these is a public moment, and every onlooker reacts on their own, or not at all: so one
+// moment may move nobody, one person, or several at once (at most RULES.camp.cap each way), in their trust in you, in
+// their suspicion of each other (people/suspicion.js), or in their liking for someone. What is said against someone
+// before everyone is remembered there; when the truth comes out, those who said it are believed again, or are not, and
+// those who had suspected them think again (settleSaid, below).
 
+// the season's record of public moments (S.stirs), from the start
 function campInit() {
-  S.sus = {};
-  S.order.forEach(a => {
-    S.sus[a] = {};
-  });
-  S.said = [];
   S.stirs = [];
-  S.credit = {};
-}
-const sus = (a, b) => (S.sus && S.sus[a] ? S.sus[a][b] || 0 : 0);
-function suspect(a, b, d) {
-  const v = Math.max(0, Math.min(RULES.scale.suspicion, sus(a, b) + d));
-  if (v === sus(a, b)) return false;
-  S.sus[a][b] = v;
-  return true;
-}
-// who in the camp suspects someone in earnest
-const suspectedBy = id =>
-  freeChars()
-    .filter(o => o.id !== id && sus(o.id, id) >= 2)
-    .map(o => o.id);
-// whose word the camp has seen proven before everyone (above 0), or proven wrong (below)
-const credit = id => (S.credit && S.credit[id]) || 0;
-// whom someone suspects most, of a pool: in earnest only, and a friend only on the strongest suspicion
-function mostSuspected(c, pool) {
-  const top = pool
-    .filter(o => sus(c.id, o.id) >= (Ties.close(c.id, o.id) ? RULES.scale.suspicion : 2))
-    .sort((a, b) => sus(c.id, b.id) - sus(c.id, a.id) || Ties.likes(c.id, a.id) - Ties.likes(c.id, b.id));
-  return top[0] || null;
-}
-// said against someone, or for them, before the whole camp: remembered until the truth about them comes out
-function sayPublic(by, about, verdict, how) {
-  S.said.push({ day: S.day, by, about, verdict, how, settled: false });
 }
 
 // ---------- a public moment ----------
@@ -66,8 +36,9 @@ function stir(kind, o) {
       const [what, whom, d] = r,
         same = moved.filter(x => x[0] === what && x[1] === whom && x[2] === d);
       if (same.reduce((n, x) => n + x[3].length, 0) >= cap) return; // as many as the cap move the same way, and no more
-      if (!(what === 'trust' ? Ties.moveTrust(l, d) : what === 'like' ? Ties.shiftLike(l.id, whom, d) : suspect(l.id, whom, d))) return;
-      const lvl = what === 'sus' ? sus(l.id, whom) : null,
+      if (!(what === 'trust' ? Ties.moveTrust(l, d) : what === 'like' ? Ties.shiftLike(l.id, whom, d) : Suspicion.move(l.id, whom, d)))
+        return;
+      const lvl = what === 'sus' ? Suspicion.level(l.id, whom) : null,
         g = same.find(x => x[4] === lvl);
       if (g) g[3].push(l.id);
       else moved.push([what, whom, d, [l.id], lvl]);
@@ -91,21 +62,22 @@ function stirNote(r, quiet) {
   if (!lines.length && !quiet) lines.push(`<p class="stir">${bi('Nobody else takes it up.', 'Больше никто ничего не говорит.')}</p>`);
   return lines.join('');
 }
-// a change in suspicion, as far as it now goes (0 to 3; in earnest from 2): what the ids now make of w, after their
-// names, as [English, Russian]
+// a change in suspicion, as far as it now goes (0 to scale.suspicion, by the levels RULES.suspects names): what the
+// ids now make of w, after their names, as [English, Russian]
 function susSay(ids, w, d, lvl) {
-  const many = ids.length > 1,
+  const L = RULES.suspects,
+    many = ids.length > 1,
     v = (one, more) => (many ? more : one),
     g = (m, f, pl) => (many ? pl : ru.gs(C(ids[0]), m, f));
   if (d > 0)
-    return lvl >= RULES.scale.suspicion
+    return lvl >= L.sure
       ? [`${v('is', 'are')} all but sure it is ${w.short} now`, `теперь почти ${g('уверен', 'уверена', 'уверены')}, что это ${ru.c(w)}`]
-      : lvl >= 2
+      : lvl >= L.earnest
         ? [`${v('suspects', 'suspect')} ${w.short} now`, `теперь ${v('подозревает', 'подозревают')} ${ru.c(w, 'a')}`]
         : [`${v('begins', 'begin')} to wonder about ${w.short}`, `${v('начинает', 'начинают')} присматриваться к ${ru.c(w, 'd')}`];
-  return lvl >= 2
+  return lvl >= L.earnest
     ? [`${v('is', 'are')} less sure it is ${w.short} now`, `уже не так ${g('уверен', 'уверена', 'уверены')}, что это ${ru.c(w)}`]
-    : lvl === 1
+    : lvl === L.wonder
       ? [
           `no longer ${v('suspects', 'suspect')} ${w.short} in earnest`,
           `больше не ${v('подозревает', 'подозревают')} ${ru.c(w, 'a')} всерьёз`
@@ -152,7 +124,7 @@ const STIRS = {
     },
     spoke: sp => spokeStep(sp, -1),
     react: (l, o, pr) =>
-      sus(l.id, o.about) >= 2
+      Suspicion.earnest(l.id, o.about)
         ? ['trust', null, 1, pr.defend]
         : [
             'trust',
@@ -162,7 +134,7 @@ const STIRS = {
               (Ties.fond(l, o.about) ? pr.friend : 0) +
               (isSusp(l) ? pr.suspicious : 0) -
               (Ties.friend(l) ? pr.loyal : 0) -
-              (sus(l.id, o.about) === 1 ? pr.suspected : 0) -
+              (Suspicion.onlyWonders(l.id, o.about) ? pr.suspected : 0) -
               (o.thief ? pr.thief : 0)
           ],
     open: (sp, o) => {
@@ -189,7 +161,7 @@ const STIRS = {
     speaker: (o, pr) => {
       const pool = freeChars().filter(c => c.id !== o.about);
       const sp =
-        pick(pool.filter(c => sus(c.id, o.about) >= 1 || Ties.dislikes(c, o.about))) ||
+        pick(pool.filter(c => Suspicion.wonders(c.id, o.about) || Ties.dislikes(c, o.about))) ||
         pick(pool.filter(c => Ties.cordial(c) && !Ties.fond(c, o.about)));
       return sp && chance(pr.odds) ? sp : null;
     },
@@ -199,7 +171,7 @@ const STIRS = {
         ? (o.backed || []).includes(l.id)
           ? null
           : ['trust', null, -1, pr.grudge]
-        : ['trust', null, 1, pr.p + (sus(l.id, o.about) >= 1 || Ties.dislikes(l, o.about) ? pr.doubted : 0)],
+        : ['trust', null, 1, pr.p + (Suspicion.wonders(l.id, o.about) || Ties.dislikes(l, o.about) ? pr.doubted : 0)],
     open: (sp, o) => {
       const a = C(o.about);
       if (!sp)
@@ -300,7 +272,7 @@ const STIRS = {
   // named may never forgive it
   dreamt: {
     react: (l, o, pr) => {
-      if (Ties.fond(l, o.about) || sus(l.id, o.by) >= 2 || (o.answer && !Ties.fond(l, o.by)))
+      if (Ties.fond(l, o.about) || Suspicion.earnest(l.id, o.by) || (o.answer && !Ties.fond(l, o.by)))
         return [
           'sus',
           o.by,
@@ -316,9 +288,9 @@ const STIRS = {
         1,
         pr.p +
           (Ties.fond(l, o.by) ? pr.believe : 0) +
-          pr.credit * credit(o.by) +
+          pr.credit * Suspicion.credit(o.by) +
           (Ties.dislikes(l, o.about) ? pr.dislike : 0) -
-          (sus(l.id, o.by) === 1 ? pr.doubt : 0)
+          (Suspicion.onlyWonders(l.id, o.by) ? pr.doubt : 0)
       ];
     },
     after: (o, pr) => resent(o.about, o.by, pr.resent),
@@ -327,7 +299,9 @@ const STIRS = {
   // a dream told aloud that clears someone: those who suspected them may think again, if they believe the dreamer
   dreamtClean: {
     react: (l, o, pr) =>
-      sus(l.id, o.about) >= 1 ? ['sus', o.about, -1, pr.p + (Ties.fond(l, o.by) ? pr.believe : 0) + pr.credit * credit(o.by)] : null,
+      Suspicion.wonders(l.id, o.about)
+        ? ['sus', o.about, -1, pr.p + (Ties.fond(l, o.by) ? pr.believe : 0) + pr.credit * Suspicion.credit(o.by)]
+        : null,
     quiet: true
   },
   // someone says out loud that they do not trust another: much as a dream, though fewer believe it
@@ -338,7 +312,7 @@ const STIRS = {
         'sus',
         o.about,
         1,
-        pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) + (Ties.fond(l, o.by) ? pr.believe : 0) + pr.credit * credit(o.by)
+        pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) + (Ties.fond(l, o.by) ? pr.believe : 0) + pr.credit * Suspicion.credit(o.by)
       ];
     },
     after: (o, pr) => resent(o.about, o.by, pr.resent),
@@ -356,7 +330,7 @@ const STIRS = {
   confessed: {
     react: (l, o, pr) =>
       Ties.fond(l, o.about)
-        ? sus(l.id, o.about) >= 1
+        ? Suspicion.wonders(l.id, o.about)
           ? ['sus', o.about, -1, pr.respect]
           : null
         : ['sus', o.about, 1, pr.liar + (isSusp(l) ? pr.suspicious : 0)],
@@ -368,12 +342,12 @@ const STIRS = {
   onto: {
     speaker: (o, pr) => {
       const pool = freeChars().filter(c => c.id !== o.about);
-      return pool.length ? C(wpick(Object.fromEntries(pool.map(c => [c.id, 1 + sus(c.id, o.about)])))) : null;
+      return pool.length ? C(wpick(Object.fromEntries(pool.map(c => [c.id, 1 + Suspicion.level(c.id, o.about)])))) : null;
     },
     spoke: (sp, o) => {
       o.by = sp.id;
       addTest(sp.id, o.about, 'distrust', 'cult'); // (blame aloud, as any: people/social.js, blameAloud)
-      sayPublic(sp.id, o.about, 'cult', 'blame');
+      Suspicion.sayAloud(sp.id, o.about, 'cult', 'blame');
     },
     react: (l, o, pr) =>
       !o.by
@@ -412,13 +386,13 @@ const STIRS = {
   // someone who swore to watch your tent says, the morning after, that they saw someone off (game/night.js, keptSaid):
   // whoever doubted them may think again
   kept: {
-    react: (l, o, pr) => (sus(l.id, o.about) >= 1 ? ['sus', o.about, -1, pr.p] : null),
+    react: (l, o, pr) => (Suspicion.wonders(l.id, o.about) ? ['sus', o.about, -1, pr.p] : null),
     quiet: true
   },
   // the truth bore out what someone had said before everyone (or the camp takes it so: the night's dead it takes for
   // innocent): whoever doubted them may think again
   proven: {
-    react: (l, o, pr) => (sus(l.id, o.by) >= 1 ? ['sus', o.by, -1, pr.clear] : null),
+    react: (l, o, pr) => (Suspicion.wonders(l.id, o.by) ? ['sus', o.by, -1, pr.clear] : null),
     open: (sp, o) => {
       const b = C(o.by),
         a = C(o.about);
@@ -452,7 +426,7 @@ const STIRS = {
         hi = Ties.pastBetween(l.id, h),
         prude = TP(l).prude + (Ties.vowed(l) ? pr.vows : 0),
         easy = pr.easy * Math.max(0, -prude),
-        believe = pr.believe * ls + pr.credit * credit(o.by),
+        believe = pr.believe * ls + pr.credit * Suspicion.credit(o.by),
         past = pr.quarrel * hi.quarrels + pr.suspect * hi.suspects + (hi.accused || hi.accusedBy ? pr.named : 0) - pr.feast * hi.feasts,
         jealous = Ties.sweetOnYou(l) || Ties.sweetOn(l.id, h) ? pr.jealous : 0;
       const her = o.bad
@@ -554,7 +528,7 @@ function resent(who, of, p) {
   const c = C(who),
     by = C(of);
   if (!isFree(c) || !chance(p)) return null;
-  suspect(c.id, by.id, 1);
+  Suspicion.move(c.id, by.id, 1);
   Ties.shiftLike(c.id, by.id, -1);
   return bi(`${c.short} will not look at ${by.short}`, `${ru.c(c)} не смотрит на ${ru.c(by, 'a')}`);
 }
@@ -565,17 +539,7 @@ function resent(who, of, p) {
 // been; the night's dead it takes for innocent, and is fooled when one of the cult killed another (people/cunning.js).
 function settleSaid(id, guilty = C(id).role === 'cult') {
   const a = C(id),
-    last = new Map();
-  S.said
-    .filter(x => x.about === id && !x.settled)
-    .forEach(x => {
-      x.settled = true;
-      last.set(x.by, x);
-    });
-  const all = [...last.values()].map(x => ({ x, right: (x.verdict === 'cult') === guilty }));
-  all.forEach(({ x, right }) => {
-    S.credit[x.by] = credit(x.by) + (right ? 1 : -1);
-  });
+    all = Suspicion.settle(id, guilty);
   const hands = x => x.how === 'vote',
     here = all.filter(({ x }) => isFree(C(x.by))).sort((p, q) => p.right - q.right || hands(q.x) - hands(p.x) || p.x.day - q.x.day);
   const told = new Set();
@@ -599,6 +563,6 @@ function settleSaid(id, guilty = C(id).role === 'cult') {
 // answer: a dream told to answer one that named the dreamer ({ first: their first dream aloud }), which the camp
 // distrusts (STIRS.dreamt)
 function dreamAloud(by, about, guilty, answer = null) {
-  sayPublic(by, about, guilty ? 'cult' : 'clean', 'dream');
+  Suspicion.sayAloud(by, about, guilty ? 'cult' : 'clean', 'dream');
   return stir(guilty ? 'dreamt' : 'dreamtClean', { by, about, answer });
 }

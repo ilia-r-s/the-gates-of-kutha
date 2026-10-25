@@ -41,8 +41,8 @@ function romances() {
   both((a, b, ab, ba) => {
     if (!ok(a) || !ok(b) || Math.min(Ties.likes(a.id, b.id), Ties.likes(b.id, a.id)) < 1 || spoken.has(a.id) || spoken.has(b.id)) return;
     const fond = Ties.close(a.id, b.id) && Ties.close(b.id, a.id),
-      doubt = sus(a.id, b.id) >= 2 || sus(b.id, a.id) >= 2,
-      clear = !sus(a.id, b.id) && !sus(b.id, a.id);
+      doubt = Suspicion.earnest(a.id, b.id) || Suspicion.earnest(b.id, a.id),
+      clear = !Suspicion.wonders(a.id, b.id) && !Suspicion.wonders(b.id, a.id);
     const p = (ab && ba ? RF.pair : RF.pair / 2) + (fond ? RF.fond : 0) + (clear ? RF.clear : 0) - (doubt ? RF.doubt : 0);
     if (fateRoll(a.id, b.id, 'pair') < p) {
       out.pairs.push({ a: a.id, b: b.id, strong: fond && ab && ba });
@@ -431,7 +431,7 @@ function codaFacts(c, ctx) {
               : null;
       if (k) add('hand', 'alive', { x, k }, CW.hand);
     });
-  if (alive && credit(c.id)) add('credit', 'alive', Math.sign(credit(c.id)), CW.credit);
+  if (alive && Suspicion.credit(c.id)) add('credit', 'alive', Math.sign(Suspicion.credit(c.id)), CW.credit);
   const f = S.fin;
   if (f && alive) {
     const held = f.g3 && f.g3.kind === 'comp' && f.g3.id === c.id;

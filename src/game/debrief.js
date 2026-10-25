@@ -975,10 +975,10 @@ function fxCamp({ f, r, add }) {
   // whom the camp had come to suspect by the end, rightly or not (two at most)
   S.order
     .map(C)
-    .filter(c => c.status === 'present' && suspectedBy(c.id).length >= 2)
+    .filter(c => c.status === 'present' && Suspicion.suspected(c.id))
     .slice(0, 2)
     .forEach(c => {
-      const by = suspectedBy(c.id);
+      const by = Suspicion.suspectedBy(c.id);
       add(
         'n',
         `By the end, ${endNames(by)} suspected ${c.name}${c.role === 'cult' ? ', and they were right' : ', wrongly'}.`,

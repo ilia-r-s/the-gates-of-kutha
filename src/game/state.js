@@ -12,9 +12,13 @@
 //                                   visions, greeted (how they greet you this slot, settled once a slot:
 //                                   people/manner.js); order: the seven in a new order each season, so that no one comes
 //                                   first by habit (the casebook lists them in the cast's own order: castOrder)
-//   temper, like, rap0              temperaments, sympathies, and trust at the start (people/tempers.js, ties.js)
-//   sus, said, credit, stirs        who suspects whom; what was said before everyone, and whose word has been proven;
-//                                   the camp's public moments (people/camp.js); confidedIn: whom you have confided in
+//   temper, like, rap0              temperaments, sympathies, and trust at the start (people/tempers.js, ties.js);
+//                                   mourning, confided, confidedIn: who is grieving whom, since when, and the
+//                                   confidences you made (people/ties.js)
+//   sus, said, credit, onYou, alerted   who suspects whom; what was said before everyone, and whose word has been
+//                                   proven; how far the camp suspects you yourself, after the deed; whether the cult
+//                                   knows you are onto it (people/suspicion.js); stirs: the camp's public moments
+//                                   (people/camp.js)
 //   flirt                           flirtatious streaks dealt at the start (people/ties.js; shown: people/flirt.js)
 //   witness, witnessTold, witnessNamed   what the thief saw; whom he named last, and everyone he has named;
 //                                   witnessMore: whether he would name another he saw (people/thief.js)
@@ -31,15 +35,13 @@
 //                                   and sightings, and who lied out of fear or kept a secret (people/alibis.js)
 //   items, fragments, omenSeen, omenLog, omenTold, searched, usedEvents     (omenTold: the ways each sign was told)
 //   told                            how far each list of everyday tellings has been gone through (core/text.js, tellOne)
-//   hierophant, alerted, falseGuard, fakeGuard, guardPromise, seerPublic, loud   the cult's game (guardPromise: the
+//   hierophant, falseGuard, fakeGuard, guardPromise, seerPublic, loud   the cult's game (guardPromise: the
 //                                   true Watcher's promise to watch your tent tonight); betrayals:
 //                                   the nights one of the cult came for another; patience: how readily it lies low this
 //                                   season; turned: how far it has turned its craft against your way of hunting it
 //                                   (people/cunning.js)
 //   you                             your own dreams: how often, how true, and the dreams (game/yourdreams.js)
-//   onYou                           how far the camp suspects you yourself, after the deed (game/deed.js)
 //   craneHow, deathsTold            how Crane was found; how the dead were found, Crane among them (world/deaths.js)
-//   mourning                        who is grieving whom, since when (people/social.js)
 //   tenor                           the season's mood: mood, heat, pull, quiet, log; after (news made likelier by news),
 //                                   feud (a quarrel that may flare up again), dust (a shamal's second day) (game/tenor.js)
 //   seed, salt                      the season's seed, which deals and plays it (core/random.js); the salt fixes the
@@ -123,6 +125,7 @@ function newGame(name, bg, hardcore = false, seed = null) {
   S.revealed = {};
   assignClaims();
   Ties.deal();
+  Suspicion.deal();
   campInit();
   crane0();
   S.salt = Math.floor(rand() * 2147483648);
@@ -131,7 +134,6 @@ function newGame(name, bg, hardcore = false, seed = null) {
   dealYourDreams();
   S.patience = +wpick(RULES.night.low.patience); // (how readily the cult lies low this season: people/cunning.js, liesLow)
   S.turned = {}; // (how far the cult has turned its craft against your way of hunting it: people/cunning.js, cultTurns)
-  S.onYou = 0; // (how far the camp suspects you yourself, after the deed: game/deed.js)
   backgroundStart(bg);
   emit('newgame');
 }
@@ -167,7 +169,6 @@ function freshSeason(name, bg) {
     journal: [],
     wardAt: {},
     searched: {},
-    alerted: false,
     betrayals: [],
     falseGuard: null,
     guardPromise: null,

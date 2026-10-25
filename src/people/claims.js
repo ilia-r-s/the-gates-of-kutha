@@ -156,8 +156,6 @@ function trueDream(c, fresh = false) {
   c.dreamt = { day: S.day, d: { t: C(v.about), cult: v.cult } };
   return tellDream(c, c.dreamt.d);
 }
-// whether someone has told a dream before everyone already, this season
-const aloudBefore = c => S.said.some(x => x.by === c.id && x.how === 'dream');
 // today's made-up dream (dreamtToday: one has been told already today)
 const dreamtToday = c => !!c.dreamt && c.dreamt.day === S.day;
 // a dream dreamt for the occasion (an answer at breakfast): today's, from now on, and told
@@ -178,7 +176,7 @@ function cornerClaims() {
   const K = RULES.claims;
   freeChars().forEach(c => {
     const cl = claimOf(c);
-    if (c.role === 'seer' || c.role === 'warden' || cl.role !== 'none' || cl.said != null || !looksLost(c)) return;
+    if (c.role === 'seer' || c.role === 'warden' || cl.role !== 'none' || cl.said != null || !Suspicion.looksLost(c)) return;
     if (!chance(K.cornered * TP(c).liked)) return;
     Object.assign(cl, { role: chance(K.likedSeer) ? 'seer' : 'warden', why: c.role === 'cult' ? 'deceit' : 'liked' });
   });
@@ -190,7 +188,7 @@ function madeUpDream(c) {
   return c.dreamt.d;
 }
 // those who have dreamt aloud before everyone, of a pool
-const dreamersHeard = pool => pool.filter(aloudBefore);
+const dreamersHeard = pool => pool.filter(Suspicion.hasDreamtAloud);
 // A pretender's dream, guilty or clean at a guess: guilty for someone they dislike or suspect (dreaming their own fears),
 // or, now and then, a rival who has dreamt aloud too; clean for a friend.
 function fakeDream(c) {
@@ -206,7 +204,7 @@ function fakeDream(c) {
 function fearOf(c, pool) {
   const w = {};
   pool.forEach(o => {
-    w[o.id] = Math.max(RULES.likes.floor, 1 - RULES.likes.pull * Ties.likes(c.id, o.id)) * (1 + sus(c.id, o.id));
+    w[o.id] = Math.max(RULES.likes.floor, 1 - RULES.likes.pull * Ties.likes(c.id, o.id)) * (1 + Suspicion.level(c.id, o.id));
   });
   return C(wpick(w));
 }
@@ -215,9 +213,7 @@ function fearOf(c, pool) {
 function closingIn(dec, pool) {
   const w = {};
   pool.forEach(o => {
-    const v =
-      freeCult().reduce((a, k) => a + Math.max(0, sus(o.id, k.id) - 1), 0) +
-      S.said.filter(x => x.by === o.id && x.how === 'dream' && x.verdict === 'cult' && C(x.about).role === 'cult').length;
+    const v = Suspicion.threat.closingIn(o);
     if (v > 0) w[o.id] = v;
   });
   return Object.keys(w).length ? C(wpick(w)) : null;
@@ -241,8 +237,7 @@ function cultDream(dec) {
     };
   const gone = busFor(dec, freeChars());
   if (gone) return told({ t: gone, cult: true });
-  const watched =
-    mate && (suspectedBy(mate.id).length > 0 || S.said.some(x => x.about === mate.id && x.verdict === 'cult' && x.by !== dec.id));
+  const watched = mate && Suspicion.threat.watched(mate, dec);
   if (watched && chance(K.shield * craft(dec).defend)) return told({ t: mate, cult: false });
   const threat = closingIn(dec, inno);
   if (threat && chance(K.frame * TP(dec).frame)) return told({ t: threat, cult: true });
@@ -288,7 +283,7 @@ function defenderOf(t, c) {
 // and the answerer's word is worth something: it has dreamt aloud before, and nobody suspects it; then anyone of the
 // cult may stake its word on it. (Measured: answering for a partner not yet lost, or late in the season, helped you
 // rather than the cult; for one already lost, by one already believed, it helped the cult.)
-const mateGamble = (a, t) => looksLost(t) && aloudBefore(a) && !suspectedBy(a.id).length;
+const mateGamble = (a, t) => Suspicion.looksLost(t) && Suspicion.hasDreamtAloud(a) && !Suspicion.suspectedBy(a).length;
 const mateOdds = (a, t) => (mateGamble(a, t) ? 1 : Math.min(1, TP(a).counter));
 // The true Dreamer and Watcher who hid their part come clean once they trust you enough, mostly (confess.atTrust, the
 // less the more they would hide it): a chance a day, however often you come to talk (S.recantTried).

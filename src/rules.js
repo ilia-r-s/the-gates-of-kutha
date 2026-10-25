@@ -256,6 +256,10 @@ const RULES = {
   // strained −1, reserved 0, cordial 1, warm 2, devoted 3; a friend is warm or devoted, someone against you strained or
   // hostile. Liking, from one person toward another: −2 cannot bear them, −1 dislike them, 1 fond of them, 2 close.
   ties: { friend: 2, cordial: 1, against: -1, hostile: -2, fond: 1, close: 2, dislike: -1, cannotBear: -2 },
+  // The levels of suspicion the rules ask about (people/suspicion.js, Suspicion): one person's of another, from 0 to
+  // scale.suspicion, in the casebook's words: 1 begins to wonder about them, 2 suspects them (in earnest), 3 is all but
+  // sure. many: so many of the camp suspecting someone in earnest are the camp's suspicion of them.
+  suspects: { wonder: 1, earnest: 2, sure: 3, many: 2 },
   // where people spend a slot (weights); in the evening more of them come back to camp, and the cult goes to its work
   places: { camp: 3, trench: 3, store: 2, village: 2, ziggurat: 1, canal: 1.5, cemetery: 1 },
   evening: { camp: 2, cultZiggurat: 3, cultCemetery: 2 },

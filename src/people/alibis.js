@@ -165,7 +165,7 @@ function planAlibis(n, crimeLoc, actorId, target = null, how = 'watch') {
   inno.forEach(c => {
     if (!crime || rec.saw[c.id]) return;
     const pool = rest.filter(o => o.id !== c.id),
-      t = pick([mostSuspected(c, pool), ...pool.filter(o => Ties.cannotBear(c.id, o.id))].filter(Boolean));
+      t = pick([Suspicion.mostSuspected(c, pool), ...pool.filter(o => Ties.cannotBear(c.id, o.id))].filter(Boolean));
     if (t && chance(A.invent * TP(c).frame)) rec.saw[c.id] = { who: t.id, cat: pick(CATS), where: crimeLoc, made: true, to: toward };
   });
   // (on a night nothing came for anyone, nobody heard any shouting: people/alibis.js, alibiLine)

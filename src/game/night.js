@@ -267,7 +267,7 @@ function chooseVictim(night) {
   const N = RULES.night,
     { cult, npcs } = night,
     holds = night.falseGuard ? 1 - N.holds : 1;
-  if (S.alerted && chance(N.alerted * holds)) return 'player'; // you confided in one of them, or it has guessed you
+  if (Suspicion.cultAlerted() && chance(N.alerted * holds)) return 'player'; // you confided in one of them, or it has guessed you
   if (cult.some(k => Ties.against(k)) && chance(N.enemy * holds * cultTurns('inquisitor'))) return 'player'; // you made an enemy of one
   // or for no reason you will ever know (the more if you read late or dig where it hides things: people/cunning.js)
   if (chance((N.you + N.youDay * (S.day - 1)) * Math.max(cultTurns('scholar'), cultTurns('delver')))) return 'player';
@@ -278,9 +278,7 @@ function chooseVictim(night) {
     return b.victim.id;
   }
   // how many of the dreams someone has told aloud named one of the cult guilty, still at large
-  const harm = c =>
-    S.said.filter(x => x.by === c.id && x.how === 'dream' && x.verdict === 'cult' && C(x.about).role === 'cult' && isFree(C(x.about)))
-      .length;
+  const harm = Suspicion.threat.harm;
   const threat = npcs.filter(c => harm(c) > 0).sort((x, y) => harm(y) - harm(x))[0],
     loud = S.loud && npcs.find(c => c.id === S.loud);
   if (threat && chance(N.threat)) {
@@ -293,8 +291,7 @@ function chooseVictim(night) {
   }
   // or one who has named an innocent guilty before everyone: with them dead, it is the one they named the camp will look
   // at (frame × the craft at planting of the best of it at that)
-  const named = c =>
-      S.said.filter(x => x.by === c.id && x.verdict === 'cult' && x.how !== 'vote' && isFree(C(x.about)) && C(x.about).role !== 'cult'),
+  const named = c => Suspicion.accusations(c).filter(x => isFree(C(x.about)) && C(x.about).role !== 'cult'),
     accuser = pick(npcs.filter(c => named(c).length));
   if (accuser && cult.length && chance(N.frame * Math.max(...cult.map(k => craft(k).plant)))) {
     night.why = { kind: 'frame', of: named(accuser).pop().about };
@@ -310,7 +307,7 @@ function chooseVictim(night) {
 function victimWhy(v, cult) {
   const k = cult.filter(c => Ties.dislikes(c.id, v.id)).sort((a, b) => Ties.likes(a.id, v.id) - Ties.likes(b.id, v.id))[0];
   if (k) return { kind: Ties.cannotBear(k.id, v.id) ? 'cannotBear' : 'dislike', by: k.id };
-  const s = cult.find(c => sus(v.id, c.id) >= 2);
+  const s = Suspicion.threat.suspects(v, cult);
   if (s) return { kind: 'suspects', of: s.id };
   return Ties.friend(v) ? { kind: 'stood' } : { kind: 'none' };
 }
@@ -662,7 +659,10 @@ function answerDream(c, d) {
       a = { t: c, cult: true };
     }
   } else if (claimsToDream(t)) {
-    if (!dreamtToday(t) && chance(K.counter[aloudBefore(t) ? 1 : 0] * TP(t).counter * (looksLost(t) ? K.desperate : 1)))
+    if (
+      !dreamtToday(t) &&
+      chance(K.counter[Suspicion.hasDreamtAloud(t) ? 1 : 0] * TP(t).counter * (Suspicion.looksLost(t) ? K.desperate : 1))
+    )
       a = { t: c, cult: true };
   } else if (claimOf(t).role === 'none' && t.role !== 'warden' && chance(K.counterSpot * TP(t).counter)) {
     claimOnTheSpot(t);
@@ -674,7 +674,7 @@ function answerDream(c, d) {
 // an answer in a dream, told before everyone: who answers (a), the dream (d), to whose dream (c); for: on another's
 // behalf, a dream that the one named is clean
 function answerWith(a, d, c, forOther) {
-  const first = !aloudBefore(a);
+  const first = !Suspicion.hasDreamtAloud(a);
   // (one of the cult that answers for the other of it holds to its story from now on: people/pretences.js)
   if (forOther && a.role === 'cult' && d.t.role === 'cult') claimOf(a).stood = d.t.id;
   dreamNow(a, d);
@@ -694,7 +694,7 @@ function answerWith(a, d, c, forOther) {
 // truthful plainly
 function retortAloud(t, c) {
   addTest(t.id, c.id, 'distrust', 'cult');
-  sayPublic(t.id, c.id, 'cult', 'blame');
+  Suspicion.sayAloud(t.id, c.id, 'cult', 'blame');
   // (the hot-tempered mostly in anger, the cold mostly coldly, the truthful mostly plainly: claims.retortLine)
   const keyed = ['suspicious', 'liar', 'lightheaded'].includes(temperOf(t)) ? 0 : ['calculating', 'detached'].includes(temperOf(t)) ? 1 : 2,
     way = chance(RULES.claims.retortLine) ? keyed : pick([0, 1, 2].filter(k => k !== keyed)),

@@ -163,7 +163,7 @@ function castMood(c) {
   if (shamed(c)) return 'sad';
   if (Ties.sweetOnYou(c) && h('flirt') < M.flirt * showMul(c) * FACES.castFlirt)
     return slyOr(c, 'flirt', hashPick(FACES.castFlirtFaces, S.salt, c.id, S.day, S.slot));
-  if (suspectedBy(c.id).length >= 2 && h('sus') < FACES.suspected * showMul(c)) return h('fear') < FACES.sad ? 'sad' : 'fear';
+  if (Suspicion.suspected(c.id) && h('sus') < FACES.suspected * showMul(c)) return h('fear') < FACES.sad ? 'sad' : 'fear';
   if (Ties.cordial(c) && slotChance(c, 'warm', showP(c, 'warm'))) return 'warm';
   if (Ties.against(c) && slotChance(c, 'cold', showP(c, 'cold'))) return 'cold';
   if (masked(c, h)) return slotPick(c, 'face', FACES.mask);

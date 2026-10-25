@@ -238,7 +238,7 @@ const DIALOG = {
     sub: () => bi('Trust, both ways. Risky if you are wrong', 'Доверие за доверие. Опасно, если вы ошиблись'),
     run(c) {
       const you = bi(...tellOne('confide', SAY.confide));
-      if (c.role === 'cult' && chance(RULES.confide.alerts)) S.alerted = true;
+      if (c.role === 'cult') Suspicion.alertCult(RULES.confide.alerts);
       // not everyone wants your confidence: it depends how they feel about you, and who they are
       if (!TAKES_CONFIDENCE.roll(c)) {
         if (temperOf(c) === 'suspicious' && chance(RULES.talk.sourConfide)) Ties.moveTrust(c, -1);
@@ -355,7 +355,7 @@ function pressedCult(c, ok, you, before) {
     S.log.cultTruth++;
     return turnAside(c, you, smug);
   }
-  if (chance(RULES.talk.pressAlerts)) S.alerted = true;
+  Suspicion.alertCult(RULES.talk.pressAlerts);
   return rebuff(c, you, before);
 }
 // something let slip, pressed hard: the cult's own words, or, from anyone else, words that sound just like them
@@ -518,13 +518,7 @@ function whomToBlame(c, others) {
     const mate = busFor(c, others);
     if (mate) return { target: mate };
     if (!chance(tp.frame) || !inno.length) return {};
-    const accusers = inno.filter(
-      o =>
-        sus(o.id, c.id) >= 2 ||
-        S.testimony.some(
-          t => t.from === o.id && t.about === c.id && (t.kind === 'distrust' || (t.kind === 'vision' && t.verdict === 'cult'))
-        )
-    );
+    const accusers = inno.filter(o => Suspicion.threat.accuser(o, c));
     return { target: k === 'calculating' && accusers.length ? pick(accusers) : Ties.pickByLike(c, inno, -1) };
   }
   if (smug && (k === 'honest' || k === 'conscientious') && chance(RULES.talk.honestTip)) return { tip: smug };
@@ -534,7 +528,7 @@ function whomToBlame(c, others) {
 // enough (cunning.bus × its craft's sacrifice); recorded for the ending
 function busFor(c, others) {
   const mate = others.find(o => o.role === 'cult' && o.id !== c.id);
-  if (!mate || !looksLost(mate) || !chance(RULES.cunning.bus * craft(c).sacrifice)) return null;
+  if (!mate || !Suspicion.looksLost(mate) || !chance(RULES.cunning.bus * craft(c).sacrifice)) return null;
   S.log.bus.push({ day: S.day, by: c.id, about: mate.id });
   return mate;
 }
@@ -542,7 +536,7 @@ function busFor(c, others) {
 // earnest; or a real cultist now and then, as their temperament allows (the smuggler, out at night, a little more
 // readily); otherwise whomever they dislike most; a fond friend only on the strongest suspicion, or hardly ever (rarest)
 function innocentBlames(c, others) {
-  const top = mostSuspected(c, others),
+  const top = Suspicion.mostSuspected(c, others),
     notFriends = others.filter(o => !Ties.close(c.id, o.id)),
     cultNotFriends = notFriends.filter(o => o.role === 'cult');
   if (top && chance(RULES.talk.nameSuspect)) return top;

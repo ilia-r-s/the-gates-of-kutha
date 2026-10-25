@@ -219,7 +219,7 @@ function takenInYourTent(h) {
   const k = +wpick(RULES.visit.talked);
   S.log.visit.talked = k;
   if (k) ripple(h, 'diedInTent', k);
-  if (k > 1) S.onYou = Math.min(RULES.scale.suspicion, (S.onYou || 0) + 1);
+  if (k > 1) Suspicion.suspectYou(1);
   journal(bi(`${h.name} was taken in the night, in your tent.`, `Ночь забрала ${ru.cf(h, 'a')} — в вашей палатке.`));
 }
 // The attack on your tent got through, and she was in it: who the night takes (RULES.visit.through), or only the usual

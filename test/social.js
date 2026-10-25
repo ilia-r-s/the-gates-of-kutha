@@ -223,7 +223,7 @@ run(async browser => {
       // suspicion stays in range; flirtation only across the sexes, never from a priest, toward you only from a woman
       S.order.forEach(a =>
         S.order.forEach(b => {
-          if (sus(a, b) < 0 || sus(a, b) > 3) bad.push('suspicion out of range');
+          if (Suspicion.level(a, b) < 0 || Suspicion.level(a, b) > 3) bad.push('suspicion out of range');
         })
       );
       S.order.forEach(a => {

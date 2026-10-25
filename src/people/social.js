@@ -17,9 +17,9 @@ function victimWeights(npcs) {
   npcs.forEach(v => {
     let x = 1 + vw.yourFriend * Math.max(0, v.rapport) * cultTurns('confidant'); // (your friends the more, once it knows you lean on them)
     cult.forEach(k => {
-      x *= (1 - vw.cultLike * Ties.likes(k.id, v.id)) * (1 + vw.suspects * sus(v.id, k.id));
+      x *= (1 - vw.cultLike * Ties.likes(k.id, v.id)) * Suspicion.threat.weight(v, k);
     });
-    x *= 1 - vw.scapegoat * suspectedBy(v.id).length;
+    x *= 1 - vw.scapegoat * Suspicion.suspectedBy(v).length;
     w[v.id] = Math.max(vw.floor, x);
   });
   return w;
@@ -305,7 +305,7 @@ function overheard(here) {
 function breakfastBlame() {
   const free = freeChars(),
     grudge = c => free.some(o => o.id !== c.id && Ties.cannotBear(c.id, o.id));
-  const pool = free.filter(c => temperOf(c) === 'suspicious' || grudge(c) || free.some(o => sus(c.id, o.id) >= RULES.scale.suspicion));
+  const pool = free.filter(c => temperOf(c) === 'suspicious' || grudge(c) || free.some(o => Suspicion.sure(c, o)));
   if (!pool.length) return '';
   const s = pick(pool),
     seen = thiefSaw(s), // the thief who saw who did it mostly only hints (people/thief.js); now and then he says it aloud
@@ -340,7 +340,7 @@ function blameAloud(s, t, feud = false) {
   const heavy = weighty('talk');
   stirred('talk');
   addTest(s.id, t.id, 'distrust', 'cult');
-  sayPublic(s.id, t.id, 'cult', 'blame');
+  Suspicion.sayAloud(s.id, t.id, 'cult', 'blame');
   const lead = feud
     ? bi(
         `At breakfast the quarrel between ${s.short} and ${t.short} flares up again. ${s.short} says, loudly enough for everyone:`,
@@ -591,7 +591,7 @@ function griefFor(victim) {
   return (
     stir('grief', { about: victim }) +
     mourners(victim) +
-    (suspectedBy(victim).length >= 2 && chance(RULES.morning.withhold) ? '' : settleSaid(victim, false)) +
+    (Suspicion.suspected(victim) && chance(RULES.morning.withhold) ? '' : settleSaid(victim, false)) +
     ontoSaid(victim)
   );
 }
@@ -599,7 +599,7 @@ function griefFor(victim) {
 // they are dead: someone says so aloud (camp.onto), whoever draws the line first. It may be what the cult killed them
 // for, and it may be what it wanted the camp to think (game/night.js, chooseVictim): the line is the same either way.
 function ontoSaid(victim) {
-  const named = S.said.filter(x => x.by === victim && x.verdict === 'cult' && x.how !== 'vote' && isFree(C(x.about)));
+  const named = Suspicion.accusations(victim).filter(x => isFree(C(x.about)));
   return named.length && chance(RULES.camp.onto.odds) ? stir('onto', { about: named.pop().about, dead: victim }) : '';
 }
 // The rest of breakfast: each one of the morning's extras, crowded out by those that came before it (game/tenor.js,

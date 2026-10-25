@@ -18,9 +18,6 @@ function framedBy(actor, target) {
 const sloppy = actor => chance(craft(actor).sloppy);
 // a careful attacker leaves nothing else at the scene for an examination to find
 const tidy = actor => chance(craft(actor).tidy);
-// whether someone looks lost, as the cult sees it: some evidence against them, or two of the camp suspecting them in
-// earnest
-const looksLost = c => caseAgainst(c) >= RULES.verdict.someCase || suspectedBy(c.id).length >= 2;
 // Rarely, one of the cult kills another, to turn your eyes away: when the other is all but caught (a strong case
 // against them, two of the camp suspecting them in earnest, or an accusation before everyone), a death among the
 // suspected looks like the cult's work on an innocent. More readily the more ruthless the killer (RULES.night.betray ×
@@ -29,13 +26,10 @@ const looksLost = c => caseAgainst(c) >= RULES.verdict.someCase || suspectedBy(c
 function betrayal(cult) {
   if (cult.length < 2) return null;
   const N = RULES.night,
-    accused = k => S.log.refusedInq.some(r => r.id === k.id),
-    caught = k => caseAgainst(k) >= RULES.verdict.strongCase || suspectedBy(k.id).length >= 2 || accused(k),
-    clear = k => caseAgainst(k) < RULES.verdict.someCase && !suspectedBy(k.id).length && !accused(k);
-  const victim = cult.find(caught),
+    victim = cult.find(Suspicion.caught),
     killer = victim && cult.find(k => k !== victim);
   if (!killer) return null;
-  const less = (S.day < 2 ? N.betrayLess : 1) * (clear(killer) ? 1 : N.betrayLess);
+  const less = (S.day < 2 ? N.betrayLess : 1) * (Suspicion.clear(killer) ? 1 : N.betrayLess);
   if (!chance(N.betray * craft(killer).sacrifice * less)) return null;
   return { killer, victim };
 }
@@ -88,12 +82,10 @@ function cultTurns(k) {
 // (spent, each), and less against one who sits still and hunts it little (÷ cultTurns quiet). Never above max.
 function liesLow(night) {
   const Q = RULES.night.low,
-    hot = night.cult.map(k => [k, suspectedBy(k.id).length]).sort((a, b) => b[1] - a[1])[0],
+    hot = night.cult.map(k => [k, Suspicion.suspectedBy(k.id).length]).sort((a, b) => b[1] - a[1])[0],
     caught = S.log.accused.find(a => a.right && a.day === S.day),
     ahead = S.doom >= RULES.start.doomWarn,
-    threat = night.npcs.some(c =>
-      S.said.some(x => x.by === c.id && x.how === 'dream' && x.verdict === 'cult' && C(x.about).role === 'cult' && isFree(C(x.about)))
-    );
+    threat = Suspicion.threat.threatened(night.npcs);
   const why = { heat: 1 + Q.heat * hot[1], after: caught ? Q.after : 1, ahead: ahead ? 1 + Q.ahead : 1 },
     p =
       (Q.odds * S.patience * why.heat * why.after * why.ahead * (threat ? Q.threatened : 1) * Q.spent ** S.log.quiet.length) /
@@ -194,9 +186,7 @@ function volunteers() {
       ? chance(RULES.descent.foeOffers) // (hardly ever, one turned against you)
       : c.role === 'cult'
         ? chance(
-            craft(c).volunteer *
-              (c.rapport ? 1 : RULES.cunning.coldOffer) *
-              (suspectedBy(c.id).length < 2 ? 1 : RULES.cunning.suspectedOffer)
+            craft(c).volunteer * (c.rapport ? 1 : RULES.cunning.coldOffer) * (Suspicion.suspected(c) ? RULES.cunning.suspectedOffer : 1)
           )
         : chance(RULES.descent.volunteerFriend[Math.min(2, c.rapport)])
   );

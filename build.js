@@ -32,12 +32,13 @@ const SCRIPT = [
   'world/deaths.js',     // how the night's dead are found: put together
   'game/state.js',       // the state of a season and the small verbs on it
   'game/tenor.js',       // the season's mood: how much happens of itself, and how it drifts
-  'people/ties.js',      // who likes whom, and how far each trusts you
+  'people/ties.js',      // who likes whom, how far each trusts you, who is sweet on whom
+  'people/suspicion.js', // who suspects whom, what was said before everyone, who is closing in on the cult
   'people/tempers.js',   // temperaments: how each person lies, blames and gossips
   'people/claims.js',    // who claims which part in Crane's diary
-  'people/social.js',    // who likes whom, gossip, rumours, mornings
+  'people/social.js',    // gossip, rumours, mornings
   'people/pretences.js', // pretences dropped: pressed, trusted, of their own accord, before the camp
-  'people/camp.js',      // who suspects whom, and public moments that move many at once
+  'people/camp.js',      // public moments that move many at once
   'people/flirt.js',     // a light flirtation, now and then
   'people/visit.js',     // a visit to your tent as the evening ends, once a season at most
   'people/manner.js',    // what shows of a feeling, and what does not: greetings, faces, partings

@@ -210,7 +210,7 @@ const YOUR_DREAM = {
 // the parts a dream may show someone keeping
 const PARTS_DREAMT = ['seer', 'warden', 'smuggler'];
 // every two at the dig, one way about, and whether the first suspects the other in earnest
-const fearPairs = () => Ties.eachWay(freeChars()).map(([a, b]) => [a, b, sus(a.id, b.id) >= 2]);
+const fearPairs = () => Ties.eachWay(freeChars()).map(([a, b]) => [a, b, Suspicion.earnest(a.id, b.id)]);
 // the nights there was an attack someone carried out, and you know where
 const pastScenes = () =>
   Object.keys(S.nights || {})
