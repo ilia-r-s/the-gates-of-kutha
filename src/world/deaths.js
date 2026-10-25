@@ -5,6 +5,33 @@
 // the rite has gone and the later in the season it is (and as the season's mood will have it: game/tenor.js), though
 // never as often as the cult kills. So a death all but always tells something of the power below. Now and then the cult signs its work besides. Within a season no state of the body is
 // told twice while another is left. RULES.night says how often each way comes.
+// What is put together agrees with itself: a mark or a signature is only one that how the body lies leaves room for
+// (data/deaths.js: is, not, makes); and nothing is told that calls to mind a sign in play not yet seen (echo, tellableNow).
+
+// The sign a telling calls to mind (data/deaths.js: echo; data/world.js: attackEcho), by its short name, is told only
+// once that sign has been seen, or when it is none of the season's at all: told before, it would point at a sign the
+// tablets give to two other powers, or show one of the power's own before its time.
+const SIGN_NAMED = Object.fromEntries(SIGN_POOL.map((s, i) => [s.short, i]));
+function tellableNow(echo) {
+  return [].concat(echo || []).every(sh => {
+    const si = SIGN_NAMED[sh];
+    return !S.signPair[si] || S.omenLog.some(o => o.si === si);
+  });
+}
+// (every name an echo gives must be a sign's, or the telling would never be held back: checked as the page loads)
+[...Object.values(DEATH_BODY), ...Object.values(DEATH_MARK)]
+  .flat()
+  .flatMap(t => [].concat((t[2] && t[2].echo) || []))
+  .concat(Object.values(ASPECT_TEXT).flatMap(a => (a.attackEcho || []).flat().filter(Boolean)))
+  .forEach(sh => {
+    if (!(sh in SIGN_NAMED)) throw new Error(`world/deaths.js: no sign is called “${sh}”`);
+  });
+const tagsOf = t => t[2] || {};
+// how the body lies, as the tellings put together say (a state, and the mark on it, which may add to it)
+const howItLies = (...ts) => ts.filter(Boolean).flatMap(t => [...(tagsOf(t).is || []), ...(tagsOf(t).makes || [])]);
+// the places in a list of the tellings that may be told now and agree with how the body lies (lies: as above)
+const agreeing = (list, lies = []) =>
+  list.map((t, k) => k).filter(k => tellableNow(tagsOf(list[k]).echo) && !(tagsOf(list[k]).not || []).some(x => lies.includes(x)));
 
 // The manner the dead are found in: the power below's own, all but always (night.manner); now and then another power's
 // of the season, by some chance nobody can account for (the ending tells it).
@@ -21,19 +48,24 @@ function deathHow(v, loc, byHand = false) {
   const N = RULES.night,
     asp = mannerOf(),
     told = S.deathsTold;
-  const fresh = (kind, n) => {
-    const all = [...Array(n).keys()],
-      left = all.filter(k => !told.includes(kind + k));
-    return left.length ? left : all;
+  // the states of a list that may be told now, those not yet told this season first, then all of those again (and, were
+  // none fit to tell, any at all)
+  const fresh = (kind, list) => {
+    const now = agreeing(list),
+      left = now.filter(k => !told.includes(kind + k));
+    return left.length ? left : now.length ? now : list.map((t, k) => k);
   };
   const taken = Math.min(N.takenMax, (N.taken + N.takenDay * (S.day - 1) + (N.takenRite * S.doom) / S.doomMax) * tenorOf('taken'));
   let how;
   if (byHand || !chance(taken)) {
     const here = !!DEATH_HAND_AT[loc] && chance(N.handHere),
-      kind = here ? 'at:' + loc : 'hand';
-    how = { kind, k: pick(fresh(kind, (here ? DEATH_HAND_AT[loc] : DEATH_HAND).length)), mark: pick([0, 1, 2]) };
+      kind = here ? 'at:' + loc : 'hand',
+      list = here ? DEATH_HAND_AT[loc] : DEATH_HAND,
+      k = pick(fresh(kind, list)),
+      marks = agreeing(DEATH_MARK[asp], howItLies(list[k]));
+    how = { kind, k, mark: marks.length ? pick(marks) : null };
     if (!chance(N.mark)) how.mark = null; // (now and then the power leaves no mark on the cult's own work)
-  } else how = { kind: 'body', k: pick(fresh('body', DEATH_BODY[asp].length)) };
+  } else how = { kind: 'body', k: pick(fresh('body', DEATH_BODY[asp])) };
   how.asp = asp;
   told.push(how.kind + how.k);
   // who comes on the body at first light: anyone up and about, but not one who spent the night in your tent, nor the one
@@ -43,16 +75,23 @@ function deathHow(v, loc, byHand = false) {
   how.f = others.length ? pick(others).id : null;
   const finder = how.f ? C(how.f) : null;
   how.open = pick(DEATH_FOUND.map((o, i) => i).filter(i => DEATH_FOUND[i](v, '', finder)));
-  how.sign = chance(N.signed) ? pick(DEATH_SIGN.map((t, i) => i)) : null;
+  // the signature, one that how the body lies leaves room for (no sherds on open eyes, no swept circle round a body
+  // bricked up in a wall)
+  const signs = agreeing(DEATH_SIGN, howItLies(...partsOf(how)));
+  how.sign = chance(N.signed) && signs.length ? pick(signs) : null;
   return how;
+}
+// the tellings a death is put together from: how the body lies, and the power's mark on it (or null)
+function partsOf(how) {
+  const asp = how.asp || S.aspectOf[S.patron];
+  if (how.kind === 'body') return [DEATH_BODY[asp][how.k], null];
+  const hand = how.kind === 'hand' ? DEATH_HAND[how.k] : DEATH_HAND_AT[how.kind.slice(3)][how.k];
+  return [hand, how.mark != null ? DEATH_MARK[asp][how.mark] : null];
 }
 // the state of the body, as [en, ru]
 function deathState(how) {
-  const asp = how.asp || S.aspectOf[S.patron];
-  if (how.kind === 'body') return DEATH_BODY[asp][how.k];
-  const hand = how.kind === 'hand' ? DEATH_HAND[how.k] : DEATH_HAND_AT[how.kind.slice(3)][how.k],
-    mark = how.mark != null ? DEATH_MARK[asp][how.mark] : null;
-  return mark ? [`${hand[0]}, ${mark[0]}`, `${hand[1]}, ${mark[1]}`] : hand;
+  const [st, mark] = partsOf(how);
+  return mark ? [`${st[0]}, ${mark[0]}`, `${st[1]}, ${mark[1]}`] : [st[0], st[1]];
 }
 // The death, as the morning tells it.
 function deathText(v, loc, how) {
@@ -70,11 +109,17 @@ function craneDeath() {
   const N = RULES.night,
     asp = mannerOf();
   let how;
-  if (chance(N.craneTaken)) how = { kind: 'body', k: pick(DEATH_BODY[asp].map((t, k) => k)) };
-  else {
+  // (no sign has been seen yet: nothing that calls one in play to mind, and a mark that agrees with how he lies)
+  if (chance(N.craneTaken)) {
+    const now = agreeing(DEATH_BODY[asp]);
+    how = { kind: 'body', k: pick(now.length ? now : DEATH_BODY[asp].map((t, k) => k)) };
+  } else {
     const here = chance(N.handHere),
-      kind = here ? 'at:ziggurat' : 'hand';
-    how = { kind, k: pick((here ? DEATH_HAND_AT.ziggurat : DEATH_HAND).map((t, k) => k)), mark: chance(N.mark) ? pick([0, 1, 2]) : null };
+      kind = here ? 'at:ziggurat' : 'hand',
+      list = here ? DEATH_HAND_AT.ziggurat : DEATH_HAND,
+      k = pick(list.map((t, i) => i)),
+      marks = agreeing(DEATH_MARK[asp], howItLies(list[k]));
+    how = { kind, k, mark: chance(N.mark) && marks.length ? pick(marks) : null };
   }
   how.asp = asp;
   if (asp !== S.aspectOf[S.patron]) S.log.manner.push({ day: 0, id: 'crane', asp });

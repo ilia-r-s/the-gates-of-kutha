@@ -4,6 +4,16 @@
 // only one place allows, DEATH_HAND_AT) with the power's mark on the body all the same (DEATH_MARK); now and then the
 // cult's signature besides (DEATH_SIGN). Lines are [English, Russian]; a state reads on from "found in Trench B, ...",
 // in Russian from "находят в траншее Б: ...".
+// Some lines carry a third part, so that what is put together agrees, and points at nothing it should not
+// (world/deaths.js):
+//   is     how the body lies: eyesOpen (the eyes open, or gone), faceDown, faceHidden (covered, or past knowing),
+//          enclosed (shut in something), buried (under earth or rubble), wrapped (covered from head to foot), water (in
+//          it), ringed (something already lies all round it on the ground), handsFull (both hands holding or clenched),
+//          bootsOff (barefoot), bootsSaid, foreheadSaid, besideSaid (something lying beside it: already told of)
+//   not    what a mark or a signature cannot go with; makes: what a mark adds to how the body lies
+//   echo   the sign a line calls to mind (its short name, world/powers.js: SHORTS), or several: told only once that sign
+//          has been seen, or when it is none of the season's, so that a death never points at a sign the tablets give
+//          to two other powers, nor shows one of the power's own before its time
 
 // ---------- who finds them, and when: (the dead, where, someone else of the camp or null) → [en, ru] ----------
 const DEATH_FOUND = [
@@ -34,11 +44,16 @@ const DEATH_FOUND = [
 const DEATH_BODY = {
   fire: [
     ['skin hot as kiln brick, though the night was cold', 'кожа горячая, как кирпич из печи, хотя ночь была холодной'],
-    ['curled like a sleeper in a ring of scorched earth', 'тело свернулось, как у спящего, посреди круга выжженной земли'],
+    [
+      'curled like a sleeper in a ring of scorched earth',
+      'тело свернулось, как у спящего, посреди круга выжженной земли',
+      { is: ['ringed'] }
+    ],
     ['burned hollow from within, though the clothes are not even singed', 'тело выгорело изнутри, а одежда даже не опалена'],
     [
       'face turned up, the eyes boiled white, as if something very bright had passed close overhead',
-      'лицо обращено к небу, глаза сварились добела, будто совсем низко пронеслось что-то ослепительно яркое'
+      'лицо обращено к небу, глаза сварились добела, будто совсем низко пронеслось что-то ослепительно яркое',
+      { is: ['eyesOpen'] }
     ],
     [
       'black as a burnt brick from the waist down, and the dust around not even warm',
@@ -46,21 +61,29 @@ const DEATH_BODY = {
     ],
     [
       'the eyes open, and in each of them a point of flame still burning, that goes out as the sun comes up',
-      'глаза открыты, и в каждом ещё теплится огонёк — и гаснет, когда встаёт солнце'
+      'глаза открыты, и в каждом ещё теплится огонёк — и гаснет, когда встаёт солнце',
+      { is: ['eyesOpen'] }
     ],
     [
       'flushed red as with a fever, and the sweat on the brow dried to a white crust',
-      'лицо красное, как в горячке, а пот на лбу высох белой коркой'
+      'лицо красное, как в горячке, а пот на лбу высох белой коркой',
+      { echo: 'children burn with fever and do not sweat' }
     ],
     ['every hair burned away to the scalp, and the face beneath untouched', 'все волосы сгорели дотла, а лицо под ними не тронуто'],
     [
       'laid out on the bare brick as on a griddle, and the brick still too hot to touch',
-      'тело лежит на голом кирпиче, как на сковороде, и кирпич до сих пор не тронуть рукой'
+      'тело лежит на голом кирпиче, как на сковороде, и кирпич до сих пор не тронуть рукой',
+      { echo: 'the bricks are warm at dawn' }
     ],
-    ['with seven blisters across the chest, set out like the Pleiades', 'на груди семь волдырей, расположенных, как Плеяды'],
+    [
+      'with seven blisters across the chest, set out like the Pleiades',
+      'на груди семь волдырей, расположенных, как Плеяды',
+      { echo: 'the Pleiades hang low over the mound' }
+    ],
     [
       'the hands black to the wrists, as if held in a fire, and the fingers still closed on nothing',
-      'кисти рук черны до запястий, будто их держали в огне, и пальцы всё ещё сжимают пустоту'
+      'кисти рук черны до запястий, будто их держали в огне, и пальцы всё ещё сжимают пустоту',
+      { is: ['handsFull'] }
     ],
     [
       'the lips and tongue scorched black, as if from a mouthful of live coals',
@@ -68,18 +91,24 @@ const DEATH_BODY = {
     ]
   ],
   dust: [
-    ['eyes open, mouth packed with grey dust', 'глаза открыты, рот забит серой пылью'],
+    [
+      'eyes open, mouth packed with grey dust',
+      'глаза открыты, рот забит серой пылью',
+      { is: ['eyesOpen'], echo: 'the dead walk and eat dust' }
+    ],
     [
       'laid out straight as for a burial, hands folded, a film of grey dust over the open eyes',
-      'тело вытянуто, как для погребения, руки сложены, открытые глаза подёрнуты серой пылью'
+      'тело вытянуто, как для погребения, руки сложены, открытые глаза подёрнуты серой пылью',
+      { is: ['eyesOpen', 'handsFull'] }
     ],
     [
       'half buried in fine grey dust that no wind could have heaped there',
-      'тело наполовину засыпано тонкой серой пылью — такой холм не намёл бы никакой ветер'
+      'тело наполовину засыпано тонкой серой пылью — такой холм не намёл бы никакой ветер',
+      { is: ['buried'], echo: 'dust falls from a clear sky' }
     ],
     [
-      'cold as grave clay, with grey earth under every fingernail, as if they had dug their way somewhere in the night',
-      'тело холодное, как могильная глина, и под каждым ногтем серая земля, будто ночью кто-то прокапывал себе куда-то путь'
+      'cold as grave clay, with grey earth under every fingernail, as if those hands had dug their way somewhere in the night',
+      'тело холодное, как могильная глина, и под каждым ногтем серая земля, будто ночью эти руки прокапывали себе куда-то путь'
     ],
     [
       'dried out like a body from an old tomb, light as straw, though supper was only a few hours ago',
@@ -95,15 +124,18 @@ const DEATH_BODY = {
     ],
     [
       'with three owls on the ground beside, watching, and they do not fly off when the men come',
-      'рядом на земле сидят три совы, смотрят и не улетают, когда подходят люди'
+      'рядом на земле сидят три совы, смотрят и не улетают, когда подходят люди',
+      { is: ['besideSaid'], echo: 'owls gather and face the mound' }
     ],
     [
       'the mouth stopped with grey earth, and the hands folded over a clay cup full of the same dust',
-      'рот забит серой землёй, а руки сложены на глиняной чаше, полной той же пыли'
+      'рот забит серой землёй, а руки сложены на глиняной чаше, полной той же пыли',
+      { is: ['handsFull'], echo: 'the dead walk and eat dust' }
     ],
     [
       'the eyes gone white as a blind man’s, with grey dust lying in them that will not blow away',
-      'глаза побелели, как у слепого, и в них лежит серая пыль, которую никак не сдуть'
+      'глаза побелели, как у слепого, и в них лежит серая пыль, которую никак не сдуть',
+      { is: ['eyesOpen'] }
     ],
     [
       'stripped of every ornament, ring, watch, the very buttons, as the dead are stripped at the seven gates',
@@ -126,12 +158,18 @@ const DEATH_BODY = {
     ],
     [
       'face down in a hollow of the earth no bigger than a washbasin, and the hollow full of brine',
-      'лицом вниз, в ямке размером с умывальный таз, и ямка полна рассола'
+      'лицом вниз, в ямке размером с умывальный таз, и ямка полна рассола',
+      { is: ['faceDown', 'water'] }
     ],
-    ['fish scales in the hair, and a live crab under the tongue', 'в волосах рыбья чешуя, а под языком — живой краб'],
+    [
+      'fish scales in the hair, and a live crab under the tongue',
+      'в волосах рыбья чешуя, а под языком — живой краб',
+      { echo: 'fish fall from a clear sky' }
+    ],
     [
       'the skin wrinkled white as if after days in water, and the boots full of sand from no river',
-      'кожа сморщенная и белая, будто после многих дней в воде, а в ботинках песок, какого нет ни в одной реке'
+      'кожа сморщенная и белая, будто после многих дней в воде, а в ботинках песок, какого нет ни в одной реке',
+      { is: ['bootsSaid'] }
     ],
     [
       'cold and glistening as a fish on a slab, and smelling of the open sea',
@@ -140,7 +178,8 @@ const DEATH_BODY = {
     ['the mouth and nose full of black sand, and the sand still wet', 'рот и нос забиты чёрным песком, и песок всё ещё мокрый'],
     [
       'at the end of a wet track that starts from nowhere, as if something had crawled up out of the dry ground and gone back into it',
-      'к телу тянется мокрый след — ниоткуда, будто что-то выползло из сухой земли и ушло обратно'
+      'к телу тянется мокрый след — ниоткуда, будто что-то выползло из сухой земли и ушло обратно',
+      { is: ['ringed'] }
     ],
     [
       'stung all over in rings, like a jellyfish’s welts, the skin bleached white by salt',
@@ -152,7 +191,8 @@ const DEATH_BODY = {
     ],
     [
       'with the marks of a scorpion’s sting on the throat, each as wide as a thumb',
-      'на горле следы скорпионьего жала, каждый шириной в большой палец'
+      'на горле следы скорпионьего жала, каждый шириной в большой палец',
+      { echo: 'a scorpion with a man’s face comes up in the spoil' }
     ]
   ],
   teeth: [
@@ -163,29 +203,43 @@ const DEATH_BODY = {
     ],
     [
       'with a lion’s pugmarks pacing a circle all around, and none of them leading away',
-      'вокруг кругами ходят следы львиных лап, и ни один не ведёт прочь'
+      'вокруг кругами ходят следы львиных лап, и ни один не ведёт прочь',
+      { is: ['ringed'], echo: ['a lion roars where no lion lives', 'a lion-headed visitor comes to a birth'] }
     ],
-    ['the face gnawed, and the stink of a byre hanging over everything', 'лицо обглодано, и надо всем висит смрад хлева'],
+    [
+      'the face gnawed, and the stink of a byre hanging over everything',
+      'лицо обглодано, и надо всем висит смрад хлева',
+      { is: ['faceHidden'] }
+    ],
     [
       'mauled as if by a lion, and all round, in the dust, the prints of bare feet with talons',
-      'тело растерзано, будто львом, а вокруг, в пыли, — отпечатки босых ног с когтями'
+      'тело растерзано, будто львом, а вокруг, в пыли, — отпечатки босых ног с когтями',
+      { is: ['ringed'], echo: ['a lion roars where no lion lives', 'a lion-headed visitor comes to a birth'] }
     ],
     [
       'a cradle-rope wound round the throat, and milk spilled on the ground beside, already soured',
-      'на шее петлёй — верёвка от колыбели, а рядом на земле разлито молоко, уже прокисшее'
+      'на шее петлёй — верёвка от колыбели, а рядом на земле разлито молоко, уже прокисшее',
+      { is: ['besideSaid'] }
     ],
-    ['the throat bitten through by broad flat teeth: a donkey’s teeth', 'горло прокушено широкими плоскими зубами — ослиными'],
+    [
+      'the throat bitten through by broad flat teeth: a donkey’s teeth',
+      'горло прокушено широкими плоскими зубами — ослиными',
+      { echo: 'something with a donkey’s teeth gnaws the saddles' }
+    ],
     [
       'a comb and a spindle laid neatly on the breast, the way a gift is laid out',
-      'на груди аккуратно, как подношение, лежат гребень и веретено'
+      'на груди аккуратно, как подношение, лежат гребень и веретено',
+      { echo: 'a comb and a spindle are left on a threshold' }
     ],
     [
       'with the prints of a dog and a black sow trodden close all round, and milk spilled where there was no milk to spill',
-      'вокруг тесно натоптаны следы собаки и чёрной свиньи, и разлито молоко — там, где молоку неоткуда было взяться'
+      'вокруг тесно натоптаны следы собаки и чёрной свиньи, и разлито молоко — там, где молоку неоткуда было взяться',
+      { is: ['ringed'], echo: 'a dog and a pig lie suckling at nothing' }
     ],
     [
       'still burning with fever in death, the skin dry and hot, and on the cheek the faint print of a lion’s paw',
-      'даже мёртвое тело горит в лихорадке, кожа сухая и горячая, а на щеке — слабый отпечаток львиной лапы'
+      'даже мёртвое тело горит в лихорадке, кожа сухая и горячая, а на щеке — слабый отпечаток львиной лапы',
+      { echo: ['children burn with fever and do not sweat', 'a lion roars where no lion lives', 'a lion-headed visitor comes to a birth'] }
     ],
     [
       'the hair combed out in the night and plaited with great care, and the throat torn open',
@@ -193,7 +247,8 @@ const DEATH_BODY = {
     ],
     [
       'curled up in a ring of gnawed bones, none of them human, and all of them fresh',
-      'тело свернулось посреди кольца обглоданных костей — ни одной человеческой, и все свежие'
+      'тело свернулось посреди кольца обглоданных костей — ни одной человеческой, и все свежие',
+      { is: ['ringed'] }
     ]
   ],
   plague: [
@@ -207,15 +262,18 @@ const DEATH_BODY = {
     ],
     [
       'spotted black from head to foot, as if splashed with ink',
-      'всё тело с головы до ног в чёрных пятнах, будто его забрызгали чернилами'
+      'всё тело с головы до ног в чёрных пятнах, будто его забрызгали чернилами',
+      { echo: 'dark spots come up on the skin overnight' }
     ],
     [
       'under a blanket of flies so thick that it seems to rise and fall, though the breathing has long stopped',
-      'тело под таким плотным покровом мух, что он словно поднимается и опускается, хотя дыхание давно остановилось'
+      'тело под таким плотным покровом мух, что он словно поднимается и опускается, хотя дыхание давно остановилось',
+      { is: ['wrapped', 'faceHidden'], echo: 'flies cover the camp in a black cloud' }
     ],
     [
       'the mouth and nostrils crawling with maggots, though death came only an hour before',
-      'во рту и в ноздрях кишат черви, хотя смерть пришла всего час назад'
+      'во рту и в ноздрях кишат черви, хотя смерть пришла всего час назад',
+      { echo: 'fresh meat is fly-blown within hours' }
     ],
     [
       'the skin covered in open sores, every one of them weeping, and a sweet smell over everything, like a sickroom’s',
@@ -223,15 +281,18 @@ const DEATH_BODY = {
     ],
     [
       'curled on the ground with a hand pressed over the mouth, as if to keep a cough in, and black spittle between the fingers',
-      'тело скорчилось на земле, ладонь прижата ко рту, словно чтобы удержать кашель, а между пальцами — чёрная слюна'
+      'тело скорчилось на земле, ладонь прижата ко рту, словно чтобы удержать кашель, а между пальцами — чёрная слюна',
+      { echo: 'a cough goes round the camp in the night' }
     ],
     [
       'wrapped in a sheet as if made ready for the dead-cart, and beside the body the deep ruts of a cart that no one in the camp owns',
-      'тело завёрнуто в простыню, словно приготовлено для телеги за мёртвыми, а рядом — глубокие колеи от телеги, какой в лагере ни у кого нет'
+      'тело завёрнуто в простыню, словно приготовлено для телеги за мёртвыми, а рядом — глубокие колеи от телеги, какой в лагере ни у кого нет',
+      { is: ['wrapped', 'ringed', 'besideSaid'], echo: 'a cart with nothing in its shafts goes from door to door' }
     ],
     [
       'the eyes milky and the lips black, and dead rats lying all round in a ring, every one on its back',
-      'глаза помутнели, губы почернели, а вокруг кольцом лежат дохлые крысы, все кверху брюхом'
+      'глаза помутнели, губы почернели, а вокруг кольцом лежат дохлые крысы, все кверху брюхом',
+      { is: ['eyesOpen', 'ringed'], echo: 'rats come out by day to die in the open' }
     ],
     [
       'the belly swollen tight as a drum, and the skin gone the yellow of old tallow',
@@ -249,47 +310,58 @@ const DEATH_BODY = {
   madness: [
     [
       'the face fixed in a wide smile, the eyes open, and the cheeks still wet, as if from laughing',
-      'на лице застыла широкая улыбка, глаза открыты, а щёки ещё мокрые — будто от смеха'
+      'на лице застыла широкая улыбка, глаза открыты, а щёки ещё мокрые — будто от смеха',
+      { is: ['eyesOpen'], echo: 'someone laughs all night on the empty tell' }
     ],
     [
       'in nightclothes and barefoot, the soles of the feet worn through to the bone, as if from walking all night',
-      'в ночной рубашке, босиком, а ступни стёрты до кости, как после целой ночи ходьбы'
+      'в ночной рубашке, босиком, а ступни стёрты до кости, как после целой ночи ходьбы',
+      { is: ['bootsOff'], echo: 'sleepwalkers go round the mound' }
     ],
     [
       'a shaving mirror in one hand, gripped so hard that the fingers have to be prised open, and the glass cracked into a star',
-      'в руке зеркальце для бритья, и пальцы сжаты так, что их приходится разжимать силой, а стекло треснуло звездой'
+      'в руке зеркальце для бритья, и пальцы сжаты так, что их приходится разжимать силой, а стекло треснуло звездой',
+      { echo: 'a mirror shows a stranger’s face' }
     ],
     [
       'the fingers raw, and the same name scratched a hundred times into the earth all round, spelled a different way each time',
-      'пальцы стёрты в кровь, а вокруг на земле сто раз нацарапано одно и то же имя — и каждый раз по-разному'
+      'пальцы стёрты в кровь, а вокруг на земле сто раз нацарапано одно и то же имя — и каждый раз по-разному',
+      { is: ['ringed'], echo: 'people forget their own names' }
     ],
     [
       'a watch in each hand, and both stopped at twenty past three',
-      'в каждой руке по часам, и те и другие остановились на двадцати минутах четвёртого'
+      'в каждой руке по часам, и те и другие остановились на двадцати минутах четвёртого',
+      { is: ['handsFull'], echo: 'every clock stops at the same minute' }
     ],
     [
       'the forehead broken from beating it on the ground, and on the face a look of great relief',
-      'лоб разбит — им бились о землю, — а на лице выражение огромного облегчения'
+      'лоб разбит — им бились о землю, — а на лице выражение огромного облегчения',
+      { is: ['foreheadSaid'] }
     ],
     [
       'the eyes put out, carefully, with the thumbs, as if to stop them seeing something',
-      'глаза выдавлены — бережно, большими пальцами, будто затем, чтобы они чего-то больше не видели'
+      'глаза выдавлены — бережно, большими пальцами, будто затем, чтобы они чего-то больше не видели',
+      { is: ['eyesOpen'] }
     ],
     [
       'a notebook clutched to the chest, every page of it filled with the same line, written backwards',
-      'к груди прижата записная книжка, и каждая её страница исписана одной и той же строкой — задом наперёд'
+      'к груди прижата записная книжка, и каждая её страница исписана одной и той же строкой — задом наперёд',
+      { echo: 'the stamps on the bricks read backwards' }
     ],
     [
       'at the centre of a ring of footprints trodden round and round all night, every print made by the same bare feet',
-      'посреди кольца следов, протоптанного за ночь, и каждый след оставлен одними и теми же босыми ногами'
+      'посреди кольца следов, протоптанного за ночь, и каждый след оставлен одними и теми же босыми ногами',
+      { is: ['ringed', 'bootsOff'], echo: ['the same footsteps pass twice', 'sleepwalkers go round the mound'] }
     ],
     [
       'huddled tight as if hiding from something, the eyes screwed shut and the fingers in the ears',
-      'тело сжалось в комок, будто от чего-то пряталось, глаза зажмурены, пальцы заткнуты в уши'
+      'тело сжалось в комок, будто от чего-то пряталось, глаза зажмурены, пальцы заткнуты в уши',
+      { is: ['handsFull'] }
     ],
     [
       'the boots on the wrong feet and the coat on inside out, buttoned with great care',
-      'ботинки надеты не на ту ногу, а куртка вывернута наизнанку и старательно застёгнута'
+      'ботинки надеты не на ту ногу, а куртка вывернута наизнанку и старательно застёгнута',
+      { is: ['bootsSaid'] }
     ],
     [
       'the lips still moving, as if counting under the breath, for an hour after the heart has stopped',
@@ -301,36 +373,77 @@ const DEATH_BODY = {
 // ---------- the power's mark on a body the cult killed with its own hands, by aspect ----------
 const DEATH_MARK = {
   fire: [
-    ['and the ground beneath is baked as hard as a kiln floor', 'а земля под телом спеклась, как под в печи'],
+    [
+      'and the ground beneath is baked as hard as a kiln floor',
+      'а земля под телом спеклась, как под в печи',
+      { not: ['water', 'enclosed'] }
+    ],
     ['and the skin is hot to the touch, hours after', 'и кожа горячая на ощупь, хотя прошли часы'],
-    ['and seven small burns run in a line down the spine', 'и вдоль позвоночника цепочкой тянутся семь маленьких ожогов']
+    [
+      'and seven small burns run in a line down the spine',
+      'и вдоль позвоночника цепочкой тянутся семь маленьких ожогов',
+      { not: ['enclosed', 'buried', 'wrapped'], echo: 'the Pleiades hang low over the mound' }
+    ]
   ],
   dust: [
     [
       'and grey dust lies over everything, finer than any dust on the tell',
-      'и всё вокруг покрыто серой пылью — тоньше любой пыли на холме'
+      'и всё вокруг покрыто серой пылью — тоньше любой пыли на холме',
+      { not: ['water', 'enclosed'], echo: 'dust falls from a clear sky' }
     ],
-    ['and the mouth is full of grey earth', 'и рот набит серой землёй'],
-    ['and an owl’s feather has been laid on the breast', 'и на грудь положено совиное перо']
+    ['and the mouth is full of grey earth', 'и рот набит серой землёй', { echo: 'the dead walk and eat dust' }],
+    [
+      'and an owl’s feather has been laid on the breast',
+      'и на грудь положено совиное перо',
+      { not: ['faceDown', 'buried', 'enclosed', 'water', 'wrapped'], echo: 'owls gather and face the mound' }
+    ]
   ],
   sea: [
-    ['and the clothes are soaked with salt water, though the ground is dry', 'и одежда пропитана солёной водой, хотя земля вокруг сухая'],
+    [
+      'and the clothes are soaked with salt water, though the ground is dry',
+      'и одежда пропитана солёной водой, хотя земля вокруг сухая',
+      { not: ['water'] }
+    ],
     ['and there is sea-wrack tangled in the hair', 'и в волосах запутались морские водоросли'],
     ['and the lips are crusted white with salt', 'и губы покрыты белой коркой соли']
   ],
   teeth: [
-    ['and something has gnawed the fingers since', 'а потом что-то обглодало пальцы'],
-    ['and a lion’s pugmarks circle the body, leading nowhere', 'и вокруг тела кругом идут львиные следы, ведущие в никуда'],
+    ['and something has gnawed the fingers since', 'а потом что-то обглодало пальцы', { not: ['buried', 'enclosed'] }],
+    [
+      'and a lion’s pugmarks circle the body, leading nowhere',
+      'и вокруг тела кругом идут львиные следы, ведущие в никуда',
+      {
+        not: ['water', 'enclosed', 'buried'],
+        makes: ['ringed'],
+        echo: ['a lion roars where no lion lives', 'a lion-headed visitor comes to a birth']
+      }
+    ],
     ['and the stink of a byre hangs over everything', 'и надо всем висит смрад хлева']
   ],
   plague: [
-    ['and flies have settled on the face so thickly that it cannot be seen', 'и на лицо село столько мух, что его не видно'],
-    ['and the skin has come out in black spots since', 'а кожа с тех пор покрылась чёрными пятнами'],
+    [
+      'and flies have settled on the face so thickly that it cannot be seen',
+      'и на лицо село столько мух, что его не видно',
+      { not: ['faceDown', 'enclosed', 'water'], makes: ['faceHidden'], echo: 'flies cover the camp in a black cloud' }
+    ],
+    [
+      'and the skin has come out in black spots since',
+      'а кожа с тех пор покрылась чёрными пятнами',
+      { echo: 'dark spots come up on the skin overnight' }
+    ],
     ['and a sweet smell hangs over everything, like a sickroom’s', 'и надо всем стоит сладкий запах, как в комнате больного']
   ],
   madness: [
-    ['and the face is fixed in a broad smile', 'и на лице застыла широкая улыбка'],
-    ['and the watch on the wrist has stopped at twenty past three', 'и часы на запястье остановились на двадцати минутах четвёртого'],
+    [
+      'and the face is fixed in a broad smile',
+      'и на лице застыла широкая улыбка',
+      { not: ['faceDown', 'faceHidden', 'enclosed'], echo: 'someone laughs all night on the empty tell' }
+    ],
+    [
+      'and the watch on the wrist has stopped at twenty past three',
+      'и часы на запястье остановились на двадцати минутах четвёртого',
+      { not: ['buried', 'enclosed'], echo: 'every clock stops at the same minute' }
+    ],
     [
       'and the clothes have been put on inside out since, and buttoned with care',
       'а одежду с тех пор надели наизнанку и аккуратно застегнули'
@@ -349,7 +462,8 @@ const DEATH_HAND = [
   ],
   [
     'the face pressed down into a basin of wet clay, as a scribe smooths a tablet',
-    'лицо вдавлено в таз с мокрой глиной — так писец разглаживает табличку'
+    'лицо вдавлено в таз с мокрой глиной — так писец разглаживает табличку',
+    { is: ['faceDown'] }
   ],
   [
     'the wrists bound with reed rope, in knots no digger ties',
@@ -359,17 +473,23 @@ const DEATH_HAND = [
     'a tent peg driven through one hand into the ground, as if to keep the body from going anywhere',
     'одна ладонь пробита палаточным колышком и пригвождена к земле — будто затем, чтобы тело никуда не ушло'
   ],
-  ['a tea glass beside the body that smells of bitter almonds', 'рядом с телом стакан из-под чая, пахнущий горьким миндалём']
+  [
+    'beside the body, a tea glass that smells of bitter almonds',
+    'рядом с телом — стакан из-под чая, пахнущий горьким миндалём',
+    { is: ['besideSaid'] }
+  ]
 ];
 const DEATH_HAND_AT = {
   trench: [
     [
       'under a fall of earth from the section wall; but the shoring was sawn through',
-      'под обвалившейся стенкой разреза; но крепь подпилена'
+      'под обвалившейся стенкой разреза; но крепь подпилена',
+      { is: ['buried'] }
     ],
     [
       'face down at the bottom of the step trench, the pick still in the back',
-      'лицом вниз на дне ступенчатой траншеи, и в спине всё ещё торчит кирка'
+      'лицом вниз на дне ступенчатой траншеи, и в спине всё ещё торчит кирка',
+      { is: ['faceDown'] }
     ]
   ],
   ziggurat: [
@@ -379,21 +499,32 @@ const DEATH_HAND_AT = {
     ],
     [
       'in a niche of the lowest course, bricked up in haste, the mortar still wet',
-      'в нише нижнего ряда кладки, наскоро заложенной кирпичом, и раствор ещё не высох'
+      'в нише нижнего ряда кладки, наскоро заложенной кирпичом, и раствор ещё не высох',
+      { is: ['enclosed'] }
     ]
   ],
   store: [
     [
       'under a fallen shelf of tablets, though the shelf was bolted to the wall',
-      'под рухнувшим стеллажом с табличками, хотя стеллаж был привинчен к стене'
+      'под рухнувшим стеллажом с табличками, хотя стеллаж был привинчен к стене',
+      { is: ['buried'] }
     ],
-    ['locked in a packing crate, the lid nailed down from outside', 'в упаковочном ящике, крышка которого заколочена снаружи']
+    [
+      'locked in a packing crate, the lid nailed down from outside',
+      'в упаковочном ящике, крышка которого заколочена снаружи',
+      { is: ['enclosed'] }
+    ]
   ],
   canal: [
-    ['face down in the water, the ankles tied together with reed rope', 'лицом вниз в воде, лодыжки связаны тростниковой верёвкой'],
+    [
+      'face down in the water, the ankles tied together with reed rope',
+      'лицом вниз в воде, лодыжки связаны тростниковой верёвкой',
+      { is: ['faceDown', 'water'] }
+    ],
     [
       'among the reeds, held under by someone who knelt on the back: the knee-marks are still in the mud',
-      'в тростнике: кто-то держал под водой, встав коленом на спину, — следы колен остались в иле'
+      'в тростнике: кто-то держал под водой, встав коленом на спину, — следы колен остались в иле',
+      { is: ['faceDown', 'water'] }
     ]
   ],
   cemetery: [
@@ -401,7 +532,11 @@ const DEATH_HAND_AT = {
       'laid in an open slipper-coffin, the lid propped beside it as if for later',
       'в открытом гробу-башмаке, а крышка прислонена рядом, будто её собирались закрыть потом'
     ],
-    ['in a grave dug fresh in the night, only the face left uncovered', 'в могиле, выкопанной ночью, и не засыпано одно только лицо']
+    [
+      'in a grave dug fresh in the night, only the face left uncovered',
+      'в наспех выкопанной ночью могиле, где не засыпано одно лицо',
+      { is: ['buried'] }
+    ]
   ]
 };
 
@@ -409,21 +544,37 @@ const DEATH_HAND_AT = {
 const DEATH_SIGN = [
   [
     'In one palm someone has pressed a cylinder seal cut with seven gates.',
-    'В ладонь вложена цилиндрическая печать с семью вырезанными вратами.'
+    'В ладонь вложена цилиндрическая печать с семью вырезанными вратами.',
+    { not: ['enclosed', 'buried', 'wrapped', 'handsFull'] }
   ],
   [
     'Seven wedges have been cut into the forehead, neatly, by a hand that knew the signs.',
-    'На лбу аккуратно вырезаны семь клиньев — рукой, знающей знаки.'
+    'На лбу аккуратно вырезаны семь клиньев — рукой, знающей знаки.',
+    { not: ['faceDown', 'faceHidden', 'enclosed', 'wrapped', 'foreheadSaid'] }
   ],
   [
     'A lamp burns beside the body, and no one in the camp will own it.',
-    'Рядом с телом горит лампа, и никто в лагере не признаёт её своей.'
+    'Рядом с телом горит лампа, и никто в лагере не признаёт её своей.',
+    { not: ['water', 'enclosed', 'besideSaid'] }
   ],
   [
     'The boots have been taken off and set side by side, toes toward the ziggurat.',
-    'Ботинки сняты и поставлены рядом, носками к зиккурату.'
+    'Ботинки сняты и поставлены рядом, носками к зиккурату.',
+    { not: ['bootsOff', 'bootsSaid', 'buried', 'enclosed', 'wrapped', 'water'] }
   ],
-  ['Someone has closed the eyes and laid a sherd on each lid.', 'Кто-то закрыл мёртвые глаза и положил на каждое веко по черепку.'],
-  ['Around the body the ground has been swept clean, in a perfect circle.', 'Вокруг тела земля чисто выметена — идеальным кругом.'],
-  ['Beside one hand a sign is scratched in the dust: the old sign for a gate.', 'У руки в пыли нацарапан знак — древний знак врат.']
+  [
+    'Someone has closed the eyes and laid a sherd on each lid.',
+    'Кто-то закрыл мёртвые глаза и положил на каждое веко по черепку.',
+    { not: ['eyesOpen', 'faceDown', 'faceHidden', 'enclosed', 'wrapped'] }
+  ],
+  [
+    'Around the body the ground has been swept clean, in a perfect circle.',
+    'Вокруг тела земля чисто выметена — идеальным кругом.',
+    { not: ['enclosed', 'buried', 'water', 'ringed'] }
+  ],
+  [
+    'Beside one hand a sign is scratched in the dust: the old sign for a gate.',
+    'У руки в пыли нацарапан знак — древний знак врат.',
+    { not: ['enclosed', 'buried', 'wrapped', 'water'] }
+  ]
 ];

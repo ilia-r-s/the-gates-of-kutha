@@ -407,7 +407,7 @@ function attackOnYou(night) {
   }
   const asp = mannerOf(); // (in the power's own manner, all but always)
   if (asp !== S.aspectOf[S.patron]) S.log.manner.push({ day: S.day, id: 'you', asp });
-  const it = `<p class="horror">${bi(tellOne('attack-' + asp, ASPECTS[asp].attack))}</p>`;
+  const it = `<p class="horror">${bi(tellOne('attack-' + asp, ASPECTS[asp].attack.filter((t, k) => tellableNow((ASPECTS[asp].attackEcho || [])[k]))))}</p>`;
   if (night.guest) return pre + guestThrough(night, it); // (and she was in your tent: people/visit.js)
   S.log.attacks.push({ day: S.day, how: 'hurt' });
   const html = pre + it + hurt(2, 1);

@@ -223,8 +223,9 @@ function advance() {
 // ---------- searching, translating, resting, examining ----------
 // One of the power's four signs, those not yet seen first, mostly; each told in a way not yet heard, while there is one. Now
 // and then (PUZ.stray) a sign that is not the power's at all, of the others in play: a coincidence, told like any
-// other, and never said to be one (the ending tells it). The log keeps each sign seen, once (si: which; i: which of
-// the power's four, or stray).
+// other, and never said to be one (the ending tells it); once seen, it may come again as any sign already seen may, so
+// that a sign seen twice is no surer to be the power's own than one seen once. The log keeps each sign seen, once (si:
+// which; i: which of the power's four, or stray); omenTold, the ways each was told (by i, or 's' and si for a stray).
 function nextOmen() {
   emit('omen');
   const stray = Object.keys(S.signPair)
@@ -234,20 +235,24 @@ function nextOmen() {
     const si = pick(stray),
       v = pick(SIGN_POOL[si].texts.map((t, k) => k));
     S.omenLog.push({ day: S.day, si, v, stray: true });
+    S.omenTold['s' + si] = [v];
     return SIGN_POOL[si].texts[v];
   }
-  // of the power's own four, one not yet seen as a rule (one already seen weighs night.signAgain against 1)
+  // of the power's own four, one not yet seen as a rule: one already seen, its own or a stray, weighs night.signAgain
+  // against 1 (and with all four seen, every sign seen weighs alike)
   const unseen = [0, 1, 2, 3].filter(i => !S.omenSeen.includes(i)),
-    i = unseen.length
-      ? +wpick(Object.fromEntries([0, 1, 2, 3].map(k => [k, unseen.includes(k) ? 1 : RULES.night.signAgain])))
-      : pick([0, 1, 2, 3]);
-  const sg = patronSign(i),
-    heard = (S.omenTold[i] = S.omenTold[i] || []),
+    again = unseen.length ? RULES.night.signAgain : 1,
+    w = Object.fromEntries([0, 1, 2, 3].map(k => [k, unseen.includes(k) ? 1 : again]));
+  S.omenLog.filter(o => o.stray).forEach(o => (w['s' + o.si] = again));
+  const key = wpick(w),
+    i = key[0] === 's' ? null : +key,
+    sg = i == null ? SIGN_POOL[+key.slice(1)] : patronSign(i),
+    heard = (S.omenTold[key] = S.omenTold[key] || []),
     ways = sg.texts.map((t, k) => k),
     fresh = ways.filter(k => !heard.includes(k)),
     v = pick(fresh.length ? fresh : ways);
   heard.push(v);
-  if (!S.omenSeen.includes(i)) {
+  if (i != null && !S.omenSeen.includes(i)) {
     S.omenSeen.push(i);
     S.omenLog.push({ day: S.day, i, si: S.signsOf[S.patron][i], v });
   }
@@ -335,39 +340,38 @@ function searchFind(l, more) {
 function studyP() {
   return clamp(RULES.study.odds + (S.bg === 'philologist' ? RULES.study.philologist : 0));
 }
-// You choose what to look for in the clay: a sign you have seen, or a charm you carry.
+// You choose what to look for in the clay: a sign you have seen, a charm you carry, an old title you have met. Every one
+// of them, always, whether or not a line about it is left to find (if none is, the fragment says nothing about it): a
+// list that dropped what was spent would tell how many lines the tablets hold about each, and a toy has fewer than a ward.
 function studyTopics() {
   const t = [],
     seen = [];
   S.omenLog.forEach(o => {
     if (!seen.includes(o.si)) seen.push(o.si);
   });
-  seen.forEach(si => {
-    if (factsOn({ sign: si }).length)
-      t.push({
-        sign: si,
-        label: bi(`Look for “${SIGN_POOL[si].short}”`, `Искать: «${R(SIGN_POOL[si].short)}»`),
-        sub: bi('A sign you have seen', 'Знамение, которое вы видели')
-      });
-  });
+  seen.forEach(si =>
+    t.push({
+      sign: si,
+      label: bi(`Look for “${SIGN_POOL[si].short}”`, `Искать: «${R(SIGN_POOL[si].short)}»`),
+      sub: bi('A sign you have seen', 'Знамение, которое вы видели')
+    })
+  );
   S.items
     .filter(w => CHARMS.includes(w))
-    .forEach(w => {
-      if (factsOn({ ward: w }).length)
-        t.push({
-          ward: w,
-          label: bi(`Look for ${theItem(w)}`, `Искать ${ru.item(w, 'a')}`),
-          sub: bi('A charm you carry. The scribes will not call it that', 'Амулет, который при вас. Писцы назовут его иначе')
-        });
-    });
-  titlesMet().forEach(e => {
-    if (factsOn({ title: e }).length)
+    .forEach(w =>
       t.push({
-        title: e,
-        label: bi(`Look for “${ttEn(e)}”`, `Искать: «${capS(ttRu(e))}»`),
-        sub: bi('An old title you have met', 'Древний титул, который вам уже встречался')
-      });
-  });
+        ward: w,
+        label: bi(`Look for ${theItem(w)}`, `Искать ${ru.item(w, 'a')}`),
+        sub: bi('A charm you carry. The scribes will not call it that', 'Амулет, который при вас. Писцы назовут его иначе')
+      })
+    );
+  titlesMet().forEach(e =>
+    t.push({
+      title: e,
+      label: bi(`Look for “${ttEn(e)}”`, `Искать: «${capS(ttRu(e))}»`),
+      sub: bi('An old title you have met', 'Древний титул, который вам уже встречался')
+    })
+  );
   return t;
 }
 function studyPick() {

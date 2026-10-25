@@ -515,7 +515,7 @@ const SCRIPT = () => {
     ['body', 0, null],
     ['hand', 1, 2],
     ['at:canal', 0, null],
-    ['at:ziggurat', 1, 5]
+    ['at:ziggurat', 1, null] // (bricked up: no signature goes with a body walled in)
   ].forEach(([kind, k, sign], i) =>
     capHtml(
       `death-${kind}-${k}`,

@@ -162,8 +162,9 @@ const GODS = {
   }
 };
 // The six natures a power can have in a season: the signs of each (eight), each told in three ways (the same sign,
-// whichever way it is told); how the night comes for you in its colour; and what waits in the sanctum. A power takes
-// the nature of the first of its signs (world/powers.js, dealSigns).
+// whichever way it is told); how the night comes for you in its colour (attack; attackEcho: the sign each of those
+// tellings calls to mind, if any, held back until it has been seen, as in data/deaths.js: echo); and what waits in the
+// sanctum. A power takes the nature of the first of its signs (world/powers.js, dealSigns).
 const ASPECT_TEXT = {
   fire: {
     omens: [
@@ -213,6 +214,7 @@ const ASPECT_TEXT = {
       'You wake with the air in the tent as hot as an oven, and something at the foot of the bed giving off heat like a kiln door.',
       'You wake to a hand on your chest, hot as a brand. When you strike a match, there is a blister on your skin in the shape of a palm.'
     ],
+    attackEcho: ['the Pleiades hang low over the mound', null, null],
     sanctum:
       'Beneath the ziggurat the air shimmers with heat. Seven braziers ring a pit, and something in the pit is breathing fire, slowly, like a sleeper.'
   },
@@ -264,6 +266,7 @@ const ASPECT_TEXT = {
       'You wake under a weight of grey dust, heaped over you like a grave, and claw your way out of it in the dark.',
       'Something stands by your bed in the dark, smelling of the grave, and bends down to breathe dust into your mouth.'
     ],
+    attackEcho: ['owls gather and face the mound', null, null],
     sanctum:
       'The seventh gate opens on a hall of grey dust. On a throne of clay sits a shape that is mostly darkness, and its eye is opening.'
   },
@@ -366,6 +369,7 @@ const ASPECT_TEXT = {
       'You wake to teeth in your arm, small and many, and a weight on the cot like a large dog’s that is not a dog.',
       'Something sits at the end of your cot in the dark, rocking and crooning, and when you move it bites.'
     ],
+    attackEcho: [['a lion roars where no lion lives', 'a lion-headed visitor comes to a birth'], null, null],
     sanctum:
       'The chamber reeks of milk and blood. Lion-headed shadows crawl the walls, and in the centre a cradle rocks with nothing in it. Yet.'
   },
@@ -416,6 +420,11 @@ const ASPECT_TEXT = {
       'You wake coughing, and cannot stop. When you strike a match the pillow is black with flies, and they rise all together and go out through the canvas.',
       'You wake to a hand stroking your neck, gently, as a doctor feels for the glands. Where it has touched, swellings come up as hard as walnuts.',
       'You wake to the creak of a cart stopping outside your tent, and to hands lifting you, quite gently, the way the dead are lifted.'
+    ],
+    attackEcho: [
+      ['a cough goes round the camp in the night', 'flies cover the camp in a black cloud'],
+      null,
+      'a cart with nothing in its shafts goes from door to door'
     ],
     sanctum:
       'The hall below smells sweet, like a sickroom, and sixty great jars stand in rows on its floor. Fifty-nine are sealed with clay. From the sixtieth, in the middle, flies come up like smoke.'
@@ -468,6 +477,7 @@ const ASPECT_TEXT = {
       'You wake to someone beside your cot counting aloud, slowly, in your own voice. When you reach for the matches, the counting stops, and something takes hold of your wrist.',
       'You wake laughing, and cannot stop, and laugh until something in your chest gives way; and all the while, somewhere in the dark, someone is laughing with you.'
     ],
+    attackEcho: ['sleepwalkers go round the mound', null, 'someone laughs all night on the empty tell'],
     sanctum:
       'The last chamber is walled with mirrors of black bronze, and in every one of them you are already standing in the circle, laughing. In the middle stands a tall mirror that shows nothing at all.'
   }
