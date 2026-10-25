@@ -35,11 +35,12 @@
 //                                   and sightings, and who lied out of fear or kept a secret (people/alibis.js)
 //   items, fragments, omenSeen, omenLog, omenTold, searched, usedEvents     (omenTold: the ways each sign was told)
 //   told                            how far each list of everyday tellings has been gone through (core/text.js, tellOne)
-//   hierophant, falseGuard, fakeGuard, guardPromise, seerPublic, loud   the cult's game (guardPromise: the
-//                                   true Watcher's promise to watch your tent tonight); betrayals:
-//                                   the nights one of the cult came for another; patience: how readily it lies low this
-//                                   season; turned: how far it has turned its craft against your way of hunting it
-//                                   (people/cunning.js)
+//   sworn                           who swore to watch your tent tonight: the true Watcher, one of the cult, anyone
+//                                   else (people/watch.js)
+//   hierophant, seerPublic, loud    the cult's game (seerPublic: the Dreamer has dreamt aloud; loud: the last to dream
+//                                   aloud); betrayals: the nights one of the cult came for another; patience: how readily
+//                                   it lies low this season; turned: how far it has turned its craft against your way of
+//                                   hunting it (people/cunning.js)
 //   you                             your own dreams: how often, how true, and the dreams (game/yourdreams.js)
 //   craneHow, deathsTold            how Crane was found; how the dead were found, Crane among them (world/deaths.js)
 //   tenor                           the season's mood: mood, heat, pull, quiet, log; after (news made likelier by news),
@@ -168,8 +169,7 @@ function freshSeason(name, bg) {
     wardAt: {},
     searched: {},
     betrayals: [],
-    falseGuard: null,
-    guardPromise: null,
+    sworn: { warden: null, cult: null, other: null },
     seerPublic: false,
     inquiryDone: false,
     inquiries: [],

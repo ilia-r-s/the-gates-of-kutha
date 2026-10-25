@@ -97,11 +97,11 @@ function theNight() {
     found: [], // what first light finds: the dead and their trace, or nobody missing
     cult: freeCult(),
     npcs: freeChars().filter(c => c.role !== 'cult'),
-    falseGuard: swore(S.falseGuard), // one of the cult swore to watch your tent tonight (kept, mostly, like anyone's)
+    falseGuard: swore(Watch.sworn('cult')), // one of the cult swore to watch your tent tonight (kept, mostly, like anyone's)
     // someone swore to watch your tent tonight: one of the cult, one who only says they keep watch, or the true Watcher
     // (whose broken promise is told as anyone's)
-    sworn: swore(S.falseGuard) || swore(S.fakeGuard) || swore(S.guardPromise),
-    smugOut: !!swore(S.fakeGuard) && C(S.fakeGuard).role === 'smuggler' // ... and it was the smuggler, out on business
+    sworn: swore(Watch.sworn('cult')) || swore(Watch.sworn('other')) || swore(Watch.sworn('warden')),
+    smugOut: !!swore(Watch.sworn('other')) && C(Watch.sworn('other')).role === 'smuggler' // ... and it was the smuggler, out on business
   };
   const out = night.out,
     N = RULES.night;
@@ -110,8 +110,8 @@ function theNight() {
   // and as the cult would have come, so that the night tells nothing of who is left
   night.guest = visitGuest(); // (one who came to your tent as the evening ended, and stayed: people/visit.js)
   night.power = !night.cult.length && chance(N.priestless);
-  night.quiet = !night.power && (!night.cult.length || liesLow(night));
-  night.target = night.quiet ? null : chooseVictim(night);
+  night.quiet = !night.power && (!night.cult.length || Parts.of('cult').lieLow(night));
+  night.target = night.quiet ? null : Parts.of('cult').victim(night);
   if (night.power && night.target !== 'player') night.why = { kind: 'power' };
   // (the last of the cult in your tent lets you be, as often as not, and if it comes for anyone tonight, it is someone
   // else; otherwise the power below comes for you by itself, as on a night with nobody of the cult left at large, so
@@ -126,12 +126,12 @@ function theNight() {
     }
   }
   if (night.falseGuard && night.target !== 'player') S.log.keptWatch.push({ day: S.day, id: night.falseGuard });
-  S.falseGuard = null;
-  S.fakeGuard = null;
+  Watch.unswear('cult');
+  Watch.unswear('other');
   night.watcher = night.npcs.find(c => c.role === 'warden');
-  night.guard = night.watcher ? chooseWatch(night) : null;
-  night.promised = S.guardPromise; // (the true Watcher's promise is for tonight, like anyone's)
-  S.guardPromise = null;
+  night.guard = night.watcher ? Parts.of('warden').watch(night) : null;
+  night.promised = Watch.sworn('warden'); // (the true Watcher's promise is for tonight, like anyone's)
+  Watch.unswear('warden');
   night.seer = night.npcs.find(c => c.role === 'seer');
   night.loc = wpick(N.where); // (where the night takes anyone but you)
   night.deed = deedTonight(); // (you go out tonight yourself: game/deed.js)
@@ -152,7 +152,7 @@ function theNight() {
     // drove it off first, all but always, and then the Watcher knows your tent was empty (game/deed.js); one who only
     // swore to watch it slept, as on any night
     night.loc = 'camp';
-    if (night.guard === 'player' && chance(N.watched)) {
+    if (Watch.holds(night, 'player')) {
       night.youOut = 'guarded';
       S.log.attacks.push({ day: S.day, how: 'guard', out: true, power: !!night.power });
     } else {
@@ -311,18 +311,6 @@ function victimWhy(v, cult) {
   if (s) return { kind: 'suspects', of: s.id };
   return Ties.friend(v) ? { kind: 'stood' } : { kind: 'none' };
 }
-// The Watcher watches over you the night they promised to, if they trust you, mostly; otherwise over anyone at all, you
-// included, and the cult too: the Watcher cannot tell. The Watcher who spent the night in your tent watched nobody's.
-function chooseWatch({ watcher: w }) {
-  if (inYourTent(w.id)) return null;
-  const pool = [
-    'player',
-    ...freeChars()
-      .filter(c => c.id !== w.id)
-      .map(c => c.id)
-  ];
-  return S.guardPromise === w.id && Ties.friend(w) && chance(RULES.night.watchKept) ? 'player' : pick(pool);
-}
 // The Dreamer dreams of someone not yet dreamt of who is still here at first light (whom the night came for and missed
 // as readily as anyone: a made-up dream may be of them too), and the dream is true, almost always (muddied: the one that
 // is not); but the god knows who has robbed it, and now and then its hand is on the thief's shoulder too (dark: a dream
@@ -340,11 +328,11 @@ function dreamTonight(seer) {
 // They come for you: the Watcher, the incantation bowl or the revolver may turn them; otherwise you pay for it (and so
 // may one who came to your tent tonight).
 function attackOnYou(night) {
-  const { guard, watcher: w } = night;
+  const { watcher: w } = night;
   const N = RULES.night;
-  if (guard === 'player' && chance(N.watched)) {
+  if (Watch.holds(night, 'player')) {
     S.log.attacks.push({ day: S.day, how: 'guard', power: !!night.power });
-    if (!chance(N.seen))
+    if (!Watch.seen())
       return bi(
         `<p>In the small hours you hear a scuffle outside your tent and a curse. By the time you get the flap open there is nobody there: only a lamp going away between the tents.</p>`,
         `<p>Под утро у палатки слышны возня и чья-то ругань. Когда вы откидываете полог, снаружи уже никого нет — только лампа удаляется между палатками.</p>`
@@ -396,7 +384,7 @@ function attackOnYou(night) {
     );
   }
   // and now and then you wake in time, and whatever it was goes
-  if (chance(N.spared)) {
+  if (Watch.spared()) {
     S.log.attacks.push({ day: S.day, how: 'woke', power: !!night.power });
     return (
       pre +
@@ -431,10 +419,9 @@ const watchedOff = v =>
 // otherwise the night takes them, and they are found where it happened, in one of the power's ways. It shakes you,
 // most likely if they had come to trust you. (saved: 'watch' or 'luck', if they live)
 function attackOnThem(night) {
-  const N = RULES.night,
-    { target, guard, loc, betrayer } = night,
+  const { target, loc, betrayer } = night,
     v = C(target);
-  const saved = guard === target && chance(N.watched) ? 'watch' : chance(N.spared) ? 'luck' : null; // (the Watcher there, and in time)
+  const saved = Watch.holds(night, target) ? 'watch' : Watch.spared() ? 'luck' : null; // (the Watcher there, and in time)
   night.saved = saved;
   if (betrayer) S.betrayals.push({ day: S.day, by: betrayer, victim: v.id, saved });
   if (saved === 'watch') {
@@ -595,12 +582,7 @@ function breakfastDreams({ seer, vision }) {
       const own = c.role === 'seer';
       if (own && (c !== seer || !vision)) return; // (the night brought the Dreamer nothing to tell)
       // the dream itself, once it is to be told: the vision, or one made up for the day
-      const dream = () => {
-        if (!own) return madeUpDream(c);
-        vision.told = true;
-        c.dreamt = { day: S.day, d: { t: C(vision.about), cult: vision.cult } }; // (told today: people/claims.js, dreamtToday)
-        return c.dreamt.d;
-      };
+      const dream = () => (own ? visionFor(c, vision) : madeUpDream(c));
       if ((Ties.cordial(c) || c.promised) && chance(N.seerTells)) {
         const d = dream();
         if (!d) return;
@@ -693,8 +675,7 @@ function answerWith(a, d, c, forOther) {
 // named guilty, someone calls the dream a lie before everyone: the hot-tempered in anger, the cold coldly, the
 // truthful plainly
 function retortAloud(t, c) {
-  Record.testify(t.id, c.id, 'distrust', 'cult');
-  Suspicion.sayAloud(t.id, c.id, 'cult', 'blame');
+  Suspicion.blame(t.id, c.id);
   // (the hot-tempered mostly in anger, the cold mostly coldly, the truthful mostly plainly: claims.retortLine)
   const keyed = ['suspicious', 'liar', 'lightheaded'].includes(temperOf(t)) ? 0 : ['calculating', 'detached'].includes(temperOf(t)) ? 1 : 2,
     way = chance(RULES.claims.retortLine) ? keyed : pick([0, 1, 2].filter(k => k !== keyed)),

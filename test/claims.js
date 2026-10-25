@@ -48,8 +48,8 @@ run(async browser => {
         const sworn = S.order.map(C).find(c => isFree(c) && claimOf(c).role === 'warden' && c.role !== 'warden');
         if (sworn && d === 2) {
           sworn.rapport = 2;
-          if (sworn.role === 'cult') S.falseGuard = sworn.id;
-          else S.fakeGuard = sworn.id;
+          if (sworn.role === 'cult') S.sworn.cult = sworn.id;
+          else S.sworn.other = sworn.id;
         }
         const before = S.testimony.length;
         (resolveNight() || []).forEach(s => scan(s, 'night'));

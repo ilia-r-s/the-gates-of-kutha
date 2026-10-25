@@ -270,10 +270,7 @@ const DIALOG = {
             ' Leave your lamp burning tonight. I will be watching your tent.',
             ' Не гасите сегодня лампу. Я присмотрю за вашей палаткой.'
           );
-          if (c.role === 'warden') {
-            S.guardPromise = c.id;
-          } else if (c.role === 'cult') S.falseGuard = c.id;
-          else S.fakeGuard = c.id;
+          Watch.swear(c); // (the true Watcher's promise, the cult's, or a pretender's)
         } else
           them += bi(
             ' I watch the whole camp at night, Doctor, not one tent.',
@@ -313,38 +310,43 @@ const DIALOG = {
           themE: 'uneasy',
           note: bi(`${c.short} has the grace to look ashamed.`, `${ru.c(c, 'd')} хватает совести смутиться.`)
         };
-      if (c.role === 'cult') return pressedCult(c, ok, you, before);
-      // shaken, an innocent may say something that sounds just like the cult's own words: fear, not guilt (talk.falseSlip;
-      // the thief, with more to hide, the more readily)
-      if (ok && chance(c.role === 'smuggler' ? RULES.talk.falseSlipThief : RULES.talk.falseSlip)) return slipOut(c, you);
-      if (c.role === 'smuggler' && ok) {
-        Record.testify(c.id, c.id, 'thief', 'thief');
-        S.revealed[c.id] = 'smuggler';
-        fixMark(c);
-        const cover = recantPressed(c), // (a watch that was his cover, given up with it, mostly)
-          named = chance(RULES.thief.pressed) ? thiefNames(c) : ''; // his story broken, he names the one he saw, mostly
-        return {
-          you,
-          youE: 'stern',
-          them:
-            bi(
-              'Fine. A few tablets went to Baghdad. Business. Not this. I swear it.',
-              `Ладно. Несколько табличек ушли в Багдад. Дело есть дело. Но к этому я ${ru.gs(c, 'непричастен', 'непричастна')}, клянусь.`
-            ) +
-            (cover ? ' ' + cover : '') +
-            (named ? ' ' + named : ''),
-          themE: named ? 'uneasy' : 'grave'
-        };
-      }
-      if (ok) {
-        // nothing of their own to give up: someone else's secret, now and then
-        const smug = unknownThief(c);
-        if (smug && chance(RULES.talk.pressTip)) return turnAside(c, you, smug);
-      }
-      return rebuff(c, you, before);
+      return Parts.move(c, 'pressed')(c, ok, you, before); // (people/parts.js)
     }
   }
 };
+// Shaken, an innocent may say something that sounds just like the cult's own words: fear, not guilt (talk.falseSlip;
+// the thief, with more to hide, the more readily). The thief's story broken, he owns his trade, and gives up the watch
+// that was his cover with it, mostly, and names the one he saw, mostly; anyone else, with nothing of their own to give
+// up, someone else's secret, now and then.
+function pressedThief(c, ok, you, before) {
+  if (ok && chance(RULES.talk.falseSlipThief)) return slipOut(c, you);
+  if (!ok) return rebuff(c, you, before);
+  Record.testify(c.id, c.id, 'thief', 'thief');
+  S.revealed[c.id] = 'smuggler';
+  fixMark(c);
+  const cover = recantPressed(c), // (a watch that was his cover, given up with it, mostly)
+    named = chance(RULES.thief.pressed) ? thiefNames(c) : ''; // his story broken, he names the one he saw, mostly
+  return {
+    you,
+    youE: 'stern',
+    them:
+      bi(
+        'Fine. A few tablets went to Baghdad. Business. Not this. I swear it.',
+        `Ладно. Несколько табличек ушли в Багдад. Дело есть дело. Но к этому я ${ru.gs(c, 'непричастен', 'непричастна')}, клянусь.`
+      ) +
+      (cover ? ' ' + cover : '') +
+      (named ? ' ' + named : ''),
+    themE: named ? 'uneasy' : 'grave'
+  };
+}
+function pressedAnyone(c, ok, you, before) {
+  if (ok && chance(RULES.talk.falseSlip)) return slipOut(c, you);
+  if (ok) {
+    const smug = unknownThief(c);
+    if (smug && chance(RULES.talk.pressTip)) return turnAside(c, you, smug);
+  }
+  return rebuff(c, you, before);
+}
 // One of the cult, pressed: shaken, it may let something slip; the cleverer turn it aside: a true word about the thief,
 // if there is one to give (as anyone with nothing of their own to give up may, now and then), or else the same
 // indignation anyone would show (and, now and then, the cult takes note).
@@ -510,20 +512,24 @@ function whomToBlame(c, others) {
     tp = TP(c),
     inno = others.filter(o => o.role !== 'cult'),
     smug = others.find(o => o.role === 'smuggler' && S.revealed[o.id] !== 'smuggler');
-  if (c.role === 'cult') {
-    if (smug && chance(k === 'honest' ? RULES.talk.honestCultTip : tp.strategic)) {
-      S.log.cultTruth++;
-      return { tip: smug };
-    }
-    const mate = busFor(c, others);
-    if (mate) return { target: mate };
-    if (!chance(tp.frame) || !inno.length) return {};
-    const accusers = inno.filter(o => Suspicion.threat.accuser(o, c));
-    return { target: k === 'calculating' && accusers.length ? pick(accusers) : Ties.pickByLike(c, inno, -1) };
-  }
-  if (smug && (k === 'honest' || k === 'conscientious') && chance(RULES.talk.honestTip)) return { tip: smug };
-  return { target: innocentBlames(c, others) };
+  return Parts.move(c, 'name')(c, others, { k, tp, inno, smug }); // (people/parts.js)
 }
+// the cult, asked: a true word about the thief, the other of it once it looks lost, or, as it frames, whoever suspects
+// it (the calculating) or an innocent it dislikes; or nobody
+function cultNames(c, others, { k, tp, inno, smug }) {
+  if (smug && chance(k === 'honest' ? RULES.talk.honestCultTip : tp.strategic)) {
+    S.log.cultTruth++;
+    return { tip: smug };
+  }
+  const mate = busFor(c, others);
+  if (mate) return { target: mate };
+  if (!chance(tp.frame) || !inno.length) return {};
+  const accusers = inno.filter(o => Suspicion.threat.accuser(o, c));
+  return { target: k === 'calculating' && accusers.length ? pick(accusers) : Ties.pickByLike(c, inno, -1) };
+}
+// anyone else, asked: the honest and the conscientious a word about the thief now and then; otherwise whom they blame
+const anyoneNames = (c, others, { k, smug }) =>
+  smug && (k === 'honest' || k === 'conscientious') && chance(RULES.talk.honestTip) ? { tip: smug } : { target: innocentBlames(c, others) };
 // the other of the cult, let go down to save the rest (the bus): only once it looks lost, and only by one ruthless
 // enough (cunning.bus × its craft's sacrifice); recorded for the ending
 function busFor(c, others) {

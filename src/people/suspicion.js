@@ -65,6 +65,13 @@ const Suspicion = (() => {
   function sayAloud(by, about, verdict, how) {
     S.said.push({ day: S.day, by, about, verdict, how, settled: false });
   }
+  // Someone says before everyone that another is one of the cult, in so many words: their distrust goes on the record, and
+  // it is said aloud (one writer for every blame said aloud: people/social.js, at breakfast; game/night.js, a dream called
+  // a lie; people/moments.js, the dead had named them).
+  function blame(by, about) {
+    Record.testify(by, about, 'distrust', 'cult');
+    sayAloud(by, about, 'cult', 'blame');
+  }
   // whether someone has told a dream before everyone, this season
   const hasDreamtAloud = c => S.said.some(x => x.by === id(c) && x.how === 'dream');
   // the dreams someone told aloud that named one of the cult guilty (atLarge: one still at the dig)
@@ -168,6 +175,7 @@ const Suspicion = (() => {
     suspected,
     mostSuspected,
     sayAloud,
+    blame,
     hasDreamtAloud,
     dreamtCult,
     named,

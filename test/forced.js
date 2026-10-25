@@ -616,7 +616,7 @@ const SCRIPT = () => {
         ref: S.log.refusedInq,
         day: S.day,
         al: S.alerted,
-        fg: S.falseGuard,
+        fg: S.sworn.cult,
         b: RULES.night.betray
       };
     k1.status = k2.status = 'present';
@@ -628,7 +628,7 @@ const SCRIPT = () => {
     S.log.refusedInq = [{ id: k2.id, day: 1 }];
     S.day = Math.max(2, S.day);
     S.alerted = false;
-    S.falseGuard = null;
+    S.sworn.cult = null;
     RULES.night.betray = 99;
     const night = saved => {
       k2.status = 'present';
@@ -665,7 +665,7 @@ const SCRIPT = () => {
     S.log.refusedInq = keep.ref;
     S.day = keep.day;
     S.alerted = keep.al;
-    S.falseGuard = keep.fg;
+    S.sworn.cult = keep.fg;
     RULES.night.betray = keep.b;
   }
   // a night with the rite complete: the gate opens early
@@ -1333,7 +1333,7 @@ const SCRIPT = () => {
   visit('visit-strikes', true, { strike: 1, kills: 1 });
   // the deed (game/deed.js): the evening's offer; whom, with what, and a trace to lay; then each way the night turns, the
   // camp's judgement (kept, or sent away: the ending)
-  const keepWatch = window.chooseWatch;
+  const keepWatch = Watch.choose;
   const deed = (tag, o) => {
     until(() => {
       newGame('Marlowe', 'soldier');
@@ -1365,7 +1365,7 @@ const SCRIPT = () => {
       return o.you ? 'player' : freeChars().find(c => c.role !== 'cult' && c !== t).id;
     };
     RULES.deed.vote = o.novote ? [0, 0, 0, 0] : [0, 0, 0.45, 0.75];
-    window.chooseWatch = o.watched ? () => t.id : keepWatch;
+    Watch.choose = o.watched ? () => t.id : keepWatch;
     goTo('camp');
     if (tag === 'deed-killed') cap('deed-offer');
     choose(/Settle it yourself|Взять всё в свои руки/);
@@ -1379,7 +1379,7 @@ const SCRIPT = () => {
     choose(/Night falls|Опускается ночь/);
     cap(tag);
     window.chooseVictim = keepVictim;
-    window.chooseWatch = keepWatch;
+    Watch.choose = keepWatch;
   };
   deed('deed-killed', { kill: 1, plant: true });
   deed('deed-plant-seen', { kill: 1, plant: true, plantSeen: 1 });

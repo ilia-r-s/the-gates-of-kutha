@@ -49,17 +49,16 @@ function breakfastBlame() {
     seen = thiefSaw(s), // the thief who saw who did it mostly only hints (people/thief.js); now and then he says it aloud
     outright = !!seen && chance(RULES.thief.outright),
     others = free.filter(o => o.id !== s.id && (!seen || o.id !== seen.actor));
-  let t;
-  if (outright) t = C(seen.actor);
-  else if (s.role === 'cult') {
-    const inno = others.filter(o => o.role !== 'cult');
-    t = busFor(s, others); // (the other of the cult, once it looks lost, by one ruthless enough)
-    if (!t) {
-      if (!inno.length || !chance(TP(s).frame)) return '';
-      t = Ties.pickByLike(s, inno, -1);
-    }
-  } else t = innocentBlames(s, others);
+  const t = outright ? C(seen.actor) : Parts.move(s, 'nameAloud')(s, others); // (people/parts.js)
   return t ? blameAloud(s, t) : '';
+}
+// the cult, blaming aloud: the other of it, once it looks lost, by one ruthless enough (busFor); else, as it frames, an
+// innocent it dislikes; or nobody
+function cultNamesAloud(s, others) {
+  const inno = others.filter(o => o.role !== 'cult'),
+    t = busFor(s, others);
+  if (t) return t;
+  return !inno.length || !chance(TP(s).frame) ? null : Ties.pickByLike(s, inno, -1);
 }
 // After a quarrel (game/events.js), each morning it may flare up again: the one who feels it more blames the other
 // before everyone (unless both are of the cult, or it would name the one the thief saw). Once, or never.
@@ -77,8 +76,7 @@ function feudAgain() {
 function blameAloud(s, t, feud = false) {
   const heavy = weighty('talk');
   stirred('talk');
-  Record.testify(s.id, t.id, 'distrust', 'cult');
-  Suspicion.sayAloud(s.id, t.id, 'cult', 'blame');
+  Suspicion.blame(s.id, t.id);
   const lead = feud
     ? bi(
         `At breakfast the quarrel between ${s.short} and ${t.short} flares up again. ${s.short} says, loudly enough for everyone:`,

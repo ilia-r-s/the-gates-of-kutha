@@ -43,11 +43,13 @@ const SCRIPT = [
   'people/gossip.js',    // what people say of each other, and of you
   'people/flirt.js',     // a light flirtation, now and then
   'people/visit.js',     // a visit to your tent as the evening ends, once a season at most
+  'people/watch.js',     // promises to watch your tent, and the Watcher's nights
   'people/manner.js',    // what shows of a feeling, and what does not: greetings, faces, partings
   'people/thief.js',     // the thief as witness
   'people/cunning.js',   // the cult's craft: planted traces, kept promises, volunteers, the patient traitor
   'people/alibis.js',    // the nights: who was where, who saw what
   'people/dialog.js',    // everything you can say to someone, and what they answer
+  'people/parts.js',     // each part's playbook: what the cult, the Dreamer, the Watcher, the thief and anyone do
   'game/day.js',         // the day: places, searching, translating, examining, resting
   'game/dread.js',       // horrors outside the tomb, and the scorched circle
   'game/hazards.js',     // the dig's own dangers by day, and harm done you in secret by night

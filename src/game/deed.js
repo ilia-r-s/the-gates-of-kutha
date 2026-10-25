@@ -157,7 +157,7 @@ function deedNight(night) {
       `<p>Под утро вы добираетесь до палатки ${ru.c(t, 'g')}. Она пуста, койка холодна. Где бы ${ru.c(t)} ни ${ru.gs(t, 'был', 'была')} в этот час, ${ru.gs(t, 'он', 'она')} не спит.</p>`
     );
     h += hurt(...D.cost.away);
-  } else if (night.guard === t.id && night.watcher && isFree(night.watcher) && chance(RULES.night.watched)) {
+  } else if (night.watcher && isFree(night.watcher) && Watch.holds(night, t.id)) {
     d.outcome = 'watched';
     d.knewBy = chance(D.knows) ? night.watcher.id : null;
     S.log.guarded.push({ day: S.day, id: t.id, you: true });
@@ -247,7 +247,7 @@ function deedNight(night) {
   // knows your tent was empty, mostly, and is seen, as at any night's watch: night.seen)
   if (night.youOut === 'guarded') {
     const w = night.watcher,
-      seen = chance(RULES.night.seen);
+      seen = Watch.seen();
     if (seen) {
       S.revealed[w.id] = 'warden';
       fixMark(w);

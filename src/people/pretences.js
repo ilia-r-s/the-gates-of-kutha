@@ -112,12 +112,9 @@ const OWN_UP = {
   staged: (c, how, ctx) => {
     S.log.staged.push({ day: S.day, id: c.id });
     const said = OWN_UP['hid-warden'](c, how, ctx);
-    if (S.guardPromise === c.id) {
-      S.guardPromise = null;
-      if (Ties.friend(c)) {
-        if (c.role === 'cult') S.falseGuard = c.id;
-        else S.fakeGuard = c.id;
-      }
+    if (Watch.sworn('warden') === c.id) {
+      Watch.unswear('warden');
+      if (Ties.friend(c)) Watch.swear(c); // (the cult's, or a pretender's)
     }
     return said;
   },
@@ -163,7 +160,7 @@ const OWN_UP = {
   },
   'hid-warden': (c, how, { lied, evaded, g, N, Nr, adm }) => {
     if (how === 'trust' || how === 'aside') {
-      S.guardPromise = c.id;
+      Watch.swear(c, 'warden');
     }
     Record.journal(bi(`${N} admitted to keeping watch.`, `${Nr} ${adm}, что стоит на страже.`));
     if (how === 'pressed')

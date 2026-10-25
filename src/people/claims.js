@@ -9,32 +9,38 @@
 function assignClaims() {
   S.claim = {};
   S.loud = null;
-  S.fakeGuard = null;
   S.order.forEach(id => {
     const c = C(id),
-      t = TP(c),
-      K = RULES.claims,
       honest = temperOf(c) === 'honest' && !chance(RULES.scale.rarest); // (the honest evade rather than lie, nearly always)
-    let role = 'none',
-      why = 'truth';
-    if (c.role === 'seer' || c.role === 'warden') {
-      if (chance(c.role === 'seer' ? t.hideSeer : t.hideWarden)) {
-        why = 'conceal';
-        role = honest ? 'evade' : 'none';
-      } else role = c.role;
-    } else if (c.role === 'smuggler' && !honest && chance(t.cover)) {
-      role = 'warden'; // (his nights out explained)
-      why = 'conceal';
-    } else if (!honest && chance(t.liked)) {
-      role = chance(K.likedSeer) ? 'seer' : 'warden';
-      why = c.role === 'cult' ? 'deceit' : 'liked';
-    } else if (chance(honest ? K.evadeHonest : K.evadeAny)) {
-      role = 'evade'; // (nothing to claim, and will not say all the same)
-      why = c.role === 'smuggler' || c.role === 'cult' ? 'conceal' : 'reticent';
-    } else if (c.role === 'smuggler' || c.role === 'cult') why = 'conceal'; // (no part, as they say; not all they are)
+    const { role, why } = Parts.move(c, 'claim')(c, TP(c), honest);
     S.claim[id] = { role, why, said: null, recanted: null };
   });
 }
+// What each part claims at the start (people/parts.js), given its temperament (t) and whether it is honest, and so
+// evades rather than lies: { role, why }. The true Dreamer and Watcher claim their part, or hide it (hideSeer,
+// hideWarden), the honest by evading; the thief may claim the watch to cover his nights (cover), and otherwise claims as
+// anyone does; anyone may claim a part for the liking (liked: the Dreamer's, now and then, at likedSeer, else the
+// Watcher's), or evade the question (evadeHonest, evadeAny: nothing to claim, and will not say all the same), or say
+// they have none. The cult claims as anyone does, at the same odds: as cover (deceit), and its none is not all it is
+// (conceal), as the thief's is not.
+const claimHidden = (c, hide, honest) =>
+  chance(hide) ? { role: honest ? 'evade' : 'none', why: 'conceal' } : { role: c.role, why: 'truth' };
+function claimAsAnyone(t, honest, why = { liked: 'liked', evade: 'reticent', none: 'truth' }) {
+  const K = RULES.claims;
+  if (!honest && chance(t.liked)) return { role: chance(K.likedSeer) ? 'seer' : 'warden', why: why.liked };
+  if (chance(honest ? K.evadeHonest : K.evadeAny)) return { role: 'evade', why: why.evade };
+  return { role: 'none', why: why.none };
+}
+const CLAIM_AS = {
+  seer: (c, t, honest) => claimHidden(c, t.hideSeer, honest),
+  warden: (c, t, honest) => claimHidden(c, t.hideWarden, honest),
+  smuggler: (c, t, honest) =>
+    !honest && chance(t.cover)
+      ? { role: 'warden', why: 'conceal' } // (his nights out explained)
+      : claimAsAnyone(t, honest, { liked: 'liked', evade: 'conceal', none: 'conceal' }),
+  cult: (c, t, honest) => claimAsAnyone(t, honest, { liked: 'deceit', evade: 'conceal', none: 'conceal' }),
+  anyone: (c, t, honest) => claimAsAnyone(t, honest)
+};
 const claimOf = c => S.claim[typeof c === 'string' ? c : c.id];
 const trueClaim = c => (c.role === 'seer' ? 'seer' : c.role === 'warden' ? 'warden' : 'none');
 const lying = c => claimOf(c).role !== trueClaim(c);
@@ -152,17 +158,20 @@ function trueDream(c, fresh = false) {
   if (c.role !== 'seer' || claimOf(c).role !== 'seer') return null;
   const v = c.visions.filter(x => isFree(C(x.about)) && !(fresh && x.told)).pop();
   if (!v) return null;
+  return tellDream(c, visionFor(c, v));
+}
+// The dream someone tells today: from now on theirs for the day, told the same way again that day (dreamtToday). One
+// writer for every dream of the day: a vision of the true Dreamer's (visionFor, marked told), one made up at its first
+// telling (madeUpDream: the cult's or a pretender's), one dreamt for the occasion (dreamNow: an answer).
+const dreamFor = (c, d) => (c.dreamt = { day: S.day, d }).d;
+function visionFor(c, v) {
   v.told = true;
-  c.dreamt = { day: S.day, d: { t: C(v.about), cult: v.cult } };
-  return tellDream(c, c.dreamt.d);
+  return dreamFor(c, { t: C(v.about), cult: v.cult });
 }
 // today's made-up dream (dreamtToday: one has been told already today)
 const dreamtToday = c => !!c.dreamt && c.dreamt.day === S.day;
 // a dream dreamt for the occasion (an answer at breakfast): today's, from now on, and told
-const dreamNow = (c, d) => {
-  c.dreamt = { day: S.day, d };
-  return tellDream(c, d);
-};
+const dreamNow = (c, d) => tellDream(c, dreamFor(c, d));
 // Someone who claimed no part, named guilty in a dream told aloud, may claim on the spot to dream as well (heat: in a
 // temper, not to be liked): from now on one who claims to dream like any other, of the cult or not.
 function claimOnTheSpot(c) {
@@ -184,7 +193,7 @@ function cornerClaims() {
 // A dream made up for the occasion, dreamt once a day and told the same way again that day: the cult's (cultDream) or
 // anyone else's (fakeDream).
 function madeUpDream(c) {
-  if (!dreamtToday(c)) c.dreamt = { day: S.day, d: c.role === 'cult' ? cultDream(c) : fakeDream(c) };
+  if (!dreamtToday(c)) dreamFor(c, Parts.move(c, 'dream')(c));
   return c.dreamt.d;
 }
 // those who have dreamt aloud before everyone, of a pool

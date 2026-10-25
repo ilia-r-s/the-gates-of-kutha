@@ -165,11 +165,10 @@ function guestStrikes(night) {
 // tent, past the Watcher if he watches it (and his chance of turning anyone), and past luck, and she dies beside you in
 // your sleep; or it finds her own tent empty, and nobody dies, and by breakfast the camp has worked out where she slept.
 function herNight(night) {
-  const h = night.guest,
-    N = RULES.night;
+  const h = night.guest;
   if (chance(RULES.visit.found)) {
     night.loc = 'camp'; // (your tent)
-    if (night.guard === 'player' && chance(N.watched)) {
+    if (Watch.holds(night, 'player')) {
       night.saved = 'watch';
       S.log.visit.found = 'watch';
       S.log.guarded.push({ day: S.day, id: h.id });
@@ -178,7 +177,7 @@ function herNight(night) {
         `<p>Под утро у палатки слышны возня и чья-то ругань. Когда вы откидываете полог, снаружи уже никого нет — только лампа удаляется между палатками. ${ru.c(h)} так и не проснулась.</p>`
       );
     }
-    if (chance(N.spared)) {
+    if (Watch.spared()) {
       night.saved = 'luck';
       S.log.visit.found = 'luck';
       S.log.spared.push({ day: S.day, id: h.id });

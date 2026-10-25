@@ -426,8 +426,7 @@ const Moments = (() => {
       },
       spoke: (sp, o) => {
         o.by = sp.id;
-        Record.testify(sp.id, o.about, 'distrust', 'cult'); // (blame aloud, as any: people/social.js, blameAloud)
-        Suspicion.sayAloud(sp.id, o.about, 'cult', 'blame');
+        Suspicion.blame(sp.id, o.about); // (a blame aloud, as any)
       },
       odds: {
         back: moment('the dead had named them: suspects the one who says so', [['base', (l, o, pr) => pr.back]]),
