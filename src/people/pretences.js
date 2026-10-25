@@ -30,18 +30,25 @@ function confessChance(c, takenToday) {
   const tp = TP(c),
     about = f => S.testimony.filter(t => t.about === c.id && f(t)).length;
   const K = RULES.confess;
+  // one of the cult that answered a dream for the other of it (game/night.js, answerWith) holds to its story: dropped,
+  // it would undo the answer and give the two of them away; only the rash let it go as readily as anyone (TEMPERS
+  // counter, at most 1)
+  const held = c.role === 'cult' && claimOf(c).stood ? Math.min(1, tp.counter) : 1;
   if (k === 'staged') return K.staged;
   if (k === 'thief') return Math.min(K.cap, tp.confess * K.thief + (c.rapport >= 2 ? K.trusting : 0));
   if (k.indexOf('hid') === 0)
     return Math.min(K.cap, tp.confess * K.hidden + (takenToday ? K.afterDeath : 0) + (c.rapport >= 2 ? K.trusting : 0));
-  return Math.min(
-    K.cap,
-    tp.confess +
-      (rivalClaim(c) ? K.rival : 0) +
-      (about(t => t.kind === 'vision' && t.verdict === 'cult') ? K.dreamt : 0) +
-      (about(t => t.kind === 'failwatch') ? K.caught : 0) +
-      (about(t => t.kind === 'distrust') >= 2 ? K.blamed : 0) +
-      (c.rapport >= 2 ? K.trusting : 0)
+  return (
+    held *
+    Math.min(
+      K.cap,
+      tp.confess +
+        (rivalClaim(c) ? K.rival : 0) +
+        (about(t => t.kind === 'vision' && t.verdict === 'cult') ? K.dreamt : 0) +
+        (about(t => t.kind === 'failwatch') ? K.caught : 0) +
+        (about(t => t.kind === 'distrust') >= 2 ? K.blamed : 0) +
+        (c.rapport >= 2 ? K.trusting : 0)
+    )
   );
 }
 // Someone drops a pretence: their claim is set right and the camp's record notes it; ownUp says what it means and what

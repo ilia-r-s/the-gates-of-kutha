@@ -266,18 +266,29 @@ function partingDream(c) {
 // Who answers for one named guilty in a dream told aloud (t, by c): anyone else here who claims to dream, the true
 // Dreamer among them, for one they would protect (a friend; for the cult, the other of it as well), as readily as they
 // stand up for anyone (CRAFT defend); the true Dreamer only with a clean dream of them to tell, anyone else with no
-// dream told yet today.
+// dream told yet today. The cult answering for the other of it is the exception (mateOdds).
 function defenderOf(t, c) {
   const K = RULES.claims;
   return (
     shuffle(freeChars()).find(a => {
       if (a.id === t.id || a.id === c.id || a.status !== 'present' || claimOf(a).role !== 'seer') return false;
-      if (!(likes(a.id, t.id) >= 1 || (a.role === 'cult' && t.role === 'cult'))) return false;
+      const mate = a.role === 'cult' && t.role === 'cult';
+      if (!(likes(a.id, t.id) >= 1 || mate)) return false;
       const can = a.role === 'seer' ? a.visions.some(v => v.about === t.id && !v.cult) : !dreamtToday(a);
-      return can && chance(K.defend * craft(a).defend);
+      return can && chance(K.defend * craft(a).defend * (mate ? mateOdds(a, t) : 1));
     }) || null
   );
 }
+// One of the cult answering a dream told aloud for the other of it is, as a rule, a poor gamble: it ties the two of
+// them together before everyone, a dream that names the answerer next makes its story dangerous, and a story given up
+// later undoes the answer and gives it away. So mostly only the rash fall into it, as readily as they would answer a
+// dream against themselves (TEMPERS counter, at most 1: the light-headed, the liar, the suspicious; seldom the
+// calculating, the detached, the conscientious, the honest). It pays only when the other of it is all but lost already
+// and the answerer's word is worth something: it has dreamt aloud before, and nobody suspects it; then anyone of the
+// cult may stake its word on it. (Measured: answering for a partner not yet lost, or late in the season, helped you
+// rather than the cult; for one already lost, by one already believed, it helped the cult.)
+const mateGamble = (a, t) => looksLost(t) && aloudBefore(a) && !suspectedBy(a.id).length;
+const mateOdds = (a, t) => (mateGamble(a, t) ? 1 : Math.min(1, TP(a).counter));
 // The true Dreamer and Watcher who hid their part come clean once they trust you enough, mostly (confess.atTrust, the
 // less the more they would hide it): a chance a day, however often you come to talk (S.recantTried).
 function recantTrust(c) {

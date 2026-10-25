@@ -638,6 +638,8 @@ function answerDream(c, d) {
 // behalf, a dream that the one named is clean
 function answerWith(a, d, c, forOther) {
   const first = !aloudBefore(a);
+  // (one of the cult that answers for the other of it holds to its story from now on: people/pretences.js)
+  if (forOther && a.role === 'cult' && d.t.role === 'cult') claimOf(a).stood = d.t.id;
   dreamNow(a, d);
   return (
     (forOther
