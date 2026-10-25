@@ -63,7 +63,7 @@ rite, before the camp turns on you, the night takes you or your nerve gives out.
   </tr>
   <tr>
     <td width="50%"><img src="docs/images/morning.png" alt="Night over the camp, and the report of what the night brought"><br><sub>Night, and morning: what the dark brought, and what the camp makes of it.</sub></td>
-    <td width="50%"><img src="docs/images/casebook.png" alt="The casebook's people tab: each person's portrait, trust, habits and what they claim"><br><sub>The casebook: habits, claims, marks, and who suspects whom.</sub></td>
+    <td width="50%"><img src="docs/images/casebook.png" alt="Choosing where to go next, beside the casebook's people: each one's portrait, trust, habits noted and what they claim"><br><sub>Where to go next, and the casebook: habits, trust, claims and your marks.</sub></td>
   </tr>
   <tr>
     <td width="50%"><img src="docs/images/below.png" alt="The first gate below the ziggurat, a brick doorway between two lamps, with a companion"><br><sub>Below: the first of seven gates.</sub></td>

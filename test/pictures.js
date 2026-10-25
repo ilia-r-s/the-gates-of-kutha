@@ -43,6 +43,7 @@ async function shoot(page, name, what) {
   await settle(page);
   const file = path.join(OUT, `${name}.png`);
   if (what === 'casebook') {
+    // (the casebook's people, the page scrolled down to them, so that the picture is as wide as the others)
     await page.evaluate(() => {
       S_ui.tab = 'people';
       renderBook();
@@ -50,15 +51,11 @@ async function shoot(page, name, what) {
       tp.style.maxHeight = 'none';
       tp.style.height = 'auto';
       tp.style.overflow = 'visible';
+      window.scrollTo(0, document.querySelector('.casebook').getBoundingClientRect().top + window.scrollY - 24);
     });
-    const el = await page.$('.casebook');
-    const box = await el.boundingBox();
-    await page.screenshot({
-      path: file,
-      clip: { x: box.x, y: box.y, width: box.width, height: Math.min(box.height, 760) },
-      fullPage: true
-    });
-  } else await page.screenshot({ path: file });
+    await page.waitForTimeout(200);
+  }
+  await page.screenshot({ path: file });
   return file;
 }
 // a season from its seed: through the title screen and the reply as a player would, then played by the policy until
