@@ -27,20 +27,21 @@ The rarest turns are never announced; the ending tells them. Among them: a table
 false (`PUZ.scribe`, 1% a line); a sign that is not the power's at all but another's, by coincidence (`PUZ.stray`, 1% a
 sign); one of a charm's marks misread (`PUZ.misread`, 1%); a habit you noticed that was only that day's (`day.misnote`,
 1%); a trace that was not its owner's own habit that night, a borrowed pair of boots, a cadged cigarette
-(`examine.smudge`, 1%); the old title a philologist knows, misremembered (`study.misremember`, 1%); a death in another
-power's manner than the one below (3%: all but `night.manner`); a Dreamer's dream that is muddied (5%), or a night
-without one (3%); a night the cult lies low for no reason anyone will know (`night.low.odds`, 4%, × the season's
-patience); an attack that fails by luck (`night.spared`, 3%); a scene swept clean (`night.swept`, 3%); the cult coming
-for you for no reason you will ever know (`night.you`, 1% a night, more as the days go); a hand at an inquiry raised
-against its owner's own leaning (`verdict.contrary`, 2%).
+(`examine.smudge`, 1%); the old title a philologist knows, misremembered (`study.misremember`, 1%); a charm burned
+before your eyes in the sanctum that was not the ward (`descent.feint`, 10%); a death in another power's manner than the
+one below (3%: all but `night.manner`); a Dreamer's dream that is muddied (5%), or a night without one (3%); a night the
+cult lies low for no reason anyone will know (`night.low.odds`, 4%, × the season's patience); an attack that fails by
+luck (`night.spared`, 3%); a scene swept clean (`night.swept`, 3%); the cult coming for you for no reason you will ever
+know (`night.you`, 1% a night, more as the days go); a hand at an inquiry raised against its owner's own leaning
+(`verdict.contrary`, 2%).
 
 The exceptions, each for a reason:
 
 1. **The calendar**: five days, three slots a day (two on a short day). It is the frame the season is played in.
 2. **The counting**: the meters (nerve, wounds, the rite) and their limits (nerve at nothing is madness, wounds at the
-   limit death, the rite at its end opens the gate), the word each meter shows (below) and the casebook's word for
-   each person's trust, the ending's score, and which of the endings a season comes to, which follows from what
-   happened. What they show is exactly what stands; the chance is in what happens, not in the arithmetic.
+   limit death, the rite at its end opens the gate), the word each meter shows (below) and the casebook's word for each
+   person's trust, the ending's score, and which of the endings a season comes to, which follows from what happened.
+   What they show is exactly what stands; the chance is in what happens, not in the arithmetic.
 3. **A step of trust or suspicion is one step.** Both are short scales (trust from −2 to 3, suspicion from 0 to 3), and
    a step is their unit; whether anything moves is always a throw.
 4. **The truth, once dealt.** The dice deal the cast's parts, temperaments, likes and habits, the power below, its
@@ -55,12 +56,12 @@ The exceptions, each for a reason:
 6. **The cult never confesses to being the cult.** It may tell the truth about other things, slip, flinch, blurt what
    only the attacker knew, or be named by a witness; but its faith does not break of itself. One confession would end
    the mystery for nothing, and the cult is meant to be hard to find.
-7. **Presentation**: faces in the pictures, the casebook's words, the ending page's wording, the epilogues, the music.
-   These are fixed by the season without the dice (`hash01`), so that drawing or reading never changes what happens;
-   they decide nothing.
+7. **Presentation**: faces in the pictures and the greeting each slot, the casebook's words, the ending page's wording,
+   the epilogues, the music. These are fixed by the season without the dice (`hash01`), so that drawing or reading never
+   changes what happens; they decide nothing.
 8. **Who the people are.** A priest keeps his vows: Père Anselm flirts with nobody and pairs off with nobody. Flirtation
-   in the camp is only between a man and a woman, and toward you comes only from the women at the dig. These are part
-   of who the cast are, like their names.
+   in the camp is only between a man and a woman, and toward you comes only from the women at the dig. These are part of
+   who the cast are, like their names.
 
 ## The season
 
@@ -73,7 +74,8 @@ The exceptions, each for a reason:
   (`adapt.idleRite`: how the cult reads you, below). Exposing a cultist sets it back about `inquiry.doomRight` (2); a
   wrong accusation advances it about `inquiry.doomWrong` (2). From `start.doomStir` (5) the scorched circle at the foot
   of E-meslam is seen to widen now and then (`night.riteNote`); from `start.doomWarn` (8) you are warned every dawn, as
-  the meter itself would tell you. If it completes, the descent begins at once.
+  the meter itself would tell you. If it completes, the descent begins at once, with the rite at its top
+  (`start.doomMax`) however far past it the last night carried it; below, only what you do there carries it further.
 - **You**: nerve `start.nerve` (10), wounds `start.wounds` (3). Nerve at zero: madness. Wounds at the limit: death.
   During play nerve, wounds and trust are never told in numbers, only in words ("your nerve frays", "you are badly
   wounded", "trusts you more now"); a loss of `scale.severe` (2) or more is told as a great one, and so is a gain of
@@ -215,14 +217,15 @@ by day the cult mostly keeps clear of its own (`company.cultApart`), the better 
   give up a third); a smuggler's trace is shown to be a thief's; a trace left by someone who had been there earlier is
   shown to be older than the night; an innocent's trace laid by the cult is shown to be planted, and now and then the
   attacker's own is found beneath it (`cunning.underneath`). The scene can mislead you, too (`examine.misread`, 15%; ×
-  `misreadTwo`, 0.2, when two traces lie side by side): the attacker's own trace taken for an older one, or an older one
-  taken for the attacker's. A scene that will not read may keep something for another look (`examine.again`, 20%).
-  Whatever turns up belongs to the night of the attack, not to the day you looked; and once in a hundred traces the
-  habit it shows was not its owner's own that night (`examine.smudge`).
+  `misreadTwo`, 0.2, when two traces lie side by side): the attacker's own trace taken for an older one (a careless
+  attacker's two together, as they lie side by side), or an older one taken for the attacker's. A scene that will not
+  read may keep something for another look (`examine.again`, 20%). Whatever turns up belongs to the night of the attack,
+  not to the day you looked; and once in a hundred traces the habit it shows was not its owner's own that night
+  (`examine.smudge`).
 - **Translate** a fragment at camp (`study.odds` 62%): about `PUZ.lines` (4) lines (now and then three or five), leaning
   toward what you chose to look for; one line in a hundred is a scribe's error, and false (`PUZ.scribe`). Reading costs
-  nerve, the more the more you know: about a point of it at `study.cost` (50%) + `study.costLine` (3%) for each line
-  you knew already, at most `costMax` (90%; a philologist × `costPhilologist`, 0.75), and about two at `worse` (20%) +
+  nerve, the more the more you know: about a point of it at `study.cost` (50%) + `study.costLine` (3%) for each line you
+  knew already, at most `costMax` (90%; a philologist × `costPhilologist`, 0.75), and about two at `worse` (20%) +
   `worseLine` (2%) per line known; signs that will not come clear cost a point all the same at `failCost` (40%), and a
   failure may crumble the fragment (`crumble`, 30%). At night the words may come back to you (`study.linger`, 1.2% per
   line you know, at most `lingerMax`, 40%) for another point. So reading alone can drive you mad: the more of the
@@ -268,20 +271,20 @@ you, speaks against it, or says nothing; the hands are shown by name, and the ca
   a sworn watch slept through, +`verdict.flinch` (0.5) for a flinch at what you show them (an old charm, a find, the
   tablets' words) or a hint at their nights, +`verdict.sight` (1) for each sighting in the dark that fits a habit of
   theirs you have seen, +`verdict.lie` (1) for each account of a night that the person they said they were with does not
-  bear out, +`verdict.there` (0.5) for each account of a night that puts them, by their own word, where it
-  happened, +`verdict.spite` (0.5) for being caught at your tent in the night, meaning you harm, +`verdict.distrust`
-  (0.25) for each distrust voiced. The camp no longer weighs the word of one of the cult unmasked, nor the dreams of
-  someone who has owned that they never dreamed. Nothing tells you how strong your case is: that is yours to judge from
-  the casebook.
+  bear out, +`verdict.there` (0.5) for each account of a night that puts them, by their own word, where it happened,
+  +`verdict.spite` (0.5) for being caught at your tent in the night, meaning you harm, +`verdict.distrust` (0.25) for
+  each distrust voiced. The camp no longer weighs the word of one of the cult unmasked, nor the dreams of someone who
+  has owned that they never dreamed. Nothing tells you how strong your case is: that is yours to judge from the
+  casebook.
 - **Each of the camp**, the cult among them, weighs it: their own suspicion of the accused (0 to 3; the thief who saw
-  them at it, 3) + the case + `verdict.trust` (0.5) × their trust in you + how far they take your word −
-  `verdict.like` (0.75) × their liking for the accused + `verdict.fear` (0.15) × the night's dead so far (at most
-  `fearCap`, 4) − `verdict.anger` (0.25) × the camp's anger − `verdict.again` (0.5) for each inquiry of the last
-  `againDays` (2) evenings that it refused or that sent an innocent away (the camp tires of inquiries that come to
-  nothing) ± up to `verdict.mood` (1) for the evening's mood, the same for everyone in the tent (× the season mood's
-  swing) ± up to `verdict.whim` (0.75) of their own. At `verdict.back` (1.8) or more they side with you; below
-  `verdict.against` (0.5) they speak against it; between, they say nothing. Now and then a hand goes the other way from
-  its owner's leaning (`verdict.contrary`, 2%: a whim, a slip).
+  them at it, 3) + the case + `verdict.trust` (0.5) × their trust in you + how far they take your word − `verdict.like`
+  (0.75) × their liking for the accused + `verdict.fear` (0.15) × the night's dead so far (at most `fearCap`, 4) −
+  `verdict.anger` (0.25) × the camp's anger − `verdict.again` (0.5) for each inquiry of the last `againDays` (2)
+  evenings that it refused or that sent an innocent away (the camp tires of inquiries that come to nothing) ± up to
+  `verdict.mood` (1) for the evening's mood, the same for everyone in the tent (× the season mood's swing) ± up to
+  `verdict.whim` (0.75) of their own. At `verdict.back` (1.8) or more they side with you; below `verdict.against` (0.5)
+  they speak against it; between, they say nothing. Now and then a hand goes the other way from its owner's leaning
+  (`verdict.contrary`, 2%: a whim, a slip).
 - **Your word.** At first most of the camp gives a newcomer the benefit of the doubt: `verdict.word` (0.5), + their
   temperament's `word` (the light-headed and conscientious readier, the suspicious, detached and calculating slower), ±
   up to `verdict.wordSpread` (0.4) for who they are. Then, each by chance: once one of the cult is unmasked, more by
@@ -304,9 +307,10 @@ you, speaks against it, or says nothing; the hands are shown by name, and the ca
   wrong is suspected by some of the camp.
 - **Refused**, the accused stays, and holds it against you, whatever they are: for good as a rule (`verdict.grudge`,
   90%: trust −2), else as one turned against you (−1); now and then they half understand, and it costs only a step
-  (`verdict.forgive`, 5%; twice as readily for the honest, the conscientious and a friend). If they are one of the cult,
-  the cult knows you are close (`verdict.alerts`, 90%: as if you had confided in it). You lose about a point of nerve
-  (`inquiry.nerveRefused`, 1).
+  (`verdict.forgive`, 5%; twice as readily for the honest, the conscientious and a friend); and hardly ever
+  (`scale.rarest`, 1%), strangely, they bear you no grudge at all. If they are one of the cult, the cult knows you are
+  close (`verdict.alerts`, 90%: as if you had confided in it). You lose about a point of nerve (`inquiry.nerveRefused`,
+  1).
 - **Wrong**, someone outside the cult is sent away and holds it against you the same way; the rite gains about
   `inquiry.doomWrong` (2), the camp is angered (below), and you lose about two points of nerve (`inquiry.nerveWrong`,
   2), unless it was the thief (a thief caught is a thief caught, though it counts as a wrong accusation in everything
@@ -355,10 +359,12 @@ The night goes as any night, by its own dice. In the small hours, after the cult
   points of nerve, and a wound (`cost.failed`: 2, 1); if that wound is your last, the ending tells it.
 
 Someone may pass you between the tents (`deed.seen`, 18%, × the means' `noise`: a knife 1, the revolver 2; × `quietly`,
-0.5, if you never reached the cot); if the Watcher was watching your tent, it is the Watcher. Having reached the cot, you
-may leave a trace of your own without knowing it (`deed.trace`, 30%: a horn button), besides any habit you laid. If the
-cult came for you that night, it found your tent empty. If it was the last of the cult you killed, you carry on in the
-dark, none the wiser, and the descent finds the circle empty.
+0.5, if you never reached the cot); if the Watcher was watching your tent, it is the Watcher. Having reached the cot,
+you may leave a trace of your own without knowing it (`deed.trace`, 30%: a horn button), besides any habit you laid. If
+the cult came for you that night, it found your tent empty, unless the Watcher by it drove it off first
+(`night.watched`), and then the Watcher, seen as at any watch (`night.seen`), knows your tent was empty; one who swore
+to watch it and did not is told of as on any night. If it was the last of the cult you killed, you carry on in the dark,
+none the wiser, and the descent finds the circle empty.
 
 **The morning after**, whoever knows it was you (the one who woke, or the Watcher who drove you off, if they knew you;
 or whoever passed you) may tell the camp before breakfast (`deed.tell`, by their trust in you: 60% at −1 or lower, 35%
@@ -389,23 +395,25 @@ The ending counts the deed against you, and a killing names your style (Endings,
 ## Conversations
 
 Two questions to a conversation (`talk.questions`), then you take your leave; now and then the talk runs to a third
-(`talk.longer`, 8%) or is cut short after one (`talk.shorter`, 8%), and the page says so in words (one in no hurry today,
-after the second question; one with little time today, after the first). Thinking better of it before you have asked
-anything is no conversation. What you say, and much of what is said back, comes in several tellings, gone through in
-turn so that nothing is said the same way twice running (`data/variety.js`; `tellOne`, `tellAt` in `core/text.js`:
-chosen without the dice). Anyone, however they feel about you, may be having a bad day: they keep it short, refuse a favour or
-will not name names (`talk.offDay`, 5%, × how readily their feelings show; × `offDayFriend`, 0.4, with a friend).
+(`talk.longer`, 8%) or is cut short after one (`talk.shorter`, 8%), settled as you ask the first question, and the page
+says so in words (one in no hurry today, after the second question, or, after a cold or hurried word, only that they
+have not sent you away yet; one with little time today, after the first). Thinking better of it before you have asked
+anything is no conversation, and learns you nothing: the greeting is the slot's own (Manner, below). What you say, and
+much of what is said back, comes in several tellings, gone through in turn so that nothing is said the same way twice
+running (`data/variety.js`; `tellOne`, `tellAt` in `core/text.js`: chosen without the dice). Anyone, however they feel
+about you, may be having a bad day: they keep it short, refuse a favour or will not name names (`talk.offDay`, 5%, × how
+readily their feelings show; × `offDayFriend`, 0.4, with a friend).
 
 | Option | What it does |
 | --- | --- |
-| Make conversation | One of their habits, mostly (`talk.habit`, 65%); a scholar may share a tablet line (`talk.scholarLine`; one of the cult shares none about the power below or its ward); the talkative pass on gossip; you may glimpse their temperament (`talk.mien`); now and then a word about someone they feel strongly about (`talk.feel`, a little more or less often with the season's talk): fond of them, cannot stand them, or taken with them (true to their feelings, but for now and then the opposite, × how untrue their gossip runs: `talk.feelFalse`; and no cultist speaks of the other); small talk may warm them (temperament `chat` + `talk.warmth`; a cultist no more readily than anyone, except toward an occultist, whose interests it may half share: +`cunning.charm`); with someone mourning the night's dead, the day it happened, your company may comfort them instead (`talk.comfort`; trust +1, as far as devoted); with a friend (trust ≥ 2) it may steady your nerve a little (`talk.company`). Someone at trust ≤ −1 keeps it short, if they let it show (`talk.cold` × manner). |
+| Make conversation | One of their habits, mostly (`talk.habit`, 65%); a scholar may share a tablet line (`talk.scholarLine`; one of the cult shares none about the ward of the power below, but for a slip, `readings.cultSlip`; the rest it shares as anyone would); the talkative pass on gossip; you may glimpse their temperament (`talk.mien`); now and then a word about someone they feel strongly about (`talk.feel`, a little more or less often with the season's talk): fond of them, cannot stand them, or taken with them (true to their feelings, but for now and then the opposite, × how untrue their gossip runs: `talk.feelFalse`; and no cultist speaks of the other); small talk may warm them (temperament `chat` + `talk.warmth`; a cultist no more readily than anyone, except toward an occultist, whose interests it may half share: +`cunning.charm`); with someone mourning the night's dead, the day it happened, your company may comfort them instead (`talk.comfort`; trust +1, as far as devoted); with a friend (trust ≥ 2) it may steady your nerve a little (`talk.company`). Someone at trust ≤ −1 keeps it short, if they let it show (`talk.cold` × manner). |
 | Where were you last night | Their account of the night and anything they saw (below). Someone at trust ≤ −1 may keep a sighting back (`talk.withhold`), though not well. |
 | Crane's diary | The part they claim: Dreamer, Watcher, none, or (the honest, hiding something) no answer at all; now and then someone with nothing to claim will not say either, whoever they are (`claims.evadeAny`, 3%; the honest, `evadeHonest`, 15%). A liar may give themselves away (temperament `tell`). |
 | Whom do you distrust | A dream, if they claim to dream (the Dreamer mostly, `talk.dreamTell`, 85%; a pretender now and then, `dreamAnswer`); otherwise a name, or a refusal, mostly in their temperament's own way (`talk.ownWay`). The innocent name whom they suspect most, if anyone in earnest (`talk.nameSuspect`), and a fond friend only on the strongest suspicion (or, hardly ever, out of sorts: `scale.rarest`). A thief who saw something hints at it (below). |
 | What does this title mean | Anselm, Ilse and Zahrun gloss an old title. |
 | Show something | How they take a charm (fear, calm, a dealer's greed: the thief's at `talk.greed`, anyone's now and then, `greedOther`, 4%, twice as readily the liar and the calculating); Anselm and Ilse read what a charm binds (a charm shown again is read as before). |
 | Confide | Trust +1, if they take it (`confide.odds` 70% + 10% per trust + temperament; a cultist, an occultist's, +`cunning.listen`; −`confide.again` 15% for each confidence they have already taken). Whoever claims the watch, truly or not, and takes it at trust 2 or more swears to watch your tent, mostly (`talk.promise`, 85%); whoever claims to dream, at trust 1 or more, promises you their dreams as readily. A cultist confided in, whether it takes it or not, alerts the cult (`confide.alerts`, 90%). |
-| Press | `talk.press` 40% + soldier + 5% per trust to shake something loose; it costs trust, whoever they are and whatever comes of it, all but always (`talk.pressCost`, 90%). Anyone shaken who keeps up a story they have told may give it up (`claims.pressed`, 45%, + the temperament's `confess`): a part claimed that is not theirs, the cult's in the same words as anyone's, or a true part hidden; the smuggler gives up the smuggling. A cultist, shaken, lets something slip at the temperament's `slip`; otherwise turns it aside: a word about the thief (mostly, when there is a thief to give: `talk.cultTip`, 75%; now and then naming someone else seen out at night, `tipWrong`, 8%), or the same indignation anyone pressed for nothing would show. Anyone else shaken with nothing of their own to give up may turn it aside the same way, now and then (`talk.pressTip`); and now and then an innocent, shaken, says something that sounds just like the cult's own words, out of fear (`talk.falseSlip`, 3%; the thief, `falseSlipThief`, 10%). |
+| Press | `talk.press` 40% + soldier + 5% per trust to shake something loose; it costs trust, whoever they are and whatever comes of it, all but always (`talk.pressCost`, 90%). Anyone shaken who keeps up a story they have told may give it up (`claims.pressed`, 45%, + the temperament's `confess`): a part claimed that is not theirs, the cult's in the same words as anyone's, or a true part hidden; the smuggler gives up the smuggling. A cultist, shaken, lets something slip at the temperament's `slip`; otherwise turns it aside: a word about the thief (mostly, when there is a thief to give: `talk.cultTip`, 75%; now and then naming someone else seen out at night, `tipWrong`, 8%), or the same indignation anyone pressed for nothing would show. Anyone else shaken with nothing of their own to give up may turn it aside the same way, now and then (`talk.pressTip`); and now and then an innocent, shaken, says something that sounds just like the cult's own words, out of fear (`talk.falseSlip`, 3%; the thief, `falseSlipThief`, 10%). Pressed and not shaken, one of the cult may take it as a sign you are onto it (`talk.pressAlerts`, 50%), as if you had confided in it. |
 
 Someone at trust ≤ −1 refuses favours (`talk.refuse`): no gloss, no reading, no name.
 
@@ -419,8 +427,11 @@ their trust is the one thing that tells you exactly (the counting, above).
 
 - **Greetings.** Warm words from anyone who likes you (trust 1 or more) if it shows, cold ones from someone against you
   if it shows, otherwise an ordinary greeting, though a feeling held back may still show in the face (`manner.leak`). A
-  good day greets you warmly and a bad one coldly, whatever they feel. A cultist courting your trust may put on a warm
-  face it does not feel (`MANNER.mask`).
+  good day greets you warmly and a bad one coldly, whatever they feel. Anyone who feels nothing much either way about
+  you (trust 0 or 1) may put on a pleasant face they do not feel, warm words and a smile, as readily as their
+  temperament puts on faces (`MANNER.mask`); one of the cult, courting your trust, tries it a second time over: a little
+  more readily than anyone, never twice as readily. How someone greets you is fixed for the slot, and agrees with their
+  face in the picture of the place: a conversation opened again after thinking better of it opens the same way.
 - **Faces.** Each answer's own expression is warmed or cooled by the feeling, when it shows. A lie that shows
   (temperament `tell`) shows on the face, as a practised liar's half-smile or anyone else's unease.
 - **Flirting** looks coy mostly, but not always: a smile, a sly look, a wink. A joke about love and marriage
@@ -430,7 +441,8 @@ their trust is the one thing that tells you exactly (the counting, above).
   (`manner.parting`), or a back turned by someone against you (`talk.coldParting`), each only if it shows.
 - **About the dig** the same holds; those the camp suspects in earnest look worried, if it shows.
 
-Faces drawn in pictures are decided without the dice, so drawing a picture again never changes the game.
+Faces drawn in pictures, and greetings, are decided without the dice and fixed for the slot, so drawing a picture again,
+or opening a conversation again, never changes the game or tells you more.
 
 ## Traces and witnesses
 
@@ -442,24 +454,27 @@ are shared: many in the camp wear the same boots or smoke the same tobacco. Wher
 weight (`night.where`: the trench, the ziggurat, the graves, the canal and the magazine 1 each, the village 0.3).
 
 Nobody's night is simple (`alibis`, `people/alibis.js`). On the night of each attack (and on a night the cult lay low,
-everyone was somewhere all the same), everyone has an account. Friends spend the evening together (`pair`), wherever
-anyone might be of an evening (`alibis.where`), but never where it happened out on the tell (whoever does the night's
-work picks a place nobody is keeping company in); two who are sweet on each other may slip out somewhere quiet (`tryst`;
-not there either) and, unless honest, swear they were asleep in camp (`hide`);
-someone out alone may, by ill luck, have been where it happened (`astray`), be glimpsed there, or leave a trace there
-earlier in the evening, and then lie about it out of fear (`fear` × how readily they lie; `alibi`, one out alone),
-perhaps naming a friend as company (`fearFriend`), who may or may not bear it out (a cultist named so is glad of the
-alibi and backs it, `cultCover`). The innocent otherwise tell the truth about their evening, except habitual liars
-(temperament `lieSmall`). A cultist may claim an evening with someone who was alone (`cultPair`, 38%: so that the cult
-claims company as often as anyone does), where that one truly was (never the Watcher, who keeps the camp, nor anyone
-alone where it happened), so that the cult's evenings in company fall where anyone's do; a fond friend who bends the
-truth easily may back the story up (`cover`); and now and then the attacker owns being out near the place,
-rather than be caught lying (`bold`). Some saw someone pass in the dark and noticed one habit (`sawOut`, `sawFromCamp`):
-the attacker, or whoever else was about there (`seenAstray`); the light-headed may misremember it (`mistake`); a cultist
-who will frame an innocent invents a sighting (`frame` × temperament `frame`); and anyone sure of someone's guilt, or
-who cannot bear them, may say they saw them too (`invent` × temperament `frame`). One who found the body, or was there
-by ill luck, may let slip what nobody has told the camp, as the attacker may (`knew`): an innocent's slip looks like a
-guilty one. A friend (trust 2 or more) who saw someone may tell you before breakfast, unasked (`talk.volunteer`).
+everyone was somewhere all the same), everyone has an account. Everyone's evening is dealt the same way, the cult's
+among them (all but the thief, out on business of his own, and the Watcher, who keeps the camp). Friends spend the
+evening together (`pair`), wherever anyone might be of an evening (`alibis.where`), but never where it happened out on
+the tell (whoever does the night's work picks a place nobody is keeping company in). The cult keeps no closer company
+with its own than with anyone. Two who are sweet on each other may slip out somewhere quiet (`tryst`; not there either,
+nor the one doing the night's work) and, unless honest, swear they were asleep in camp (`hide`). Someone out alone may,
+by ill luck, have been where it happened (`astray`), be glimpsed there, or leave a trace there earlier in the evening,
+and then lie about it out of fear (`fear` × how readily they lie; `alibi`, one out alone), perhaps naming a friend as
+company (`fearFriend`), who may or may not bear it out (a fond friend who bends the truth backs it, `cover`; a cultist
+named so is glad of the alibi and backs it, `cultCover`). Otherwise everyone tells the truth about their evening, except
+habitual liars (temperament `lieSmall`), and now and then anyone will not say (`evadeNight`). The one of the cult who
+did the night's work went out to it later: its evening is its cover, told by the same rules, borne out by whoever it
+spent it with as often as anyone's is, and now and then it owns being out near the place as anyone there by ill luck
+might. So the cult claims company as often as anyone does (measured: 32% of its accounts against 27–32% for bystanders
+and the Dreamer), and its accounts fall as anyone's do. Some saw someone pass in the dark and noticed one habit
+(`sawOut`, `sawFromCamp`): the attacker, or whoever else was about there (`seenAstray`); the light-headed may
+misremember it (`mistake`); a cultist who will frame an innocent invents a sighting (`frame` × temperament `frame`); and
+anyone sure of someone's guilt, or who cannot bear them, may say they saw them too (`invent` × temperament `frame`). One
+who found the body, or was there by ill luck (the other of the cult as readily as anyone), may let slip what nobody has
+told the camp, as the attacker may (`knew`): an innocent's slip looks like a guilty one. A friend (trust 2 or more) who
+saw someone may tell you before breakfast, unasked (`talk.volunteer`).
 
 And nobody's account is sure: one attacked and saved glimpsed a habit of the attacker's (`alibis.glimpse`, 15%); the
 thief spends the night in camp after all (`smugglerIn`, 15%), tells the truth of his night (`thiefTruth`, 5%; an honest
@@ -472,15 +487,16 @@ So the innocent fall under suspicion as readily as the cult: they share its habi
 were in the wrong place at the wrong time, and are seen, named and blamed. Now and then an innocent ends the season with
 a case against them as strong as any cultist's.
 
-**The thief as witness.** Out on his own business, the smuggler may see the attack: at `thief.witness` (8%) any night,
-`thief.near` (50%) if he was where it happened, `thief.robbed` (40%) if his trace is at the scene. He says nothing (a
-thief who saw a murder would be the next), and the camp sees nothing of it; but he hints: when you ask whom he distrusts
-(`thief.hint`), and in his gossip (`thief.gossip`); and at an inquiry he votes against the one he saw as surely as
-anyone who suspects them most; asked whom he distrusts, now and then he names them outright (`thief.outright`, 10%). The
-one he saw is the one who did it, all but always (`thief.sure`, 95%; otherwise someone else about in the dark). When his
-own story breaks, he names the one he saw, if they are still at large: mostly when you press him into admitting the
-smuggling (`thief.pressed`, 90%); at `thief.own` when he comes clean of his own accord; at `thief.sent` when an inquiry
-sends him away. Having named one, he names another he saw only seldom (`thief.again`, 30%).
+**The thief as witness.** Out on his own business (never on a night spent in your tent), the smuggler may see the
+attack: at `thief.witness` (8%) any night, `thief.near` (50%) if he was where it happened, `thief.robbed` (40%) if his
+trace is at the scene. He says nothing (a thief who saw a murder would be the next), and the camp sees nothing of it;
+but he hints: when you ask whom he distrusts (`thief.hint`), and in his gossip (`thief.gossip`); and at an inquiry he
+votes against the one he saw as surely as anyone who suspects them most; asked whom he distrusts, now and then he names
+them outright (`thief.outright`, 10%). The one he saw is the one who did it, all but always (`thief.sure`, 95%;
+otherwise someone else about in the dark). When his own story breaks, he names the one he saw, if they are still at
+large: mostly when you press him into admitting the smuggling (`thief.pressed`, 90%); at `thief.own` when he comes clean
+of his own accord; at `thief.sent` when an inquiry sends him away. Having named one, he names another he saw only seldom
+(`thief.again`, 30%).
 
 ## The cult's craft
 
@@ -496,17 +512,19 @@ The cult is clever, mostly, and some of it more than the rest (`CRAFT`, by tempe
 | **Light-headed** | 10% | 40% | 5% | 30% | 5% | 35% | 60% | 70% | 10% |
 | **Suspicious** | 22% | 25% | 15% | 10% | 30% | 15% | 55% | 50% | 25% |
 
-- **A planted trace** (`plant`): the attacker lays the trace of an innocent it dislikes (never of that night's victim).
-  Unexamined, it looks like any other trace; examined, it shows for what it is.
+- **A planted trace** (`plant`): the attacker lays the trace of an innocent it dislikes (never of that night's victim,
+  nor of one who spent the night in your tent). Unexamined, it looks like any other trace; examined, it shows for what
+  it is.
 - **A sworn watch.** One of the cult who claims the watch swears to watch your tent as anyone who claims it would
   (confided in, or staging a coming clean to you alone, at trust 2 or more: below). That night the cult is torn between
   its cover and what it knows of you (your confidences, an enemy among it), and acts on what it knows only half as
   readily (`night.holds`, 50%): no more and no less than it takes for a broken watch to say about as much of anyone who
   swore it, since one of the cult who swore it was mostly confided in, and so knows you. If nothing came for you, the
   ending counts the promise kept.
-- **Courting you**: a warm face where there is no warmth (`MANNER.mask`), and the same indignation as anyone when
-  pressed for nothing; but no readier trust than anyone's, except toward an occultist, whose interests the cult may half
-  share: a little warmer in small talk (`cunning.charm`, 8%) and readier for your confidences (`cunning.listen`, 5%).
+- **Courting you**: a pleasant face where there is no warmth (`MANNER.mask`), put on as anyone of its temperament might
+  and then a second time over (Manner, above), and the same indignation as anyone when pressed for nothing; but no
+  readier trust than anyone's, except toward an occultist, whose interests the cult may half share: a little warmer in
+  small talk (`cunning.charm`, 8%) and readier for your confidences (`cunning.listen`, 5%).
 - **Careless** (`sloppy`): the attacker leaves a second trace of its own at the scene.
 - **Tidy** (`tidy`): the attacker leaves nothing else behind. Examining its trace shows it genuine (unless the scene
   misleads you, above), and gives up no second trace.
@@ -571,31 +589,33 @@ attacker, though someone may have been seen about. The ending tells it. The
 ending says why each quiet night was quiet, when it had a reason: the camp closing in on one of it, one of it unmasked
 that evening, or the rite far enough along to risk nothing.
 
-Otherwise it chooses its victim in this order: **you**, if you confided in a cultist (`night.alerted`, 55%) or made an
-enemy of one (trust −1 or lower: `night.enemy`, 20%), half as readily on a night one of it swore to watch your tent
-(`night.holds`, above), or
-for no reason you will ever know (`night.you`, 1%, + `youDay`, 0.5%, for each day gone); otherwise, rarely, one of its
-own (above); otherwise the dreamer the camp has heard name one of it guilty most often (`night.threat`, 70%: the true
-Dreamer, as a rule, since it goes by what was dreamt, not by who dreams true); the last pretender to dream aloud at
-breakfast (`night.loud`, 50%, × `loudSpared`, 0.3, while those dreams have done it no harm: a pretender naming the
+Otherwise it chooses its victim in this order: **you**, if you confided in a cultist or it has learned you are onto it
+(by a refused inquiry, a press it turned aside, or the deed) (`night.alerted`, 55%) or made an enemy of one (trust −1 or
+lower: `night.enemy`, 20%), half as readily on a night one of it swore to watch your tent (`night.holds`, above), or for
+no reason you will ever know (`night.you`, 1%, + `youDay`, 0.5%, for each day gone); otherwise, rarely, one of its own
+(above); otherwise the dreamer the camp has heard name one of it guilty most often (`night.threat`, 70%: the true
+Dreamer, as a rule, since it goes by what was dreamt, not by who dreams true); the last to dream aloud at breakfast,
+whoever they are (`night.loud`, 50%, × `loudSpared`, 0.3, while those dreams have done it no harm: one naming the
 innocent does its work for it); someone who has named an innocent guilty before everyone, in a dream or in blame aloud
 (`night.frame`, 60%, × the best of it at planting a trace, `CRAFT.plant`), so that with them dead it is the one they
 named whom the camp looks at; or anyone else, weighted toward those who stand by you (+`victims.yourFriend` per trust)
 and away from those the cult likes (×(1 − `victims.cultLike` × like) per cultist), toward those who have begun to
 suspect one of the cult (×(1 + `victims.suspects` × suspicion) per cultist), and away from those the camp already
-suspects, who are of more use to the cult alive (×(1 − `victims.scapegoat`, 0.12, × how many suspect them)). Why it chose whom it chose
-is kept for the ending.
+suspects, who are of more use to the cult alive (×(1 − `victims.scapegoat`, 0.12, × how many suspect them)). Why it
+chose whom it chose is kept for the ending.
 
 The Watcher watches over you the night they promised to, if they trust you (≥ 2), all but always (`night.watchKept`,
-90%); a promise is for that night only, the true Watcher's as anyone's, and another day needs another promise. Otherwise
-the Watcher watches anyone at random (you among them, and the cult too: the Watcher cannot tell). The Watcher there drives off whoever comes, all but always (`night.watched`, 90%),
-and is seen doing it at your tent (`night.seen`, 90%); someone unwatched may yet be spared by luck (`night.spared`, 3%:
-the dogs, a light, a sleeper stirring). An attack on you is turned by the Watcher, by the incantation bowl
-(`night.bowl`, 90%; it breaks as it is used, held or not, `bowlBreaks`, 90%, and is otherwise whole in the morning), by
-the revolver (`night.revolver`, 40%: a point of nerve), or by waking in time (`night.spared`, 3%: a point of nerve);
-otherwise you lose about 2 nerve and take a wound, in the power's own manner, all but always (`night.manner`, 97%). A
-death shakes your nerve (about a point of it) at `night.shaken` (55%), +`night.shakenTrust` (15%) for each point of
-trust the dead had in you. The night comes for you in one of three ways.
+90%); a promise is for that night only, the true Watcher's as anyone's, and another day needs another promise. A broken
+promise, the true Watcher's as anyone's, is told at first light, and the camp hears of it (`sleptWatch`). The Watcher
+who spends the night in your tent watches nobody's. Otherwise the Watcher watches anyone at random (you among them, and
+the cult too: the Watcher cannot tell). The Watcher there drives off whoever comes, all but always (`night.watched`,
+90%), and is seen doing it at your tent (`night.seen`, 90%); someone unwatched may yet be spared by luck
+(`night.spared`, 3%: the dogs, a light, a sleeper stirring). An attack on you is turned by the Watcher, by the
+incantation bowl (`night.bowl`, 90%; it breaks as it is used, held or not, `bowlBreaks`, 90%, and is otherwise whole in
+the morning), by the revolver (`night.revolver`, 40%: a point of nerve), or by waking in time (`night.spared`, 3%: a
+point of nerve); otherwise you lose about 2 nerve and take a wound, in the power's own manner, all but always
+(`night.manner`, 97%). A death shakes your nerve (about a point of it) at `night.shaken` (55%), +`night.shakenTrust`
+(15%) for each point of trust the dead had in you. The night comes for you in one of three ways.
 
 **Harm in secret.** Someone who cannot stand you (trust −1 or lower; the cult too, which can like you, hate you or have
 a soft spot for you as anyone can) may do you a harm in secret: at most one a night, at `spite.try` (7%) × `hate` (2) at
@@ -611,56 +631,60 @@ the words are in `data/hazards.js`.
 **The words.** The tablet lines you know may come back to you in the night (above, `study.linger`), for a point of
 nerve.
 
-The dead are found where it happened (`world/deaths.js`, words in `data/deaths.js`), by someone or other (seven ways).
-Mostly the cult did it with its own hands: one of eight ways anywhere, or (`night.handHere`, 40%) one of two ways only
-that place allows, and the power's mark on the body all the same, mostly (`night.mark`, 90%; three for each nature of the power). But the
-power below takes its own, in one of twelve ways in its own colour, at `night.taken` (15%) + `night.takenDay` (4%) for
-each day gone + `night.takenRite` (20%) × the rite's progress, × the season mood's taken, never above `night.takenMax`
-(45%): so most of the dead are always murdered, and the power's own hand shows more as the rite gathers strength. So a
-death almost always tells something of the power below: it is in the power's own manner but for now and then another's
-of the season (`night.manner`, 97%), never told, which the ending tells. Now and then (`night.signed`, 30%) the cult
-leaves its signature besides (seven). In a season no state of the body is told twice while another is left. Crane, the
-night before you came, was the power's own work as a rule (`night.craneTaken`, 70%), otherwise the cult's, like any
-other death, and his scene holds a trace like any other.
+The dead are found where it happened (`world/deaths.js`, words in `data/deaths.js`), by someone or other (seven ways;
+never one who spent the night in your tent, nor the one you go for yourself that night). Mostly the cult did it with its
+own hands: one of eight ways anywhere, or (`night.handHere`, 40%) one of two ways only that place allows, and the
+power's mark on the body all the same, mostly (`night.mark`, 90%; three for each nature of the power). But the power
+below takes its own, in one of twelve ways in its own colour, at `night.taken` (15%) + `night.takenDay` (4%) for each
+day gone + `night.takenRite` (20%) × the rite's progress, × the season mood's taken, never above `night.takenMax` (45%):
+so most of the dead are always murdered, and the power's own hand shows more as the rite gathers strength. So a death
+almost always tells something of the power below: it is in the power's own manner but for now and then another's of the
+season (`night.manner`, 97%), never told, which the ending tells. Now and then (`night.signed`, 30%) the cult leaves its
+signature besides (seven). In a season no state of the body is told twice while another is left. Crane, the night before
+you came, was the power's own work as a rule (`night.craneTaken`, 70%), otherwise the cult's, like any other death, and
+his scene holds a trace like any other.
 
 **Onto them.** If the one the night took had named someone still at the dig guilty before everyone, someone may say so
 aloud at first light, as half the camp is thinking it (`camp.onto`, 45%). It may be what the cult killed them for, and
 it may be what it wanted the camp to think (above); the line is the same either way. It is a public moment (below).
 
 **A watch sworn, and told of.** The morning after someone swore to watch your tent (one of the cult, a pretender, or the
-true Watcher who watched it as promised) and nothing came for you, the one who swore may tell the camp at breakfast that
-they saw someone off in the small hours (`night.kept`, 30%, as the morning has room): the cult, to be trusted for it;
-anyone else, to be thanked, or because they heard something in the dark and believe it. Whoever doubted them may think
-again (`camp.kept`, below). Nothing had come near your tent; the ending tells it.
+true Watcher who watched it as promised; never one who spent the night in your tent) and nothing came for you, the one
+who swore may tell the camp at breakfast that they saw someone off in the small hours (`night.kept`, 30%, as the morning
+has room): the cult, to be trusted for it; anyone else, to be thanked, or because they heard something in the dark and
+believe it. Whoever doubted them may think again (`camp.kept`, below). Nothing had come near your tent; the ending tells
+it.
 
 At dawn the season's mood may turn (above). Then: the trace, perhaps a horror of the night (above), the scorched circle,
 a sign of the power below, all but always (`night.dawnSign`, 95%: one not yet seen as a rule, an old one at
 `night.signAgain`, 0.05, of the weight; each sign is told in three ways, the ones not yet heard first; where dread runs
 high, perhaps a second sign; one sign in a hundred is not the power's at all, `PUZ.stray`), perhaps a charm from the
-finds tray (`night.findsTray` × the mood's finds), the Dreamer's dream (of someone not yet dreamt of, never of whoever
-the night came for; the night may bring none, `night.dreamless`, 3%; it is true at `night.dreamTrue`, 95%, else
-muddied; brought to you before breakfast by a Dreamer who trusts you or promised, mostly, `night.seerTells`, 90%;
-otherwise aloud at breakfast at `night.seerAloud`) and the dreams of anyone who only says they dream, the cult's as
-readily (`night.pretender`), told aloud in no fixed order, so that who spoke first tells you nothing; the morning's talk
-(below), and perhaps news, as often as its strand comes (`night.event`: news 0.24, the uncanny 0.1, the camp's own 0.1
-a morning, each × its strand's rate and the room the morning has left, above). A piece of news
-already told comes again only seldom (`events.again`, 0.1 of its weight); the voice on the wireless, before the rite
-stirs, seldom (`events.early`, 0.2). What each piece does comes all but always, never always (`events`). The world
-outside: a shamal (two slots today, and no evening; now and then it drops by noon, `shamalPasses`, 15%; heavy, it blows
-on the next day, `dustAgain`, 75%); a telegram from the Trustees (about −1 nerve); RAF biplanes, the post from Hillah
-(about +1 nerve); a dealer (a charm, or a small find; a fake now and then, `fake`, 20%; heavy, a second thing that is
-real, `dealerMore`, 60%); a cable from the Museum (a tablet line; garbled now and then, `garbled`, 10%); a doctor from
-Hinaidi (a wound seen to, mostly, or about +1 nerve); rain (about a fragment washed out, now and then none or two); an
-inspector from Baghdad (takes a fragment, unless he is satisfied, `satisfied`, 20%); the supply lorry (a torch, `torch`,
-85%, else about +1 nerve; heavy, a flask of brandy, `brandy`, 70%). The uncanny: the diggers refusing Trench B, and
-seven shadows at noon (a sign each); a mirage, someone in your tent in the night, the village well gone bitter, a voice
-on the wireless reading your name (about −1 nerve each); a grave of kneeling men (about a fragment, about −1 nerve); a
-dervish (an incantation bowl, `bowl`, 85%, or about +1 nerve). The uncanny's cost is a horror's, which you may grow used
-to (above). The camp's own: coffee with the headman (trust +1, `coffee`, 75%); a quarrel at breakfast (a feud shows); a
-wedding feast (a friendship shows, or trust +1 for the one beside you, `feast`, 75%); the diggers' song about whoever
-the camp eyes most (anyone at `songAnyone`, 0.25, against each one's suspicion by the camp, squared; the camp may eye
-them the more). A quarrel or a feast is now and then between any two at all (`mislead`, 4%). Heavy, each does twice as
-much, or worse (above); a heavy quarrel leaves each of the two suspecting the other (`heavySus`, 75%).
+finds tray (`night.findsTray` × the mood's finds), the Dreamer's dream (of someone still here at first light and not yet
+dreamt of, whom the night came for and missed among them; the night may bring none, `night.dreamless`, 3%; it is true at
+`night.dreamTrue`, 95%, else muddied), and the dreams of anyone who only says they dream, the cult's among them, all by
+the same odds: brought to you before breakfast by one who trusts you or promised you their dreams, mostly
+(`night.seerTells`, 90%), otherwise told aloud at breakfast (`night.dreamAloud`, 30%, as the morning has room), in no
+fixed order; and as you take your leave, by one who has told none that day (`talk.partingDream`, 40%, if they promised
+or trust you; `partingUnpromised`, 10%, otherwise), so that who spoke first tells you nothing; the morning's talk
+(below), and perhaps news, as often as its strand comes (`night.event`: news 0.24, the uncanny 0.1, the camp's own 0.1 a
+morning, each × its strand's rate and the room the morning has left, above). A piece of news already told comes again
+only seldom (`events.again`, 0.1 of its weight); the voice on the wireless, before the rite stirs, seldom
+(`events.early`, 0.2). What each piece does comes all but always, never always (`events`). The world outside: a shamal
+(two slots today, and no evening; now and then it drops by noon, `shamalPasses`, 15%; heavy, it blows on the next day,
+`dustAgain`, 75%); a telegram from the Trustees (about −1 nerve); RAF biplanes, the post from Hillah (about +1 nerve); a
+dealer (a charm, or a small find; a fake now and then, `fake`, 20%; heavy, a second thing that is real, `dealerMore`,
+60%); a cable from the Museum (a tablet line; garbled now and then, `garbled`, 10%); a doctor from Hinaidi (a wound seen
+to, mostly, or about +1 nerve); rain (about a fragment washed out, now and then none or two); an inspector from Baghdad
+(takes a fragment, unless he is satisfied, `satisfied`, 20%); the supply lorry (a torch, `torch`, 85%, else about +1
+nerve; heavy, a flask of brandy, `brandy`, 70%). The uncanny: the diggers refusing Trench B, and seven shadows at noon
+(a sign each); a mirage, someone in your tent in the night, the village well gone bitter, a voice on the wireless
+reading your name (about −1 nerve each); a grave of kneeling men (about a fragment, about −1 nerve); a dervish (an
+incantation bowl, `bowl`, 85%, or about +1 nerve). The uncanny's cost is a horror's, which you may grow used to (above).
+The camp's own: coffee with the headman (trust +1, `coffee`, 75%); a quarrel at breakfast (a feud shows); a wedding
+feast (a friendship shows, or trust +1 for the one beside you, `feast`, 75%); the diggers' song about whoever the camp
+eyes most (anyone at `songAnyone`, 0.25, against each one's suspicion by the camp, squared; the camp may eye them the
+more). A quarrel or a feast is now and then between any two at all (`mislead`, 4%). Heavy, each does twice as much, or
+worse (above); a heavy quarrel leaves each of the two suspecting the other (`heavySus`, 75%).
 
 **The thief in the Dreamer's dreams.** The god knows who has robbed it: in a true dream of the thief, now and then its
 hand is on the thief's shoulder (`night.thiefDark`, 30%), a guilty dream of one who is no cultist. The ending tells such
@@ -743,8 +767,14 @@ and every answer is told the same way, whoever gives it:
 
 - **For one they would protect.** Anyone else who claims to dream may answer for the one named with a clean dream of
   their own ("Then we did not dream the same dream"): for a friend, or, in the cult, for the other of it; at
-  `claims.defend` (35%) × `CRAFT.defend` by their temperament. The true Dreamer answers so only with a clean dream of
-  them to tell, anyone else only with no dream told yet that day. Nobody answers for themselves this way.
+  `claims.defend` (35%) × `CRAFT.defend` by their temperament. One of the cult answering for the other of it is, as a
+  rule, a poor gamble (it ties the two together before everyone, and a story dropped later gives the answer away), so it
+  does so only at its rashness as well (temperament `counter`, at most 1: the light-headed, the liar and the suspicious
+  as readily as anyone; the calculating, the detached, the conscientious and the honest seldom), unless it pays: the
+  other of it already looks lost, and the answerer has dreamt aloud before and nobody suspects it. Having answered, it
+  holds to its claim, and gives it up of its own accord only at its rashness × the usual chance. The true Dreamer
+  answers so only with a clean dream of them to tell, anyone else only with no dream told yet that day. Nobody answers
+  for themselves this way.
 - **A dream in answer.** The one named may answer with a dream of their own that names the dreamer. It is the oldest
   trick there is, and the camp knows it, so it is seldom done, and mostly by the rash (temperament `counter`: the
   light-headed 1.4, the liar 1.3, the suspicious 0.99; the calculating 0.2; the honest hardly ever, 0.01): one who
@@ -829,7 +859,7 @@ way down, is less sure, no longer suspects them in earnest, no longer suspects t
 | Moment | When | Who is moved, and how readily |
 | --- | --- | --- |
 | **Called out** (`calledOut`) | You sent an innocent away | One of their friends, the fonder the likelier, else someone honest or suspicious, speaks up (`odds` 75%) and trusts you less. Each onlooker cools at `p` 15%, +`friend` 30% if they liked the one sent away, +`suspicious` 10%, −`loyal` 15% if they trust you (2+), −`suspected` 10% if they had their doubts, −`thief` 10% if it was only a thief. Anyone who had suspected them in earnest stands by you instead (`defend` 30%). |
-| **Praised** (`praised`) | You exposed a cultist | Someone who had suspected or disliked them says so (`odds` 70%) and warms to you. Each onlooker warms at `p` 12%, +`doubted` 25% if they had suspected or disliked the cultist; a friend of the exposed may not forgive you for being right (`grudge` 25%). |
+| **Praised** (`praised`) | You exposed a cultist | Someone who had suspected or disliked them says so (`odds` 70%) and warms to you. Each onlooker warms at `p` 12%, +`doubted` 25% if they had suspected or disliked the cultist; a friend of the exposed may not forgive you for being right (`grudge` 25%), unless they raised a hand with you against them. |
 | **Grief** (`grief`) | The night took someone | One of their friends, the fonder the likelier, may grieve aloud (`odds` 30%), and blames you a little, the less likely the more they trust you (`bitter` 60% − `trusting` 25% per point of trust); one who does not blame you asks you to put it right. Each onlooker cools at +`friend` 10% if they liked the dead, +`late` 1% for each day of the season gone, +`confided` 15% if you had confided in the dead, −`progress` 10% once you have exposed anyone, −`loyal` 15% if they trust you (≥ 2). Whoever liked the dead mourns that day, mostly (`morning.mourn`), and the one who takes it hardest is named. |
 | **A watch slept through** (`sleptWatch`) | Someone swore to watch your tent, and slept | Each onlooker suspects them at `p` 25%, +`dislike` 20%, −`friend` 30%, +`suspicious` 10%. |
 | **A dream aloud** (`dreamt`) | A dream told at breakfast names someone guilty | Each onlooker suspects the one named at `p` 15%, +`believe` 25% if they like the dreamer, +`credit` 15% for each time the dreamer has been proven right before everyone, +`dislike` 15% if they dislike the one named, −`doubt` 15% if they half suspect the dreamer. The friends of the one named, and those who already suspect the dreamer, suspect the dreamer instead (`back` 15%, +`friend` 25%, +`suspicious` 10%); so does anyone not fond of the dreamer when the dream only answers one that named them (+`answer`: 25% for a first dream aloud, 10% otherwise). The one named may hold it against the dreamer for good (`resent` 50%). |
@@ -890,18 +920,21 @@ is only the night, as in any conversation (`talk.chillCult`, 30%; `chillOther`, 
 - **She stays**, and if she is of the cult she may do the cult's work herself in the small hours (`visit.strike`, 30%;
   never on a night the cult lies low), and mostly she does it (`kills`, 90%): the season ends. If not, you catch her
   wrist in time, at the cost of about 2 nerve and a wound, and by first light she is in the truck to Hillah as one of
-  them unmasked (the rite set back as at an inquiry; if she was the last of them, the season is won, all but always,
-  as at an inquiry).
-- **Otherwise the night goes as any night**, by its own dice. The cult coming for her may know where she sleeps
-  tonight (`visit.found`, 50%): then it comes to your tent, past the Watcher if it is watched and past luck, and she
-  dies beside you in your sleep (about 2 nerve); or it finds her own tent empty, nobody dies, and by breakfast the camp
-  has worked out where she slept. Coming for you, past the Watcher, the bowl, the revolver and luck, it finds two of you
+  them unmasked (the rite set back as at an inquiry; if she was the last of them, the season is won, all but always, as
+  at an inquiry).
+- **Otherwise the night goes as any night**, by its own dice. The cult coming for her may know where she sleeps tonight
+  (`visit.found`, 50%): then it comes to your tent, past the Watcher if it is watched and past luck, and she dies beside
+  you in your sleep (about 2 nerve); or it finds her own tent empty, nobody dies, and by breakfast the camp has worked
+  out where she slept. Coming for you, past the Watcher, the bowl, the revolver and luck, it finds two of you
   (`visit.through`, by weight: her 0.4, you 0.25, both 0.15, or only the usual harm 0.2, as she screams and it flees).
-  The last of the cult in your tent, who let you be, does not come for you that night: if it comes for anyone, it is
-  someone else. One of the cult in your tent may slip out to do the night's work herself.
-- **A death in your tent** is talked of (`visit.talked`, by weight: hardly 1, readily 2, wildly 1): her friends, and
-  now and then anyone (`rumours.diedAny`, 5%), think the less of you, the more the harder it is talked of; talked of
-  wildly, the camp's suspicion of you rises a step (it weighs only if you go out yourself: the deed, above).
+  The last of the cult in your tent lets you be as often as not (`visit.spares`, 50%), and then, if it comes for anyone,
+  it is someone else; otherwise the power below comes for you by itself, as on a night with nobody of the cult left at
+  large. By her own account she was with you all night, whoever she is, and she is nowhere else that night: not keeping
+  watch, not out robbing the dig, not the one who finds a body at dawn. One of the cult in your tent may slip out to do
+  the night's work herself.
+- **A death in your tent** is talked of (`visit.talked`, by weight: hardly 1, readily 2, wildly 1): her friends, and now
+  and then anyone (`rumours.diedAny`, 5%), think the less of you, the more the harder it is talked of; talked of wildly,
+  the camp's suspicion of you rises a step (it weighs only if you go out yourself: the deed, above).
 - **The morning after**, if you both live, she is gone before you wake (`visit.leaves`, 45%) or still there, whatever
   she is: one who slipped out on the cult's work is back by then as often as anyone else stays, so the morning says
   nothing of what she is. Your nerve may mend (`visit.mend`, 60%: about a point), and she may trust you the more
@@ -917,12 +950,13 @@ A person keeping up a pretence (a part claimed that is not theirs, the cult's am
 cover; a true part hidden) may drop it any morning, of their own accord: temperament `confess`, plus `confess.rival` if
 another claims the same part, `confess.dreamt` if a dream named them, `confess.caught` if a sworn watch failed,
 `confess.blamed` if two or more distrust them, `confess.trusting` if they trust you; for a hidden part, half the
-temperament's chance, more after a death. The smuggler owns the smuggling of his own accord too (`confess.thief`, 0.3
-× the temperament's chance). Never more than `confess.cap` (75%) a day, so some keep a lie to the very end. Of a
-morning it is said to you alone before breakfast (`confess.aside`, 40%) or before everyone, in the same words whoever
-says it, and the casebook records it the same way. At an inquiry, with the camp watching, the chance is higher
-(`confess.publicly`). Pressed and shaken, anyone gives up a story they have told at `claims.pressed` (45%) + their
-temperament's `confess`; trust 3 brings a hidden part out, mostly (above).
+temperament's chance, more after a death. The smuggler owns the smuggling of his own accord too (`confess.thief`, 0.3 ×
+the temperament's chance). Never more than `confess.cap` (75%) a day, so some keep a lie to the very end. Of a morning
+it is said to you alone before breakfast (`confess.aside`, 40%) or before everyone, in the same words whoever says it,
+and the casebook records it the same way. At an inquiry, with the camp watching, the chance is higher
+(`confess.publicly`): once you have named the one you accuse, before the hands are raised, so that calling the camp
+together and thinking better of it brings nobody to their feet. Pressed and shaken, anyone gives up a story they have
+told at `claims.pressed` (45%) + their temperament's `confess`; trust 3 brings a hidden part out, mostly (above).
 
 The cult never comes clean as the cult (above). A false part it gives up as anyone does, at the same odds and in the
 same words: a cover story dropped before it breaks, and the lie underneath goes on. And a coming clean may be staged: a
@@ -943,25 +977,29 @@ the season if the rite completes. Six old charms of twelve lie in the tell, one 
 share one, and another place holds none: `PUZ.share`, 10%): four are wards (one per power), two bind nothing.
 
 The tablets never speak plainly. Each power goes by two old titles (`TITLES` in `world/powers.js`: thirty-two, dealt
-anew every season to any of the powers, so knowing the hymns tells you nothing). Every title is a real one, as the old
-texts give it, and the code notes whose it was and where: Nergal's Meslamtaea ("the One Who Came Out of Meslam") and
-"the King of Sunset"; Lamaštu's seven names ("the Sister of the Gods of the Streets", "She Who Kindles Fire"); Tiamat's
-"Mother Hubur" (Enūma eliš); Neti's "the Chief Doorman of the Underworld" (Inana's Descent); Ḫumbaba's "the One Whose
-Breath Is Death" (Gilgameš); the demon rābiṣu, "the Lurker"; and so on. Each power's own epithet (`GODS`) is one the
-texts give it too (Tiamat, "She Who Bore Them All"; Namtar, "Vizier of the Underworld"; Bēlet-ṣēri, "Scribe of the
-Underworld"). Signs are written as omen formulas; and a charm is never named, only known by its marks. Every charm bears two marks each season (`CHARM_MARKS`: seven notches,
-a hair-crack, a smell of cedar, a fleck of gold and so on, fifteen in all): one that no other charm bears, and a second
-that now and then another charm bears too (`PUZ.markShared` marks are shared so). The tablets name a charm by its own
-mark alone, or by both (`PUZ.markBoth`), always the same way in a season: "what bears seven notches" means nothing until
-you hold a charm and turn it over (the Kit, and the moment you come by it, say what it bears; one mark in a hundred is
-misread, `PUZ.misread`, and the ending tells it). Every tablet line is true, but for the scribe's errors (`PUZ.scribe`,
-1% a line, never told); no line alone names the power and its ward; all of them together pin everything down, a scribe's
-error apart (`test/gods.js`). Glosses tie titles to powers (a cultist lies about the power below, all but always; the
-light-headed may misremember); readings name two powers a charm may bind, one of them right (`readings`), though a
-mistaken reading now and then says it binds nothing at all (`readings.mistakeNone`), and so does the cult's lie about
-another ward, now and then (`cultNone`). A line about the power below (the unmasked cultist's shout; below, the table
-laid for the dead, the voices, Crane's satchel, the scribe's tablet) is one that narrows it, all but always
-(`PUZ.patronLine`, 90%; else any line at all).
+anew every season to any of the powers, so knowing the hymns tells you nothing; a title that is the very name or epithet
+of one of the season's own four is left out that season (`TITLES`: `of`), so that no gloss gives one power's name to
+another beside it, and fourteen at least are always left). A title's sex says nothing of its power's: they are borrowed,
+a lord's or a lady's alike. Every title is a real one, as the old texts give it, and the code notes whose it was and
+where: Nergal's Meslamtaea ("the One Who Came Out of Meslam") and "the King of Sunset"; Lamaštu's seven names ("the
+Sister of the Gods of the Streets", "She Who Kindles Fire"); Tiamat's "Mother Hubur" (Enūma eliš); Neti's "the Chief
+Doorman of the Underworld" (Inana's Descent); Ḫumbaba's "the One Whose Breath Is Death" (Gilgameš); the demon rābiṣu,
+"the Lurker"; and so on. Each power's own epithet (`GODS`) is one the texts give it too (Tiamat, "She Who Bore Them
+All"; Namtar, "Vizier of the Underworld"; Bēlet-ṣēri, "Scribe of the Underworld"). Signs are written as omen formulas;
+and a charm is never named, only known by its marks. Every charm bears two marks each season (`CHARM_MARKS`: seven
+notches, a hair-crack, a smell of cedar, a fleck of gold and so on, fifteen in all): one that no other charm bears, and
+a second that now and then another charm bears too (`PUZ.markShared` marks are shared so). The tablets name a charm by
+its own mark alone, or by both (`PUZ.markBoth`), always the same way in a season: "what bears seven notches" means
+nothing until you hold a charm and turn it over (the Kit, and the moment you come by it, say what it bears; one mark in
+a hundred is misread, `PUZ.misread`, and the ending tells it). Every tablet line is true, but for the scribe's errors
+(`PUZ.scribe`, 1% a line, never told); no line alone names the power and its ward; all of them together pin everything
+down, a scribe's error apart (`test/gods.js`). Every charm, ward or toy, has one line saying it has no hold over some
+power. Glosses tie titles to powers (a cultist lies about the power below, all but always; the light-headed may
+misremember); readings name two powers a charm may bind, one of them right (`readings`), though a mistaken reading now
+and then says it binds nothing at all (`readings.mistakeNone`), and so does the cult's lie about another ward, now and
+then (`cultNone`). A line about the power below (the unmasked cultist's shout; below, the table laid for the dead, the
+voices, what lies in the cradle) is one that narrows it, all but always (`PUZ.patronLine`, 90%; else any line at all);
+Crane's satchel and the scribe's tablet give any line.
 
 The shape of the tablets: `PUZ` (how many signs come in halves, how much a fragment leans toward what you study, how
 often a power is named by title, how many lines a fragment gives, how often two titles are said to belong to different
@@ -998,34 +1036,38 @@ stair (`descent.company`, about 1 nerve each, whatever they are).
   (`descent.cost.knifeHeard`). Without a traitor's move, meet the eyes (`descent.eyes`, a bold way; failing: about 1
   nerve) or walk blind (`descent.blind`, a humble way; failing: a wound).
 - **The fifth or sixth gate**: something else waits there.
-- **The seventh gate** takes a price: a thing you carry, a companion who holds the gate, or about 2 nerve (a memory). It
-  takes what it is given, all but always (`descent.gate7`): now and then it will not have a thing, and you must offer
-  something else (`refuse`, 5%; a thing that would cost you little, the bowl or the brandy, as often as not: `small`,
-  50%); a companion left to hold it follows you through as it swings shut (`follow`, 5%; never one of the cult, which
-  has its own reasons); or it takes another memory, and about a nerve more (`more`, 5%).
+- **The seventh gate** takes a price: a thing you carry (never the torch, whose work is done by the last gate), a
+  companion who holds the gate, or about 2 nerve (a memory). It takes what it is given, all but always
+  (`descent.gate7`): now and then it will not have a thing, and you must offer something else (`refuse`, 5%; a thing
+  that would cost you little, the bowl or the brandy, as often as not: `small`, 50%); a companion left to hold it
+  follows you through as it swings shut (`follow`, 5%; never one of the cult, which has its own reasons); or it takes
+  another memory, and about a nerve more (`more`, 5%).
 - **The sanctum**: whoever of the cult came down with you takes a place in the circle, all but always (`descent.turn`,
   95%; × 1 − `turnFond`, 0.3, if fond of you: then it stops at the edge of the light and does not go to them), and one
-  you left behind on the way comes down to it by another way at the same chance; one who waited may have taken the true
-  ward from you on the way and burned it before your eyes (`descent.steal`). With nobody of the cult in the circle, the
-  rite fails of itself, all but always (`descent.emptied`, 97%; else the power finishes it). Then raise a charm
-  (`descent.ward`, 55%, + bonus, +`descent.wardNamed`, 15%, if you named its power; a charm against another power:
-  `descent.wrongWard`, and a win that way is told for the luck it was), speak the counter-rite against the named power
-  (`descent.rite`, 25%, + bonus + 4% per tablet line about it, up to five; the wrong power: `descent.wrongRite`,
-  likewise), or one of the two desperate acts, last resorts that owe nothing to what you learned, each to be tried once:
-  shoot the hierophant (`descent.shootOne`, 25%, if only one cultist is left, else `descent.shootMore`, 6%; a miss, and
-  the revolver is torn from you) or set the bitumen alight (`descent.fire`, 6%, +4% per loyal companion, −0.5% per step
-  of the rite; a fire that goes out is out). No act's chance down here is under 5% or over 95%, but the wrong charm's or the
-  wrong name's. The bonus: companions (`descent.companion`, 10% each), nerve above 5 (`descent.nerve`, 2% a point; as
-  much less for each point below), the favour you won between the gates (`descent.favour`, 6% each), less
-  `descent.doom` (3%) for each step of the rite and `descent.extraCultist` (7%) for each cultist beyond one. A failed
-  ward or rite costs about 1 nerve; a missed shot or a fire that goes out costs about a nerve and a wound. After a
-  failure the rite leaves you time for another act, mostly after the first (`descent.moreTime[0]`, 97%), seldom after the
-  second (`[1]`, 5%), hardly ever after that (`scale.rarest`); a second act after a failed one is a little likelier
-  (`descent.again`: the first shook the circle, though it did not break it). With nothing left to try, you can only
-  watch, and the rite completes, all but always: now and then it breaks of itself on its last line (`descent.falters`,
-  3%), a hard victory. A ward or the rite on the first try, with `descent.cleanNerve` (6) nerve or more and a wound to
-  spare, is a clean victory all but always (`descent.cleanSure`, 90%); any other success is a hard one, but for now and
-  then a clean one all the same (`descent.cleanLucky`, 3%; never a shot or the fire).
+  you left behind on the way comes down to it by another way at the same chance (the ending tells it as a betrayal); one
+  who waited may have taken a charm from you on the way and burned it before your eyes: the true ward, if you carry it
+  (`descent.steal`, 35%), but now and then another of your charms, a feint to make you give up the rest
+  (`descent.feint`, 10%), and now and then one though you carry no ward at all (`steal` × `feint`); it looks the same
+  either way, and the ending tells which. With nobody of the cult in the circle, the rite fails of itself, all but
+  always (`descent.emptied`, 97%; else the power finishes it). Then raise a charm (`descent.ward`, 55%, + bonus,
+  +`descent.wardNamed`, 15%, if you named its power; a charm against another power: `descent.wrongWard`, and a win that
+  way is told for the luck it was), speak the counter-rite against the named power (`descent.rite`, 25%, + bonus + 4%
+  per tablet line about it, up to five; the wrong power: `descent.wrongRite`, likewise), or one of the two desperate
+  acts, last resorts that owe nothing to what you learned, each to be tried once: shoot the hierophant
+  (`descent.shootOne`, 25%, if only one cultist is left, else `descent.shootMore`, 6%; a miss, and the revolver is torn
+  from you) or set the bitumen alight (`descent.fire`, 6%, +4% per loyal companion, −0.5% per step of the rite; a fire
+  that goes out is out). No act's chance down here is under 5% or over 95%, but the wrong charm's or the wrong name's.
+  The bonus: companions (`descent.companion`, 10% each), nerve above 5 (`descent.nerve`, 2% a point; as much less for
+  each point below), the favour you won between the gates (`descent.favour`, 6% each), less `descent.doom` (3%) for each
+  step of the rite and `descent.extraCultist` (7%) for each cultist beyond one. A failed ward or rite costs about 1
+  nerve; a missed shot or a fire that goes out costs about a nerve and a wound. After a failure the rite leaves you time
+  for another act, mostly after the first (`descent.moreTime[0]`, 97%), seldom after the second (`[1]`, 5%), hardly ever
+  after that (`scale.rarest`); a second act after a failed one is a little likelier (`descent.again`: the first shook
+  the circle, though it did not break it). With nothing left to try, you can only watch, and the rite completes, all but
+  always: now and then it breaks of itself on its last line (`descent.falters`, 3%), a hard victory. A ward or the rite
+  on the first try, with `descent.cleanNerve` (6) nerve or more and a wound to spare, is a clean victory all but always
+  (`descent.cleanSure`, 90%); any other success is a hard one, but for now and then a clean one all the same
+  (`descent.cleanLucky`, 3%; never a shot or the fire).
 
 **Between the gates** (`below`, `game/below.js`), one thing between the first gate and the fourth, and one between the
 fourth and the seventh, drawn from what waits there and never the same twice; now and then two between a pair of gates
@@ -1086,18 +1128,19 @@ or someone's spite.
   for a first exposure by day 3, − failed acts below, ± up to 2 for the camp's trust at the end (of those still at the
   dig, friends at trust ≥ 2 minus those turned against you at ≤ −1), +1 if anyone came clean before the camp. The deed:
   −`deed` (1) for going out at all, and, if you killed, +`deedCult` (2) for one of the cult or −`deedInnocent` (5) for
-  anyone else. **Your body and mind count too**: −`wound` per wound you carry at the end, +1 if your nerve at the end
-  is at least `steady` (70%) of the most you can hold, −1 if it ever fell as low as `frayed` (2). Its tier: clean ≥ 10,
+  anyone else. **Your body and mind count too**: −`wound` per wound you carry at the end, +1 if your nerve at the end is
+  at least `steady` (70%) of the most you can hold, −1 if it ever fell as low as `frayed` (2). Its tier: clean ≥ 10,
   honest ≥ 5, costly ≥ 0, at any price below that (a win with blood on your hands is a costly one at best); when lost,
   within reach ≥ 4, else out of your depth. A won season's account says how you came out of it, body and mind, and what
-  became of you afterwards.
+  became of you afterwards; a lost one, after every one of the cult was unmasked or dead, says it was not the cult that
+  beat you but Kutha by itself, or the camp that sent you away.
 - **The style** of your season is what you did unusually much of. Each style counts its own things with its own weights
   (`END_STYLE_W`: pressing and accusing for the inquisitor, resting and backing off for the quiet guest, translating for
   the scholar, examining scenes for the detective, searching for the digger, confiding and being trusted, and the
   companions who went down with you, for the confidant), and the counts are measured against an ordinary season's mean
   and spread (`END_STYLE_MU`, `END_STYLE_SD`, calibrated by `test/endstyle.js`). With nothing out of the ordinary
-  (`END_STYLE_MIN`), you were the field director. A season in which you killed someone with your own hands (the deed)
-  is the Avenger's, whatever else you did: eight styles in all.
+  (`END_STYLE_MIN`), you were the field director. A season in which you killed someone with your own hands (the deed) is
+  the Avenger's, whatever else you did: eight styles in all.
 - **Haunting**: horrors met (searching, and of their own accord), the cost of reading, tablet lines read, wounds taken
   in the night, signs seen, charms found, a memory paid to the seventh gate, nerve run low (and being an occultist) add
   up, each by its weight (`END_HAUNT_W`), to how much of Kutha came home with you (`END_HAUNT`). A madness is the
@@ -1122,13 +1165,16 @@ or someone's spite.
   they found, a night they were where it happened or lied about out of fear, a tryst they kept quiet, a sighting they
   made up, the harm they did you in secret, the hands they raised at your inquiries, their word proven before the camp,
   going down with you or holding the seventh gate, a trace the cult laid to frame them, a dream told aloud, a thief's
-  word kept; and for the cult, a soft spot for you, a friendship or a grudge, which outlast the cult itself. Your own
+  word kept; and for the cult, a soft spot for you, a friendship or a grudge, which outlast the cult itself, told by
+  where its fate leaves it (in a cell to be tried; the asylum; at large, never unmasked or fled; nothing more for one
+  who died before any trial). At most one of each kind, the latest, and none of the innocent's for the cult. Your own
   epilogue is told the same way (`FATE_YOU_CODA`; `fates.youOne`: one line, else two): the reading that cost you
   (`fates.read` nerve lost to it, or `fates.lines` lines known), the dig's dangers and someone's spite, an innocent you
   sent away, the night you went to someone's tent, a friend the night took, a companion left below, the friends you
-  kept, the horrors that stayed with you (`fates.horrors`). All of it is chosen without the dice, so the very same
-  season is told the same way twice. Which of several words is told is fixed by the season, not by the dice, so the
-  next expedition is dealt exactly as before.
+  kept, the horrors that stayed with you (`fates.horrors`); in a cell in Baghdad, for the one you killed, what has no
+  telling of its own is told as at home unless a cell rules it out; nobody is written to who died later. All of it is
+  chosen without the dice, so the very same season is told the same way twice. Which of several words is told is fixed
+  by the season, not by the dice, so the next expedition is dealt exactly as before.
 - **The end you chose.** Rarely, what the season left in you is more than you can carry, and in the end you end it
   yourself (`fates.last`; `FATE_YOU_LAST`; never how, only that it was and something of why). Only if you came out of
   the season alive: `base` (1.4%) for anyone who came home, × `mad` (5) if your mind broke and the season left you in a
@@ -1137,19 +1183,21 @@ or someone's spite.
   `wronged` (1.4) for each innocent sent away on your word; × `grief` (1.3) for each friend the night took; × `tent`
   (1.6) if someone died beside you; × `read` (1.5) if the reading cost you dear; × `horrors` (1.4) if the horrors stayed
   with you; × `friend` (0.8) for each friend who came through, up to three; × `loved` (0.4) if someone loves you; at
-  most `max` (25%). It is told by one of its reasons, the weightier likelier (`fates.last.why`), and told last of all;
-  your other epilogue is then one line at most, and never the same thing. Measured on the bots: about 3½% of seasons,
-  nearly all of them a mind that broke (about 8% of the madness endings), almost never a season won.
+  most `max` (25%). It is told by one of its reasons, the weightier likelier (`fates.last.why`; an innocent you sent
+  away only if they did not die later), and told last of all; your other epilogue is then one line at most, and never
+  the same thing. Measured on the bots: about 3½% of seasons, nearly all of them a mind that broke (about 8% of the
+  madness endings), almost never a season won.
 - **A death that came later.** Now and then one of the seven who came through the season does not come through what it
   left in them (`fates.after`; `FATE_AFTER`): by their own hand, or in a way nobody can account for. For each who is
   still at the dig, sent away, or of the cult in a cell: `base` (4.5%), × `gone` (1.3) if you did not come home, ×
-  `sent` (3) for one sent away in disgrace (not the thief), × `dreamer` (2) for the true Dreamer, × `grief` (1.6) for one
-  who grieved, × `below` (1.6) for one who went down with you, × `jailed` (2.5) for one of the cult in a cell, × `thief`
-  (1.5) for the thief; at most `max` (30%) each, and at most `most` (2) in an ending, the likeliest. Told by one of its
-  reasons, the weightier likelier (`fates.after.why`), and by their own hand at `fates.after.chosen` for that reason
-  (none for one who went below, or the thief; never a priest, who keeps his vows); it is all that is told of them.
-  Never one spoken for in a romance, never one of the cult still at large, never after a season the gate opened.
-  Measured (2,100 seasons): one in about 18% of seasons (two in 1–2%), a third of them by their own hand.
+  `sent` (3) for one sent away in disgrace (not the thief), × `dreamer` (2) for the true Dreamer, × `grief` (1.6) for
+  one who grieved, × `below` (1.6) for one who went down with you, × `jailed` (2.5) for one of the cult in a cell, ×
+  `thief` (1.5) for the thief; at most `max` (30%) each, and at most `most` (2) in an ending, the likeliest. Told by one
+  of its reasons, the weightier likelier (`fates.after.why`; one of the cult in a cell only as a prisoner: what else
+  weighed on it is not told), and by their own hand at `fates.after.chosen` for that reason (none for one who went
+  below, or the thief; never a priest, who keeps his vows); it is all that is told of them. Never one spoken for in a
+  romance, never one of the cult still at large, never after a season the gate opened. Measured (2,100 seasons): one in
+  about 18% of seasons (two in 1–2%), a third of them by their own hand.
 
 ## How seasons end
 
