@@ -117,7 +117,6 @@ function gossipLine(s, not = [], sure = false, heard = false) {
     if (!sure && !chance(TP(s).gossipTrue - RULES.gossip.likeBias * Math.abs(l)))
       v = pick((l < 0 || temperOf(s) === 'suspicious' ? NEG : l > 0 ? POS : TEMPER_IDS).filter(k => k !== real));
     addTest(s.id, t.id, 'temper', v);
-    S.log.gossip++;
     // (no cultist speaks of what it feels for the other: feelRemark)
     // (an aside about one they are taken with, mostly; now and then about one they are not: flirt.asideFalse)
     const aside =
@@ -134,7 +133,6 @@ function gossipLine(s, not = [], sure = false, heard = false) {
     close = close === null ? (chance(RULES.gossip.inventBond) ? chance(0.5) : null) : chance(RULES.gossip.flipBond) ? !close : null;
   if (close === null) return null; // nothing worth saying
   addTest(s.id, a.id, 'bond', (close ? 'close:' : 'feud:') + b.id);
-  S.log.gossip++;
   return { t: a, text: bondSay(a, b, close) };
 }
 const quoted = (lead, text) => lead + text + bi('”', '»');
@@ -287,7 +285,7 @@ function volunteerSighting() {
   if (!c || !chance(room('talk') * RULES.talk.volunteer)) return '';
   const sw = rec.saw[c.id],
     cl = rec.claim[c.id] || { loc: 'camp', with: null };
-  S.sights.push({ night: n, id: c.id, where: sw.where, cat: sw.cat, val: sawVal(sw) });
+  S.sights.push({ night: n, id: c.id, where: sw.where, to: sw.to, cat: sw.cat, val: sawVal(sw) });
   return `<p class="notice">${bi(`Before breakfast, ${c.short} takes you aside. “I did not want to say it in front of the others.`, `Ещё до завтрака ${ru.c(c)} отводит вас в сторону. «Не ${ru.gs(c, 'хотел', 'хотела')} говорить при остальных.`)} ${sightLine(cl, sw, c)}${bi('”', '»')}</p>`;
 }
 // ---------- your name in their mouths ----------
@@ -463,7 +461,7 @@ function griefFor(victim) {
 // for, and it may be what it wanted the camp to think (game/night.js, chooseVictim): the line is the same either way.
 function ontoSaid(victim) {
   const named = S.said.filter(
-    x => x.by === victim && x.verdict === 'cult' && x.how !== 'vote' && isFree(C(x.about)) && C(x.about).status === 'present'
+    x => x.by === victim && x.verdict === 'cult' && x.how !== 'vote' && isFree(C(x.about))
   );
   return named.length && chance(RULES.camp.onto.odds) ? stir('onto', { about: named.pop().about, dead: victim }) : '';
 }

@@ -315,10 +315,7 @@ function endStory(id, how) {
     }
     case 'fallen-night': {
       // found by the friend who trusted you most, if one is left; else by the foreman, or a pickman
-      const fr = S.order
-          .map(C)
-          .filter(c => isFree(c) && c.role !== 'cult' && c.rapport >= 2)
-          .sort((x, y) => y.rapport - x.rapport)[0],
+      const fr = friendsNow().sort((x, y) => y.rapport - x.rapport)[0],
         hm = C('hamid'),
         who = fr ? [fr.short, ru.c(fr)] : isFree(hm) ? ['Hamid', 'Хамид'] : ['one of the pickmen', 'один из землекопов'],
         tr = END_TRACE[asp] || END_TRACE.fire,

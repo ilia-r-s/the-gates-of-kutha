@@ -442,13 +442,13 @@ function yourLast(won, later = {}) {
   if (wronged.length && living.length)
     lay('wronged', living[living.length - 1], F.wronged ** wronged.length, F.why.wronged * wronged.length);
   else if (wronged.length) p *= F.wronged ** wronged.length;
-  const lost = S.order.map(C).filter(c => c.status === 'taken' && c.takenBy !== 'you' && c.rapport >= 2);
+  const lost = friendsLost();
   if (lost.length) lay('friends', lost[lost.length - 1], F.grief ** lost.length, F.why.friends * lost.length);
   const v = L.visit;
   if (v && (v.found === 'dead' || v.through === 'her')) lay('tent', C(v.id), F.tent, F.why.tent);
   if (L.studyCost >= RULES.fates.read || S.factKnown.length >= RULES.fates.lines) lay('tablets', null, F.read, F.why.tablets);
   if (L.horrorNerve >= RULES.fates.horrors) lay('horrors', null, F.horrors, F.why.horrors);
-  const friends = S.order.map(C).filter(c => isFree(c) && c.role !== 'cult' && c.rapport >= 2).length;
+  const friends = friendsNow().length;
   p *= F.friend ** Math.min(3, friends) * (S.romance && S.romance.you ? F.loved : 1);
   if (fateRoll('you', 'last') >= Math.min(F.max, p)) return null;
   // (a reason with no telling where you are is not told there)
@@ -480,17 +480,14 @@ function youCodas(won, last = null, later = {}) {
   if (sp) add('spite', { c: C(sp.id), caught: sp.caught }, 2);
   const wr = L.accused.filter(a => !a.right && !later[a.id]).pop();
   if (wr) add('wronged', C(wr.id), 3);
-  const gr = S.order
-    .map(C)
-    .filter(c => c.status === 'taken' && c.rapport >= 2)
-    .pop();
+  const gr = friendsLost().pop(); // (never one dead by your own hand: the deed has its own)
   if (gr) add('grave', gr, 2.5);
   // (one you left on the stair: not whoever held the seventh gate for you, nor one of the cult, who went to the circle)
   const g3 = S.fin && S.fin.g3,
     left = S.fin ? S.fin.left.filter(id => !(g3 && g3.kind === 'comp' && g3.id === id) && C(id).role !== 'cult') : [],
     lb = left.length ? C(left[left.length - 1]) : null;
   if (lb) add('leftBelow', lb, 2.5);
-  const fr = S.order.map(C).filter(c => isFree(c) && c.role !== 'cult' && c.rapport >= 2).length;
+  const fr = friendsNow().length;
   if (fr >= 2) add('friends', fr, 1.5);
   if (L.horrorNerve >= RULES.fates.horrors) add('horrors', null, 2);
   if (L.deed && L.deed.outcome && L.deed.outcome !== 'away')

@@ -1,11 +1,16 @@
 // ===================== THE NIGHT, AND THE MORNING AFTER =====================
 // The cult strikes, the watcher watches, the dreamer dreams, the rite grows; then dawn (when the season's mood may turn,
 // game/tenor.js): the sign, the finds, breakfast, the news. The night may be your last, and then no morning comes; nor
-// does one when the rite completes in the night.
+// does one when the rite completes in the night. Completed already as night falls (an innocent sent away at the evening's
+// inquiry: game/inquiry.js), it does not wait for the night: the gate opens, and the descent begins.
 function nightfall() {
   emit('nightfall');
   if (S.day >= RULES.start.days) {
     finaleIntro(false);
+    return;
+  }
+  if (S.doom >= S.doomMax) {
+    finaleIntro(true); // (which keeps the rite at its top: game/finale.js)
     return;
   }
   // now and then someone comes to your tent as the evening ends (people/visit.js); the night follows your answer
@@ -149,10 +154,10 @@ function theNight() {
     night.loc = 'camp';
     if (night.guard === 'player' && chance(N.watched)) {
       night.youOut = 'guarded';
-      S.log.attacks.push({ day: S.day, how: 'guard', out: true });
+      S.log.attacks.push({ day: S.day, how: 'guard', out: true, power: !!night.power });
     } else {
       night.youOut = true;
-      S.log.attacks.push({ day: S.day, how: 'out' });
+      S.log.attacks.push({ day: S.day, how: 'out', power: !!night.power });
     }
     night.found.push(leaveTrace(night));
     if (night.youOut === true && night.sworn && night.guard !== 'player') night.found.push(failedWatch(night.sworn));
@@ -185,7 +190,7 @@ function theNight() {
   const calm = night.target === 'player' ? N.calm : 1,
     dread = dreadNight(calm),
     words = wordsAtNight();
-  out.push(dread, words, spiteNight(calm * (dread && words ? N.calm : 1)));
+  out.push(dread, words, spiteNight(calm * (dread && words ? N.calm : 1), night.deed));
   night.found.push(riteNote()); // (the scorched circle, as first light shows it)
   return night;
 }
@@ -341,7 +346,7 @@ function attackOnYou(night) {
   const { guard, watcher: w } = night;
   const N = RULES.night;
   if (guard === 'player' && chance(N.watched)) {
-    S.log.attacks.push({ day: S.day, how: 'guard' });
+    S.log.attacks.push({ day: S.day, how: 'guard', power: !!night.power });
     if (!chance(N.seen))
       return bi(
         `<p>In the small hours you hear a scuffle outside your tent and a curse. By the time you get the flap open there is nobody there: only a lamp going away between the tents.</p>`,
@@ -361,7 +366,7 @@ function attackOnYou(night) {
       broke = chance(N.bowlBreaks);
     if (broke) lose('bowl');
     if (held) {
-      S.log.attacks.push({ day: S.day, how: 'bowl', broke });
+      S.log.attacks.push({ day: S.day, how: 'bowl', broke, power: !!night.power });
       return broke
         ? bi(
             `<p>In the night the incantation bowl under your bed cracks clean in two. Whatever came for you is trapped in the pieces, or was.</p>`,
@@ -383,7 +388,7 @@ function attackOnYou(night) {
         );
   }
   if (has('revolver') && chance(N.revolver)) {
-    S.log.attacks.push({ day: S.day, how: 'revolver' });
+    S.log.attacks.push({ day: S.day, how: 'revolver', power: !!night.power });
     return (
       pre +
       bi(
@@ -395,7 +400,7 @@ function attackOnYou(night) {
   }
   // and now and then you wake in time, and whatever it was goes
   if (chance(N.spared)) {
-    S.log.attacks.push({ day: S.day, how: 'woke' });
+    S.log.attacks.push({ day: S.day, how: 'woke', power: !!night.power });
     return (
       pre +
       bi(
@@ -409,7 +414,7 @@ function attackOnYou(night) {
   if (asp !== S.aspectOf[S.patron]) S.log.manner.push({ day: S.day, id: 'you', asp });
   const it = `<p class="horror">${bi(tellOne('attack-' + asp, ASPECTS[asp].attack.filter((t, k) => tellableNow((ASPECTS[asp].attackEcho || [])[k]))))}</p>`;
   if (night.guest) return pre + guestThrough(night, it); // (and she was in your tent: people/visit.js)
-  S.log.attacks.push({ day: S.day, how: 'hurt' });
+  S.log.attacks.push({ day: S.day, how: 'hurt', power: !!night.power });
   const html = pre + it + hurt(2, 1);
   journal(bi('You were attacked in the night.', 'Ночью на вас напали.'));
   return html;
@@ -470,6 +475,7 @@ function leaveTrace({ cult, target, loc, smugOut, betrayer, why, finder, saved, 
   rec.why = why || null;
   rec.finder = finder || null;
   rec.saved = saved || null; // (how the one it came for lived, if they did: people/cunning.js, blurt)
+  rec.power = !!power; // (the power below, come by itself: the ending tells it, game/debrief.js)
   return sceneTrace(S.day, loc, actor, target, smugOut, at);
 }
 // What the scene of night n holds (its accounts planned already), the night Crane died among them: what the page tells
@@ -643,7 +649,7 @@ function breakfastDreams({ seer, vision }) {
 function answerDream(c, d) {
   const t = d.t,
     K = RULES.claims;
-  if (!d.cult || !isFree(t) || t.status !== 'present') return '';
+  if (!d.cult || !isFree(t)) return '';
   const def = defenderOf(t, c);
   if (def) {
     if (def.role === 'seer') def.visions.filter(v => v.about === t.id && !v.cult).forEach(v => (v.told = true));
@@ -676,11 +682,11 @@ function answerWith(a, d, c, forOther) {
   return (
     (forOther
       ? bi(
-          `<p>${a.short} shakes ${a.pp} head. “Then we did not dream the same dream. I dreamt of the seven gates too: ${dreamEn(d.t.short, false)}”</p>`,
+          `<p>${a.short} shakes ${a.pp} head. “Then we did not dream the same dream. I dreamt of the seven gates too: ${dreamEn(d.t, false)}”</p>`,
           `<p>${ru.c(a)} качает головой. «Значит, нам снились разные сны. Мне тоже снились семь врат: ${dreamRu(d.t, false)}»</p>`
         )
       : bi(
-          `<p>${a.short} is on ${a.pp} feet before ${c.short} has finished. “I dreamt of the seven gates too. ${dreamEn(d.t.short, d.cult)}”</p>`,
+          `<p>${a.short} is on ${a.pp} feet before ${c.short} has finished. “I dreamt of the seven gates too. ${dreamEn(d.t, d.cult)}”</p>`,
           `<p>${ru.c(a)} вскакивает, не дав ${ru.c(c, 'd')} договорить. «Мне тоже снились семь врат. ${dreamRu(d.t, d.cult)}»</p>`
         )) + dreamAloud(a.id, d.t.id, d.cult, forOther ? null : { first })
   );

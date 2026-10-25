@@ -18,7 +18,7 @@ function endingId(kind, how) {
       : S.hurtBy === 'study' || (S.log.studyCost >= END_SAYS.study && S.log.studyCost > S.log.horrorNerve)
         ? 'bethlem'
         : 'canal';
-  return 'doom-' + (S.aspectOf[S.patron] || 'fire');
+  return 'doom-' + S.aspectOf[S.patron];
 }
 
 // ---------- the reckoning: how cleanly it was done ----------
@@ -49,10 +49,9 @@ function endReckon() {
   const hierX = C(S.hierophant).status === 'exposed';
   const failed = f ? f.acts.filter(a => a.ok === false).length : 0;
   // the people outside the cult still at the dig who trusted you by the end, and those who turned against you during the
-  // season (someone who never liked you and still doesn't was not your doing; whom you sent away is counted as wronged)
-  const atEnd = S.order.filter(id => C(id).role !== 'cult' && isFree(C(id)));
-  const friends = atEnd.filter(id => C(id).rapport >= 2);
-  const enemies = atEnd.filter(id => C(id).rapport <= -1 && C(id).rapport < (S.rap0 ? S.rap0[id] : 0));
+  // season (game/state.js, friendsNow, enemiesNow; whom you sent away is counted as wronged)
+  const friends = friendsNow().map(c => c.id),
+    enemies = enemiesNow().map(c => c.id);
   const W = RULES.reckoning,
     rep = Math.max(-W.reputation, Math.min(W.reputation, friends.length - enemies.length));
   // your body and mind: wounds you carry at the end, nerve steady at the end, nerve that once all but broke

@@ -197,7 +197,7 @@ function guestThrough(night, it) {
   const h = night.guest,
     k = wpick(RULES.visit.through);
   S.log.visit.through = k;
-  S.log.attacks.push({ day: S.day, how: k === 'hurt' ? 'hurt' : 'visit', k });
+  S.log.attacks.push({ day: S.day, how: k === 'hurt' ? 'hurt' : 'visit', k, power: !!night.power });
   if (k === 'her' || k === 'both') {
     night.dead = h.id;
     takenInYourTent(h);
@@ -267,9 +267,6 @@ function visitMorning(night) {
     mend = chance(VR.mend) ? regain(1) : 0,
     warm = chance(VR.warm) && h.rapport < RULES.scale.trustMax;
   if (warm) trustUp(h);
-  v.gone = gone;
-  v.mended = !!mend;
-  v.warmed = warm;
   return (
     (gone
       ? bi(

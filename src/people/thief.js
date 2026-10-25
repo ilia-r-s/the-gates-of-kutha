@@ -66,7 +66,6 @@ function thiefGossip(c, w) {
   const a = C(w.actor),
     k = pick([0, 1]);
   addTest(c.id, a.id, 'hint', 'night');
-  S.log.gossip++;
   return {
     t: a,
     text: bi(

@@ -1043,12 +1043,10 @@ function fxVictims({ add }) {
     else if (say) add('n', `The cult chose ${v.name} on night ${n}: ${say[0]}.`, `Сектанты выбрали ${ru.cf(v, 'a')} в ночь ${n}: ${say[1]}.`);
   });
 }
-// Whether what came on night n came by itself, with nobody of the cult left at large (game/night.js, priestless): its
-// scene had no attacker of flesh; or, the night that killed you, whose record was never written, nobody of it was free.
-const powerAt = n => {
-  const rec = S.nights[n];
-  return rec ? !!rec.crimeLoc && !rec.actor : n === S.day && S.ended === 'death' && !freeCult().length;
-};
+// Whether what came on night n was the power below, come by itself (game/night.js: with nobody of the cult left at
+// large, priestless; or for you, while the last of it lay in your tent, visit.spares), as the night recorded it: its
+// scene (leaveTrace), or whatever came for you (S.log.attacks), the night that killed you among them.
+const powerAt = n => !!(S.nights[n] && S.nights[n].power) || S.log.attacks.some(a => a.day === n && a.power);
 // The dead, and the nights they came for you (or the power below came, by itself).
 function fxNights({ r, L, add }) {
   // (and at the last, you: dead in the night, whatever did it; the dig itself by day is no night's doing)
@@ -1228,8 +1226,10 @@ function fxDeed({ add }) {
       `У палатки вы оставили след привычки ${ru.cf(o, 'g')}: ${d.plantSeen ? `${ru.cf(d.plantSeen)} ${ru.gs(C(d.plantSeen), 'понял', 'поняла')}, что его подбросили` : d.plantTook ? `лагерь счёл его следом ${ru.cf(d.plantTook, 'g')}` : 'никто не придал ему значения'}.`
     );
   }
-  if (S.log.attacks.some(a => a.day === d.day && a.how === 'out'))
-    powerAt(d.day)
+  // (what came for you while you were out: it found your tent empty, or the Watcher by it drove it off: game/night.js)
+  const away = S.log.attacks.find(a => a.day === d.day && (a.how === 'out' || (a.how === 'guard' && a.out)));
+  if (away && away.how === 'out')
+    away.power
       ? add(
           'n',
           'That night the power below came for you by itself, and found your tent empty.',
@@ -1239,6 +1239,18 @@ function fxDeed({ add }) {
           'n',
           'That night the cult came for you, and found your tent empty.',
           'В ту ночь секта приходила за вами — и нашла вашу палатку пустой.'
+        );
+  else if (away)
+    away.power
+      ? add(
+          'n',
+          'That night the power below came for you by itself while you were out, and the Watcher drove it off from your empty tent.',
+          'В ту ночь, пока вас не было, сила из-под земли сама приходила за вами — и Страж прогнал её от вашей пустой палатки.'
+        )
+      : add(
+          'n',
+          'That night the cult came for you while you were out, and the Watcher drove it off from your empty tent.',
+          'В ту ночь, пока вас не было, культ приходил за вами — и Страж прогнал его от вашей пустой палатки.'
         );
   if (d.vote)
     add(
@@ -1283,6 +1295,13 @@ function fxVisit({ add }) {
           'Под утро она попыталась вас убить, но вы вовремя перехватили её руку.'
         );
   else if (cult && v.struck !== 'killed') add('n', 'She let you live that night.', 'В ту ночь она оставила вас в живых.');
+  // (she was the last of the cult at large, and what came for you was the power below: game/night.js, visit.spares)
+  if (cult && S.log.attacks.some(a => a.day === v.day && a.power))
+    add(
+      'n',
+      'With the last of the cult beside you, it was the power below that came for you that night, by itself.',
+      'Пока последняя из секты была рядом с вами, в ту ночь за вами пришла сама сила из-под земли.'
+    );
   if (v.out)
     add(
       'n',
@@ -1360,8 +1379,8 @@ function fxYourself({ haunt, won, r, L, add }) {
   else
     add(
       'm',
-      `You took ${L.woundsTaken === 1 ? 'a wound' : `${L.woundsTaken} wounds`} in the season${L.healed ? ', and had one seen to by a doctor' : ''}.`,
-      `За сезон вы получили ${L.woundsTaken === 1 ? 'рану' : `${L.woundsTaken} ${ruN(L.woundsTaken, 'рану', 'раны', 'ран')}`}${L.healed ? ', и одну вам залечил врач' : ''}.`
+      `You took ${L.woundsTaken === 1 ? 'a wound' : `${L.woundsTaken} wounds`} in the season${L.healed ? `, and had ${['one', 'two', 'three'][L.healed - 1] || L.healed} seen to by a doctor` : ''}.`,
+      `За сезон вы получили ${L.woundsTaken === 1 ? 'рану' : `${L.woundsTaken} ${ruN(L.woundsTaken, 'рану', 'раны', 'ран')}`}${L.healed ? `, и ${['одну', 'две', 'три'][L.healed - 1] || L.healed} вам залечил врач` : ''}.`
     );
   if (L.dread)
     add(

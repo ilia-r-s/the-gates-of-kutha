@@ -124,7 +124,6 @@ function leaning(o, x, cs) {
 // the inquiries of the last few evenings that came to nothing, or sent an innocent away: the camp tires of them
 const wearyOf = () =>
   S.inquiries.filter(v => v.day < S.day && v.day >= S.day - RULES.verdict.againDays && !(v.passed && C(v.id).role === 'cult')).length;
-const handOf = s => (s >= RULES.verdict.back ? 'back' : s < RULES.verdict.against ? 'against' : 'silent');
 // The cult's own interest, on top of the leaning anyone in its place would show (so that its hands, counted over a
 // season, look like everyone's): toward seeing an innocent sent away (push), the more once it has learned you lean on
 // inquiries (people/cunning.js, cultTurns); toward sparing one of its own (defend); and one of its own who looks lost
@@ -135,21 +134,43 @@ function cultLean(o, x) {
   if (x.role !== 'cult') return VC.push * k.push * cultTurns('inquisitor');
   return looksLost(x) && chance(VC.bus * k.sacrifice) ? VC.give : -VC.defend * k.defend;
 }
+// The camp's hands, at an inquiry or when it sits in judgement on you (game/deed.js, youVote): each of the crowd leans
+// (lean, then the evening's mood, the same for everyone in the tent, their own whim, and last what more they bring:
+// extra), for it at hi or more, against it below lo, else silent; and anyone, now and then, raises a hand against their
+// own leaning (contrary: no hand is ever sure). It passes with at least need of them for it, and more for it than
+// against. With nobody left at the dig to raise a hand, it falls to the police corporal from Hillah, who takes your word,
+// or not (alone): your word is for it at an inquiry, against it when the camp judges you (mine: 'for' or 'against').
+// Returns { for, against, silent } (ids) and passed.
+function handsRaised(crowd, lean, extra, hi, lo, mine) {
+  const VR = RULES.verdict,
+    out = { for: [], against: [], silent: [] },
+    mood = VR.mood * tenorOf('swing') * (2 * rand() - 1);
+  crowd.forEach(o => {
+    const s = lean(o) + mood + VR.whim * (2 * rand() - 1) + extra(o);
+    let v = s >= hi ? 'for' : s < lo ? 'against' : 'silent';
+    if (chance(VR.contrary)) v = pick(['for', 'against', 'silent'].filter(h => h !== v));
+    out[v].push(o.id);
+  });
+  if (crowd.length) out.passed = out.for.length >= Math.min(VR.need, crowd.length) && out.for.length > out.against.length;
+  else {
+    const taken = chance(VR.alone); // (the corporal takes your word)
+    out.passed = mine === 'for' ? taken : !taken;
+  }
+  return out;
+}
 // Everyone free but the one accused: { back, against, silent } (ids), passed, and the case you made.
 function campVote(x) {
   const VR = RULES.verdict,
     cs = caseAgainst(x),
-    crowd = freeChars().filter(o => o.id !== x.id),
-    out = { back: [], against: [], silent: [], case: cs },
-    mood = VR.mood * tenorOf('swing') * (2 * rand() - 1); // the evening's mood, the same for everyone in the tent
-  crowd.forEach(o => {
-    let v = handOf(leaning(o, x, cs) + mood + VR.whim * (2 * rand() - 1) + (o.role === 'cult' ? cultLean(o, x) : 0));
-    if (chance(VR.contrary)) v = pick(['back', 'against', 'silent'].filter(h => h !== v)); // (no hand is ever sure)
-    out[v].push(o.id);
-  });
-  const need = Math.min(VR.need, crowd.length);
-  // (with nobody left to raise a hand, it is the police corporal from Hillah who takes your word, or not: verdict.alone)
-  out.passed = crowd.length ? out.back.length >= need && out.back.length > out.against.length : chance(VR.alone);
+    h = handsRaised(
+      freeChars().filter(o => o.id !== x.id),
+      o => leaning(o, x, cs),
+      o => (o.role === 'cult' ? cultLean(o, x) : 0),
+      VR.back,
+      VR.against,
+      'for'
+    ),
+    out = { back: h.for, against: h.against, silent: h.silent, case: cs, passed: h.passed };
   // every raised hand is said before everyone, and settled when the truth about the accused comes out
   out.back.forEach(id => sayPublic(id, x.id, 'cult', 'vote'));
   out.against.forEach(id => sayPublic(id, x.id, 'clean', 'vote'));
@@ -278,13 +299,14 @@ function angerAfter(right) {
   S.anger = Math.max(0, (S.anger || 0) + (right ? -vary(VR.right) : vary(VR.wrong)));
   return right ? '' : walkoutIf();
 }
-// after a day without an inquiry the camp's anger cools overnight, but hardly ever below what it holds for the innocents
-// sent away (forget: the night it lets go of that too); called at dawn, so the day that ended is yesterday
+// after a day without an inquiry the camp's anger cools overnight, about so far (cool), but hardly ever below what it
+// holds for the innocents sent away (forget: the night it lets go of that too); called at dawn, so the day that ended is
+// yesterday
 function coolOff() {
   const VR = RULES.verdict,
     a = S.anger || 0;
   if (S.inquiries.some(v => v.day === S.day - 1)) return;
-  S.anger = Math.max(a - VR.cool, chance(VR.forget) ? 0 : Math.min(a, VR.wrong * S.stats.wrong));
+  S.anger = Math.max(a - vary(VR.cool), chance(VR.forget) ? 0 : Math.min(a, VR.wrong * S.stats.wrong));
 }
 // A camp that walked out may think better of it at dawn (relent; the likelier the morning after a death): then it will
 // hear you again. Returns the line that tells of it.

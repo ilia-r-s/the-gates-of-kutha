@@ -124,14 +124,11 @@ function claimTell(c) {
 // (cultDream), lying only where a lie pays; a dream made up is dreamt once a night, and told again the same day (at
 // breakfast, asked, or in parting) it is the same dream. Told, a dream speaks their claim and is noted for or against
 // the one dreamt of.
-// d: { t: the one dreamt of, cult: guilty }. t: the one dreamt of (or their short name, as some callers still give it),
-// told with their own pronoun after the name, as the Russian does
-const dreamEn = (t, cult) => {
-  const w = typeof t === 'string' ? CHARS.find(c => c.short === t) : t;
-  return cult
-    ? `${w.short} stood inside the seventh, and the god’s hand was on ${w.pp} shoulder.`
-    : `${w.short} stood outside them, weeping. Whatever ${w.p} is, ${w.p} is not one of theirs.`;
-};
+// d: { t: the one dreamt of, cult: guilty }; t told with their own pronoun after the name, as the Russian does
+const dreamEn = (t, cult) =>
+  cult
+    ? `${t.short} stood inside the seventh, and the god’s hand was on ${t.pp} shoulder.`
+    : `${t.short} stood outside them, weeping. Whatever ${t.p} is, ${t.p} is not one of theirs.`;
 const dreamRu = (t, cult) =>
   cult
     ? `${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} за седьмыми, и рука бога лежала у ${ru.gs(t, 'него', 'неё')} на плече.`
@@ -183,7 +180,7 @@ function cornerClaims() {
     const cl = claimOf(c);
     if (c.role === 'seer' || c.role === 'warden' || cl.role !== 'none' || cl.said != null || !looksLost(c)) return;
     if (!chance(K.cornered * TP(c).liked)) return;
-    Object.assign(cl, { role: chance(K.likedSeer) ? 'seer' : 'warden', why: c.role === 'cult' ? 'deceit' : 'liked', late: S.day });
+    Object.assign(cl, { role: chance(K.likedSeer) ? 'seer' : 'warden', why: c.role === 'cult' ? 'deceit' : 'liked' });
   });
 }
 // A dream made up for the occasion, dreamt once a day and told the same way again that day: the cult's (cultDream) or
@@ -275,7 +272,7 @@ function defenderOf(t, c) {
   const K = RULES.claims;
   return (
     shuffle(freeChars()).find(a => {
-      if (a.id === t.id || a.id === c.id || a.status !== 'present' || claimOf(a).role !== 'seer') return false;
+      if (a.id === t.id || a.id === c.id || claimOf(a).role !== 'seer') return false;
       const mate = a.role === 'cult' && t.role === 'cult';
       if (!(likes(a.id, t.id) >= 1 || mate)) return false;
       const can = a.role === 'seer' ? a.visions.some(v => v.about === t.id && !v.cult) : !dreamtToday(a);

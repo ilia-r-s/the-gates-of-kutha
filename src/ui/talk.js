@@ -1,6 +1,8 @@
 // ===================== A CONVERSATION =====================
-// Two questions to a conversation as a rule (RULES.talk.questions; now and then three, or one), chosen from what
-// dialog.js offers; then you take your leave, and sometimes they tell you one more thing.
+// The conversation's screen: the questions dialog.js offers, asked and answered, and taking your leave. What happens in
+// it is the rules' (people/dialog.js: openTalk, askOf, leaveOf); this shows it as it goes: two questions to a
+// conversation as a rule (RULES.talk.questions; now and then three, or one); then you take your leave, and sometimes
+// they tell you one more thing.
 function titlePick(c, st, ask) {
   talkScene(
     c,
@@ -36,52 +38,31 @@ function talkScene(c, st, after, choices) {
 }
 // from a choice among several (a title to ask about, a thing to show), back to the conversation
 const backToTalk = (c, st) => ({ label: bi('Back to the conversation', 'Вернуться к разговору'), cls: 'minor', fn: () => talk(c.id, st) });
-// The start of a conversation: their greeting (the slot's own: people/manner.js), and the truth from someone who hid
-// their part and now trusts you. (It counts as a conversation once you ask something: thinking better of it before then
-// is no conversation, and how long it would have run is not settled until the first question: askThem.)
+// The start of a conversation: their greeting, and the truth from someone who hid their part and now trusts you
+// (people/dialog.js, openTalk). (It counts as a conversation once you ask something: thinking better of it before then
+// is no conversation, and how long it would have run is not settled until the first question: askOf.) st: the
+// conversation so far, its lines and how it stands (asked, limit, chill: askOf; cool: a cold or hurried greeting, or a
+// curt answer since, so that a third question allowed is not told as their being in no hurry: talkAfter).
 function meet(c) {
-  // (cool: a cold or hurried greeting, or a curt answer since, so that a third question allowed is not told as their
-  // being in no hurry: talkAfter)
-  const g = greeting(c),
+  const { g, owned } = openTalk(c),
     st = { asked: [], lines: [{ who: 'them', text: g.text }], chill: false, limit: null, cool: !!g.cool || c.rapport <= -1 };
   S.cv = { youE: 'neutral', themE: g.face, speaking: 'them' };
-  S.act = 'talk';
-  const rc = recantTrust(c);
-  if (rc) {
-    st.lines.push({ who: 'them', text: rc });
+  if (owned) {
+    st.lines.push({ who: 'them', text: owned });
     S.cv.themE = 'grave';
   }
   return st;
 }
-// A question asked and answered, with whatever you notice as they answer; an occultist may feel a chill near them,
-// once a conversation.
+// A question asked and answered (people/dialog.js, askOf), with whatever you notice as they answer.
 function askThem(c, st, k, arg) {
-  if (!st.asked.length) {
-    S.log.talk++;
-    // two questions, as a rule; now and then they have time for a third, or none for a second (talk.longer, shorter)
-    const RT = RULES.talk;
-    st.limit = RT.questions + (chance(RT.longer) ? 1 : chance(RT.shorter) ? -1 : 0);
-  }
-  st.asked.push(k);
-  S.log[k] = (S.log[k] || 0) + 1;
-  emit('ask', k);
-  const r = DIALOG[k].run(c, arg);
+  const r = askOf(c, st, k, arg);
   if (r.cool) st.cool = true;
   st.lines.push({ who: 'you', text: r.you });
   if (r.pre) st.lines.push({ who: 'note', text: r.pre });
   st.lines.push({ who: 'them', text: r.them });
   if (r.note) st.lines.push({ who: 'note', text: r.note });
-  if (!st.chill && S.bg === 'occultist') {
-    st.chill = true;
-    if (chance(c.role === 'cult' ? RULES.talk.chillCult : RULES.talk.chillOther)) {
-      st.lines.push({
-        who: 'note',
-        text: bi(...tellOne('chill', [x => [fmt(T.chill, P(x)), fmtR(R(T.chill), { n: x })], ...SAY.chill])(c))
-      });
-      addTest(c.id, c.id, 'chill', 'cult');
-    }
-  }
-  S.cv = { youE: r.youE, themE: faceFor(c, r.themE), speaking: 'them' };
+  if (r.chill) st.lines.push({ who: 'note', text: r.chill });
+  S.cv = { youE: r.youE, themE: r.face, speaking: 'them' };
   talk(c.id, st);
 }
 function talk(id, st) {
@@ -130,9 +111,10 @@ function talkAfter(c, st, over) {
     t = said[k] || (said[k] = tellOne(k, SAY[k])(c));
   return `<p class="dim">${bi(...t)}</p>`;
 }
-// Taking your leave: a dream told in parting, perhaps, and a last look at them (people/manner.js); then the slot is spent.
+// Taking your leave (people/dialog.js, leaveOf): a dream told in parting, perhaps, and a last look at them; then the
+// slot is spent.
 function talkLeave(c, st) {
-  const d = partingDream(c);
+  const { dream: d, mien: m, last } = leaveOf(c);
   if (d) {
     st.lines.push({
       who: 'them',
@@ -143,9 +125,7 @@ function talkLeave(c, st) {
     });
     S.cv = { youE: 'grave', themE: 'grave', speaking: 'them' };
   }
-  const m = mienNote(c, RULES.talk.mienParting);
   if (m) st.lines.push({ who: 'note', text: m });
-  const last = parting(c);
   if (last) {
     st.lines.push({ who: 'note', text: last[0] });
     S.cv.themE = last[1];

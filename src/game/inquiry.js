@@ -97,7 +97,6 @@ function unmasked(c, vote, hands0 = '') {
 // above it.
 function lastOfThem(kicker, body) {
   if (chance(RULES.inquiry.tooLate * (S.doom >= RULES.start.doomWarn ? RULES.inquiry.tooLateNear : 1))) {
-    S.log.tooLate = true;
     show({
       kicker,
       title: bi('The gate is opening', 'Врата отворяются'),

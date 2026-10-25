@@ -284,9 +284,8 @@ function deedMorning() {
     t = C(d.id),
     happened = d.outcome === 'killed' || d.outcome === 'failed' || d.outcome === 'watched';
   let h = '';
-  const up = (n, why) => {
+  const up = n => {
     S.onYou = Math.min(RULES.scale.suspicion, (S.onYou || 0) + n);
-    (d.why = d.why || []).push(why);
   };
   // whoever knows: the one you went for, the Watcher who drove you off, or someone you passed
   const knower = d.knewBy ? C(d.knewBy) : d.seenBy ? C(d.seenBy) : null;
@@ -303,37 +302,37 @@ function deedMorning() {
       );
     } else if (chance(D.hint)) {
       d.hinted = knower.id;
-      up(happened ? 1 : 0.5, 'hint');
+      up(happened ? 1 : 0.5);
       const hm = C('hamid'),
         asked = knower.id !== hm.id && isFree(hm) ? ['Hamid', 'Хамида'] : ['the cook', 'повара'];
       h += bi(
         `<p class="notice">${knower.short} watches you over breakfast and says nothing. Later you hear ${knower.p} asked ${asked[0]} whether the Doctor sleeps well these nights.</p>`,
         `<p class="notice">${ru.c(knower)} весь завтрак смотрит на вас и молчит. Позже вы узнаёте, что ${ru.gs(knower, 'он спрашивал', 'она спрашивала')} ${asked[1]}, хорошо ли доктор спит в последние ночи.</p>`
       );
-    } else d.silent = knower.id;
+    }
   }
   if (happened && d.trace && chance(D.link)) {
     d.linked = true;
-    up(1, 'trace');
+    up(1);
     h += bi(
       `<p class="notice">Someone found a horn button by ${t.short}’s tent. By noon the whole camp has looked at your jacket.</p>`,
       `<p class="notice">У палатки ${ru.c(t, 'g')} кто-то нашёл роговую пуговицу. К полудню весь лагерь уже посмотрел на вашу куртку.</p>`
     );
   }
   if (happened && S.log.attacks.some(a => a.day === d.day && a.how === 'out')) {
-    up(1, 'out');
+    up(1);
     h += bi(
       `<p class="notice">The whole camp knows your tent was empty last night when they came for you. Nobody asks where you were. Everyone wonders.</p>`,
       `<p class="notice">Весь лагерь знает, что прошлой ночью, когда за вами пришли, ваша палатка была пуста. Никто не спрашивает, где вы были. Все гадают.</p>`
     );
   }
-  if ((d.outcome === 'killed' || d.outcome === 'failed') && d.means === 'revolver' && chance(D.shot)) up(1, 'shot');
+  if ((d.outcome === 'killed' || d.outcome === 'failed') && d.means === 'revolver' && chance(D.shot)) up(1);
   if (d.planted) {
     const owners = freeChars().filter(o => o.traits[d.plant.cat] === d.plant.val && o.id !== t.id);
     const sp = pick(freeChars().filter(o => o.id !== t.id));
     if (sp && chance(D.plantSeen)) {
       d.plantSeen = sp.id;
-      if (chance(D.plantLink)) up(1, 'plant');
+      if (chance(D.plantLink)) up(1);
       h += bi(
         `<p class="notice">${sp.short} looks for a long time at what was left by ${t.short}’s tent, and says it was put there for someone to find.</p>`,
         `<p class="notice">${ru.c(sp)} долго разглядывает то, что нашли у палатки ${ru.c(t, 'g')}, и говорит, что это подбросили, чтобы кто-нибудь нашёл.</p>`
@@ -344,53 +343,59 @@ function deedMorning() {
       h += stir('planted', { about: o.id, at: t.id, cat: d.plant.cat });
     }
   }
-  d.onYou = S.onYou || 0;
   // the cult hears what the camp hears, and guesses at what it does not, whoever it was you went for: once it knows or
   // guesses it was you, it knows what you are (as if you had confided in it)
   if (happened && chance(D.cultKnows * (d.caught || d.hinted || d.linked ? 1 : D.unseen))) S.alerted = true;
   if (d.caught) return h + youVote();
-  if (happened && (S.onYou || 0) >= 2 && chance(D.vote[Math.min(3, Math.floor(S.onYou))])) return h + youVote();
+  // (suspected at 2 or more: below that the table's odds are nothing, and no die is thrown)
+  if (happened && chance(D.vote[Math.min(3, Math.floor(S.onYou || 0))])) return h + youVote();
   return h;
 }
 // at a later dawn, a camp that suspects you enough may still sit in judgement on you
 function deedDawn() {
   const d = S.log.deed;
-  if (!d || !d.morning || d.judged || S.ended || (S.onYou || 0) < 2) return '';
-  return chance(RULES.deed.later * RULES.deed.vote[Math.min(3, Math.floor(S.onYou))]) ? youVote() : '';
+  if (!d || !d.morning || d.judged || S.ended) return '';
+  return chance(RULES.deed.later * RULES.deed.vote[Math.min(3, Math.floor(S.onYou || 0))]) ? youVote() : '';
 }
 // The camp sits in judgement on you. Each takes a side (RULES.deed.judge): how sure the camp is it was you (S.onYou,
 // and more if someone saw you), a friend of the one you went for (and the one you went for, if alive), less for each
 // step of trust in you; the dead so far, the camp's anger, the evening's mood and their own whim; the cult leans on it
 // a little (to be rid of you), as it leans at any inquiry. At least need of them, and more than speak for you, and you
-// are put on the truck to Hillah: the season ends. Otherwise you stay, and those who would have sent you away trust you
-// the less.
+// are put on the truck to Hillah: the season ends (game/verdict.js, handsRaised: with nobody left at the dig, the police
+// corporal from Hillah decides, and takes your word, mostly). Otherwise you stay: those who would have sent you away
+// trust you the less, mostly (sour), the camp is the angrier, about so far (angered), and suspects you about a step less
+// (cleared).
 function youVote() {
   const d = S.log.deed,
     J = RULES.deed.judge,
     VR = RULES.verdict,
     crowd = freeChars(),
-    out = { expel: [], keep: [], silent: [] },
-    mood = VR.mood * tenorOf('swing') * (2 * rand() - 1),
-    cs = (S.onYou || 0) + (d.caught ? J.caught : 0);
-  crowd.forEach(o => {
-    const lean =
-      cs +
-      (likes(o.id, d.id) >= 1 ? J.friend : 0) +
-      (o.id === d.id ? J.victim : 0) -
-      J.trust * o.rapport +
-      VR.fear * Math.min(S.stats.taken, VR.fearCap) +
-      VR.anger * (S.anger || 0) +
-      (o.role === 'cult' ? J.cult * craft(o).push : 0) +
-      mood +
-      VR.whim * (2 * rand() - 1);
-    let v = lean >= J.expel ? 'expel' : lean < J.keep ? 'keep' : 'silent';
-    if (chance(VR.contrary)) v = pick(['expel', 'keep', 'silent'].filter(x => x !== v));
-    out[v].push(o.id);
-  });
-  out.passed = out.expel.length >= Math.min(VR.need, crowd.length) && out.expel.length > out.keep.length;
+    cs = (S.onYou || 0) + (d.caught ? J.caught : 0),
+    h = handsRaised(
+      crowd,
+      o =>
+        cs +
+        (likes(o.id, d.id) >= 1 ? J.friend : 0) +
+        (o.id === d.id ? J.victim : 0) -
+        J.trust * o.rapport +
+        VR.fear * Math.min(S.stats.taken, VR.fearCap) +
+        VR.anger * (S.anger || 0) +
+        (o.role === 'cult' ? J.cult * craft(o).push : 0),
+      () => 0,
+      J.expel,
+      J.keep,
+      'against'
+    ),
+    out = { expel: h.for, keep: h.against, silent: h.silent, passed: h.passed };
   d.judged = S.day;
   d.vote = { expel: out.expel, keep: out.keep, silent: out.silent, passed: out.passed, day: S.day };
-  const hands = `<p class="notice">${bi(
+  const corporal = !crowd.length; // (nobody left to judge you: handsRaised)
+  const hands = corporal
+    ? `<p class="notice">${bi(
+        'There is nobody left at the dig to sit in judgement on you, and it falls to the police corporal from Hillah to decide. He takes your word for it.',
+        'Судить вас на раскопе уже некому, и решать приходится капралу из Хиллы. Он верит вам на слово.'
+      )}</p>`
+    : `<p class="notice">${bi(
     'The camp sits in judgement on you in the mess tent. ' +
       [
         out.expel.length ? `${nameList(out.expel)} would put you on the lorry to Hillah.` : 'Nobody would put you on the lorry.',
@@ -412,13 +417,15 @@ function youVote() {
     ending('expelled');
     return '';
   }
-  out.expel.forEach(id => trustDown(C(id)));
-  S.anger = (S.anger || 0) + RULES.deed.angered;
-  S.onYou = Math.max(0, (S.onYou || 0) - RULES.deed.cleared);
+  // (each who would have sent you away, mostly, if their trust in you can sink any lower)
+  const sour = out.expel.map(C).filter(o => o.rapport > RULES.scale.trustMin && chance(RULES.deed.sour));
+  sour.forEach(o => trustDown(o));
+  S.anger = (S.anger || 0) + vary(RULES.deed.angered);
+  S.onYou = Math.max(0, (S.onYou || 0) - vary(RULES.deed.cleared));
   return (
     hands +
-    `<p class="notice">${bi('The camp will not send you away. Not today.', 'Лагерь не станет вас отсылать. Не сегодня.')}</p>` +
-    trustNote([], out.expel)
+    (corporal ? '' : `<p class="notice">${bi('The camp will not send you away. Not today.', 'Лагерь не станет вас отсылать. Не сегодня.')}</p>`) +
+    trustNote([], sour.map(o => o.id))
   );
 }
 // the morning after the deed, the camp talks the more readily (people/social.js, socialMorning)

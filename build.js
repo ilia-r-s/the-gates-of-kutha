@@ -6,7 +6,8 @@
 // The game is one script made of the modules below, concatenated in order. Every module shares one global scope, so
 // the build refuses two top-level declarations of the same name: a function declared twice would silently replace
 // the first, which is how a sound effect once overwrote a picture.
-// usage: node build.js [--check] [--src=dir] [--out=dir]   (--check builds in memory and reports, writing nothing)
+// usage: node build.js [--check] [--debug] [--src=dir] [--out=dir]   (--check builds in memory and reports, writing
+// nothing; --debug ships the script whole, comments and all)
 // The module lists are exported for the tools that read the game as the browser does (test/lint.js).
 const fs = require('fs'), path = require('path');
 const opt = k => (process.argv.find(a => a.startsWith(`--${k}=`)) || '').slice(k.length + 3);
@@ -49,7 +50,7 @@ const SCRIPT = [
   'game/verdict.js',     // ... and whether the camp will back you
   'game/night.js',       // the night and the morning after
   'game/yourdreams.js',  // ... and your own dreams in it
-  'game/deed.js',       // justice in your own hands, once a season
+  'game/deed.js',        // justice in your own hands, once a season
   'game/events.js',      // the day's news
   'game/finale.js',      // the descent and the rite
   'game/below.js',       // what waits between the gates

@@ -51,7 +51,8 @@ const TEMPER_IDS = Object.keys(TEMPERS);
 // ---------- how a feeling shows (people/manner.js) ----------
 // shows: how readily a feeling shows in face and word (× the chances in RULES.manner): the honest and the light-headed
 // wear theirs openly, the calculating and the detached hardly at all.
-// mask: in the cult, a warm face put on for you without the feeling behind it, while it courts your trust
+// mask: a pleasant face put on without the feeling behind it, by anyone at trust 0 or 1 (the cult, courting your trust,
+// tries it twice over: people/manner.js)
 const MANNER = {
   honest:        { shows: 1.15, mask: 0.01 },
   conscientious: { shows: 0.9,  mask: 0.15 },
@@ -65,7 +66,7 @@ const MANNER = {
 // flirt        flirting (the light-headed wink more: wink becomes winkLight)
 // joke         a joke about love and marriage (a priest's: jokeVows)
 // warm, cold   a warm greeting, or a cold one (from someone hostile, angry at angry, else cold)
-// mask         the cult's warm mask
+// mask         a pleasant face put on (MANNER.mask)
 // goodDay      a good day (at goodDay of the whims: the good faces), or else a bad one (the bad faces)
 // castFlirt    faces drawn about the dig: someone sweet on you (at castFlirt × flirt × shows); castWhim: a whim
 // suspected    someone the camp suspects, drawn about the dig (at suspected × shows): sad at sad, else afraid
@@ -281,12 +282,12 @@ const RULES = {
   // word against them (a slip, a slip of the tongue about the night, a witness: strong), per dream of their guilt
   // (dream; a dream of innocence takes as much away), per sworn watch slept through, per flinch at an old charm or hint
   // at their nights (flinch), per distrust voiced (distrust).
-  // The camp's anger: + wrong for each innocent sent away, + refused for each inquiry it would not back, − right for
-  // each cultist unmasked. After an inquiry that went against you, once it reaches walkoutFrom, the camp may hold no
-  // more inquiries (at walkoutStep for each step of anger from walkoutFrom up), and then the diggers down tools the next
-  // day. After a day without an inquiry it cools overnight by cool, but not below wrong for each innocent sent away but
-  // on the night it lets go of that too (forget): the camp forgets a refused inquiry in time, if you give it time, and an
-  // innocent sent away hardly ever.
+  // The camp's anger, about so far each (vary): + wrong for each innocent sent away, + refused for each inquiry it would
+  // not back, − right for each cultist unmasked. After an inquiry that went against you, once it reaches walkoutFrom, the
+  // camp may hold no more inquiries (at walkoutStep for each step of anger from walkoutFrom up), and then the diggers
+  // down tools the next day. After a day without an inquiry it cools overnight by about cool, but not below wrong for
+  // each innocent sent away but on the night it lets go of that too (forget): the camp forgets a refused inquiry in
+  // time, if you give it time, and an innocent sent away hardly ever.
   verdict: {
     trust: 0.5, like: 0.75, anger: 0.25, mood: 1, whim: 0.75, back: 1.8, against: 0.5, need: 2, fear: 0.15, fearCap: 4,
     word: 0.5, wordSpread: 0.4, wordMin: -1.5, wordMax: 2.5,
@@ -434,7 +435,7 @@ const RULES = {
     company: 0.35,                              // making conversation with a friend (trust 2 or more) steadies your nerve a little
     press: 0.4, pressSoldier: 0.25, pressTrust: 0.05, pressAlerts: 0.5, pressCost: 0.9,   // pressCost: pressing costs trust, whoever they are
     cold: 0.6, refuse: 0.6, hostileSilence: 0.5,   // someone who has turned against you keeps it short, refuses a favour, will not name names
-    scholarLine: 0.6, greed: 0.45, sourConfide: 0.5, dreamAnswer: 0.6, partingDream: 0.4,
+    scholarLine: 0.6, greed: 0.45, sourConfide: 0.5, partingDream: 0.4,
     honestTip: 0.1, honestCultTip: 0.7, smugglerSight: 0.15, pressTip: 0.3,
     chillCult: 0.3, chillOther: 0.05, evadeNote: 0.5, tellTruthful: 0.06, tellSuspicious: 0.15, mien: 0.35, mienParting: 0.15,
     feel: 0.3,                                  // in small talk, a word about someone they feel strongly about
@@ -445,12 +446,12 @@ const RULES = {
     // charm like a dealer now and then (greedOther; the liar and the calculating twice as readily); a promise is made
     // when a Watcher or a Dreamer takes your confidence (promise); an innocent pressed hard says something that sounds
     // like the cult's own words (falseSlip; the thief: falseSlipThief); the cult pressed turns it aside onto the thief
-    // (cultTip); a word about the thief names the wrong one (tipWrong); the Dreamer asked whom they distrust answers with
-    // a dream (dreamTell; anyone who only claims to dream, the cult among them: dreamAnswer); people put things in their
-    // temperament's own way (ownWay); anyone has a bad day, keeps it short
+    // (cultTip); a word about the thief names the wrong one (tipWrong); anyone who claims to dream, asked whom they
+    // distrust, answers with a dream (dreamTell: the true Dreamer as readily as anyone who only says so, the cult among
+    // them); people put things in their temperament's own way (ownWay); anyone has a bad day, keeps it short
     // or refuses a favour (offDay × how readily they show it; × offDayFriend with a friend)
     habit: 0.65, greedOther: 0.04, promise: 0.85, falseSlip: 0.03, falseSlipThief: 0.1, cultTip: 0.75, tipWrong: 0.08,
-    dreamTell: 0.85, ownWay: 0.75, offDay: 0.05, offDayFriend: 0.4,
+    dreamTell: 0.75, ownWay: 0.75, offDay: 0.05, offDayFriend: 0.4,
     partingUnpromised: 0.1,                     // a dream told as you leave (partingDream: by one who promised you dreams or trusts you; this: anyone else who says they dream)
     mienWrong: 0.08,                            // your impression of someone's manner is wrong (÷ how readily their feelings show)
     feelFalse: 0.3                              // a word about their own feelings is the opposite (× how untrue their gossip runs)
@@ -575,8 +576,9 @@ const RULES = {
   // (by suspicion) that morning, and at later × vote each dawn after. Judged (judge): each leans by the camp's suspicion
   // of you (+ caught if someone saw you), + friend of the one you went for, + victim (the one you went for, alive), −
   // trust × trust in you, + the dead, + the camp's anger, + cult × craft push for the cult, ± mood and whim; at expel or
-  // more they would send you away, below keep they speak for you; sent away, the season ends; else the camp angers
-  // (angered) and lets the suspicion go a step (cleared). The camp talks the more the morning after (talk ×).
+  // more they would send you away, below keep they speak for you; sent away, the season ends; else each who would have
+  // sent you away trusts you the less (sour), and the camp angers, about so far (angered), and lets the suspicion go
+  // about a step (cleared). The camp talks the more the morning after (talk ×).
   deed: {
     from: 3, kill: { knife: 0.6, revolver: 0.85 }, soldier: 0.1, knows: 0.6, wakes: 0.45,
     seen: 0.18, quietly: 0.5, noise: { knife: 1, revolver: 2 }, trace: 0.3, link: 0.4, plantSeen: 0.3, plantLink: 0.3, shot: 0.35,
@@ -585,7 +587,8 @@ const RULES = {
     vote: [0, 0, 0.45, 0.75], later: 0.5,
     judge: { caught: 1, friend: 1, victim: 3, trust: 1, cult: 0.3, expel: 2.2, keep: 0.6 },
     away: { errand: 0.1, thief: 0.08, tryst: 0.6, restless: 0.08 },
-    angered: 1, cleared: 1, talk: 2
+    angered: 1, cleared: 1, talk: 2,
+    sour: 0.9                                   // a step less trust in you from each who would have sent you away, at this chance
   },
   // the thief as witness (people/thief.js): sees it (at random, where he was, where he came to rob); hints when asked whom
   // he distrusts and in gossip; names the one he saw when pressed (pressed), coming clean of his own accord, or sent away

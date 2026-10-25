@@ -9,20 +9,22 @@
 //                                   hurt you last (for the ending)
 //   chars{id}, order                the seven: role, status, traits, known (what you took their habits to be),
 //                                   rapport (trust in you), mark, markAt (your mark when their part became certain),
-//                                   visions; order: the seven in a new order each season, so that no one comes first by
-//                                   habit (the casebook lists them in the cast's own order: castOrder)
+//                                   visions, greeted (how they greet you this slot, settled once a slot:
+//                                   people/manner.js); order: the seven in a new order each season, so that no one comes
+//                                   first by habit (the casebook lists them in the cast's own order: castOrder)
 //   temper, like, rap0              temperaments, sympathies, and trust at the start (people/tempers.js, social.js)
 //   sus, said, credit, stirs        who suspects whom; what was said before everyone, and whose word has been proven;
 //                                   the camp's public moments (people/camp.js); confidedIn: whom you have confided in
 //   flirt                           flirtatious streaks dealt at the start (people/flirt.js)
-//   witness, witnessTold, witnessNamed   what the thief saw; whom he named last, and everyone he has named
-//                                   (people/thief.js)
+//   witness, witnessTold, witnessNamed   what the thief saw; whom he named last, and everyone he has named;
+//                                   witnessMore: whether he would name another he saw (people/thief.js)
 //   recantTried                     the day each hidden Dreamer or Watcher last had their chance to come clean to a
 //                                   friend (people/claims.js, recantTrust)
 //   claim, revealed                 what each claims in Crane's diary; what you know for certain (badges)
 //   gods, patron, aspectOf, titlesOf, titleOf, signsOf, signPair, charms, wardOf, wardAt, godOfWard, decoys, marksOf,
 //   refOf, facts, factKnown         the season's four powers (of eight) and the one below, the season's six charms (of
-//                                   twelve) and the tablets (world/powers.js); glosses, readings, gm
+//                                   twelve) and the tablets (world/powers.js); glosses, readings, gm; marksSeen: the
+//                                   marks you read on each charm as you came by it (gain, below)
 //   clues, crime, testimony, journal, nights, claims, sights, rumors, pending    what you have learned, and heard
 //                                   (a clue's source: cult, thief, stray: someone's who had been there earlier, or
 //                                   plant: an innocent's trace laid by the cult); nights: each night's truth, accounts
@@ -61,6 +63,13 @@ const freeChars = () => S.order.map(C).filter(isFree);
 // ids in the cast's own order, as the casebook and the ending list them
 const castOrder = ids => CHARS.map(c => c.id).filter(id => ids.includes(id));
 const freeCult = () => freeChars().filter(c => c.role === 'cult');
+// Your friends: those outside the cult still at the dig who trust you (2 or more); your enemies: those outside it still
+// here who have turned against you since the start (someone who never liked you and still does not was not your doing);
+// friends lost: those who trusted you whom the night took (not one dead by your own hand: game/deed.js). For the ending,
+// and for the cult's reading of you as the season goes (people/cunning.js).
+const friendsNow = () => freeChars().filter(c => c.role !== 'cult' && c.rapport >= 2),
+  enemiesNow = () => freeChars().filter(c => c.role !== 'cult' && c.rapport <= -1 && c.rapport < (S.rap0 ? S.rap0[c.id] : 0)),
+  friendsLost = () => S.order.map(C).filter(c => c.status === 'taken' && c.takenBy !== 'you' && c.rapport >= 2);
 const has = it => S.items.includes(it);
 function gain(it) {
   const had = has(it);
@@ -93,9 +102,11 @@ function backedDown() {
   S.backAt = at;
 }
 // A new season, dealt in this order (the dice are thrown in this order): the parts, first of all (dealParts); the
-// power below; the cast's habits and temperaments; the powers' titles, signs and charms; what people claim, whom they
-// like, what your background gives you, the night Crane died, how far each of the camp takes your word, and the
-// season's mood.
+// powers and the one below (freshSeason); the cast's habits and temperaments (dealCast); the powers' signs, wards and
+// titles, and the tablets (dealGods); what people claim (assignClaims), whom they like (assignLikes; campInit throws
+// none), the flirtations (assignFlirts); what your background gives you (backgroundStart); the night Crane died
+// (crane0); the salt that fixes the choices made without the dice; how far each of the camp takes your word (dealWord,
+// by the salt); the season's mood (dealTenor); your own dreams (dealYourDreams); and the cult's patience.
 // hardcore: the casebook keeps only the bare record, with nothing joined up for you (ui/book.js)
 function newGame(name, bg, hardcore = false) {
   const dealt = dealParts();
@@ -183,11 +194,11 @@ function freshSeason(name, bg) {
 // How the season is played, counted for the ending and the debrief.
 function freshLog() {
   return {
-    talk: 0,
+    talk: 0, // conversations; and the questions counted (people/dialog.js, ASKED_COUNTED)
     about: 0,
     night: 0,
     distrust: 0,
-    show: 0,
+    diary: 0,
     confide: 0,
     press: 0,
     pressedWho: [], // whom you pressed (people/dialog.js), for what became of them
@@ -211,11 +222,10 @@ function freshLog() {
     inq: 0,
     readings: 0,
     confess: 0,
-    gossip: 0,
     cultTruth: 0,
     accused: [],
     refusedInq: [],
-    attacks: [],
+    attacks: [], // the nights something came for you: { day, how, power: the power below, come by itself } (game/night.js)
     guarded: [],
     spared: [],
     quiet: [],
@@ -224,7 +234,6 @@ function freshLog() {
     visit: null, // someone who came to your tent as the evening ended (people/visit.js): { id, day, agreed, ... }
     deed: null, // the night you went out yourself (game/deed.js): { day, id, means, plant, outcome, ... }
     manner: [],
-    tooLate: false,
     walkedOut: null, // the day the camp first walked out on your inquiries (game/verdict.js), whether or not it relented
     relented: null,
     bus: [],

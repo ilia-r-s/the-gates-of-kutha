@@ -34,9 +34,7 @@ function paintChrome() {
     const el = document.querySelector(sel);
     if (!el) return;
     const v = LANG === 'ru' ? rus : en;
-    if (what === 'text') {
-      if (el.textContent !== v) el.textContent = v;
-    } else if (what === 'twin') {
+    if (what === 'twin') {
       // both at once, the hidden one holding the room: as many lines in either language
       if (!el.querySelector('.twin')) {
         el.innerHTML = twin([en, 'en'], [rus, 'ru']);
@@ -64,7 +62,7 @@ function setLang(l) {
   const svg = document.getElementById('map');
   if (svg) svg.removeAttribute('data-ready');
   renderAll();
-  if (typeof auButtons === 'function') auButtons();
+  auButtons();
 }
 function langInit() {
   document.documentElement.setAttribute('lang', LANG); // (the artifact's page has no lang of its own)

@@ -74,7 +74,7 @@ function talkNotes(c, ...said) {
     .join(' ');
 }
 // a line from the tablets they are reading, if there is one you have not heard (one of the cult shares none about the
-// power below or its ward, but for a slip: readings.cultSlip)
+// ward of the power below, but for a slip: readings.cultSlip)
 function scholarTalk(c) {
   const l = learnFact(undefined, undefined, c.role === 'cult' && !chance(RULES.readings.cultSlip));
   if (l == null) return null;
@@ -161,7 +161,7 @@ const DIALOG = {
             `${ru.c(c)} отвечает, но вам кажется, что ${ru.gs(c, 'он видел', 'она видела')} больше, чем говорит.`
           );
         else {
-          S.sights.push({ night: n, id: c.id, where: sw.where, cat: sw.cat, val: sawVal(sw) });
+          S.sights.push({ night: n, id: c.id, where: sw.where, to: sw.to, cat: sw.cat, val: sawVal(sw) });
           seen = ' ' + sightLine(cl, sw, c);
         }
       }
@@ -488,11 +488,12 @@ DIALOG.distrust = {
     );
   }
 };
-// A dream to answer with, if they dream or say they do (people/claims.js): the true Dreamer's latest, mostly
-// (talk.dreamTell); anyone's who only says they dream, the cult's as any pretender's, now and then (talk.dreamAnswer).
+// A dream to answer with, if they dream or say they do (people/claims.js), as readily from anyone (talk.dreamTell), so
+// that how readily someone answers with a dream says nothing of whether they dream true: the true Dreamer's latest;
+// anyone's who only says they dream, the cult's as any pretender's, made up for the day.
 function dreamToTell(c) {
   if (c.role === 'seer' && claimOf(c).role === 'seer') return chance(RULES.talk.dreamTell) ? trueDream(c) : null;
-  const d = claimsToDream(c) && chance(RULES.talk.dreamAnswer) ? madeUpDream(c) : null;
+  const d = claimsToDream(c) && chance(RULES.talk.dreamTell) ? madeUpDream(c) : null;
   return d && tellDream(c, d);
 }
 // Whom they name, asked whom they distrust: { tip: the thief, named for what he is }, { target }, or {} (not without
@@ -623,3 +624,47 @@ DIALOG.diary = {
     };
   }
 };
+
+// ---------- a conversation, as the rules have it (ui/talk.js shows it) ----------
+// Going up to someone: their greeting (the slot's own: people/manner.js), and the truth from someone who hid their part
+// and now trusts you (people/claims.js, recantTrust). Returns { g: the greeting, owned: what they own up to, if anything }.
+function openTalk(c) {
+  S.act = 'talk';
+  return { g: greeting(c), owned: recantTrust(c) };
+}
+// the questions the season's record counts, for the cult's reading of you and the ending (people/cunning.js, game/endings.js)
+const ASKED_COUNTED = ['about', 'night', 'distrust', 'diary', 'confide', 'press'];
+// A question asked (k; arg: the thing shown, or the title asked about). It counts as a conversation once you ask
+// something, and how long it will run is settled then: two questions, as a rule, now and then a third, or none for a
+// second (talk.longer, shorter). Then the answer (DIALOG); what an occultist may feel near them, once a conversation
+// (talk.chillCult, chillOther); and the face they answer with (people/manner.js, faceFor). conv: the conversation so far,
+// as the screen keeps it ({ asked, limit, chill }: ui/talk.js). Returns the exchange (DIALOG's run), with face, and chill:
+// what was felt, if anything.
+function askOf(c, conv, k, arg) {
+  if (!conv.asked.length) {
+    const RT = RULES.talk;
+    S.log.talk++;
+    conv.limit = RT.questions + (chance(RT.longer) ? 1 : chance(RT.shorter) ? -1 : 0);
+  }
+  conv.asked.push(k);
+  if (ASKED_COUNTED.includes(k)) S.log[k]++;
+  emit('ask', k);
+  const r = DIALOG[k].run(c, arg);
+  let chill = null;
+  if (!conv.chill && S.bg === 'occultist') {
+    conv.chill = true;
+    if (chance(c.role === 'cult' ? RULES.talk.chillCult : RULES.talk.chillOther)) {
+      chill = bi(...tellOne('chill', [x => [fmt(T.chill, P(x)), fmtR(R(T.chill), { n: x })], ...SAY.chill])(c));
+      addTest(c.id, c.id, 'chill', 'cult');
+    }
+  }
+  return { ...r, face: faceFor(c, r.themE), chill };
+}
+// Taking your leave: a dream told in parting, perhaps (people/claims.js, partingDream), what you make of their manner as
+// you go (mienNote, at talk.mienParting), and a last look at them (people/manner.js, parting). Returns { dream, mien,
+// last }, each null if nothing came of it.
+function leaveOf(c) {
+  const dream = partingDream(c),
+    mien = mienNote(c, RULES.talk.mienParting);
+  return { dream, mien, last: parting(c) };
+}

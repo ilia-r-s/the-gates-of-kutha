@@ -141,7 +141,11 @@ run(async browser => {
           S.hurtBy = 'wrist';
         }
         if (want === 'bethlem') S.hurtBy = 'study';
-        if (want === 'canal') S.hurtBy = 'search';
+        // (the canal is madness from what you saw, not from what you read: game/endings.js, endingId)
+        if (want === 'canal') {
+          S.hurtBy = 'search';
+          S.log.studyCost = 0;
+        }
         if (kind === 'doom') {
           S.aspectOf[S.patron] = want.slice(5);
           S.fin.acts.push({ kind: 'ward', it: S.charms.find(w => w !== S.wardOf[S.patron]), ok: false }, { kind: 'fire', ok: false });

@@ -109,6 +109,5 @@ function flirtGossip(s, not = [], heard = false) {
   const [a, b] = pick(f),
     A = C(a);
   addTest(s.id, a, 'flirt', b);
-  S.log.gossip++;
   return { t: A, text: b === 'you' ? pick(heard ? FLIRT_HEARD_YOU : FLIRT_SAID_YOU)(s, A) : pick(FLIRT_SAID)(s, A, C(b)) };
 }

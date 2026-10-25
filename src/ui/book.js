@@ -424,7 +424,16 @@ function sightFits(x) {
     ? ` <span class="dim">${bi(`· fits ${listNames(fits.map(c => c.short))}`, `· подходит: ${ru.list(fits.map(c => ru.c(c)))}`)}</span>`
     : '';
 }
-// Whom people passed in the dark.
+// Whom people passed in the dark: where, as they told it (people/alibis.js, sightLine): in camp, toward your tent, toward
+// the tent of one who slept in yours, or about the tents (to); elsewhere, by the place.
+const sightWhere = x =>
+  x.where !== 'camp'
+    ? [`near ${LOCS[x.where].ref}`, `у ${ru.loc(x.where, 'gen')}`]
+    : x.to === 'tents'
+      ? ['about the tents', 'между палатками']
+      : x.to && S.chars[x.to]
+        ? [`near ${C(x.to).short}’s tent`, `у палатки ${ru.c(x.to, 'g')}`]
+        : ['near your tent', 'у вашей палатки'];
 function evSightings() {
   let h = '';
   if (S.sights.length)
@@ -433,10 +442,10 @@ function evSightings() {
       S.sights
         .slice()
         .reverse()
-        .map(
-          x =>
-            `<li><span class="c-day">${nightLabel(x.night)}</span> ${bi(`${C(x.id).short} passed someone near ${x.where === 'camp' ? 'your tent' : LOCS[x.where].ref}: ${WIT[x.val]}`, `${ru.c(x.id)} ${ru.gs(x.id, 'встретил', 'встретила')} кого-то у ${x.where === 'camp' ? 'вашей палатки' : ru.loc(x.where, 'gen')}: ${RU_WIT[x.val]}`)}${sightFits(x)}</li>`
-        )
+        .map(x => {
+          const [at, atRu] = sightWhere(x);
+          return `<li><span class="c-day">${nightLabel(x.night)}</span> ${bi(`${C(x.id).short} passed someone ${at}: ${WIT[x.val]}`, `${ru.c(x.id)} ${ru.gs(x.id, 'встретил', 'встретила')} кого-то ${atRu}: ${RU_WIT[x.val]}`)}${sightFits(x)}</li>`;
+        })
         .join('') +
       '</ul>';
   return h;
@@ -472,7 +481,7 @@ function evClaims() {
     if (cl.recanted == null || cl.claimed === false) return ''; // (one who had said nothing before had nothing to take back)
     // before everyone, as anyone saw it (a cultist's retreat before everyone looks the same)
     return ` <span class="dim">${
-      cl.how === 'confess' || cl.how === 'public' || cl.aloud
+      cl.how === 'confess' || cl.how === 'public'
         ? bi(
             `(said otherwise on day ${d}, and came clean of it)`,
             `(в день ${d} ${ru.gs(c, 'говорил', 'говорила')} иное — и ${ru.gs(c, 'сам признался', 'сама призналась')} во лжи)`
@@ -802,7 +811,7 @@ function bookInit() {
       if (S_ui.scene && (S_ui.scene.choices || []).some(ch => typeof ch.sub === 'function')) paintScene(S_ui.scene);
     } else {
       S.gm[k] = b.hasAttribute('data-toggle') ? (S.gm[k] ? 0 : 1) : ((S.gm[k] || 0) + 1) % 3;
-      if (typeof sfx === 'function') sfx('mark');
+      sfx('mark');
     }
     renderBook();
     p.scrollTop = top;

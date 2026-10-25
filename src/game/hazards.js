@@ -25,14 +25,15 @@ function perilNow(l, k = 1) {
   return `<p class="horror">${bi(en, rus)}</p>` + hazardCost(n, w, 'peril');
 }
 // By night, someone who cannot stand you may do you a harm, at most one a night: the likelier the more they hate you,
-// as their temperament allows (the honest hardly ever), and as the season's mood has it (k: × the usual chance).
-function spiteNight(k = 1) {
+// as their temperament allows (the honest hardly ever), and as the season's mood has it (k: × the usual chance). deed:
+// the deed you went out on tonight, if any (game/deed.js): a revolver you took with you is not in your kit to be taken.
+function spiteNight(k = 1, deed = null) {
   const SP = RULES.spite,
     who = shuffle(freeChars().filter(c => c.rapport <= -1)).find(c =>
       chance(SP.try * (c.rapport <= -2 ? SP.hate : 1) * SP.temper[temperOf(c)] * tenorOf('spite') * k)
     );
   if (!who) return '';
-  const loot = ['brandy', 'torch', 'revolver'].filter(has),
+  const loot = ['brandy', 'torch', 'revolver'].filter(it => has(it) && !(it === 'revolver' && deed && deed.means === 'revolver')),
     kind = pick(['scorpion', 'water', 'lamp'].concat(loot.length ? ['theft'] : [])),
     rec = { day: S.day, id: who.id, kind, ok: chance(SP.ok), caught: false };
   S.log.spite.push(rec);
