@@ -1,7 +1,7 @@
 // The test suite, in one command.
 //   node test/run.js          quick: build, lint, format, top panel, golden transcripts (en, ru), forced branches,
-//                             claims, social layer, puzzle soundness, every ending, after a doom, seeded seasons, the
-//                             dice rules, a Russian bot
+//                             claims, social layer, puzzle soundness, every ending, after a doom, the dice trace,
+//                             seeded seasons, the dice rules, a Russian bot
 //                             (about a minute and a half on two cores)
 //   node test/run.js full     the same with more games, plus the random and cheating bots and the puzzle simulation
 //   JOBS=n node test/run.js   how many steps run at once (one for each processor core unless told otherwise)
@@ -36,6 +36,10 @@ const STEPS = [
   ['puzzle soundness', node('gods.js', full ? '400' : '150'), out => /"nProblems": 0/.test(out) && /"soloPins": 0/.test(out), full ? 6 : 3],
   ['every ending', node('endings.js'), out => /"problems": 0/.test(out), 12],
   ['after a doom', node('dooms.js', full ? '300' : '80'), out => /"problems": 0/.test(out), full ? 25 : 8],
+  // (the dice trace: seasons played in Node, every die and every word as recorded; and, in full, the same seasons in
+  // Chromium, which the Node kernel must agree with)
+  ['dice trace', node('trace.js', 'check', ...(full ? [] : ['quick'])), out => /"differ": 0/.test(out), full ? 70 : 16],
+  ...(full ? [['node and browser', node('trace.js', 'browser'), out => /"differ": 0/.test(out), 12]] : []),
   // (seasons from their seeds, each scene scanned: the same seeds every run, so a failure replays by its code)
   [
     'seeded seasons',

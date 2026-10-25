@@ -10,23 +10,61 @@ function rand() {
   _seed = (_seed + 0x6d2b79f5) | 0;
   let t = Math.imul(_seed ^ (_seed >>> 15), 1 | _seed);
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  const v = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  if (TRACE && !_inDie) traceDie('R', null, v);
+  return v;
+}
+// The dice trace (test/trace.js): while a test holds an array in TRACE, every die thrown is written into it, as [kind,
+// what was asked, what came up]: C a chance (its odds after the clamp, and yes or no), P a pick (how many to choose
+// from, and which), W a weighted pick (the weights, and the key), S a shuffle (how many), R a bare throw. With TRACE_WHO
+// set, each entry also names the functions that threw it. The trace throws nothing itself, and in play it is off.
+let TRACE = null,
+  TRACE_WHO = false,
+  _inDie = false;
+function traceDie(kind, asked, got) {
+  const e = [kind, typeof asked === 'number' ? +asked.toPrecision(12) : asked, got]; // (odds to 12 places)
+  if (TRACE_WHO)
+    e.push(
+      String(new Error().stack)
+        .split('\n')
+        .slice(3, 9)
+        .map(l => (/at (\S+)/.exec(l) || [])[1] || '?')
+        .join(' < ')
+    );
+  TRACE.push(e);
 }
 // No die is ever certain (the project's rule, RULES.md): whatever the odds asked, a chance is at least scale.rarest and
 // at most scale.surest, so that nothing anyone does, and nothing that happens, is ever sure. Odds of nothing at all are
 // for what cannot happen at all (nothing to confess, no one to name): the tables never ask for them otherwise.
-const chance = p => p > 0 && rand() < Math.min(RULES.scale.surest, Math.max(RULES.scale.rarest, p));
+const chance = p => {
+  if (!(p > 0)) return false;
+  const q = Math.min(RULES.scale.surest, Math.max(RULES.scale.rarest, p));
+  _inDie = true;
+  const yes = rand() < q;
+  _inDie = false;
+  if (TRACE) traceDie('C', q, yes);
+  return yes;
+};
 // How much something costs or gives back, as it turns out: n mostly, now and then one more or one less (at spread),
 // never less than nothing. Nerve lost and regained and the rite's steps vary at RULES.scale.spread; wounds, which
 // weigh more, at the narrower RULES.scale.graze (game/state.js: hurt, regain, heal).
 const vary = (n, spread = RULES.scale.spread) => (n > 0 && chance(spread) ? Math.max(0, n + (chance(0.5) ? 1 : -1)) : n);
-const pick = a => a[Math.floor(rand() * a.length)];
+const pick = a => {
+  _inDie = true;
+  const i = Math.floor(rand() * a.length);
+  _inDie = false;
+  if (TRACE) traceDie('P', a.length, i);
+  return a[i];
+};
 function shuffle(a) {
   a = a.slice();
+  _inDie = true;
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
+  _inDie = false;
+  if (TRACE && a.length > 1) traceDie('S', a.length, null);
   return a;
 }
 // ---------- seeds ----------
@@ -38,7 +76,9 @@ const reseed = n => {
 function newSeed() {
   const keep = _seed;
   _seed = _page;
+  _inDie = true; // (the page's stream, not the season's: kept out of the dice trace)
   const n = Math.floor(rand() * 4294967296) >>> 0;
+  _inDie = false;
   _page = _seed;
   _seed = keep;
   return n;
@@ -57,12 +97,27 @@ function parseSeed(t) {
 function wpick(o) {
   let tot = 0;
   for (const k in o) tot += o[k];
-  let r = rand() * tot;
+  _inDie = true;
+  let r = rand() * tot,
+    got = null;
+  _inDie = false;
   for (const k in o) {
     r -= o[k];
-    if (r <= 0) return k;
+    if (r <= 0) {
+      got = k;
+      break;
+    }
   }
-  return Object.keys(o)[0];
+  if (got === null) got = Object.keys(o)[0];
+  if (TRACE)
+    traceDie(
+      'W',
+      Object.keys(o)
+        .map(k => k + ':' + +(+o[k]).toPrecision(12))
+        .join(','),
+      got
+    );
+  return got;
 }
 // (between RULES.scale.least and .most, unless told otherwise)
 const clamp = (x, a = RULES.scale.least, b = RULES.scale.most) => Math.max(a, Math.min(b, x));
