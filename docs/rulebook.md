@@ -2,7 +2,7 @@
 
 Oct 25, 2026 · @Ilia
 
-Every rule of The Gates of Kutha, build 27.0.0, with every probability: what you can do, what the camp, the cult and the power below do, what the dice decide, and how often each of the nineteen endings comes.
+Every rule of The Gates of Kutha, build 27.1.0, with every probability: what you can do, what the camp, the cult and the power below do, what the dice decide, and how often each of the nineteen endings comes.
 
 ## The game in brief
 
@@ -12,15 +12,17 @@ You take over the British dig at Tell Ibrahim, ancient Kutha, in March 1926, fiv
 
 | Outcome | How | Odds, playing as a person would |
 | --- | --- | --- |
-| Clean victory | The whole of the cult unmasked above ground (at evening inquiries, or caught at your tent by night); or, below, the rite stopped at the first try with nerve and a wound to spare; or the circle left with nobody to finish the rite | 2.2% |
-| Hard victory | The rite stopped any other way: a later act, a shot, fire, a scarred rite, the rite breaking of itself | 7.8% |
-| Defeat | The rite completes (doom), your wounds reach the limit (death), your nerve reaches nothing (madness), or the camp sends you away for the deed (sent away) | 90.0% (rite 25.9%, death 22.4%, madness 41.3%, sent away 0.4%) |
+| Clean victory | The whole of the cult unmasked above ground (at evening inquiries, or caught at your tent by night); or, below, the rite stopped at the first try with nerve and a wound to spare; or the circle left with nobody to finish the rite | 2.3% |
+| Hard victory | The rite stopped any other way: a later act, a shot, fire, a scarred rite, the rite breaking of itself | 7.6% |
+| Defeat | The rite completes (doom), your wounds reach the limit (death), your nerve reaches nothing (madness), or the camp sends you away for the deed (sent away) | 90.2% (rite 24.8%, death 22.2%, madness 42.8%, sent away 0.4%) |
 
-The odds are from 3,150 simulated seasons of build 27.0.0, bots playing the real page in seven styles (the full tables close this rulebook).
+The odds are from 3,150 simulated seasons of build 27.1.0, bots playing the real page in seven styles (the full tables close this rulebook).
 
 **How it plays.** A day has three slots (morning, afternoon, evening). In each you go somewhere and do one thing: talk to someone there, search the place, examine a fresh scene, translate a tablet fragment, rest, or, of an evening in camp, call an inquiry (or, once a season, settle it yourself). Each night the cult comes for someone, unless it lies low. Each dawn brings a trace at the scene, a sign of the power below, dreams, talk and news. On the fifth night, or as soon as the rite completes, you go down under the ziggurat: you name a power, choose up to two companions, pass seven gates and act in the sanctum.
 
 **What you are never told.** The game never shows a probability, and never states nerve, wounds or trust as numbers in its text: losses and gains are told in words ("your nerve frays", "trusts you more now"). The meters at the top show nerve, wounds and the rite as a word each (The meters in words, below), and the casebook gives each person's trust as a word.
+
+**What it runs on.** One page and nothing to install: a current browser with JavaScript on (Chrome or Edge 80+, Firefox 72+, Safari 13.1+); with JavaScript off, the page says so and shows nothing else. Browsers hold sound back until your first click, tap or key, and until then the page says so where the music's name shows. Tested on every build in Chromium 141 (desktop, and phones from 360 pixels wide, in both languages) and by eye in desktop Chrome; not yet in Firefox, Safari or on real phones.
 
 ## Nothing is certain
 
@@ -80,6 +82,8 @@ A season is five days of three slots (morning, afternoon, evening), each day fol
 
 **The casebook** is kept the way your reply to the Trustees' wire says, for the whole season. The usual way, it files what you learn under the person it concerns: it marks habits that turn up at a scene, says whom a trace or a sighting fits, flags accounts that disagree and two people claiming one part, and shows on each card who suspects that person in earnest and what has been said of them. Neither way does anything tell you how strong a case is. Played hardcore, it keeps only the bare record and joins nothing up; the rules are otherwise the same.
 
+**The season's code.** Every season is dealt and played from one seed, a code such as 1A2B-3C4D, shown in the casebook's Kit and on the ending page. Typed on the title screen, a code deals the same season again, whatever background you choose, and the same choices play it the same way; left empty, the season is a new one. At the end, *Play this season again* does it for you.
+
 ## The meters in words
 
 The top panel shows nerve, wounds and the rite as a word each, never as a number, and never says where a limit lies: its tooltip says only what the limit means ("lose all of it and you go mad"). Each word covers a band, and its colour darkens as things get worse; the rite's words keep step with what the dawns say of it.
@@ -136,15 +140,15 @@ The same seven people come every season, but each season deals them new parts, t
 | Light-headed | 40% | 60% | 10% | 25% | 45% | 95% | 50% / 15% |
 | Suspicious | 30% | 80% | 10% | 8% | 30% | 70% | 45% / 25% |
 
-| Temperament | Gossips | Gossip is true | Will not name anyone | Names a real cultist | Small talk warms them | Taking your confidence | Starts warmer / cooler toward you | Takes your word at an inquiry | Answers a dream with a dream | Calls a dream a lie |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Honest | 20% | 95% | 45% | 45% | 45% | ±0 | 1% / 1% | ±0 | × 0.01 | × 0.8 |
-| Conscientious | 25% | 90% | 30% | 40% | 55% | +5% | 10% / 1% | +0.2 | × 0.3 | × 0.8 |
-| A liar | 40% | 35% | 1% | 25% | 50% | ±0 | 20% / 10% | ±0 | × 1.3 | × 1.1 |
-| Calculating | 40% | 55% | 10% | 30% | 40% | +10% | 40% / 1% | −0.2 | × 0.2 | × 0.5 |
-| Detached | 5% | 90% | 60% | 30% | 30% | −15% | 1% / 20% | −0.3 | × 0.3 | × 0.4 |
-| Light-headed | 60% | 65% | 1% | 30% | 65% | +10% | 30% / 1% | +0.4 | × 1.4 | × 1.3 |
-| Suspicious | 50% | 60% | 1% | 20% | 35% | −25% | 1% / 50% | −0.5 | × 0.99 | × 1.6 |
+| Temperament | Gossips | Gossip is true | Will not name anyone | Names a real cultist | Small talk warms them | Taking your confidence | Starts warmer / cooler toward you | Takes your word at an inquiry | Answers a dream with a dream | Calls a dream a lie | Prudery: thinks ill of a night in your tent |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Honest | 20% | 95% | 45% | 45% | 45% | ±0 | 1% / 1% | ±0 | × 0.01 | × 0.8 | +5% |
+| Conscientious | 25% | 90% | 30% | 40% | 55% | +5% | 10% / 1% | +0.2 | × 0.3 | × 0.8 | +20% |
+| A liar | 40% | 35% | 1% | 25% | 50% | ±0 | 20% / 10% | ±0 | × 1.3 | × 1.1 | ±0 |
+| Calculating | 40% | 55% | 10% | 30% | 40% | +10% | 40% / 1% | −0.2 | × 0.2 | × 0.5 | ±0 |
+| Detached | 5% | 90% | 60% | 30% | 30% | −15% | 1% / 20% | −0.3 | × 0.3 | × 0.4 | −5% |
+| Light-headed | 60% | 65% | 1% | 30% | 65% | +10% | 30% / 1% | +0.4 | × 1.4 | × 1.3 | −15% |
+| Suspicious | 50% | 60% | 1% | 20% | 35% | −25% | 1% / 50% | −0.5 | × 0.99 | × 1.6 | +15% |
 
 **Likes.** Each person likes each other person from −2 (cannot bear) to 2 (fond): −2 8%, −1 22%, 0 38%, 1 24%, 2 8%. A feeling is mutual 60% of the time, otherwise the other way is drawn on its own. The two of the cult lean toward each other (+1 each way, 60% of seasons, up to fond), which talk of friendships can give away. Wherever someone picks among people, likes weigh the pick × (1 + 0.45 × like).
 
@@ -246,6 +250,8 @@ A conversation is two questions, then you take your leave (8% of the time a thir
 
 **How feelings show.** Whether a feeling shows depends on its strength (warmth at trust 1, 2, 3: 30%, 70%, 90%; coldness at −1, −2: 55%, 85%), × how readily their temperament shows it (honest 1.15, light-headed 1.2, suspicious 1, conscientious 0.9, liar 0.85, calculating 0.6, detached 0.5). Anyone has a good or bad day that has nothing to do with you (10%). A feeling held back may show in the face all the same (25%). Anyone who feels nothing much either way about you (trust 0 or 1) may put on a pleasant face they do not feel, warm words and a smile (honest 1%, detached 10%, conscientious and suspicious 15%, light-headed 20%, liar 35%, calculating 45%); one of the cult, courting your trust, tries it a second time over: a little more readily than anyone, never twice as readily. How someone greets you is fixed for the slot, and agrees with their face in the picture of the place: a conversation opened again after thinking better of it opens the same way. As you leave: a lingering look from one sweet on you (20%), a warm word from a friend (20%), a back turned by one against you (30%), a parting glimpse of their manner (15%), each only if it shows. The casebook's word for their trust is always exact.
 
+**Looks.** A flirtatious look is coy mostly (by weight: coy 4, a smirk 2, a smile 2, a warm look 1, a sly one 1, or 2 for the light-headed). A joke about love and marriage is told with a knowing face 70% of the time (a smirk 3, a smile 2, coy 1, sly 1; a priest's only a smirk or a smile). The sly look is each person's own, fixed for the slot: in a joke, a man's is a wink, a sidelong glance or an arched brow, Constance's a wink or an arched brow, Ilse's a sidelong glance or an arched brow; flirting, Constance's is a sidelong glance, an arched brow or heavy-lidded bedroom eyes, Ilse's any of those or a look from under the lashes. The day the camp heard a night she spent in your tent told badly before her, she is sad (70%), in the picture of the place and as she greets you (A visitor at night, below).
+
 ## The night
 
 Each night the cult comes for one person, as a rule someone other than you, unless it lies low, and the rite grows by about 1.3 for each of the cult still at large; then the night may bring a horror, the words you have read, or harm in secret.
@@ -295,13 +301,16 @@ The night takes anyone but you in Trench B, on the ziggurat, among the graves, b
 
 ## A visitor at night
 
-Once a season at most, from day 2, a woman with a soft spot for you who has come to trust you (2 or more) may come to your tent as the evening ends: afraid, she says, that they may not see the light of day, and not wanting to spend the night alone. She comes at 4% + 2% for each of the night's dead so far (at most 15%), the fonder of you the likelier, and never on the night you go out yourself. An occultist may feel the cult's cold as she comes in (30% if she is of the cult), or a cold that is only the night (5%).
+Once a season at most, from day 2, a woman with a soft spot for you who has come to trust you (2 or more) may come to your tent as the evening ends: afraid, she says, that they may not see the light of day, and not wanting to spend the night alone. She comes at 4% + 2% for each of the night's dead so far (at most 15%), the fonder of you the likelier, and never on the night you go out yourself. An occultist may feel the cult's cold as she comes in (30% if she is of the cult), or a cold that is only the night (5%). At the tent pole her face is sad, whatever she is: it tells nothing of what she is.
 
+- **Your answer shows in her face**, fixed for the season: let her stay, and her look turns to heavy-lidded bedroom eyes; sent back, she stays as sad as she came, or stares as if she had not heard you right, or her face closes against you (by weight: sad 3, surprised 2, angry 1.5, angry twice as readily when it cost her trust in you), and her going is told the same way.
 - **Sent back**, she trusts you a step less (90%; a second step less 30% of those times), and her friends may think the less of you for it (20% × liking).
 - **She stays**, and if she is of the cult she may do the cult's work herself in the small hours (30%, never on a night the cult lies low), and mostly she does it (90%): the season ends. If not, you catch her wrist in time, for about 2 nerve and a wound, and by first light she is on the lorry to Hillah as one of them unmasked: the rite falls back about 2, and if she was the last of them the season is won, all but always, as at an inquiry.
 - **Otherwise the night goes as any night.** The cult coming for her knows where she sleeps tonight half the time: then it comes to your tent, past the Watcher if it is watched and past luck, and she dies beside you in your sleep (about 2 nerve); else it finds her own tent empty, nobody dies, and by breakfast the camp has worked out where she slept. Coming for you, past the Watcher, the bowl, the revolver and luck, it finds two of you: it takes her (40%), you (25%) or both (15%), or does only the usual harm as she screams and it flees (20%). The last of the cult in your tent lets you be as often as not (50%), and then, if it comes for anyone, it is someone else; otherwise the power below comes for you by itself, as on a night with nobody of the cult left at large. By her own account she was with you all night, whoever she is, and she is nowhere else that night: not keeping watch, not out robbing the dig, not the one who finds a body at dawn. One of the cult in your tent may slip out to do the night's work herself.
 - **A death in your tent** is talked of hardly (25%), readily (50%) or wildly (25%). Talked of at all, her friends (20% × liking) and now and then anyone (5%) think the less of you, twice as readily when it is talked of wildly; talked of wildly, the camp's suspicion of you rises a step (it weighs only if you go out yourself: Settling it yourself, below).
 - **The morning after**, if you both live, she is gone before you wake (45%) or still there, whatever she is: one who slipped out on the cult's work is back by then as often as anyone else stays. Your nerve may mend (60%: about 1), and she may trust you the more (50%). The camp talks twice as readily: a friend of hers takes it well or badly (20% × liking), one taken with her badly (50%). A flirtation that came to this is likelier to come to more (Flirtation, The camp, below).
+- **Then it is gossip.** From that morning, while she is at the dig, a piece of gossip may be about it (45%, × 0.55 for each day after the first): at breakfast before everyone, overheard, or said to you in conversation (Gossip, The camp, below). It is told badly, as a scandal (the Doctor has not been here a week; in my day a lady waited to be courted), at 55%, +15% a step the speaker dislikes her, +25% if they are sweet on her or on you, +8% a step they are against you, + their prudery (Temperaments, above), +25% for a priest, −25% a step they like her, −15% if they are devoted to you; else kindly.
+- **Whoever hears it makes up their mind once**: the camp at breakfast, the one it was told to when you overhear it, nobody but you in conversation. Of her, each thinks the less or the better, at both chances together, one way or the other as they weigh. The less: 20% told badly (4% told kindly), + their prudery (+25% for a priest), +10% a step they dislike her (told badly, −10% a step they like her), +10% for each quarrel between them, +5% a step they suspect her, +15% if either named the other guilty before everyone, −10% for each feast they sat through together, and, told badly, ±8% a step they like or dislike the speaker and +5% for each time the speaker's word was proven before the camp. The better: told badly, 12% a step they like her and 8% a step they dislike the speaker; told kindly, 6%, +10% a step they like her, ±8% a step they like or dislike the speaker; either way, + 40% × how far their prudery runs below nothing. Of you, the less: 12% told badly (±8% a step they like or dislike the speaker), 3% told kindly, + prudery, +30% if they are sweet on her or on you, −8% for each step of their trust in you past 1; the better: 3%, + 40% × the same ease, + 8% a step they dislike the speaker (told badly) or like her (told kindly). Told before her, she holds it against one who told it badly (80%: she likes them a step less), or warms to one who told it kindly (50%), and that day, told badly, she is sad (Looks, above). The casebook keeps who told it and how, and what the camp made of it.
 
 Nothing of it is ever explained; the ending tells what she was, and what the night held.
 
@@ -418,7 +427,7 @@ Measured over 700 seasons of build 27, a false claim to dream, once stated, came
 
 Everyone keeps their own count of whom they suspect, from 0 to 3 (begins to wonder, suspects in earnest, all but sure), apart from whom they like; it moves a step at a time, mostly at public moments.
 
-**Public moments.** Some things happen before the whole camp. Every onlooker (everyone at the dig except whoever started it and whoever it is about) gets one roll and is moved one step or not at all, at most three people each way per moment. A heavy moment (one that comes seldom in the season's mood) moves each onlooker 1.5 × as readily. The one who speaks up at a moment moves a step in their trust in you 90% of the time.
+**Public moments.** Some things happen before the whole camp. Every onlooker (everyone at the dig except whoever started it and whoever it is about; for something told to one of the camp only, that one) gets one roll for each way it may move them, and is moved one step or not at all, at most three people each way per moment. A heavy moment (one that comes seldom in the season's mood) moves each onlooker 1.5 × as readily. The one who speaks up at a moment moves a step in their trust in you 90% of the time.
 
 | Moment | When | Who is moved, and how readily |
 | --- | --- | --- |
@@ -436,6 +445,7 @@ Everyone keeps their own count of whom they suspect, from 0 to 3 (begins to wond
 | A watch told of | Someone who swore to watch your tent says they saw someone off | Whoever doubted them may think again (30%). |
 | Proven right | The truth bears out what someone said before everyone | Whoever suspected the speaker may think again (60%). |
 | Proven wrong | The truth gives it the lie | Each onlooker suspects the speaker at 15%, +30% if they liked the one wronged. |
+| A night in your tent, told | Gossip about it, badly or kindly, at breakfast or overheard | Each who hears it, once: their liking for her, and their trust in you, a step one way or the other (A visitor at night, above). |
 
 **The truth settles what was said.** When someone's part comes out, as the camp sees it (exposed, sent away, or taken by the night, whom the camp takes for innocent), each speaker's last word about them is proven right or wrong before the camp and remembered: it makes their next dream or accusation more, or less, believable.
 
@@ -443,7 +453,7 @@ Everyone keeps their own count of whom they suspect, from 0 to 3 (begins to wond
 
 **What is said of you.** At breakfast someone may talk about you, the likelier the more strongly they feel (weight |trust| + 0.5): as they feel, mostly, the other way 15% of the time (the indifferent either way); a calculating one of the cult talks you down on purpose, 60% of the time when indifferent and 30% even behind a warm face (trust 1 or more). Their friends listen: bad talk 40%, good 35%.
 
-**Gossip** (at breakfast, in conversation, overheard) is about a temperament (65%) or a friendship or feud, true at the speaker's rate (35% to 95%), 8% less true per step they feel about the one discussed, and when false slanted toward the bad for someone disliked (and by the suspicious) and toward the good for a friend. When gossip about a bond is false, a real friendship or feud is told backwards 50% of the time (else nothing is said), and where there is none, one is invented 30% of the time.
+**Gossip** (at breakfast, in conversation, overheard) is about a temperament (65%) or a friendship or feud, true at the speaker's rate (35% to 95%), 8% less true per step they feel about the one discussed, and when false slanted toward the bad for someone disliked (and by the suspicious) and toward the good for a friend. When gossip about a bond is false, a real friendship or feud is told backwards 50% of the time (else nothing is said), and where there is none, one is invented 30% of the time. In its turn, before the talk of temperaments and friendships, gossip may be a thief's hint, a night someone spent in your tent (A visitor at night, above), who is sweet on whom, or what someone else thinks of you (30% of the times it could be told). That last is a strong feeling, for you (their trust 2 or more: they think the world of you, speak up for you, will stand by you) or against you (−1 or less: they do not trust you, talk behind your back, would be glad to see you on the lorry), told to you or, overheard, to someone else. It is as true as any gossip; when false, a strong feeling is told backwards (50%) or one made up where there is nothing much either way (30%), leaning the way the speaker does, and otherwise nothing is said.
 
 **Coming clean.** Someone keeping up a pretence (a part claimed that is not theirs, the cult's among them; a watch claimed as cover; a true part hidden; the smuggling) may drop it any morning of their own accord, at their temperament's daily rate (3% to 45%), + 20% if another claims the same part, + 15% if a dream named them, + 30% if a sworn watch failed, + 10% if two or more distrust them, + 8% if they trust you (2+). A hidden part comes out at half the temperament's rate + 12% the morning after a death + 8% if they trust you; the smuggling at 0.3 × the temperament's rate. Never above 75% a day, so some keep a lie to the end. 40% of the time it is said to you alone before breakfast, otherwise before everyone. At an inquiry, with the camp watching, 15% more, once you have named the one you accuse and before the hands are raised, so that calling the camp together and thinking better of it brings nobody to their feet. Pressed and shaken, anyone gives up a story they have told at 45% + their temperament's rate; trust 3 brings a hidden part out (80% × (1 − half their hiding rate)). The cult never comes clean as the cult; a false part it gives up as anyone does, at the same odds and in the same words (but one that answered a dream for the other of it, of its own accord only at its rashness × those odds: Claims, above), and the lie underneath goes on. A liar or a calculating one who told you they had no part (never the smuggler) may stage a coming clean as the Watcher (2% a morning), whoever they are: a new lie in the very words of a true confession. Said to you alone by one who trusts you (2 or more), it comes with a promise to watch your tent that night, a false watch (A sworn watch, The cult's craft, below). Pressing never brings a staged confession out; the ending tells it.
 
@@ -737,7 +747,7 @@ A ward, the rite or a fire that wins is told for what it was: a charm against an
 
 **The conduct score.** +3 for each of the cult exposed at an inquiry; +2 for each taken down at the fourth gate or unmasked in the night (one who came to your tent and failed to kill you); +2 if the hierophant was exposed; −3 for each wrong accusation; −1 for each inquiry the camp refused; −2 if the camp ever walked out; −2 for each of the night's dead (not counting whoever you killed yourself, whom the deed counts); +1 for each right mark and −1 for each wrong one in your casebook, as it stood when that person's part came out (a mark changed after the fact does not count); +2 for naming the power rightly below (−1 wrongly); +2 for a first exposure by day 3; −1 for each failed act below; up to ±2 for the camp's trust at the end (friends at 2 or more, less those you turned against you); +1 if anyone came clean before the camp; for the deed, −1 for going out at all and, if you killed, +2 for one of the cult or −5 for anyone else; −1 for each wound you carry; +1 if your nerve ends at 70% of its most or more; −1 if it ever fell to 2. A win is clean at 10 or more, honest at 5, costly at 0, otherwise at any price (a win with blood on your hands is a costly one at best); a defeat was within reach at 4 or more, otherwise you were out of your depth.
 
-**Your style** is what you did unusually much of, against an ordinary season's mean and spread: the inquisitor (pressing and accusing × 2, distrust asked × 0.5, enemies made × 0.5, facing a traitor × 2, a shot × 2), the quiet guest (resting × 2, backing off × 2, the slow stair, going unseen, never accusing × 2), the scholar (translating × 2, readings × 1.5, lines known × 0.3, the counter-rite × 2), the detective (examining × 2, asking about nights, sightings and the diary × 0.5 each, marks right × 0.5), the digger (searching × 2, charms × 0.5), the confidant (confiding × 2, small talk, trust, friends, confessions heard, companions below). The style that stands out most by at least 0.75 of a spread names you; with nothing out of the ordinary, you were the field director. A season in which you killed someone with your own hands is the Avenger's, whatever else you did: eight styles in all. In play: field director 22.2%, digger 16.0%, scholar 14.7%, confidant 13.0%, quiet guest 12.5%, detective 11.2%, inquisitor 8.2%, the Avenger 2.1%.
+**Your style** is what you did unusually much of, against an ordinary season's mean and spread: the inquisitor (pressing and accusing × 2, distrust asked × 0.5, enemies made × 0.5, facing a traitor × 2, a shot × 2), the quiet guest (resting × 2, backing off × 2, the slow stair, going unseen, never accusing × 2), the scholar (translating × 2, readings × 1.5, lines known × 0.3, the counter-rite × 2), the detective (examining × 2, asking about nights, sightings and the diary × 0.5 each, marks right × 0.5), the digger (searching × 2, charms × 0.5), the confidant (confiding × 2, small talk, trust, friends, confessions heard, companions below). The style that stands out most by at least 0.75 of a spread names you; with nothing out of the ordinary, you were the field director. A season in which you killed someone with your own hands is the Avenger's, whatever else you did: eight styles in all. In play: field director 23.2%, digger 15.8%, scholar 14.2%, confidant 12.6%, quiet guest 12.4%, detective 11.2%, inquisitor 8.1%, the Avenger 2.5%.
 
 **How much of Kutha came home with you** (a won season's account): horrors met (1 each), nerve lost to reading (1 each), every 5 lines known, wounds taken in the night (1 each), every 2 signs seen, every 3 charms found, a memory left at the seventh gate (2), being an occultist (1), and each step your nerve ever fell below 3 (1 each), added up: at 7.5 a little, at 10.5 a great deal.
 
@@ -745,120 +755,122 @@ A ward, the rite or a fire that wins is told for what it was: a charm against an
 
 **The debrief** tells the truth of the season: every part, temperament, claim and feeling toward you; the power, its signs, titles and ward and the marks by which the tablets knew it; why the night chose each of its dead, and why each quiet night was quiet; the cult's planted traces and kept promises, and from which day it had your measure; the true Dreamer's muddied or dark dreams, and your own dreams and whether each was so; the night someone came to your tent and the night you went out yourself; every rare turn of the dice (a scribe's error, a stray sign, a misnoted habit, a death in another manner, a bowl that broke and held nothing, a misread mark…); and what became of everyone, with a line or two more drawn from what passed between you (none 30%, one 45%, two 25%; your own, one 60%, two 40%), at most one of each kind, the latest. For one of the cult they are none of the innocent's, and are told by where its fate leaves it (in a cell to be tried; the asylum; at large, never unmasked or fled; nothing more for one who died before any trial); yours, in a cell in Baghdad for the one you killed, are told as at home wherever a cell does not rule it out; and in yours nobody is written to who died later. The epilogues are fixed by the season without the dice, so the same season is told the same way twice.
 
-**The end you chose.** Rarely, what the season left in you is more than you can carry, and in the end you end it yourself; the epilogue never says how, only that it was and something of why. Only if you came out of the season alive: 1.4% for anyone who came home, × 5 if your mind broke and the season left you in a quiet ward, else × 2 if your nerve all but broke; × 1.5 in a cell in Baghdad for the one you killed; × 3 for one you killed who was no cultist, or × 1.5 for one who was; × 1.4 for each innocent sent away on your word; × 1.3 for each friend the night took; × 1.6 if someone died beside you; × 1.5 if the reading cost you dear; × 1.4 if the horrors stayed with you; × 0.8 for each friend who came through, up to three; × 0.4 if someone loves you; at most 25%. It is told by one of its reasons, the weightier likelier (an innocent you sent away only if they did not die later), and told last of all; your other epilogue is then one line at most, and never the same thing. Measured on the bots: about 4½% of seasons, nearly all of them a mind that broke (about 10% of the madness endings), almost never a season won.
+**The end you chose.** Rarely, what the season left in you is more than you can carry, and in the end you end it yourself; the epilogue never says how, only that it was and something of why. Only if you came out of the season alive: 1.4% for anyone who came home, × 5 if your mind broke and the season left you in a quiet ward, else × 2 if your nerve all but broke; × 1.5 in a cell in Baghdad for the one you killed; × 3 for one you killed who was no cultist, or × 1.5 for one who was; × 1.4 for each innocent sent away on your word; × 1.3 for each friend the night took; × 1.6 if someone died beside you; × 1.5 if the reading cost you dear; × 1.4 if the horrors stayed with you; × 0.8 for each friend who came through, up to three; × 0.4 if someone loves you; at most 25%. It is told by one of its reasons, the weightier likelier (an innocent you sent away only if they did not die later), and told last of all; your other epilogue is then one line at most, and never the same thing. Measured on the bots: about 3½% of seasons, nearly all of them a mind that broke (about 7½% of the madness endings), almost never a season won.
 
 **A death that came later.** Now and then one of the seven who came through the season does not come through what it left in them: by their own hand, or in a way nobody can account for. For each who is still at the dig, sent away, or of the cult in a cell: 4.5%, × 1.3 if you did not come home, × 3 for one sent away in disgrace (not the thief), × 2 for the true Dreamer, × 1.6 for one who grieved, × 1.6 for one who went down with you, × 2.5 for one of the cult in a cell, × 1.5 for the thief; at most 30% each, and at most two in an ending, the likeliest. It is told by one of its reasons, the weightier likelier (for one of the cult in a cell, only as a prisoner: what else weighed on it is not told), and is by their own hand 40% to 70% of the time as that reason has it (never for one who went below, or the thief; never a priest, who keeps his vows); it is all that is told of them. Never one spoken for in a romance, never one of the cult still at large, never after a season the gate opened. Measured over 3,150 seasons: one in about 18% of seasons (two in about 2%), a third of them by their own hand.
+
+**After a doom.** When the gate opened, what rose did something to each of the seven, decided without the dice: one way each, by weight, by where the end found them. In the circle with you: taken 5, marked 2.5, fled 0.4, helped 0.3, untouched 0.8; on the stair or holding the seventh gate: taken 3.5, marked 3, fled 0.6, helped 0.4, untouched 1.2; at the dig: 2, 2.5, 2, 1.5, 3; sent away: 0.6, 1.2, 2, 0.8, 6. Each weight is multiplied by what they were and did: honest (helped × 2, fled × 0.7), conscientious (helped × 1.8, fled × 0.8), a liar (fled × 1.5, helped × 0.5), calculating (fled × 1.6, helped × 0.6, taken × 0.85), detached (fled × 1.3, marked × 0.8), light-headed (taken × 1.3, marked × 1.2, fled × 0.8), suspicious (fled × 1.6, taken × 0.85); the Dreamer (taken and marked × 1.3, and taken × 1.5 more when what rose was madness), the Watcher (helped × 1.8, fled × 0.7), the thief (fled × 2, helped × 0.4, taken × 1.2); a priest's vows (helped × 3, fled × 0.4); a home beyond the two rivers (fled × 1.5) or between them (fled × 0.6, helped × 1.3); fond of you, or one who kept watch over your tent (helped × 1.3 each); grieving one the night took (taken × 1.3); one who owned a night's fear (fled × 1.4); one the night came for and missed (taken × 1.5, marked × 1.3); one who left Kutha with someone (fled × 2); no way rarer than 1% of the whole. Taken: it killed them; marked: they live and carry its mark; fled: they got clear of the two rivers in time; helped: they stayed to help others, and died at it by its nature (fire 40%, dust and the sea 35%, teeth and madness 30%, plague 50%); untouched: their ordinary epilogue. One of the cult still at large: joined what rose 3, taken 2, waits for it 1.5, fled 1, marked 1, walked away and lived 0.6; one of the cult in a cell at Hillah: freed (and went to it) 2, taken 2, its ordinary fate 4. One of the night's dead not yet buried is never buried (fire 45%, dust 50%, the sea and plague 40%, teeth 35%, madness 25%; never one you killed). Each is told in its nature's own words, nobody twice alike in an ending. Measured over 782 dooms: in the circle with you, taken 60% and marked 26%; at the dig, untouched 23%, fled 21%, taken 19%, marked 19%, helped 18%; of the cult at large, joined 36%; in a cell, freed 26%; of the night's dead, never buried 36%.
 
 ## How often each ending comes
 
 Played as a person would, a season is lost about 90% of the time, won hard about 8% and won clean about 2%; style, mood, the power and your background move these by a few points at most.
 
-These are 3,150 simulated seasons of build 27.0.0: bots that play the real page, each leaning toward one way of working on top of the same sensible play, 450 seasons each, every background and season's mood as the dice dealt them. A person who reads the casebook well should do better than these bots, a careless one worse. Intervals are 95% (Wilson); a row of 450 seasons is good to about ±3 points.
+These are 3,150 simulated seasons of build 27.1.0: bots that play the real page, each leaning toward one way of working on top of the same sensible play, 450 seasons each, every background and season's mood as the dice dealt them. A person who reads the casebook well should do better than these bots, a careless one worse. Intervals are 95% (Wilson); a row of 450 seasons is good to about ±3 points.
 
 **Human-like play, 3,150 seasons** (seven styles, 450 each):
 
 | Outcome | Odds (95% interval) |
 | --- | --- |
-| **Defeat** | **90.0% (88.9–91.0)** |
-| — the rite completes | 25.9% (24.4–27.5) |
-| — death | 22.4% (21.0–23.9) |
-| — madness | 41.3% (39.6–43.0) |
-| — sent away | 0.4% (0.3–0.7) |
-| **Hard victory** | **7.8% (6.9–8.8)** |
-| **Clean victory** | **2.2% (1.7–2.8)** |
+| **Defeat** | **90.2% (89.1–91.2)** |
+| — the rite completes | 24.8% (23.3–26.4) |
+| — death | 22.2% (20.8–23.7) |
+| — madness | 42.8% (41.0–44.5) |
+| — sent away | 0.4% (0.2–0.7) |
+| **Hard victory** | **7.6% (6.7–8.5)** |
+| **Clean victory** | **2.3% (1.8–2.8)** |
 
 **Every ending:**
 
 | Ending | Odds (95% interval) |
 | --- | --- |
-| *The Gate Unopened*: the whole of the cult unmasked above ground | 0.3% (0.2–0.6) |
+| *The Gate Unopened*: the whole of the cult unmasked above ground | 0.3% (0.2–0.5) |
 | *The Sealing of Kutha*: sealed by the ward | 0.6% (0.4–0.9) |
-| *The Last Word*: banished by the counter-rite | 0.4% (0.2–0.7) |
-| *The Empty Sanctum*: nobody of the cult left in the circle | 0.9% (0.6–1.2) |
-| *One Shot in the Dark*: the hierophant shot | 0.5% (0.3–0.9) |
-| *Fire on the Mound*: the bitumen set alight | 1.0% (0.7–1.4) |
-| *What the Gate Kept*: a ward or the rite at a price, or the rite breaking of itself | 6.3% (5.5–7.2) |
-| *Taken in the Night*: death above ground | 7.7% (6.8–8.6) |
-| *Buried with the Kings*: death below | 14.7% (13.5–16.0) |
-| *The Bethlem Tablets*: madness from reading | 2.9% (2.4–3.6) |
-| *Clay and Reed*: madness above ground | 11.1% (10.0–12.2) |
-| *Two Hundred and Nine Steps*: madness below | 27.3% (25.7–28.9) |
-| *The Long Night of Kutha*: the rite completes (fire) | 4.4% (3.8–5.2) |
-| *The Grey Country*: the rite completes (dust) | 4.9% (4.2–5.7) |
-| *The Salt Deep Rises*: the rite completes (the sea) | 4.3% (3.7–5.1) |
-| *The Cradle Rocks*: the rite completes (teeth) | 4.2% (3.6–5.0) |
-| *None to Bury Them*: the rite completes (plague) | 3.3% (2.7–4.0) |
-| *The Sleepwalkers*: the rite completes (madness) | 4.8% (4.1–5.6) |
-| *The Lorry to Hillah*: sent away for the deed | 0.4% (0.3–0.7) |
+| *The Last Word*: banished by the counter-rite | 0.7% (0.5–1.1) |
+| *The Empty Sanctum*: nobody of the cult left in the circle | 0.7% (0.4–1.0) |
+| *One Shot in the Dark*: the hierophant shot | 0.6% (0.4–0.9) |
+| *Fire on the Mound*: the bitumen set alight | 0.6% (0.4–1.0) |
+| *What the Gate Kept*: a ward or the rite at a price, or the rite breaking of itself | 6.3% (5.5–7.3) |
+| *Taken in the Night*: death above ground | 6.6% (5.8–7.5) |
+| *Buried with the Kings*: death below | 15.6% (14.4–16.9) |
+| *The Bethlem Tablets*: madness from reading | 3.2% (2.6–3.8) |
+| *Clay and Reed*: madness above ground | 11.8% (10.7–13.0) |
+| *Two Hundred and Nine Steps*: madness below | 27.8% (26.3–29.4) |
+| *The Long Night of Kutha*: the rite completes (fire) | 4.8% (4.1–5.6) |
+| *The Grey Country*: the rite completes (dust) | 3.8% (3.2–4.6) |
+| *The Salt Deep Rises*: the rite completes (the sea) | 4.1% (3.5–4.9) |
+| *The Cradle Rocks*: the rite completes (teeth) | 4.3% (3.7–5.1) |
+| *None to Bury Them*: the rite completes (plague) | 3.5% (2.9–4.2) |
+| *The Sleepwalkers*: the rite completes (madness) | 4.3% (3.6–5.0) |
+| *The Lorry to Hillah*: sent away for the deed | 0.4% (0.2–0.7) |
 
 **By play style** (450 seasons each):
 
 | Style | Defeat | Rite · death · madness · sent away | Hard victory | Clean victory |
 | --- | --- | --- | --- | --- |
-| Balanced | 88.2% | 18.7% · 23.1% · 46.2% · 0.2% | 9.1% | 2.7% |
-| Detective (examines, asks about the night) | 90.4% | 28.2% · 22.2% · 39.6% · 0.4% | 8.0% | 1.6% |
-| Scholar (translates) | 92.2% | 26.2% · 19.1% · 46.2% · 0.7% | 6.0% | 1.8% |
-| Quiet guest (rests, backs off) | 88.2% | 31.1% · 24.2% · 32.7% · 0.2% | 10.0% | 1.8% |
-| Inquisitor (presses, accuses) | 88.2% | 24.7% · 19.8% · 43.8% · 0.0% | 8.0% | 3.8% |
-| Confidant (confides, befriends) | 91.8% | 26.0% · 27.3% · 37.3% · 1.1% | 4.9% | 3.3% |
-| Digger (searches) | 91.1% | 26.7% · 20.9% · 43.1% · 0.4% | 8.4% | 0.4% |
+| Balanced | 91.3% | 27.6% · 22.4% · 41.1% · 0.2% | 6.4% | 2.2% |
+| Detective (examines, asks about the night) | 91.8% | 23.1% · 22.7% · 45.8% · 0.2% | 5.1% | 3.1% |
+| Scholar (translates) | 92.2% | 22.0% · 20.0% · 50.0% · 0.2% | 6.0% | 1.8% |
+| Quiet guest (rests, backs off) | 89.1% | 31.1% · 21.6% · 36.2% · 0.2% | 8.9% | 2.0% |
+| Inquisitor (presses, accuses) | 89.8% | 18.9% · 25.8% · 44.7% · 0.4% | 8.0% | 2.2% |
+| Confidant (confides, befriends) | 89.8% | 26.7% · 26.4% · 35.8% · 0.9% | 8.7% | 1.6% |
+| Digger (searches) | 87.3% | 24.4% · 16.7% · 45.8% · 0.4% | 9.8% | 2.9% |
 
-No style does markedly better than another: each one's defeats lie between 88.2% and 92.2%, within the noise.
+No style does markedly better than another: each one's defeats lie between 87.3% and 92.2%, within the noise.
 
 **By the mood that ruled most of the season** (human-like play):
 
 | Mood | Seasons | Defeat | Rite · death · madness · sent away | Hard victory | Clean victory |
 | --- | --- | --- | --- | --- | --- |
-| Still | 816 | 90.4% | 23.5% · 28.9% · 37.7% · 0.2% | 7.6% | 2.0% |
-| Uneasy | 801 | 91.5% | 25.0% · 21.7% · 44.4% · 0.4% | 6.9% | 1.6% |
-| Haunted | 547 | 89.0% | 27.6% · 17.7% · 43.1% · 0.5% | 9.0% | 2.0% |
-| Full of talk | 595 | 88.6% | 27.6% · 20.0% · 40.2% · 0.8% | 8.6% | 2.9% |
-| Full of comings and goings | 391 | 89.8% | 28.1% · 20.2% · 41.2% · 0.3% | 7.2% | 3.1% |
+| Still | 798 | 91.5% | 23.9% · 27.4% · 40.0% · 0.1% | 6.6% | 1.9% |
+| Uneasy | 812 | 90.0% | 25.4% · 20.6% · 43.5% · 0.6% | 7.9% | 2.1% |
+| Haunted | 549 | 91.1% | 23.7% · 18.2% · 48.3% · 0.9% | 6.2% | 2.7% |
+| Full of talk | 594 | 87.4% | 26.1% · 21.9% · 39.2% · 0.2% | 9.9% | 2.7% |
+| Full of comings and goings | 397 | 90.9% | 25.2% · 21.2% · 44.6% · 0.0% | 7.1% | 2.0% |
 
 **By the mood the season began in** (human-like play):
 
 | Mood | Seasons | Defeat | Rite · death · madness · sent away | Hard victory | Clean victory |
 | --- | --- | --- | --- | --- | --- |
-| Still | 900 | 88.9% | 24.6% · 26.2% · 37.9% · 0.2% | 9.0% | 2.1% |
-| Uneasy | 881 | 91.3% | 27.7% · 20.0% · 42.8% · 0.8% | 6.9% | 1.8% |
-| Haunted | 475 | 90.5% | 27.4% · 18.5% · 44.0% · 0.6% | 7.6% | 1.9% |
-| Full of talk | 472 | 90.7% | 24.4% · 24.6% · 41.3% · 0.4% | 7.4% | 1.9% |
-| Full of comings and goings | 422 | 88.6% | 25.4% · 21.1% · 42.2% · 0.0% | 7.6% | 3.8% |
+| Still | 889 | 92.0% | 24.7% · 25.4% · 41.5% · 0.3% | 5.8% | 2.1% |
+| Uneasy | 931 | 88.8% | 25.7% · 20.9% · 41.9% · 0.3% | 8.9% | 2.3% |
+| Haunted | 463 | 92.2% | 23.3% · 20.7% · 47.3% · 0.9% | 5.4% | 2.4% |
+| Full of talk | 429 | 87.9% | 25.9% · 22.8% · 38.9% · 0.2% | 9.3% | 2.8% |
+| Full of comings and goings | 438 | 89.5% | 23.7% · 19.4% · 46.1% · 0.2% | 8.7% | 1.8% |
 
 **By the nature of the power below** (human-like play):
 
 | Nature | Seasons | Defeat | Rite · death · madness · sent away | Hard victory | Clean victory |
 | --- | --- | --- | --- | --- | --- |
-| Fire | 522 | 87.5% | 26.8% · 20.9% · 39.3% · 0.6% | 9.8% | 2.7% |
-| Dust | 532 | 90.2% | 28.9% · 23.1% · 37.6% · 0.6% | 8.6% | 1.1% |
-| The salt sea | 535 | 91.4% | 25.4% · 18.9% · 46.5% · 0.6% | 6.2% | 2.4% |
-| Teeth | 535 | 90.8% | 24.9% · 21.9% · 44.1% · 0.0% | 7.7% | 1.5% |
-| Plague | 474 | 91.1% | 21.9% · 26.6% · 42.2% · 0.4% | 7.0% | 1.9% |
-| Madness | 552 | 89.1% | 27.2% · 23.4% · 38.0% · 0.5% | 7.4% | 3.4% |
+| Fire | 552 | 91.1% | 27.5% · 19.6% · 43.7% · 0.4% | 7.1% | 1.8% |
+| Dust | 503 | 89.5% | 24.1% · 20.3% · 44.7% · 0.4% | 8.0% | 2.6% |
+| The salt sea | 546 | 89.0% | 23.8% · 19.8% · 45.1% · 0.4% | 8.4% | 2.6% |
+| Teeth | 539 | 90.0% | 25.2% · 23.2% · 41.4% · 0.2% | 7.6% | 2.4% |
+| Plague | 486 | 91.2% | 22.4% · 27.0% · 41.2% · 0.6% | 7.2% | 1.6% |
+| Madness | 524 | 90.5% | 25.6% · 24.0% · 40.5% · 0.4% | 7.1% | 2.5% |
 
 **By the power below** (human-like play; a power's nature varies from season to season):
 
 | Power | Seasons | Defeat | Rite · death · madness · sent away | Hard victory | Clean victory |
 | --- | --- | --- | --- | --- | --- |
-| Nergal | 375 | 90.7% | 22.9% · 23.7% · 43.7% · 0.3% | 7.2% | 2.1% |
-| Ereshkigal | 380 | 89.5% | 29.7% · 22.4% · 36.8% · 0.5% | 8.4% | 2.1% |
-| Tiamat | 362 | 86.2% | 22.1% · 21.3% · 42.5% · 0.3% | 9.9% | 3.9% |
-| Lamashtu | 429 | 90.0% | 28.4% · 20.3% · 41.3% · 0.0% | 7.5% | 2.6% |
-| Namtar | 417 | 89.7% | 24.5% · 25.4% · 39.1% · 0.7% | 8.2% | 2.2% |
-| Pazuzu | 399 | 93.0% | 25.6% · 23.8% · 43.1% · 0.5% | 5.5% | 1.5% |
-| Kingu | 431 | 92.3% | 30.2% · 20.9% · 40.6% · 0.7% | 6.5% | 1.2% |
-| Belet-Seri | 357 | 88.2% | 23.0% · 21.3% · 43.4% · 0.6% | 9.5% | 2.2% |
+| Nergal | 379 | 86.5% | 26.6% · 22.2% · 37.5% · 0.3% | 10.3% | 3.2% |
+| Ereshkigal | 412 | 89.1% | 22.8% · 25.0% · 41.0% · 0.2% | 8.7% | 2.2% |
+| Tiamat | 376 | 91.8% | 26.1% · 21.5% · 44.1% · 0.0% | 6.4% | 1.9% |
+| Lamashtu | 391 | 89.3% | 24.8% · 25.1% · 38.6% · 0.8% | 9.0% | 1.8% |
+| Namtar | 406 | 93.1% | 26.4% · 21.4% · 45.3% · 0.0% | 4.9% | 2.0% |
+| Pazuzu | 429 | 87.6% | 24.2% · 22.1% · 40.8% · 0.5% | 9.3% | 3.0% |
+| Kingu | 374 | 90.9% | 22.5% · 20.9% · 46.8% · 0.8% | 5.9% | 3.2% |
+| Belet-Seri | 383 | 93.5% | 25.3% · 19.3% · 48.3% · 0.5% | 5.7% | 0.8% |
 
 **By background** (human-like play):
 
 | Background | Seasons | Defeat | Rite · death · madness · sent away | Hard victory | Clean victory |
 | --- | --- | --- | --- | --- | --- |
-| Philologist | 1,050 | 91.0% | 24.4% · 31.4% · 34.8% · 0.5% | 6.9% | 2.1% |
-| Old soldier | 1,050 | 87.3% | 36.0% · 10.0% · 40.6% · 0.8% | 9.7% | 3.0% |
-| Occultist | 1,050 | 91.7% | 17.4% · 25.7% · 48.5% · 0.1% | 6.8% | 1.5% |
+| Philologist | 1,050 | 89.7% | 23.0% · 30.3% · 36.1% · 0.3% | 8.1% | 2.2% |
+| Old soldier | 1,050 | 89.5% | 37.0% · 10.3% · 41.6% · 0.7% | 7.9% | 2.6% |
+| Occultist | 1,050 | 91.3% | 14.5% · 26.1% · 50.6% · 0.2% | 6.7% | 2.0% |
 
 The old soldier dies least and sees the rite complete most; the occultist goes mad half the time.
 
-In these seasons the bots went down below in 78% of seasons, lost 2.5 of the camp to the night, took 1.7 wounds and lost 9.0 nerve on average; 3.7% of seasons read a scribe's error, 4.9% saw a stray sign, and 4.6% noted a habit that was not someone's own. Of the clean victories, 1% were scored clean work, 10% honest work, 35% costly and 54% at any price; of the hard ones, 1% honest work, 8% costly and 91% at any price; and every defeat was out of your depth.
+In these seasons the bots went down below in 78% of seasons, lost 2.55 of the camp to the night, took 1.7 wounds and lost 9.0 nerve on average; 4.0% of seasons read a scribe's error, 4.0% saw a stray sign, and 3.5% noted a habit that was not someone's own. Of the clean victories, none was scored clean work, 7% honest work, 25% costly and 68% at any price; of the hard ones, 1% honest work, 8% costly and 92% at any price; and every defeat was out of your depth.
 
-The end you chose comes in about 4½% of seasons, nearly all of them a mind that broke (about 10% of the madness endings); a death that came later, in about 18% (two in about 2%), a third of them by their own hand (Endings, above).
+The end you chose comes in about 3½% of seasons, nearly all of them a mind that broke (about 7½% of the madness endings); a death that came later, in about 18% (two in about 2%), a third of them by their own hand (Endings, above).

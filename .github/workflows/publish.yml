@@ -1,0 +1,81 @@
+# Each build that reaches main, published (DEVELOPING.md, "Publishing a build"): the whole suite again; the game on
+# GitHub Pages; and, when this version has no release yet, the tag v<version> and a GitHub Release with the game as one
+# file and the version's section of CHANGELOG.md as its notes. It can be run by hand too (Run workflow).
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: The whole suite (the build first)
+        run: node test/run.js full
+      - id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: The site
+        run: node .github/publish.js site "${{ steps.pages.outputs.base_url }}" _site
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    needs: [build, deploy]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VERSION: ${{ needs.build.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Release v${{ needs.build.outputs.version }}, unless it is out already
+        run: |
+          if gh release view "v$VERSION" > /dev/null 2>&1; then
+            echo "v$VERSION is released already: nothing to do"
+            exit 0
+          fi
+          node build.js
+          cp standalone.html the-gates-of-kutha.html
+          node .github/publish.js notes "$VERSION" > notes.md
+          gh release create "v$VERSION" the-gates-of-kutha.html --target "$GITHUB_SHA" --title "Build $VERSION" --notes-file notes.md

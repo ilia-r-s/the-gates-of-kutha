@@ -1421,3 +1421,869 @@ const FATE_AFTER = {
     ]
   }
 };
+
+// ---------- after a doom: what it did to each of the camp (game/fates.js, doomFates) ----------
+// By the nature of what rose, and the way it went for them (RULES.fates.doom): taken (by where the end found them: below,
+// with you or on the stair; camp, at the dig; away, sent away), marked, fled, helped, helpedDied; the cult at large (cult:
+// joined, taken, waits, fled, marked; none, the same for every nature: DOOM_CULT_NONE); one of the cult in a cell at
+// Hillah (cell: freed, taken); one of the night's dead never buried (unburied, told after the night they were taken).
+// Each is told in place of their ordinary afterwards; one it killed, or took with it, has nothing more told of them. Two
+// told the same way are told in different words (game/fates.js, doomFates: no line twice in an ending).
+// (dl: a line from the names and pronouns of whoever it is about, in English and in Russian)
+const dEN = c => ({ n: c.name, He: EP.He(c), he: c.p, him: EP.him(c), his: c.pp, His: capS(c.pp) });
+const dRU = c => ({
+  N: capS(ru.cf(c)),
+  n: ru.cf(c),
+  Na: capS(ru.cf(c, 'a')),
+  na: ru.cf(c, 'a'),
+  ng: ru.cf(c, 'g'),
+  ni: ru.cf(c, 'i'),
+  on: ru.gs(c, 'он', 'она'),
+  On: ru.gs(c, 'Он', 'Она'),
+  ego: ru.gs(c, 'его', 'её'),
+  Ego: ru.gs(c, 'Его', 'Её'),
+  emu: ru.gs(c, 'ему', 'ей'),
+  nego: ru.gs(c, 'него', 'неё'),
+  nemu: ru.gs(c, 'нему', 'ней'),
+  nim: ru.gs(c, 'ним', 'ней'),
+  g: (m, f) => ru.gs(c, m, f)
+});
+const dl = f => c => f(dEN(c), dRU(c));
+const DOOM_FATE = {
+  fire: {
+    taken: {
+      below: [
+        dl((e, r) => [
+          `${e.n} is still below when it rises, and does not come up again. When the pilots overfly the crater three days later there is nothing on the stair but glass.`,
+          `${r.N} ещё внизу, когда оно поднимается, и больше не выходит наверх. Когда через три дня лётчики облетают воронку, на лестнице нет ничего, кроме стекла.`
+        ]),
+        dl((e, r) => [
+          `${e.n} sees it rise from the stair, and turns to climb, and the light catches ${e.him} halfway to the top.`,
+          `${r.N} видит с лестницы, как оно поднимается, и бросается наверх, но свет настигает ${r.ego} на полпути.`
+        ])
+      ],
+      camp: [
+        dl((e, r) => [
+          `${e.n} is in the camp when the seven stars come down. Of ${e.him} the pilots find only a shadow, burned into a wall of glassy brick.`,
+          `Когда спускаются семь звёзд, ${r.n} в лагере. От ${r.nego} лётчики находят лишь тень, впечатанную в стену из остеклевшего кирпича.`
+        ]),
+        dl((e, r) => [
+          `${e.n} runs for the canal with ${e.his} clothes alight, and does not reach it.`,
+          `${r.N} бежит к каналу в горящей одежде — и не добегает.`
+        ]),
+        dl((e, r) => [
+          `${e.n} goes back into the dig-house for the season’s notebooks, and the roof comes down burning.`,
+          `${r.N} возвращается в экспедиционный дом за полевыми тетрадями сезона, и горящая крыша обрушивается.`
+        ])
+      ],
+      away: [
+        dl((e, r) => [
+          `${e.n} is far up the Baghdad road when the sky goes white behind ${e.him}. The car is found three days later on the verge, burned out, with nobody in it.`,
+          `${r.N} уже далеко на багдадской дороге, когда небо позади белеет. Через три дня машину находят на обочине — выгоревшую и пустую.`
+        ])
+      ]
+    },
+    marked: [
+      dl((e, r) => [
+        `${e.n} lives, burned down one side, and never again sits near a fire.`,
+        `${r.N} выживает, с ожогами во весь бок, и больше никогда не садится у огня.`
+      ]),
+      dl((e, r) => [
+        `${e.n} comes out of it with ${e.his} eyebrows gone and ${e.his} hands blistered, and can never again look at the night sky without counting the stars.`,
+        `${r.N} выходит из огня без бровей, с ладонями в волдырях, и больше никогда не может смотреть на ночное небо, не пересчитывая звёзд.`
+      ])
+    ],
+    fled: [
+      dl((e, r) => [
+        `${e.n} is on the road north when the sky turns white behind ${e.him}, and does not stop until Beirut.`,
+        `${r.N} уже на дороге на север, когда небо позади белеет, и не останавливается до самого Бейрута.`
+      ]),
+      dl((e, r) => [
+        `${e.n} watches the glow over Kutha from the window of the Basra train, and leaves Iraq on the first boat out. ${e.He} is afraid of the stars ever after.`,
+        `${r.N} смотрит на зарево над Кутой из окна поезда на Басру и уплывает из Ирака первым же пароходом. С тех пор ${r.on} боится звёзд.`
+      ])
+    ],
+    helped: [
+      dl((e, r) => [
+        `${e.n} drags the diggers’ children out of the burning reed huts, one after another, and lives, though ${e.his} hands are never right again.`,
+        `${r.N} выносит детей землекопов из горящих тростниковых хижин, одного за другим, и выживает, хотя руки у ${r.nego} так и не заживают как следует.`
+      ]),
+      dl((e, r) => [
+        `${e.n} keeps the people of the village end in the canal all night, up to their necks, while the plain bakes around them, and brings every one of them out alive.`,
+        `Всю ночь ${r.n} держит людей с деревенского края в канале, по горло в воде, пока вокруг обжигается равнина, и выводит оттуда живыми всех до единого.`
+      ])
+    ],
+    helpedDied: [
+      dl((e, r) => [
+        `${e.n} goes back into the burning village for a child. The child comes out.`,
+        `${r.N} возвращается в горящую деревню за ребёнком. Ребёнок выходит оттуда.`
+      ]),
+      dl((e, r) => [
+        `${e.n} goes up and down the canal bank in the glare, pulling people into the water, until the glare takes ${e.him} too.`,
+        `${r.N} бегает вдоль берега канала в этом слепящем свете и затаскивает людей в воду, пока свет не забирает и ${r.ego}.`
+      ])
+    ],
+    cult: {
+      joined: [
+        dl((e, r) => [
+          `${e.n} walks into the fire to meet what rises, and the fire lets ${e.him} in like a door.`,
+          `${r.N} входит в огонь навстречу тому, что поднимается, и огонь впускает ${r.ego}, как дверь.`
+        ]),
+        dl((e, r) => [
+          `${e.n} goes down the stair singing, against the light, and the singing goes on a long time after ${e.he} is gone.`,
+          `${r.N} с пением спускается по лестнице, навстречу свету, и пение звучит ещё долго после того, как ${r.on} исчезает.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} burns at the foot of the stair, the first of all, and does not seem to mind.`,
+          `${r.N} сгорает у подножия лестницы раньше всех и, кажется, ничуть не возражает.`
+        ]),
+        dl((e, r) => [
+          `${e.n} looks straight at what rises, and has no eyes after it, and soon nothing else.`,
+          `${r.N} смотрит прямо на то, что поднимается, — и после этого у ${r.nego} больше нет глаз, а вскоре и ничего другого.`
+        ])
+      ],
+      waits: [
+        dl((e, r) => [
+          `${e.n} kneels at the top of the stair to wait for it. In the morning there is only a shape in the glassy brick, kneeling.`,
+          `${r.N} опускается на колени у верхней ступени и ждёт. Утром в остеклевшем кирпиче остаётся лишь очертание — коленопреклонённое.`
+        ])
+      ],
+      fled: [
+        dl((e, r) => [
+          `${e.n} runs from what ${e.he} called up. The pilots find ${e.him} three days later on the Hillah road, walking, blind.`,
+          `${r.N} бежит от того, что ${r.g('сам вызвал', 'сама вызвала')}. Через три дня лётчики находят ${r.ego} на дороге в Хиллу: ${r.on} бредёт по ней вслепую.`
+        ])
+      ],
+      marked: [
+        dl((e, r) => [
+          `${e.n} comes through it unburned, and the seven stars stay in ${e.his} eyes for good: the doctors in Baghdad call it a cataract.`,
+          `${r.N} выходит из огня без единого ожога, но семь звёзд навсегда остаются у ${r.nego} в глазах: багдадские врачи называют это катарактой.`
+        ])
+      ]
+    },
+    cell: {
+      freed: [
+        dl((e, r) => [
+          `The heat bursts the lock-up at Hillah. ${e.n} walks out of it unburned, north towards the light, and nobody dares to stop ${e.him}.`,
+          `Жар разрывает арестантскую в Хилле. ${r.N} выходит из неё без единого ожога и идёт на север, навстречу свету, и никто не смеет ${r.ego} остановить.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} burns in ${e.his} cell at Hillah, and the guards swear the fire began inside ${e.him}.`,
+          `${r.N} сгорает в своей камере в Хилле, и стражники клянутся, что огонь занялся изнутри ${r.nego}.`
+        ])
+      ]
+    },
+    unburied: [
+      dl((e, r) => [
+        `${e.He} is never buried: the store tent where ${e.he} lay is glass now, like the rest of the camp.`,
+        `${r.Ego} так и не хоронят: палатка-склад, где ${r.g('он лежал', 'она лежала')}, теперь из стекла, как и весь лагерь.`
+      ]),
+      dl((e, r) => [
+        `${e.He} is never buried: the lorry sent from Hillah for the dead is found burned out on the road, still loaded.`,
+        `${r.Ego} так и не хоронят: грузовик, присланный из Хиллы за мёртвыми, находят на дороге выгоревшим — так и не разгруженным.`
+      ])
+    ]
+  },
+  dust: {
+    taken: {
+      below: [
+        dl((e, r) => [
+          `${e.n} is still on the stair when the dead come up it, and goes up among them, and walks north with them.`,
+          `${r.N} ещё на лестнице, когда по ней поднимаются мёртвые, — и ${r.on} поднимается вместе с ними и уходит с ними на север.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is the last thing the owls pass on their way up the stair. The dead that come after them step over ${e.him}.`,
+          `${r.N} — последнее, мимо чего пролетают совы, взмывая вверх по лестнице. Мёртвые, что идут следом, перешагивают через ${r.nego}.`
+        ])
+      ],
+      camp: [
+        dl((e, r) => [
+          `${e.n} opens the tent flap to the knocking that night, as everyone between the two rivers opens a door. The pilots from Hinaidi count ${e.him} among the grey walkers on the Baghdad road.`,
+          `В ту ночь ${r.n} откидывает полог на стук — как все между двумя реками открывают двери. Лётчики из Хинайди насчитывают ${r.ego} среди серых путников на багдадской дороге.`
+        ]),
+        dl((e, r) => [
+          `${e.n} breathes the first of the dust, and by morning is walking north with the others, ${e.his} mouth full of clay.`,
+          `${r.N} вдыхает первую же пыль, а к утру уже идёт с остальными на север, и рот у ${r.nego} набит глиной.`
+        ]),
+        dl((e, r) => [
+          `${e.n} hides from the dead in the store tent, among the finds, and is found there by the men from Hinaidi, grey and quite cold, holding a clay figure.`,
+          `${r.N} прячется от мёртвых в палатке-складе, среди находок, и люди из Хинайди находят ${r.ego} там — ${r.g('серого', 'серую')} с головы до ног, ${r.g('холодного', 'холодную')}, с глиняной фигуркой в руках.`
+        ])
+      ],
+      away: [
+        dl((e, r) => [
+          `${e.n} is in Baghdad when every door between the two rivers stands open. ${e.His} landlady says ${e.he} went out to see who was knocking, and did not come back.`,
+          `${r.N} в Багдаде, когда все двери между двумя реками стоят настежь. Хозяйка квартиры говорит, что ${r.g('он вышел', 'она вышла')} посмотреть, кто стучит, и не ${r.g('вернулся', 'вернулась')}.`
+        ])
+      ]
+    },
+    marked: [
+      dl((e, r) => [
+        `${e.n} coughs up grey dust every morning for the rest of ${e.his} life, a little less each year.`,
+        `${r.N} до конца жизни каждое утро откашливает серую пыль — с каждым годом чуть меньше.`
+      ]),
+      dl((e, r) => [
+        `${e.n}’s hair goes grey in the one night, and ${e.he} never again sleeps with a door unbolted.`,
+        `За одну ночь ${r.n} седеет и больше никогда не ложится спать, не задвинув засов.`
+      ])
+    ],
+    fled: [
+      dl((e, r) => [
+        `${e.n} bolts the door and keeps it bolted until the knocking stops, and leaves the country by way of Mosul as soon as the roads are empty.`,
+        `${r.N} задвигает засов и не отпирает, пока не стихнет стук, а как только дороги пустеют, уезжает из страны через Мосул.`
+      ]),
+      dl((e, r) => [
+        `${e.n} is on a steamer going down the Shatt al-Arab by morning, and does not look back at the shore.`,
+        `К утру ${r.n} уже на пароходе, идущем вниз по Шатт-эль-Арабу, и не оглядывается на берег.`
+      ])
+    ],
+    helped: [
+      dl((e, r) => [
+        `${e.n} goes out on the roads with a lamp to turn the living back from the grey walkers, and brings back more of them than anyone thought possible.`,
+        `${r.N} выходит на дороги с лампой, чтобы поворачивать назад живых, ушедших за серыми путниками, и возвращает больше людей, чем кто-либо считал возможным.`
+      ]),
+      dl((e, r) => [
+        `${e.n} goes from door to door in the village by the tell, shutting them, and bolting them, and sitting up behind them with whoever is left, and lives.`,
+        `${r.N} обходит деревню у холма дом за домом: закрывает двери, задвигает засовы и сидит за ними ночами с теми, кто остался, — и выживает.`
+      ])
+    ],
+    helpedDied: [
+      dl((e, r) => [
+        `${e.n} goes out to bring a neighbour’s child back from the road, and walks north with the child.`,
+        `${r.N} выходит, чтобы вернуть с дороги соседского ребёнка, и уходит на север вместе с ребёнком.`
+      ]),
+      dl((e, r) => [
+        `${e.n} holds a door shut against the knocking for three nights, for a family not ${e.his} own. On the fourth night the knocking is from inside.`,
+        `Три ночи ${r.n} держит дверь, в которую стучат, — ради чужой семьи. На четвёртую ночь стучат уже изнутри.`
+      ])
+    ],
+    cult: {
+      joined: [
+        dl((e, r) => [`${e.n} walks north at the head of the dead, singing.`, `${r.N} идёт на север во главе мёртвых и поёт.`]),
+        dl((e, r) => [
+          `${e.n} goes down the stair against the dead coming up it, and none of them stops ${e.him}.`,
+          `${r.N} спускается по лестнице навстречу поднимающимся мёртвым, и ни один из них ${r.ego} не останавливает.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `The dead come for ${e.n} first: they have been waiting for ${e.him} longest.`,
+          `${r.g('Первым', 'Первой')} мёртвые приходят за ${r.ni}: дольше всех они ждали именно ${r.ego}.`
+        ]),
+        dl((e, r) => [
+          `${e.n} chokes on the first of the dust, and does not get up again, even when the dead do.`,
+          `${r.N} задыхается от первой же пыли и больше не поднимается — даже когда поднимаются мёртвые.`
+        ])
+      ],
+      waits: [
+        dl((e, r) => [
+          `${e.n} sits down at the top of the stair to watch the dead go by, and is sitting there still when the dust settles, as grey as they are.`,
+          `${r.N} садится у верхней ступени смотреть, как мимо идут мёртвые, и всё ещё сидит там, когда оседает пыль, ${r.g('такой же серый', 'такая же серая')}, как они.`
+        ])
+      ],
+      fled: [
+        dl((e, r) => [
+          `${e.n} runs south from what ${e.he} called up, into the desert. The owls follow ${e.him}.`,
+          `${r.N} бежит на юг, в пустыню, от того, что ${r.g('сам вызвал', 'сама вызвала')}. Совы летят следом.`
+        ])
+      ],
+      marked: [
+        dl((e, r) => [
+          `${e.n} lives, and keeps one door of ${e.his} house open for the rest of ${e.his} life, for whoever may come through it.`,
+          `${r.N} выживает и до конца жизни держит одну дверь в доме открытой — для того, кто может через неё войти.`
+        ])
+      ]
+    },
+    cell: {
+      freed: [
+        dl((e, r) => [
+          `That night every door between the two rivers stands open, and the cell door at Hillah with them. ${e.n} walks out and north with the dead, and the guards walk with ${e.him}.`,
+          `В ту ночь все двери между двумя реками стоят настежь, и дверь камеры в Хилле тоже. ${r.N} выходит из неё и вместе с мёртвыми уходит на север, а с ${r.nim} уходят и стражники.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} is found in the cell at Hillah in the morning, grey from head to foot, as if ${e.he} had been dead for years.`,
+          `Утром ${r.na} находят в камере в Хилле — ${r.g('серого', 'серую')} с головы до ног, будто ${r.g('он мёртв', 'она мертва')} уже много лет.`
+        ])
+      ]
+    },
+    unburied: [
+      dl((e, r) => [
+        `${e.He} is never buried: on the night the rite completes, ${e.he} gets up from the store tent and walks north with the rest.`,
+        `${r.Ego} так и не хоронят: в ночь, когда обряд свершается, ${r.on} поднимается с топчана в палатке-складе и уходит на север вместе с остальными.`
+      ]),
+      dl((e, r) => [
+        `${e.He} is never buried: the grave is dug, and in the morning it is empty, and the earth beside it trodden north.`,
+        `${r.Ego} так и не хоронят: могилу выкапывают, но утром она пуста, а земля рядом истоптана следами, ведущими на север.`
+      ])
+    ]
+  },
+  sea: {
+    taken: {
+      below: [
+        dl((e, r) => [
+          `${e.n} is still on the stair when the black water comes up it.`,
+          `${r.N} ещё на лестнице, когда по ней поднимается чёрная вода.`
+        ]),
+        dl((e, r) => [
+          `${e.n} climbs ahead of the water as long as there is stair to climb.`,
+          `${r.N} карабкается вверх впереди воды, пока ещё есть куда карабкаться.`
+        ])
+      ],
+      camp: [
+        dl((e, r) => [
+          `${e.n} stays at the camp one night too long. The lake where Kutha stood keeps ${e.him}, with everything else.`,
+          `${r.N} остаётся в лагере на одну ночь дольше, чем следовало. Озеро на месте Куты оставляет ${r.ego} себе — вместе со всем остальным.`
+        ]),
+        dl((e, r) => [
+          `${e.n} drinks from the canal on the second day, before anyone knows it has turned to salt, and dies raving of a sea where there is none.`,
+          `На второй день ${r.n} пьёт из канала, прежде чем кто-нибудь понимает, что вода в нём стала солёной, и умирает в бреду, твердя о море там, где его нет.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is on the roof of the dig-house when the water reaches the eaves, and swims for the top of E-meslam, and the pilots never see ${e.him} reach it.`,
+          `Когда вода доходит до карниза, ${r.n} на крыше экспедиционного дома; ${r.on} плывёт к вершине Э-меслама, и лётчики так и не видят, ${r.g('доплыл ли он', 'доплыла ли она')}.`
+        ])
+      ],
+      away: [
+        dl((e, r) => [
+          `${e.n} is still at Hillah, waiting for the Baghdad train, when the river comes up salt, and is one of the eleven it takes there that week.`,
+          `${r.N} всё ещё в Хилле, ждёт поезда на Багдад, когда река поднимается солёной, — и ${r.g('становится одним', 'становится одной')} из одиннадцати, кого река забирает там на той неделе.`
+        ])
+      ]
+    },
+    marked: [
+      dl((e, r) => [
+        `${e.n} can never again drink water without tasting salt in it.`,
+        `${r.N} больше никогда не может пить воду, не чувствуя в ней соли.`
+      ]),
+      dl((e, r) => [
+        `${e.n} lives, and every night dreams of something very large turning slowly, and wakes with salt on ${e.his} lips.`,
+        `${r.N} выживает, но каждую ночь ${r.emu} снится что-то очень большое, медленно ворочающееся во тьме, и ${r.on} просыпается с солью на губах.`
+      ])
+    ],
+    fled: [
+      dl((e, r) => [
+        `${e.n} gets out of the river country ahead of the salt, and settles as far from any water as a person can, in a town with only wells.`,
+        `${r.N} уезжает из речного края раньше, чем доходит соль, и селится так далеко от воды, как только можно, — в городке, где одни колодцы.`
+      ]),
+      dl((e, r) => [
+        `${e.n} is on the last train north before the line at Hillah goes under, and will not go near a river again if ${e.he} can help it.`,
+        `${r.N} уезжает последним поездом на север, прежде чем пути у Хиллы уходят под воду, и с тех пор по возможности не подходит ни к одной реке.`
+      ])
+    ],
+    helped: [
+      dl((e, r) => [
+        `${e.n} spends the spring carrying fresh water out from Baghdad to the villages along the salt river, and is blessed for it in more languages than ${e.he} knows.`,
+        `Всю весну ${r.n} возит пресную воду из Багдада в деревни вдоль солёной реки, и ${r.ego} благословляют за это на большем числе языков, чем ${r.on} знает.`
+      ]),
+      dl((e, r) => [
+        `${e.n} takes a boat out over the flooded villages for a week, bringing people down off the roofs, and lives to be ashamed of how few.`,
+        `Целую неделю ${r.n} плавает на лодке над затопленными деревнями и снимает людей с крыш — и потом всю жизнь стыдится, что так немногих.`
+      ])
+    ],
+    helpedDied: [
+      dl((e, r) => [
+        `${e.n} goes back into the rising water for a child left on a roof, and neither of them comes out.`,
+        `${r.N} возвращается в прибывающую воду за ребёнком, оставшимся на крыше, — и ни один из них не выходит обратно.`
+      ]),
+      dl((e, r) => [
+        `${e.n} ferries people off the roofs until the boat is taken out from under ${e.him} by something very large, turning.`,
+        `${r.N} снимает людей с крыш, пока лодку не выбивает из-под ${r.nego} что-то очень большое, ворочающееся в глубине.`
+      ])
+    ],
+    cult: {
+      joined: [
+        dl((e, r) => [
+          `${e.n} wades out into the black water to meet what turns beneath it, singing, and goes under.`,
+          `${r.N} входит в чёрную воду навстречу тому, что ворочается в глубине, поёт — и скрывается под водой.`
+        ]),
+        dl((e, r) => [
+          `${e.n} walks down the stair into the black water as if it were not there, and it closes over ${e.him} without a ripple.`,
+          `${r.N} спускается по лестнице в чёрную воду так, будто воды там нет, и вода смыкается над ${r.nim} без единой ряби.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} drowns at the foot of E-meslam, in water that was not there an hour before.`,
+          `${r.N} тонет у подножия Э-меслама — в воде, которой ещё час назад там не было.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is taken under by what turns below, the first of all, and the pilots see nothing of ${e.him} afterwards but a darker patch in the lake.`,
+          `То, что ворочается в глубине, первым утягивает под воду ${r.na}, и потом лётчики не видят от ${r.nego} ничего, кроме тёмного пятна на озере.`
+        ])
+      ],
+      waits: [
+        dl((e, r) => [
+          `${e.n} waits on the top of E-meslam as the lake rises round it. For a week the pilots from Hinaidi report a figure there, and then they do not.`,
+          `${r.N} ждёт на вершине Э-меслама, пока вокруг поднимается озеро. Неделю лётчики из Хинайди докладывают, что видят там фигуру, — а потом перестают.`
+        ])
+      ],
+      fled: [
+        dl((e, r) => [
+          `${e.n} runs from what ${e.he} called up, and is picked up a week later far out in the Gulf, alone in a boat with no oars.`,
+          `${r.N} бежит от того, что ${r.g('сам вызвал', 'сама вызвала')}, и через неделю ${r.ego} подбирают далеко в заливе — ${r.g('одного', 'одну')}, в лодке без вёсел.`
+        ])
+      ],
+      marked: [
+        dl((e, r) => [
+          `${e.n} lives, and cannot bear to be dry afterwards; ${e.his} skin is never quite free of a fine grey scale.`,
+          `${r.N} выживает, но потом не выносит сухости, и кожа у ${r.nego} так и не очищается от мелкой серой чешуи.`
+        ])
+      ]
+    },
+    cell: {
+      freed: [
+        dl((e, r) => [
+          `The salt water comes into the lock-up at Hillah through the floor. When it goes down, ${e.n}’s cell is empty and the bars of the window are bent outward.`,
+          `Солёная вода приходит в арестантскую в Хилле сквозь пол. Когда она спадает, камера ${r.ng} пуста, а решётка на окне выгнута наружу.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} drowns in ${e.his} cell at Hillah when the river comes up salt, and the guards say ${e.he} did not call out once.`,
+          `${r.N} тонет в своей камере в Хилле, когда река поднимается солёной, и стражники говорят, что ${r.g('он ни разу не позвал', 'она ни разу не позвала')} на помощь.`
+        ])
+      ]
+    },
+    unburied: [
+      dl((e, r) => [
+        `${e.He} is never buried: the store tent where ${e.he} lay is at the bottom of the lake where Kutha stood.`,
+        `${r.Ego} так и не хоронят: палатка-склад, где ${r.g('он лежал', 'она лежала')}, теперь на дне озера на месте Куты.`
+      ]),
+      dl((e, r) => [
+        `${e.He} is never buried: the coffin is on the Hillah road when the river comes up salt, and the river does not give it back.`,
+        `${r.Ego} так и не хоронят: гроб везут по дороге на Хиллу, когда река поднимается солёной, и река его не отдаёт.`
+      ])
+    ]
+  },
+  teeth: {
+    taken: {
+      below: [
+        dl((e, r) => [
+          `${e.n} hears the gnawing come down the stair towards ${e.him}, unhurried, and does not come up.`,
+          `${r.N} слышит, как по лестнице к ${r.nemu} неторопливо спускается грызущий звук, и не выходит наверх.`
+        ]),
+        dl((e, r) => [
+          `${e.n} stops on the stair to listen to the cradle rocking below, and is still listening when it stops.`,
+          `${r.N} останавливается на лестнице послушать, как внизу качается колыбель, — и всё ещё слушает, когда колыбель замирает.`
+        ])
+      ],
+      camp: [
+        dl((e, r) => [
+          `${e.n} sleeps in the camp that night with no bronze head over the tent flap. In the morning there is nothing on ${e.his} cot but the blanket, gnawed.`,
+          `В ту ночь ${r.n} спит в лагере без бронзовой головы над пологом. Утром на ${r.ego} походной кровати нет ничего, кроме изгрызенного одеяла.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is bitten in the dark of the store tent by something small. It is a very small bite, and it never stops bleeding.`,
+          `В темноте палатки-склада ${r.na} кусает что-то маленькое. Укус совсем крошечный, но кровь так и не останавливается.`
+        ]),
+        dl((e, r) => [
+          `${e.n} follows the sound of a child crying out into the dark past the tents. There is no child at the dig.`,
+          `${r.N} уходит в темноту за палатками на звук детского плача. Детей на раскопе нет.`
+        ])
+      ],
+      away: [
+        dl((e, r) => [
+          `${e.n} is in Baghdad that spring, and the bronze head over ${e.his} door falls in the night. They find ${e.him} in the morning with the marks of small teeth on ${e.his} throat.`,
+          `Той весной ${r.n} в Багдаде, и ночью бронзовая голова над ${r.ego} дверью падает. Утром ${r.ego} находят со следами мелких зубов на горле.`
+        ])
+      ]
+    },
+    marked: [
+      dl((e, r) => [
+        `${e.n} lives, with a ring of small teeth-marks on ${e.his} wrist that never fades, and hangs a little bronze head over every door ${e.he} sleeps behind.`,
+        `${r.N} выживает, но на запястье у ${r.nego} остаётся кольцо следов от мелких зубов, которое так и не бледнеет, и над каждой дверью, за которой ${r.on} спит, ${r.on} вешает маленькую бронзовую голову.`
+      ]),
+      dl((e, r) => [
+        `${e.n} never again sleeps where ${e.he} can hear a cradle rock.`,
+        `${r.N} больше никогда не спит там, где слышно, как качается колыбель.`
+      ])
+    ],
+    fled: [
+      dl((e, r) => [
+        `${e.n} is gone north before the spring, and in every room ${e.he} sleeps in afterwards there is a comb on the threshold. In the mornings it is always still there.`,
+        `${r.N} уезжает на север ещё до весны, и с тех пор в каждой комнате, где ${r.on} ночует, на пороге лежит гребень. По утрам гребень всегда на месте.`
+      ]),
+      dl((e, r) => [
+        `${e.n} takes the first boat out of Basra, and will never afterwards have a cradle in the house.`,
+        `${r.N} уплывает первым же пароходом из Басры и больше никогда не держит в доме колыбели.`
+      ])
+    ],
+    helped: [
+      dl((e, r) => [
+        `${e.n} stays in the canal villages through the spring, sitting up at night with the women near their time, and the one child born alive that spring is born in a house where ${e.he} sat up.`,
+        `Всю весну ${r.n} проводит в деревнях вдоль канала, ночами сидя с женщинами, которым вот-вот рожать, и единственный ребёнок, родившийся той весной живым, рождается в доме, где ${r.g('сидел он', 'сидела она')}.`
+      ]),
+      dl((e, r) => [
+        `${e.n} goes from village to village with a sack of little bronze heads from the Baghdad bazaar, and nails one over every door that will have it.`,
+        `${r.N} ходит из деревни в деревню с мешком маленьких бронзовых голов с багдадского базара и прибивает по одной над каждой дверью, где позволят.`
+      ])
+    ],
+    helpedDied: [
+      dl((e, r) => [
+        `${e.n} sits up through the spring with the women of the canal villages, and one morning ${e.he} is gone from the threshold, like the combs.`,
+        `Всю весну ${r.n} сидит ночами с женщинами из деревень вдоль канала, и однажды утром ${r.ego} на пороге больше нет — как гребней.`
+      ]),
+      dl((e, r) => [
+        `${e.n} goes down into a dry well after a crying ${e.he} takes for a child, and the crying stops.`,
+        `${r.N} спускается в высохший колодец на плач, который ${r.on} принимает за детский, — и плач смолкает.`
+      ])
+    ],
+    cult: {
+      joined: [
+        dl((e, r) => [
+          `${e.n} goes down to rock the cradle, and is not seen again.`,
+          `${r.N} спускается покачать колыбель, и больше ${r.ego} никто не видит.`
+        ]),
+        dl((e, r) => [
+          `${e.n} goes from door to door along the canal by night, taking the combs from the thresholds.`,
+          `${r.N} ходит ночами вдоль канала от двери к двери и забирает с порогов гребни.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} is the first thing the cradle wants, and it is not kept waiting.`,
+          `${r.N} — первое, чего захотела колыбель, и колыбели не приходится ждать.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is found at the foot of the stair, gnawed, smiling, with a comb in ${e.his} hand.`,
+          `${r.Na} находят у подножия лестницы — ${r.g('изгрызенного', 'изгрызенную')}, с улыбкой и с гребнем в руке.`
+        ])
+      ],
+      waits: [
+        dl((e, r) => [
+          `${e.n} sits down at the top of the stair to listen to the cradle rocking below, and does not get up.`,
+          `${r.N} садится у верхней ступени слушать, как внизу качается колыбель, и больше не встаёт.`
+        ])
+      ],
+      fled: [
+        dl((e, r) => [
+          `${e.n} runs from what ${e.he} called up, and the midwives of the canal villages will not let ${e.him} past their doors.`,
+          `${r.N} бежит от того, что ${r.g('сам вызвал', 'сама вызвала')}, но повитухи деревень вдоль канала не пускают ${r.ego} даже на порог.`
+        ])
+      ],
+      marked: [
+        dl((e, r) => [
+          `${e.n} lives, and smiles at every child ${e.he} passes in the street, and the mothers cross the road.`,
+          `${r.N} выживает и улыбается каждому ребёнку, мимо которого проходит на улице, а матери переходят на другую сторону.`
+        ])
+      ]
+    },
+    cell: {
+      freed: [
+        dl((e, r) => [
+          `On the night the cradle stops rocking the lock-up at Hillah is found open, and ${e.n}’s cell empty but for a comb on the threshold.`,
+          `В ночь, когда колыбель перестаёт качаться, арестантскую в Хилле находят открытой, а камеру ${r.ng} — пустой: только на пороге лежит гребень.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} is found in the cell at Hillah with the marks of small teeth on ${e.his} throat. The door was locked all night.`,
+          `${r.Na} находят в камере в Хилле со следами мелких зубов на горле. Дверь всю ночь была заперта.`
+        ])
+      ]
+    },
+    unburied: [
+      dl((e, r) => [
+        `${e.He} is never buried: on the night the rite completes something gets into the store tent, and in the morning there is nothing on ${e.his} cot but the sheet.`,
+        `${r.Ego} так и не хоронят: в ночь, когда обряд свершается, что-то пробирается в палатку-склад, и утром на ${r.ego} топчане нет ничего, кроме простыни.`
+      ]),
+      dl((e, r) => [
+        `${e.He} is never buried: the women who come to wash the body will not go near it, and by the next morning there is no need.`,
+        `${r.Ego} так и не хоронят: женщины, пришедшие обмыть тело, не решаются к нему подойти, а на следующее утро в этом уже нет нужды.`
+      ])
+    ]
+  },
+  plague: {
+    taken: {
+      below: [
+        dl((e, r) => [
+          `${e.n} breathes the flies on the stair, and is dead of it before the dawn.`,
+          `${r.N} вдыхает мух на лестнице и умирает от этого ещё до рассвета.`
+        ]),
+        dl((e, r) => [
+          `${e.n} gets as far as the top of the stair, covered in sores, and lies down there in the open, and the flies settle.`,
+          `${r.N} добирается до верхней ступени, ${r.g('весь', 'вся')} в язвах, ложится там под открытым небом, и на ${r.nego} садятся мухи.`
+        ])
+      ],
+      camp: [
+        dl((e, r) => [
+          `${e.n} sickens on the second day with something no doctor can name, and is laid out before the dig-house door with the rest.`,
+          `На второй день ${r.n} заболевает чем-то, чему ни один врач не может подобрать названия, и ${r.ego} кладут перед дверью экспедиционного дома вместе с остальными.`
+        ]),
+        dl((e, r) => [
+          `${e.n} catches one of the sixty sicknesses on the road to Hillah, and is dead of it before the Health Service has found it a name.`,
+          `По дороге в Хиллу ${r.n} подхватывает одну из шестидесяти хворей и умирает прежде, чем Санитарная служба успевает подобрать ей название.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is the last of the camp to fall sick, and the last to die, and there is nobody left to lay ${e.him} out.`,
+          `${r.N} заболевает ${r.g('последним', 'последней')} из всего лагеря и ${r.g('последним', 'последней')} умирает, и обрядить ${r.ego} уже некому.`
+        ])
+      ],
+      away: [
+        dl((e, r) => [
+          `${e.n} is in Baghdad when the sickness comes up the river, and dies in the cholera hospital of something that is not cholera.`,
+          `${r.N} в Багдаде, когда болезнь поднимается вверх по реке, и умирает в холерном бараке от чего-то, что не холера.`
+        ])
+      ]
+    },
+    marked: [
+      dl((e, r) => [
+        `${e.n} has the sickness and lives, and the marks of it never quite fade.`,
+        `${r.N} переносит болезнь и выживает, но её следы так и не сходят до конца.`
+      ]),
+      dl((e, r) => [
+        `${e.n} lives through it, and can never afterwards bear the sound of flies.`,
+        `${r.N} выживает, но с тех пор не выносит жужжания мух.`
+      ])
+    ],
+    fled: [
+      dl((e, r) => [
+        `${e.n} gets out ahead of the sickness on the last train north, and spends a month in quarantine at Aleppo, speaking to no one.`,
+        `${r.N} уезжает от болезни последним поездом на север и месяц сидит в карантине в Алеппо, ни с кем не разговаривая.`
+      ]),
+      dl((e, r) => [
+        `${e.n} is on a boat out of Basra before the Health Service closes the port, and boils ${e.his} water for the rest of ${e.his} life.`,
+        `${r.N} успевает отплыть из Басры прежде, чем Санитарная служба закрывает порт, и до конца жизни кипятит воду.`
+      ])
+    ],
+    helped: [
+      dl((e, r) => [
+        `${e.n} buries the dead of three villages with ${e.his} own hands, since there is none else to do it, and lives.`,
+        `${r.N} своими руками хоронит мёртвых из трёх деревень, потому что больше некому, и выживает.`
+      ]),
+      dl((e, r) => [
+        `${e.n} nurses the sick at Hillah with carbolic and boiled water, and saves a few, which is more than the doctors manage.`,
+        `${r.N} выхаживает больных в Хилле карболкой и кипячёной водой и спасает нескольких — больше, чем удаётся врачам.`
+      ])
+    ],
+    helpedDied: [
+      dl((e, r) => [
+        `${e.n} stays to bury the dead, since there is none else to do it, and in the end there is none to bury ${e.him}.`,
+        `${r.N} остаётся хоронить мёртвых, потому что больше некому, и в конце концов хоронить ${r.ego} уже некому.`
+      ]),
+      dl((e, r) => [
+        `${e.n} sits up with the sick at Hillah for nine nights, and on the tenth lies down among them.`,
+        `Девять ночей ${r.n} сидит с больными в Хилле, а на десятую ложится рядом с ними.`
+      ])
+    ],
+    cult: {
+      joined: [
+        dl((e, r) => [
+          `${e.n} goes from village to village behind the flies, blessing the doors.`,
+          `${r.N} ходит из деревни в деревню вслед за мухами и благословляет двери.`
+        ]),
+        dl((e, r) => [
+          `${e.n} goes down the stair to the fifty-nine broken jars, and sits among them, and is not seen again.`,
+          `${r.N} спускается по лестнице к пятидесяти девяти разбитым кувшинам, садится среди них, и больше ${r.ego} никто не видит.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `The sickness takes ${e.n} first, all sixty kinds of it at once.`,
+          `Болезнь забирает ${r.na} ${r.g('первым', 'первой')} — все шестьдесят хворей разом.`
+        ]),
+        dl((e, r) => [
+          `${e.n} breathes the flies as they pour up the stair, gladly, and is dead before the last of them is gone.`,
+          `${r.N} с радостью вдыхает мух, что валом валят вверх по лестнице, и умирает раньше, чем пролетает последняя.`
+        ])
+      ],
+      waits: [
+        dl((e, r) => [
+          `${e.n} sits at the top of the stair while the flies go up past ${e.him} like smoke, and they do not touch ${e.him}. ${e.He} is still sitting there when the men from Hinaidi come.`,
+          `${r.N} сидит у верхней ступени, пока мухи дымом поднимаются мимо, и они ${r.ego} не трогают. ${r.On} всё ещё сидит там, когда приходят люди из Хинайди.`
+        ])
+      ],
+      fled: [
+        dl((e, r) => [
+          `${e.n} runs from what ${e.he} called up, and carries it with ${e.him} as far as Basra, where the port is closed behind ${e.him}.`,
+          `${r.N} бежит от того, что ${r.g('сам вызвал', 'сама вызвала')}, и уносит это с собой до самой Басры, где за ${r.nim} закрывают порт.`
+        ])
+      ],
+      marked: [
+        dl((e, r) => [
+          `${e.n} lives, and never falls ill again, and wherever ${e.he} goes the doctors are kept busy.`,
+          `${r.N} выживает и больше никогда не болеет, но куда бы ${r.g('он ни пришёл', 'она ни пришла')}, у врачей прибавляется работы.`
+        ])
+      ]
+    },
+    cell: {
+      freed: [
+        dl((e, r) => [
+          `The guards at the lock-up at Hillah die first. ${e.n} walks out past them, and nobody is left to stop ${e.him}.`,
+          `Стражники в арестантской в Хилле умирают первыми. ${r.N} выходит мимо них, и остановить ${r.ego} уже некому.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} dies of the sickness in ${e.his} cell at Hillah, and lies there a week, since there is none to bury ${e.him}.`,
+          `${r.N} умирает от болезни в своей камере в Хилле и неделю лежит там: хоронить ${r.ego} некому.`
+        ])
+      ]
+    },
+    unburied: [
+      dl((e, r) => [
+        `${e.He} is never buried: the men who were to take ${e.him} to Baghdad sicken on the road, and there is none to bury them either.`,
+        `${r.Ego} так и не хоронят: люди, которые должны были отвезти ${r.ego} в Багдад, заболевают в дороге, и хоронить их тоже некому.`
+      ]),
+      dl((e, r) => [
+        `${e.He} is never buried: the Health Service burns the store tent with everything in it.`,
+        `${r.Ego} так и не хоронят: Санитарная служба сжигает палатку-склад со всем, что в ней было.`
+      ])
+    ]
+  },
+  madness: {
+    taken: {
+      below: [
+        dl((e, r) => [
+          `${e.n} goes up the stair with your reflections, laughing, and is not seen again.`,
+          `${r.N} поднимается по лестнице вместе с вашими отражениями, смеясь, и больше ${r.ego} никто не видит.`
+        ]),
+        dl((e, r) => [
+          `${e.n} sits down on the stair to wait for you, and forgets what ${e.he} was waiting for, and is sitting there still.`,
+          `${r.N} садится на ступеньку подождать вас, забывает, чего ${r.g('ждал', 'ждала')}, и сидит там до сих пор.`
+        ])
+      ],
+      camp: [
+        dl((e, r) => [
+          `${e.n} forgets ${e.his} own name with the rest of the camp, and is the only one who never remembers it.`,
+          `${r.N} вместе со всем лагерем забывает собственное имя — и ${r.g('единственный', 'единственная')} так и не вспоминает его.`
+        ]),
+        dl((e, r) => [
+          `${e.n} is found at the new moon on the Hillah road in ${e.his} nightclothes, standing quite still, smiling. ${e.He} never comes back to ${e.his} senses.`,
+          `К новолунию ${r.na} находят на дороге в Хиллу в ночной рубашке: ${r.on} стоит не шевелясь и улыбается. В себя ${r.on} так и не приходит.`
+        ]),
+        dl((e, r) => [
+          `${e.n} laughs for a day and a night, and then stops, and does not speak again, or eat, or sleep.`,
+          `${r.N} смеётся сутки напролёт, а потом замолкает — и больше не говорит, не ест и не спит.`
+        ])
+      ],
+      away: [
+        dl((e, r) => [
+          `${e.n} is in Baghdad when the clocks stop. The last pilot back sees ${e.him} in Rashid Street with the others, in ${e.his} nightclothes, smiling.`,
+          `${r.N} в Багдаде, когда останавливаются часы. Последний вернувшийся лётчик видит ${r.ego} на улице Рашида вместе с остальными — в ночной рубашке, с улыбкой.`
+        ])
+      ]
+    },
+    marked: [
+      dl((e, r) => [
+        `${e.n} remembers ${e.his} name again after a day and a night, but loses a day and a night every month for the rest of ${e.his} life.`,
+        `Через сутки ${r.n} снова вспоминает своё имя, но до конца жизни каждый месяц теряет ещё по одним суткам.`
+      ]),
+      dl((e, r) => [
+        `${e.n} stops every clock ${e.he} owns at twenty past three, and will not say why.`,
+        `${r.N} останавливает все свои часы на двадцати минутах четвёртого и не говорит зачем.`
+      ])
+    ],
+    fled: [
+      dl((e, r) => [
+        `${e.n} is on the Basra train when the clocks stop, and comes to on the coast with no memory of the journey, and a smile ${e.he} cannot get off ${e.his} face.`,
+        `Когда останавливаются часы, ${r.n} в поезде на Басру; в себя ${r.on} приходит уже на побережье — не помня дороги и с улыбкой, которую никак не может согнать с лица.`
+      ]),
+      dl((e, r) => [
+        `${e.n} gets out before the new moon, and for the rest of ${e.his} life will not have a mirror in the house.`,
+        `${r.N} уезжает до новолуния и до конца жизни не держит в доме зеркал.`
+      ])
+    ],
+    helped: [
+      dl((e, r) => [
+        `${e.n} goes from door to door in Hillah, saying people’s names to them until they answer. Most of them do.`,
+        `${r.N} ходит в Хилле от двери к двери и называет людям их имена, пока те не откликнутся. Откликаются почти все.`
+      ]),
+      dl((e, r) => [
+        `${e.n} winds the clocks of a whole village every morning for a month, until one morning they keep going by themselves.`,
+        `Целый месяц ${r.n} каждое утро заводит часы целой деревни — пока однажды утром часы не начинают идти сами.`
+      ])
+    ],
+    helpedDied: [
+      dl((e, r) => [
+        `${e.n} spends a week leading sleepwalkers indoors, and on the seventh night walks out among them, smiling.`,
+        `Неделю ${r.n} разводит лунатиков по домам, а на седьмую ночь ${r.g('сам выходит', 'сама выходит')} к ним — с улыбкой.`
+      ]),
+      dl((e, r) => [
+        `${e.n} sits with the smiling people in the streets of Hillah, talking to them, until ${e.he} forgets what ${e.he} was saying, and smiles.`,
+        `${r.N} сидит с улыбающимися людьми на улицах Хиллы и разговаривает с ними, пока не забывает, что ${r.g('хотел', 'хотела')} сказать, — и тоже улыбается.`
+      ])
+    ],
+    cult: {
+      joined: [
+        dl((e, r) => [
+          `${e.n} walks out into the streets of Baghdad in ${e.his} nightclothes at the head of them all, smiling widest.`,
+          `${r.N} выходит на улицы Багдада в ночной рубашке впереди всех и улыбается шире всех.`
+        ]),
+        dl((e, r) => [
+          `${e.n} goes down the stair to stand among the mirrors, and is one more reflection now, laughing.`,
+          `${r.N} спускается по лестнице и встаёт среди зеркал — теперь ${r.on} лишь ещё одно отражение, и оно смеётся.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} laughs with your reflections, and cannot stop, and dies of it on the fourth day.`,
+          `${r.N} смеётся вместе с вашими отражениями и уже не может остановиться, а на четвёртый день умирает от этого смеха.`
+        ]),
+        dl((e, r) => [
+          `${e.n} forgets ${e.his} own name, and then how to breathe.`,
+          `${r.N} забывает собственное имя, а потом — как дышать.`
+        ])
+      ],
+      waits: [
+        dl((e, r) => [
+          `${e.n} sits at the top of the stair, smiling at something only ${e.he} can see, and is sitting there still at the new moon.`,
+          `${r.N} сидит у верхней ступени и улыбается тому, что видно лишь ${r.emu}, — и всё ещё сидит там в новолуние.`
+        ])
+      ],
+      fled: [
+        dl((e, r) => [
+          `${e.n} runs from what ${e.he} called up, and is found in Mosul a month later, not knowing ${e.his} own name, and happy.`,
+          `${r.N} бежит от того, что ${r.g('сам вызвал', 'сама вызвала')}, и через месяц ${r.ego} находят в Мосуле — ${r.g('не помнящего собственного имени и счастливого', 'не помнящую собственного имени и счастливую')}.`
+        ])
+      ],
+      marked: [
+        dl((e, r) => [
+          `${e.n} lives, and every clock in ${e.his} house stops at twenty past three, however often it is wound.`,
+          `${r.N} выживает, но все часы в ${r.ego} доме останавливаются на двадцати минутах четвёртого, сколько их ни заводи.`
+        ])
+      ]
+    },
+    cell: {
+      freed: [
+        dl((e, r) => [
+          `The guards at Hillah forget their own names for a day and a night, and ${e.n} walks out of the lock-up in ${e.his} nightclothes, smiling.`,
+          `На сутки стражники в Хилле забывают собственные имена, и ${r.n} выходит из арестантской в ночной рубашке, улыбаясь.`
+        ])
+      ],
+      taken: [
+        dl((e, r) => [
+          `${e.n} is found in the cell at Hillah at twenty past three, standing quite still, smiling. ${e.He} stands so until ${e.he} dies.`,
+          `${r.Na} находят в камере в Хилле в двадцать минут четвёртого: ${r.on} стоит не шевелясь и улыбается. Так ${r.on} и стоит, пока не умирает.`
+        ])
+      ]
+    },
+    unburied: [
+      dl((e, r) => [
+        `${e.He} is never buried, or nobody remembers burying ${e.him}: there is a grave, but nobody can say whose hands dug it.`,
+        `${r.Ego} так и не хоронят — или никто не помнит, как хоронили: могила есть, но никто не может сказать, чьи руки её вырыли.`
+      ]),
+      dl((e, r) => [
+        `${e.He} is never buried: everyone at the dig is sure that someone else saw to it, and nobody did.`,
+        `${r.Ego} так и не хоронят: каждый на раскопе уверен, что об этом позаботился кто-то другой, — и никто не позаботился.`
+      ])
+    ]
+  }
+};
+// one of the cult who came through the rite and walked away from it, whatever rose
+const DOOM_CULT_NONE = [
+  dl((e, r) => [
+    `${e.n} goes home when the roads are clear, and lives to be old, and nobody ever once asks ${e.him} about Kutha.`,
+    `Когда дороги пустеют, ${r.n} возвращается домой и доживает до глубокой старости, и никто ни разу не спрашивает ${r.ego} о Куте.`
+  ]),
+  dl((e, r) => [
+    `${e.n} is back at Kutha by the autumn, before anyone else dares to be, and digs, alone, for years.`,
+    `К осени ${r.n} снова в Куте — раньше, чем туда осмеливается вернуться кто-нибудь ещё, — и копает там в одиночку долгие годы.`
+  ])
+];

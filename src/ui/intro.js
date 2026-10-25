@@ -1,5 +1,16 @@
 // ===================== THE TITLE SCREEN, AND THE ARRIVAL =====================
-function introScene() {
+// a season's code in the page's address (…#seed=1A2B-3C4D, or ?seed=), to deal that season
+function seedInAddress() {
+  try {
+    const m = /[?#&]seed=([0-9a-fA-F-]{1,12})/.exec(location.search + location.hash);
+    return m ? parseSeed(m[1]) : null;
+  } catch (e) {
+    return null;
+  }
+}
+// The title screen: your name, your background, and, if you have one, the code of a season to play again (else a new one).
+// seed: a code to offer in the field.
+function introScene(seed = seedInAddress()) {
   S = null;
   S_ui.tab = 'people';
   const bgs = [
@@ -48,15 +59,17 @@ function introScene() {
       `<p>${bi('Professor Aldous Crane, director of the British expedition to Tell Ibrahim, the ancient city of Kutha, is dead. The Trustees have wired you to take over the season and to close the dig before the dark of the moon, five days from now.', 'Профессор Олдос Крейн, глава британской экспедиции на Телль-Ибрагим — холм, под которым спит древняя Кута, — мёртв. Попечители телеграфируют вам: принять сезон и закрыть раскоп до новолуния. До него пять дней.')}</p>`,
       `<p>${bi('Seven people are still at the camp. Crane’s last diary entry says that two of them serve something under the mound, and that it wants to come up.', 'В лагере остаются семь человек. Последняя запись в дневнике Крейна гласит, что двое из них служат чему-то под холмом — и что оно хочет выйти наверх.')}</p>`,
       `<div class="namefield"><label for="pname">${bi('Your surname', 'Ваша фамилия')}</label><input id="pname" type="text" maxlength="24" value="${bi('Marlowe', 'Марлоу')}" autocomplete="off"></div>`,
+      `<div class="namefield"><label for="pseed">${bi('Season code', 'Код сезона')}</label><input id="pseed" class="seed" type="text" maxlength="12" value="${seed == null ? '' : seedCode(seed)}" placeholder="${bi('a new season', 'новый сезон')}" autocomplete="off" spellcheck="false"><span class="dim">${bi('The code of a season deals it again, whoever you are.', 'Код сезона сдаёт его заново, кем бы вы ни были.')}</span></div>`,
       `<p class="dim">${bi('Choose who you are:', 'Кто вы?')}</p>`
     ],
     choices: bgs.map(b => ({
       label: b.name,
       html: `<span class="ch-label">${b.name}</span><span class="ch-sub">${b.blurb}</span><span class="ch-perk">${b.perk}</span>`,
       fn: () => {
-        const el = document.getElementById('pname');
+        const el = document.getElementById('pname'),
+          sd = document.getElementById('pseed');
         const nm = ((el && el.value) || 'Marlowe').trim().slice(0, 24) || 'Marlowe';
-        replyScene(nm, b.id);
+        replyScene(nm, b.id, sd ? parseSeed(sd.value) : null);
       }
     }))
   });
@@ -64,9 +77,9 @@ function introScene() {
 // Your reply to the Trustees' wire, which fixes how you will keep your casebook for the whole season: the usual way, which
 // files what you learn under the names it concerns and marks whatever fits, or the bare record and nothing joined up
 // (hardcore: ui/book.js). There is no changing it until the next expedition.
-function replyScene(name, bg) {
+function replyScene(name, bg, seed = null) {
   const go = hardcore => () => {
-    newGame(name, bg, hardcore);
+    newGame(name, bg, hardcore, seed);
     arrivalScene();
   };
   const wire = (en, rus) => `<span class="ch-label wire">${bi(en, rus)}</span>`;
@@ -99,6 +112,13 @@ function replyScene(name, bg) {
       }
     ]
   });
+}
+// the season just ended, dealt again: the same seed, name, background and casebook (game/endings.js)
+function replaySeason() {
+  const { name, bg, hardcore, seed } = S;
+  S_ui.tab = 'people';
+  newGame(name, bg, hardcore, seed);
+  arrivalScene();
 }
 function arrivalScene() {
   show({

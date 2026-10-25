@@ -1,8 +1,11 @@
 {
   "name": "gates-of-kutha",
-  "version": "27.0.0",
+  "version": "27.1.0",
   "private": true,
   "description": "The Gates of Kutha: a Lovecraftian hidden-role mystery in one HTML page, in English and Russian.",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
   "scripts": {
     "build": "node build.js",
     "check": "node build.js --check",
@@ -12,6 +15,10 @@
     "test:full": "node test/run.js full"
   },
   "devDependencies": {
+    "@fontsource/courier-prime": "5.3.0",
+    "@fontsource/im-fell-english-sc": "5.3.0",
+    "@fontsource/noto-sans-cuneiform": "5.3.0",
+    "@fontsource/spectral": "5.3.0",
     "eslint": "10.12.0",
     "globals": "17.13.0",
     "playwright": "1.56.0",

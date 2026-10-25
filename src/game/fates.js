@@ -73,10 +73,11 @@ function romances() {
   );
   return out;
 }
-// What became of everyone afterwards, each with a portrait (later: the deaths that came later, afterDeaths).
+// What became of everyone afterwards, each with a portrait (later: the deaths that came later, afterDeaths; dooms: what
+// a doom did to each of them, doomFates).
 function endAfter(id, won, later = afterDeaths()) {
   const f = S.fin,
-    ctx = { id, won, shot: f && f.acts.find(a => a.kind === 'shoot' && a.ok), doom: id.indexOf('doom') === 0, later };
+    ctx = { id, won, shot: f && f.acts.find(a => a.kind === 'shoot' && a.ok), later, dooms: doomFates() };
   return (
     '<ul class="after">' +
     S.order
@@ -93,9 +94,12 @@ function endFate(c, ctx) {
   const { won } = ctx,
     gone = S.ended === 'madness' ? FATE_GONE.mad : S.ended === 'death' || S.ended === 'doom' ? FATE_GONE.dead : null,
     away = gone || (youInCell() ? FATE_GONE.jail : null),
-    later = ctx.later && ctx.later[c.id];
-  // (a death that came later is all that is told of them: afterDeaths)
+    later = ctx.later && ctx.later[c.id],
+    doom = ctx.dooms[c.id];
+  // (a death that came later is all that is told of them: afterDeaths; and so is what a doom did to one it killed, or
+  // took with it: doomFates)
   if (later) return fateItem(c, 'gone', bi(...FATE_AFTER[later.kind][later.k][later.line](c, later.d)));
+  if (doom && DOOM_GONE.has(doom.kind)) return fateItem(c, 'gone', doomSaid(c, doom));
   let t;
   if (c.status === 'taken') {
     // (the one you killed yourself: game/deed.js; whatever the camp knew or guessed of it, the inquest in Baghdad has its
@@ -122,11 +126,17 @@ function endFate(c, ctx) {
           `${c.name} was found dead in ${c.pp} tent on night ${c.takenDay}. ${inquest[0]} ${EP.He(c)} is buried ${g[0]}.`,
           `${capS(ru.cf(c, 'a'))} нашли ${ru.gs(c, 'мёртвым', 'мёртвой')} в ${ru.gs(c, 'его', 'её')} палатке в ночь ${c.takenDay}. ${inquest[1]} ${ru.gs(c, 'Его', 'Её')} хоронят ${g[1]}.`
         )
-      : bi(
-          `${c.name} was taken on night ${c.takenDay}. ${EP.He(c)} is buried ${g[0]}.`,
-          `${capS(ru.cf(c))} ${ru.gs(c, 'погиб', 'погибла')} в ночь ${c.takenDay}. ${ru.gs(c, 'Его', 'Её')} хоронят ${g[1]}.`
-        );
-  } else if (c.status === 'exposed') t = unmaskedFate(c).say(c);
+      : doom // (never buried, after a doom: doomFates)
+        ? bi(`${c.name} was taken on night ${c.takenDay}.`, `${capS(ru.cf(c))} ${ru.gs(c, 'погиб', 'погибла')} в ночь ${c.takenDay}.`) +
+          ' ' +
+          doomSaid(c, doom)
+        : bi(
+            `${c.name} was taken on night ${c.takenDay}. ${EP.He(c)} is buried ${g[0]}.`,
+            `${capS(ru.cf(c))} ${ru.gs(c, 'погиб', 'погибла')} в ночь ${c.takenDay}. ${ru.gs(c, 'Его', 'Её')} хоронят ${g[1]}.`
+          );
+  } else if (doom)
+    t = doomSaid(c, doom); // (marked, fled, helped, or the cult's own way: in place of the ordinary afterwards)
+  else if (c.status === 'exposed') t = unmaskedFate(c).say(c);
   else if (c.status === 'dismissed')
     t = fateOf(c.role === 'smuggler' ? (gone ? FATE.thiefSentGone : FATE.thiefSent) : gone ? FATE.dismissedGone : FATE.dismissed, c.id)(c);
   else if (c.role === 'cult') t = endFateCult(c, ctx);
@@ -155,7 +165,7 @@ function endFate(c, ctx) {
     else if (c.rapport <= -1) t += ' ' + fateOf(away ? away.enemy : FATE_ENEMY, c.id, 'enemy')(c);
   }
   love.pairs
-    .filter(p => p.b === c.id)
+    .filter(p => p.b === c.id && !(ctx.dooms[p.a] && DOOM_GONE.has(ctx.dooms[p.a].kind)))
     .forEach(p => {
       t += ' ' + fateOf(FATE_PAIR[p.strong ? 'strong' : 'mild'], p.a, p.b)(C(p.a), c);
     });
@@ -231,8 +241,102 @@ function afterDeaths() {
       })
   );
 }
-// A cultist still at large at the end: shot, lost in the fire, gone into the desert or the dark, or waiting.
-function endFateCult(c, { id, won, shot, doom }) {
+// ---------- after a doom ----------
+// The ways a doom ends someone, or takes them with it: nothing more is told of them (endFate)
+const DOOM_GONE = new Set(['taken', 'helpedDied', 'joined', 'waits', 'freed']);
+// where the end found someone not of the cult: with you in the circle (heart), left on the stair or holding the seventh
+// gate (stair), at the dig (camp), or sent away (away)
+function doomAt(c) {
+  const f = S.fin;
+  if (c.status === 'dismissed') return 'away';
+  if (f && (f.took || []).includes(c.id))
+    return f.left.includes(c.id) || (f.g3 && f.g3.kind === 'comp' && f.g3.id === c.id) ? 'stair' : 'heart';
+  return 'camp';
+}
+// the words for one way a doom went for someone (data/fates.js, DOOM_FATE)
+function doomLines(d, kind) {
+  const by = DOOM_FATE[S.aspectOf[S.patron]];
+  if (kind === 'unburied') return by.unburied;
+  if (d.cell) return by.cell[kind] || [];
+  if (d.cult) return kind === 'none' ? DOOM_CULT_NONE : by.cult[kind];
+  if (kind === 'taken') return by.taken[doomBelow(d) ? 'below' : d.at];
+  return by[kind] || [];
+}
+const doomBelow = d => d.at === 'heart' || d.at === 'stair';
+// which words a way draws on, so that no two are told alike: one set for the cell, one for the cult at large, one by
+// place for the taken (below, at the dig, away), one for each other way
+const doomPool = (d, kind) => `${kind}:${d.cell ? 'cell' : d.cult ? 'cult' : kind === 'taken' ? (doomBelow(d) ? 'below' : d.at) : 'all'}`;
+// what someone was and did, on the weights of the ways a doom may go for them (RULES.fates.doom.mul)
+function doomMul(c, w, D, nat) {
+  const M = D.mul,
+    by = m => m && Object.keys(m).forEach(k => k in w && (w[k] *= m[k]));
+  by(M[temperOf(c)]);
+  by(M[c.role]);
+  if (VOWS.includes(c.id)) by(M.vows);
+  by(D.far.includes(c.id) ? M.far : M.near);
+  if (c.rapport >= 2) by(M.friend);
+  if (S.log.guarded.some(x => x.id === c.id)) by(M.guarded);
+  const m = S.mourning && S.mourning[c.id];
+  if (m && S.chars[m.victim] && C(m.victim).status === 'taken') by(M.grief);
+  if (S.nights.some(rec => rec && (rec.afraid || []).includes(c.id))) by(M.afraid);
+  if (S.nights.some(rec => rec && rec.target === c.id)) by(M.attacked); // (and missed: they are alive)
+  if (S.romance && S.romance.pairs.some(p => p.a === c.id || p.b === c.id)) by(M.pair);
+  if (nat === 'madness' && c.role === 'seer') w.taken *= D.madDreamer;
+}
+// one key of some weights, the share of [0, 1) that r falls in
+function byWeight(w, r) {
+  let x = r * Object.values(w).reduce((a, b) => a + b, 0);
+  for (const k in w) if (w[k] > 0 && (x -= w[k]) < 0) return k;
+  return Object.keys(w).find(k => w[k] > 0);
+}
+// What a doom did to each of the seven (RULES.fates.doom): one way each, by where the end found them and what they were
+// and did, the weightier likelier; fixed by the season, without the dice. No two are told in the same words: a way whose
+// words are all told already is passed over. { id: { kind, at | cult | cell, line } }; nobody it passed by (their
+// ordinary fate is told), but one of the cult, whose passing-by has words of its own.
+function doomFates() {
+  if (S.ended !== 'doom') return {};
+  const D = RULES.fates.doom,
+    nat = S.aspectOf[S.patron],
+    used = new Set(),
+    left = (d, k) => doomLines(d, k).filter((l, i) => !used.has(`${doomPool(d, k)}:${i}`)).length,
+    out = {};
+  S.order.map(C).forEach(c => {
+    let d;
+    if (c.status === 'taken') {
+      // (one of the night's dead, not yet buried; never the one you killed, whom the inquest in Baghdad has)
+      if (c.takenBy === 'you' || fateRoll(c.id, 'doomDead') >= D.unburied[nat]) return;
+      d = { kind: 'unburied', at: 'dead' };
+      if (!left(d, 'unburied')) return; // (its words all told already: buried, as anyone)
+    } else {
+      d = c.role === 'cult' ? (c.status === 'exposed' ? { cell: true } : { cult: true }) : { at: doomAt(c) };
+      const w = { ...(d.cell ? D.cell : d.cult ? D.cult : D.at[d.at]) };
+      if (d.at) doomMul(c, w, D, nat);
+      const total = Object.values(w).reduce((a, b) => a + b, 0);
+      Object.keys(w).forEach(k => {
+        if (w[k] > 0) w[k] = Math.max(w[k], RULES.scale.rarest * total);
+        // (a way with no words left is passed over; helping has two: lived, or died at it)
+        const words = k === 'helped' ? left(d, 'helped') + left(d, 'helpedDied') : k === 'none' && !d.cult ? 1 : left(d, k);
+        if (!words) w[k] = 0;
+      });
+      d.kind = byWeight(w, fateRoll(c.id, 'doom'));
+      if (d.kind === 'helped' && (!left(d, 'helped') || (fateRoll(c.id, 'doomHelp') < D.helpedDies[nat] && left(d, 'helpedDied'))))
+        d.kind = 'helpedDied';
+      if (d.kind === 'none' && !d.cult) return;
+    }
+    const L = doomLines(d, d.kind),
+      key = i => `${doomPool(d, d.kind)}:${i}`;
+    let i = Math.floor(fateRoll(c.id, 'doomLine') * L.length);
+    for (let n = 0; n < L.length && used.has(key(i)); n++) i = (i + 1) % L.length;
+    used.add(key(i));
+    out[c.id] = { ...d, line: i };
+  });
+  return out;
+}
+// the words for what a doom did to someone (doomFates)
+const doomSaid = (c, d) => bi(...doomLines(d, d.kind)[d.line](c));
+// A cultist still at large at the end: shot, lost in the fire, gone into the desert, or waiting (after a doom, its own
+// way: doomFates).
+function endFateCult(c, { id, won, shot }) {
   const n = c.name,
     N = capS(ru.cf(c)),
     he = c.p,
@@ -264,16 +368,6 @@ function endFateCult(c, { id, won, shot, doom }) {
       `${n} is found below at dawn among the cold braziers, speaking a language dead for three thousand years. ${He} never speaks another.`,
       `На рассвете ${ru.cf(c, 'a')} находят внизу, среди остывших жаровен: ${on} говорит на языке, мёртвом уже три тысячи лет. Ни на каком другом ${on} больше не заговорит.`
     );
-  if (doom)
-    return second
-      ? bi(
-          `${n} kneels at the top of the stair to wait for it, and is not there in the morning.`,
-          `${N} опускается на колени у верхней ступени и ждёт — а к утру ${ru.gs(c, 'его', 'её')} там уже нет.`
-        )
-      : bi(
-          `${n} walks into the dark behind what rose, and is not seen again.`,
-          `${N} уходит во тьму вслед за тем, что поднялось, и больше ${ru.gs(c, 'его', 'её')} никто не видит.`
-        );
   // (sent away in disgrace, you are there to read it yourself)
   if (second)
     return S.ended === 'expelled'

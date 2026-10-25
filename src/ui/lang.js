@@ -52,13 +52,17 @@ function paintChrome() {
 function setLang(l) {
   if ((l !== 'en' && l !== 'ru') || l === LANG) return;
   const inp = document.getElementById('pname'),
-    typed = inp ? inp.value : null;
+    typed = inp ? inp.value : null,
+    sd = document.getElementById('pseed'),
+    code = sd ? sd.value : null;
   LANG = l;
   document.documentElement.setAttribute('lang', l);
   paintChrome();
   if (S_ui.scene) paintScene(S_ui.scene);
   const ni = document.getElementById('pname');
   if (ni && typed != null) ni.value = typed === 'Marlowe' || typed === 'Марлоу' ? (l === 'ru' ? 'Марлоу' : 'Marlowe') : typed;
+  const si = document.getElementById('pseed');
+  if (si && code != null) si.value = code;
   const svg = document.getElementById('map');
   if (svg) svg.removeAttribute('data-ready');
   renderAll();

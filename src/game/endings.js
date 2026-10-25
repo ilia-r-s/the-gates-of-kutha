@@ -474,7 +474,8 @@ function ending(kind, how) {
       (seen
         ? `<p class="dim">${bi(`Endings reached so far: ${seen} of ${END_IDS.length}.`, `Открыто финалов: ${seen} из ${END_IDS.length}.`)}</p>`
         : '') +
-      `<h3>${bi('What was true', 'Как всё было на самом деле')}</h3>${endTruth()}</div>`
+      `<h3>${bi('What was true', 'Как всё было на самом деле')}</h3>${endTruth()}` +
+      `<p class="dim">${bi(`Season ${seedCode(S.seed)}: the same code deals it again.`, `Сезон ${seedCode(S.seed)}: тот же код сдаст его заново.`)}</p></div>`
   );
   const n = END_IDS.indexOf(id) + 1,
     inBed = id === 'fallen-night' && NIGHT_IN_BED.includes(nightDeath()),
@@ -493,7 +494,16 @@ function ending(kind, how) {
       {
         label: bi('Begin a new expedition', 'Начать новую экспедицию'),
         sub: bi('New roles, new traits, perhaps another god', 'Новые роли, новые привычки — быть может, и другой бог'),
-        fn: introScene
+        fn: () => introScene(null)
+      },
+      {
+        label: bi('Play this season again', 'Сыграть этот сезон заново'),
+        sub: bi(
+          `Season ${seedCode(S.seed)} · the same people, parts and power below`,
+          `Сезон ${seedCode(S.seed)} · те же люди, роли и сила под холмом`
+        ),
+        cls: 'minor',
+        fn: replaySeason
       }
     ]
   });

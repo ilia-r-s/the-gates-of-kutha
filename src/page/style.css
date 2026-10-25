@@ -25,8 +25,22 @@ body { min-height: 100dvh; }
 /* each search, drawn on the site plan as a small test pit beside the place */
 #map .pit { fill: var(--line-hi); stroke: var(--clay); stroke-width: .7; }
 .namefield input { -webkit-appearance: none; appearance: none; }
+.namefield input.seed { font-family: var(--f-mono); letter-spacing: .08em; text-transform: uppercase; width: min(100%, 170px); }
+.namefield input.seed::placeholder { text-transform: none; letter-spacing: 0; }
+.seedcode { font-family: var(--f-mono); letter-spacing: .08em; color: var(--clay-hi); }
 .np { font-family: var(--f-mono); font-size: .74rem; color: var(--gold); align-self: center; white-space: nowrap; margin-left: 4px; }
 .np:empty { display: none; }
+/* the music waiting for the page to be touched: the now-playing line's own hand, breathing a little */
+.np-wake { font: inherit; letter-spacing: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; animation: npWake 2.6s ease-in-out infinite; }
+.np-wake .tw { text-decoration: underline dotted; text-underline-offset: 3px; }
+.np-wake:hover, .np-wake:focus-visible { color: var(--clay-hi); }
+@keyframes npWake { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+@media (prefers-reduced-motion: reduce) { .np-wake { animation: none; } }
+/* a browser with JavaScript turned off: the game cannot run, and says so (page/body.html) */
+.noscript { max-width: 36rem; margin: 14vh auto 0; padding: 1.6rem 1.9rem; border: 1px solid var(--line-hi); background: var(--panel); color: var(--clay-hi); line-height: 1.6; }
+.noscript h1 { font-family: var(--f-display); color: var(--gold); font-size: 1.6rem; margin: 0 0 .8rem; font-weight: normal; }
+.noscript p { margin: .7rem 0; }
+.noscript .ru { border-top: 1px solid var(--line); padding-top: .8rem; margin-top: 1.1rem; }
 .tr.hit .tv { color: var(--ember); }
 .tr.thiefhit .tv { color: var(--gold); }
 .rolebadge { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; padding: .05rem .35rem; border: 1px solid currentColor; border-radius: 2px; margin-left: .45rem; vertical-align: 2px; white-space: nowrap; }

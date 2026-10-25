@@ -180,7 +180,9 @@ run(async browser => {
     );
     if (r.id !== want) bad.push([want, 'reached ' + r.id]);
     if (!r.en.art || r.en.art < 2000) bad.push([want, 'no picture']);
-    const lat = (r.rus.kicker + r.rus.title + r.rus.sub + r.rus.text + r.rus.choices).match(/[A-Za-z][A-Za-z’'\-]+/g);
+    const lat = (r.rus.kicker + r.rus.title + r.rus.sub + r.rus.text + r.rus.choices)
+      .replace(/\b[0-9A-F]{4}-[0-9A-F]{4}\b/g, '') // (a season's code is the same in both languages)
+      .match(/[A-Za-z][A-Za-z’'\-]+/g);
     if (lat) bad.push([want, 'ru latin', [...new Set(lat)].slice(0, 12)]);
     const cyr = (r.en.kicker + r.en.title + r.en.sub + r.en.text + r.en.choices).match(/[А-Яа-яЁё]+/g);
     if (cyr) bad.push([want, 'en cyrillic', [...new Set(cyr)].slice(0, 12)]);

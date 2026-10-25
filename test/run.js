@@ -1,6 +1,7 @@
 // The test suite, in one command.
 //   node test/run.js          quick: build, lint, format, top panel, golden transcripts (en, ru), forced branches,
-//                             claims, social layer, puzzle soundness, every ending, the dice rules, a Russian bot
+//                             claims, social layer, puzzle soundness, every ending, after a doom, seeded seasons, the
+//                             dice rules, a Russian bot
 //                             (about a minute and a half on two cores)
 //   node test/run.js full     the same with more games, plus the random and cheating bots and the puzzle simulation
 //   JOBS=n node test/run.js   how many steps run at once (one for each processor core unless told otherwise)
@@ -34,6 +35,14 @@ const STEPS = [
   ['social layer', node('social.js', full ? '300' : '80'), out => /"nProblems": 0/.test(out), full ? 31 : 8],
   ['puzzle soundness', node('gods.js', full ? '400' : '150'), out => /"nProblems": 0/.test(out) && /"soloPins": 0/.test(out), full ? 6 : 3],
   ['every ending', node('endings.js'), out => /"problems": 0/.test(out), 12],
+  ['after a doom', node('dooms.js', full ? '300' : '80'), out => /"problems": 0/.test(out), full ? 25 : 8],
+  // (seasons from their seeds, each scene scanned: the same seeds every run, so a failure replays by its code)
+  [
+    'seeded seasons',
+    node('replay.js', `--fuzz=${full ? 240 : 60}`, '--from=C0DE-0001', '--pol=random'),
+    out => /"failing": 0/.test(out),
+    full ? 40 : 10
+  ],
   ['dice rules', node('dice.js', full ? '120' : '40'), out => /"problems": 0/.test(out), full ? 30 : 16],
   ['russian bot', node('rubot.js', full ? '30' : '8'), out => /"problems": 0/.test(out), full ? 40 : 11],
   ...(full

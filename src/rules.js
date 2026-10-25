@@ -37,14 +37,16 @@ const PUZ = { half: 0.5, rel: 0.6, title: 0.8, lines: 4, apart: 0.3, apartMax: 2
 // you:      confide                how readily they take your confidence
 //           warm / sour            start the season well or ill disposed toward you
 //           word                   how far they take your word at an inquiry, to begin with (the camp's verdict)
+//           prude                  how readily they think ill of a night someone spent in your tent, told as gossip, and
+//                                  of you for it (below 0: how readily they take it well) (people/camp.js, STIRS.scandal)
 const TEMPERS = {
-  honest:        { hideSeer: 0.2,  hideWarden: 0.3,  cover: 0.01,   liked: 0.01,    truth: 0.99,   frame: 0.01,   strategic: 0.05, lieSmall: 0.01,    mistake: 0.01,    confess: 0.45, tell: 0.6,  slip: 0.99,    fear: [0.6, 0.1],   gossip: 0.2,  gossipTrue: 0.95, decline: 0.45, blameAcc: 0.45, chat: 0.25, confide: 0,     warm: 0.01,   sour: 0.01, word: 0, counter: 0.01, retort: 0.8 },
-  conscientious: { hideSeer: 0.35, hideWarden: 0.45, cover: 0.3, liked: 0.2,  truth: 0.7, frame: 0.4, strategic: 0.25, lieSmall: 0.01,    mistake: 0.01,    confess: 0.3,  tell: 0.5,  slip: 0.85, fear: [0.55, 0.15], gossip: 0.25, gossipTrue: 0.9,  decline: 0.3,  blameAcc: 0.4,  chat: 0.35, confide: 0.05,  warm: 0.1, sour: 0.01, word: 0.2, counter: 0.3, retort: 0.8 },
-  liar:          { hideSeer: 0.5,  hideWarden: 0.55, cover: 0.8, liked: 0.65, truth: 0.01,   frame: 0.9, strategic: 0.1,  lieSmall: 0.35, mistake: 0.01,    confess: 0.03, tell: 0.12, slip: 0.55, fear: [0.35, 0.12], gossip: 0.4,  gossipTrue: 0.35, decline: 0.01,    blameAcc: 0.25, chat: 0.3,  confide: 0,     warm: 0.2, sour: 0.1, word: 0, counter: 1.3, retort: 1.1 },
-  calculating:   { hideSeer: 0.5,  hideWarden: 0.55, cover: 0.7, liked: 0.45, truth: 0.6, frame: 0.9, strategic: 0.35, lieSmall: 0.12, mistake: 0.01,    confess: 0.05, tell: 0.08, slip: 0.35, fear: [0.25, 0.1],  gossip: 0.4,  gossipTrue: 0.55, decline: 0.1,  blameAcc: 0.3,  chat: 0.2,  confide: 0.1,   warm: 0.4, sour: 0.01, word: -0.2, counter: 0.2, retort: 0.5 },
-  detached:      { hideSeer: 0.5,  hideWarden: 0.7,  cover: 0.4, liked: 0.1,  truth: 0.4, frame: 0.3, strategic: 0.1,  lieSmall: 0.01,    mistake: 0.05, confess: 0.12, tell: 0.25, slip: 0.75, fear: [0.3, 0.05],  gossip: 0.05, gossipTrue: 0.9,  decline: 0.6,  blameAcc: 0.3,  chat: 0.1,  confide: -0.15, warm: 0.01,   sour: 0.2, word: -0.3, counter: 0.3, retort: 0.4 },
-  lightheaded:   { hideSeer: 0.3,  hideWarden: 0.4,  cover: 0.5, liked: 0.75, truth: 0.4, frame: 0.6, strategic: 0.1,  lieSmall: 0.05, mistake: 0.2,  confess: 0.25, tell: 0.45, slip: 0.95, fear: [0.5, 0.15],  gossip: 0.6,  gossipTrue: 0.65, decline: 0.01,    blameAcc: 0.3,  chat: 0.45, confide: 0.1,   warm: 0.3, sour: 0.01, word: 0.4, counter: 1.4, retort: 1.3 },
-  suspicious:    { hideSeer: 0.7,  hideWarden: 0.75, cover: 0.4, liked: 0.3,  truth: 0.3, frame: 0.8, strategic: 0.1,  lieSmall: 0.01,    mistake: 0.01,    confess: 0.08, tell: 0.3,  slip: 0.7,  fear: [0.45, 0.25], gossip: 0.5,  gossipTrue: 0.6,  decline: 0.01,    blameAcc: 0.2,  chat: 0.15, confide: -0.25, warm: 0.01,   sour: 0.5, word: -0.5, counter: 0.99, retort: 1.6 }
+  honest:        { hideSeer: 0.2,  hideWarden: 0.3,  cover: 0.01,   liked: 0.01,    truth: 0.99,   frame: 0.01,   strategic: 0.05, lieSmall: 0.01,    mistake: 0.01,    confess: 0.45, tell: 0.6,  slip: 0.99,    fear: [0.6, 0.1],   gossip: 0.2,  gossipTrue: 0.95, decline: 0.45, blameAcc: 0.45, chat: 0.25, confide: 0,     warm: 0.01,   sour: 0.01, word: 0, counter: 0.01, retort: 0.8, prude: 0.05 },
+  conscientious: { hideSeer: 0.35, hideWarden: 0.45, cover: 0.3, liked: 0.2,  truth: 0.7, frame: 0.4, strategic: 0.25, lieSmall: 0.01,    mistake: 0.01,    confess: 0.3,  tell: 0.5,  slip: 0.85, fear: [0.55, 0.15], gossip: 0.25, gossipTrue: 0.9,  decline: 0.3,  blameAcc: 0.4,  chat: 0.35, confide: 0.05,  warm: 0.1, sour: 0.01, word: 0.2, counter: 0.3, retort: 0.8, prude: 0.2 },
+  liar:          { hideSeer: 0.5,  hideWarden: 0.55, cover: 0.8, liked: 0.65, truth: 0.01,   frame: 0.9, strategic: 0.1,  lieSmall: 0.35, mistake: 0.01,    confess: 0.03, tell: 0.12, slip: 0.55, fear: [0.35, 0.12], gossip: 0.4,  gossipTrue: 0.35, decline: 0.01,    blameAcc: 0.25, chat: 0.3,  confide: 0,     warm: 0.2, sour: 0.1, word: 0, counter: 1.3, retort: 1.1, prude: 0 },
+  calculating:   { hideSeer: 0.5,  hideWarden: 0.55, cover: 0.7, liked: 0.45, truth: 0.6, frame: 0.9, strategic: 0.35, lieSmall: 0.12, mistake: 0.01,    confess: 0.05, tell: 0.08, slip: 0.35, fear: [0.25, 0.1],  gossip: 0.4,  gossipTrue: 0.55, decline: 0.1,  blameAcc: 0.3,  chat: 0.2,  confide: 0.1,   warm: 0.4, sour: 0.01, word: -0.2, counter: 0.2, retort: 0.5, prude: 0 },
+  detached:      { hideSeer: 0.5,  hideWarden: 0.7,  cover: 0.4, liked: 0.1,  truth: 0.4, frame: 0.3, strategic: 0.1,  lieSmall: 0.01,    mistake: 0.05, confess: 0.12, tell: 0.25, slip: 0.75, fear: [0.3, 0.05],  gossip: 0.05, gossipTrue: 0.9,  decline: 0.6,  blameAcc: 0.3,  chat: 0.1,  confide: -0.15, warm: 0.01,   sour: 0.2, word: -0.3, counter: 0.3, retort: 0.4, prude: -0.05 },
+  lightheaded:   { hideSeer: 0.3,  hideWarden: 0.4,  cover: 0.5, liked: 0.75, truth: 0.4, frame: 0.6, strategic: 0.1,  lieSmall: 0.05, mistake: 0.2,  confess: 0.25, tell: 0.45, slip: 0.95, fear: [0.5, 0.15],  gossip: 0.6,  gossipTrue: 0.65, decline: 0.01,    blameAcc: 0.3,  chat: 0.45, confide: 0.1,   warm: 0.3, sour: 0.01, word: 0.4, counter: 1.4, retort: 1.3, prude: -0.15 },
+  suspicious:    { hideSeer: 0.7,  hideWarden: 0.75, cover: 0.4, liked: 0.3,  truth: 0.3, frame: 0.8, strategic: 0.1,  lieSmall: 0.01,    mistake: 0.01,    confess: 0.08, tell: 0.3,  slip: 0.7,  fear: [0.45, 0.25], gossip: 0.5,  gossipTrue: 0.6,  decline: 0.01,    blameAcc: 0.2,  chat: 0.15, confide: -0.25, warm: 0.01,   sour: 0.5, word: -0.5, counter: 0.99, retort: 1.6, prude: 0.15 }
 };
 const TEMPER_IDS = Object.keys(TEMPERS);
 
@@ -63,21 +65,34 @@ const MANNER = {
   suspicious:    { shows: 1,    mask: 0.15 }
 };
 // the faces a feeling wears, by weight (or, for faces chosen without the dice, as a list to draw from):
-// flirt        flirting (the light-headed wink more: wink becomes winkLight)
+// flirt        flirting (the light-headed give the sly look more: sly becomes slyLight)
 // joke         a joke about love and marriage (a priest's: jokeVows)
+// sly          the sly look of a joke or a flirtation, by whose it is (by id, else by sex): one of these, fixed for the
+//              slot without the dice (people/manner.js, slyFace)
+// visit        the face of the woman at your tent pole late in the evening (people/visit.js): neither flirting nor
+//              telling anything of what she is; let her stay, visitYes; sent back, one of visitNo by weight (angry × visitHurt
+//              if it cost her trust in you), fixed for the slot
 // warm, cold   a warm greeting, or a cold one (from someone hostile, angry at angry, else cold)
 // mask         a pleasant face put on (MANNER.mask)
 // goodDay      a good day (at goodDay of the whims: the good faces), or else a bad one (the bad faces)
 // castFlirt    faces drawn about the dig: someone sweet on you (at castFlirt × flirt × shows); castWhim: a whim
 // suspected    someone the camp suspects, drawn about the dig (at suspected × shows): sad at sad, else afraid
+// shamed       the day the camp heard her night in your tent told badly before her, she is sad (at shamed: the picture
+//              of the place and the face she greets you with)
 // inquiry      faces at an inquiry: your friends, everyone else (shares, in order)
 const FACES = {
-  flirt: { coy: 4, smirk: 2, smile: 2, warm: 1, wink: 1 }, winkLight: 2,
-  joke: { smirk: 3, smile: 2, coy: 1, wink: 1 }, jokeVows: { smirk: 2, smile: 2 },
+  flirt: { coy: 4, smirk: 2, smile: 2, warm: 1, sly: 1 }, slyLight: 2,
+  joke: { smirk: 3, smile: 2, coy: 1, sly: 1 }, jokeVows: { smirk: 2, smile: 2 },
+  sly: {
+    joke:  { constance: ['wink', 'arch'], ilse: ['glance', 'arch'], he: ['wink', 'glance', 'arch'], she: ['glance', 'arch'] },
+    flirt: { constance: ['glance', 'arch', 'sultry'], ilse: ['glance', 'arch', 'demure', 'sultry'], he: ['wink', 'glance', 'arch'], she: ['glance', 'arch'] }
+  },
+  visit: 'sad', visitYes: 'sultry', visitNo: { sad: 3, surprised: 2, angry: 1.5 }, visitHurt: 2,
   warm: { warm: 2, smile: 1 }, angry: 0.5, mask: { warm: 1, smile: 1 },
   goodDay: 0.6, good: { smile: 1, warm: 1 }, bad: { cold: 1, thoughtful: 1, sad: 1 },
-  castFlirt: 0.6, castFlirtFaces: ['coy', 'coy', 'smile', 'smirk', 'wink'], castWhim: ['smile', 'thoughtful', 'sad', 'cold'],
+  castFlirt: 0.6, castFlirtFaces: ['coy', 'coy', 'smile', 'smirk', 'sly'], castWhim: ['smile', 'thoughtful', 'sad', 'cold'],
   suspected: 0.6, sad: 0.5,
+  shamed: 0.7,
   inquiry: {
     friend:    [['sad', 0.65], ['thoughtful', 0.35]],
     other:     [['angry', 0.5], ['cold', 0.3], ['neutral', 0.2]]
@@ -500,7 +515,16 @@ const RULES = {
   // of the cult (per step of suspicion), less likely someone the camp already suspects (per suspecter: a useful scapegoat)
   victims: { yourFriend: 0.25, cultLike: 0.35, floor: 0.1, suspects: 0.25, scapegoat: 0.12 },
   confide: { odds: 0.7, trust: 0.1, min: 0.15, max: 0.95, again: 0.15, alerts: 0.9 }, // again: less welcome for each confidence they already took; alerts: a cultist confided in tells the cult
-  gossip: { temper: 0.65, likeBias: 0.08, inventBond: 0.3, flipBond: 0.5 },
+  // gossip (people/social.js): about a temperament (temper; else a friendship or a feud), the less true of someone the
+  // speaker feels strongly about (likeBias, a step), a bond made up where there is none (inventBond) or told backwards
+  // (flipBond); what someone else thinks of you (you, of the times it could be told, at the same odds as a bond); and the
+  // night someone spent in your tent (visit: at odds from the morning the camp knows, × fade a day after; told badly at
+  // bad + spite a step the speaker dislikes her + jealous, sweet on her or on you + foe a step against you + their
+  // temperament's prude + vows for a priest − friend a step they like her − ally a step past fond of you; else kindly)
+  gossip: {
+    temper: 0.65, likeBias: 0.08, inventBond: 0.3, flipBond: 0.5, you: 0.3,
+    visit: { odds: 0.45, fade: 0.55, bad: 0.55, spite: 0.15, jealous: 0.25, foe: 0.08, vows: 0.25, friend: 0.25, ally: 0.15 }
+  },
   rumours: {
     pressFriend: 0.3, pressFoe: 0.15, confideFriend: 0.2,                       // × how much they like the one you pressed or confided in
     slyBad: 0.6, slyWarm: 0.3, listenBad: 0.4, listenGood: 0.35,              // the sly cultist's talk is bad (slyWarm: with a warm face on); friends listen
@@ -529,7 +553,24 @@ const RULES = {
     disproven:   { p: 0.15, friend: 0.3 },
     planted:     { p: 0.3, dislike: 0.15, suspicious: 0.1 },
     onto:        { odds: 0.45, p: 0.2, dislike: 0.15, suspicious: 0.1, back: 0.2 },
-    kept:        { p: 0.3 }
+    kept:        { p: 0.3 },
+    // the night in your tent, told as gossip (people/social.js, visitGossip): each who hears it, once. Of her: the less
+    // (cool told badly, coolKind told kindly; + their temperament's prude, + vows for a priest; + dislike a step they
+    // dislike her, − friend a step they like her; + quarrel for each quarrel between them, + suspect a step they suspect
+    // her, + named if either named the other guilty before everyone, − feast for each feast sat through together; told
+    // badly, + believe a step they like the speaker, + credit for the speaker's proven word) or the better (told badly:
+    // rally a step they like her, spurn a step they dislike the speaker; told kindly: warm, + friend a step they like her,
+    // + believe, + credit; and easy × how little prudish they are). Of you: the less (youCool told badly + believe, + credit,
+    // youCoolKind told kindly; + prude, + vows, + jealous if they are sweet on her or on you, − loyal a step past warm) or
+    // the better (youWarm, + easy × how little prudish; told badly, spurn a step they dislike the speaker; told kindly,
+    // glad a step they like her). Each reaction one way or the other, as those weigh against each other. Told before her,
+    // she holds it against one who told it badly (hurt), or warms to one who told it kindly (thanks).
+    scandal: {
+      cool: 0.2, coolKind: 0.04, dislike: 0.1, friend: 0.1, quarrel: 0.1, suspect: 0.05, named: 0.15, feast: 0.1,
+      rally: 0.12, spurn: 0.08, warm: 0.06, easy: 0.4, believe: 0.08, credit: 0.05, vows: 0.25,
+      youCool: 0.12, youCoolKind: 0.03, jealous: 0.3, loyal: 0.08, youWarm: 0.03, glad: 0.08,
+      hurt: 0.8, thanks: 0.5
+    }
   },
   // flirtation (people/flirt.js): dealt at the start (a woman toward you; anyone toward a person of the other sex); shows
   // while her trust in you or their liking holds; then only now and then, in these places (face: an answer given with a
@@ -699,6 +740,45 @@ const RULES = {
       base: 0.045, gone: 1.3, sent: 3, dreamer: 2, grief: 1.6, below: 1.6, jailed: 2.5, thief: 1.5, max: 0.3, most: 2,
       why: { plain: 1, cult: 3, wronged: 3, dreams: 2, grief: 2, below: 2, thief: 2 },
       chosen: { plain: 0.45, cult: 0.5, wronged: 0.7, dreams: 0.4, grief: 0.7, below: 0, thief: 0 }
+    },
+    // doom: after a season the gate opened, what it did to each of the camp (doomFates), fixed by the season without the
+    // dice. Each draws one way by weight: by where the end found them (at: heart, in the circle with you; stair, left on
+    // the stair or holding the seventh gate; camp, at the dig; away, sent away), × what they were and did (mul: by
+    // temperament; by part; vows, a priest's; far or near, a home beyond the two rivers or between them; friend, one fond
+    // of you; guarded, kept watch over your tent; grief, mourning one the night took; afraid, owned a night's fear;
+    // attacked, the night came for them and missed; pair, left Kutha with someone), × madDreamer for the true Dreamer
+    // taken when what rose was madness; no way rarer than scale.rarest of the whole. Ways: taken (it killed them), marked (they lived, and carry its mark), fled (they got clear of the two
+    // rivers in time), helped (they stayed to help others; and died at it at helpedDies, by nature), none (it passed
+    // them by: an ordinary ending). The cult at large, at the rite (cult): joined (went with what rose), taken, waits,
+    // fled, marked, none; one of the cult in a cell at Hillah (cell): freed (the doom opened the cell, and it went to
+    // join what rose), taken, none. One of the night's dead not yet buried, never is, at unburied (by nature; never one
+    // you killed). No two of an ending are told in the same words: a way with no words left is passed over (and one of the
+    // dead, once the words for the unburied are all told, is buried as anyone).
+    doom: {
+      at: {
+        heart: { taken: 5,   marked: 2.5, fled: 0.4, helped: 0.3, none: 0.8 },
+        stair: { taken: 3.5, marked: 3,   fled: 0.6, helped: 0.4, none: 1.2 },
+        camp:  { taken: 2,   marked: 2.5, fled: 2,   helped: 1.5, none: 3 },
+        away:  { taken: 0.6, marked: 1.2, fled: 2,   helped: 0.8, none: 6 }
+      },
+      cult: { joined: 3, taken: 2, waits: 1.5, fled: 1, marked: 1, none: 0.6 },
+      cell: { freed: 2, taken: 2, none: 4 },
+      mul: {
+        honest:        { helped: 2,   fled: 0.7 },
+        conscientious: { helped: 1.8, fled: 0.8 },
+        liar:          { fled: 1.5,   helped: 0.5 },
+        calculating:   { fled: 1.6,   helped: 0.6, taken: 0.85 },
+        detached:      { fled: 1.3,   marked: 0.8 },
+        lightheaded:   { taken: 1.3,  marked: 1.2, fled: 0.8 },
+        suspicious:    { fled: 1.6,   taken: 0.85 },
+        seer: { taken: 1.3, marked: 1.3 }, warden: { helped: 1.8, fled: 0.7 }, smuggler: { fled: 2, helped: 0.4, taken: 1.2 },
+        vows: { helped: 3, fled: 0.4 }, far: { fled: 1.5 }, near: { fled: 0.6, helped: 1.3 },
+        friend: { helped: 1.3 }, guarded: { helped: 1.3 }, grief: { taken: 1.3 }, afraid: { fled: 1.4 },
+        attacked: { taken: 1.5, marked: 1.3 }, pair: { fled: 2 }
+      },
+      far: ['anselm', 'constance', 'ashby', 'ilse'], madDreamer: 1.5,
+      helpedDies: { fire: 0.4, dust: 0.35, sea: 0.35, teeth: 0.3, plague: 0.5, madness: 0.3 },
+      unburied: { fire: 0.45, dust: 0.5, sea: 0.4, teeth: 0.35, plague: 0.4, madness: 0.25 }
     }
   },
   // the reckoning: how cleanly a season was won or lost (the conduct score), and the tiers it falls into. Your body and

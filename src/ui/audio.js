@@ -55,6 +55,7 @@ function auInit() {
     return false;
   }
   const c = AU.ctx;
+  c.addEventListener('statechange', npUpdate); // (the word that the music waits for a click goes once it plays)
   AU.master = c.createGain();
   AU.master.gain.value = 0.9;
   AU.master.connect(c.destination);
@@ -534,9 +535,21 @@ const TRACK_NAMES = {
   dust: 'Dust and Clay',
   deep: 'Below Kutha'
 };
+// What is playing, where the music buttons are; or, with the music on and the browser still holding the sound back until
+// the page is first touched (browsers will not play sound before that), a word to say so, in the same place and the same
+// hand: any click, tap or key starts it (auGesture), the word itself among them.
 function npUpdate() {
   const el = document.getElementById('nowPlaying');
   if (!el) return;
+  const asleep = AU.on.music && !!(window.AudioContext || window.webkitAudioContext) && (!AU.ctx || AU.ctx.state !== 'running');
+  if (asleep) {
+    const touch = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    el.innerHTML = `<button type="button" class="np-wake">\u266A ${twin(
+      touch ? 'The music starts with your first tap' : 'The music starts with your first click',
+      'Музыка начнётся с первого нажатия'
+    )}</button>`;
+    return;
+  }
   const n = AU.cur && AU.on.music ? TRACK_NAMES[AU.cur.id] : '';
   el.innerHTML = n ? '\u266A ' + twin(n, R(n)) : '';
 }

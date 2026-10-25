@@ -6,7 +6,9 @@
 // the night goes as any night, by its own dice: the cult coming for her finds her tent empty; coming for you, past the
 // Watcher, the bowl, the revolver and luck, it finds two of you (RULES.visit.through: her dead, you, both, or only the
 // usual harm). The morning after, if you both live, your nerve may mend and her trust may grow. The camp talks of it
-// either way, and a flirtation that came to this may come to more (game/fates.js). An occultist may feel the cult's
+// either way, and from then on someone may tell it as gossip, badly or kindly, and whoever hears it may think the less
+// or the better of her, and of you (people/social.js, visitGossip; people/camp.js, STIRS.scandal); and a flirtation that
+// came to this may come to more (game/fates.js). An occultist may feel the cult's
 // cold as she comes in, or a cold that is only the night (as in any conversation). Nothing of it is ever explained: the
 // ending tells what she was, and what the night held (game/debrief.js).
 
@@ -19,7 +21,7 @@ function visitTonight() {
   if (!may.length || !chance(Math.min(VR.max, VR.odds + VR.perDead * S.stats.taken))) return null;
   return C(wpick(Object.fromEntries(may.map(c => [c.id, c.rapport]))));
 }
-// the knock at the tent pole, and your answer (the night follows it: game/night.js, nightComes)
+// the knock at the tent pole, and your answer; her face as she hears it (the night follows: game/night.js, nightComes)
 function visitScene(h) {
   S.phase = 'visit';
   emit('visit');
@@ -28,6 +30,8 @@ function visitScene(h) {
   show({
     kicker: bi(`Day ${S.day} of ${RULES.start.days} · Late evening`, `День ${S.day} из ${RULES.start.days} · Поздний вечер`),
     title: bi('A knock at the tent pole', 'Стук по шесту палатки'),
+    // (her face at your tent in the dark: not flirting, and the same whatever she is, FACES.visit)
+    art: { bg: 'camp', time: 'night', talk: h.id, mood: FACES.visit },
     body: [
       bi(
         `<p>Late, when the camp has gone quiet, someone taps at your tent pole. It is ${h.short}, a shawl round her shoulders and no lamp. “Forgive me, Doctor. I could not sleep.” She looks past you, into the dark between the tents. “I am afraid we may not see the light of day. I would rather not spend this night alone.”</p>`,
@@ -47,7 +51,7 @@ function visitScene(h) {
 // heard of it by morning (people/social.js, ripple).
 function visitAnswer(h, yes, chill) {
   const VR = RULES.visit;
-  S.log.visit = { id: h.id, day: S.day, agreed: yes, chill, hurt: 0 };
+  S.log.visit = { id: h.id, day: S.day, agreed: yes, chill, hurt: 0, heard: [] }; // (heard: who has made up their mind about it, told as gossip: people/camp.js, STIRS.scandal)
   if (!yes) {
     if (chance(VR.hurt)) {
       trustDown(h);
@@ -70,7 +74,23 @@ function visitAnswer(h, yes, chill) {
           `Под конец вечера к вам в палатку ${ru.gs(h, 'пришёл', 'пришла')} ${ru.cf(h)}, и вы отправили её обратно.`
         )
   );
-  nightComes();
+  visitReply(h);
+}
+// Her face as she hears your answer, fixed by the season (no dice): let her stay, and her look turns to heavy lids,
+// whatever she is (FACES.visitYes); sent back, she stays as sad as she came, or stares as if she had not heard you right,
+// or her face closes against you, the more readily the more it cost her (FACES.visitNo; × visitHurt for angry when she
+// trusts you less for it). Then the night (game/night.js, nightComes).
+function visitReply(h) {
+  const v = S.log.visit,
+    no = { ...FACES.visitNo, angry: (FACES.visitNo.angry || 0) * (v.hurt ? FACES.visitHurt : 1) },
+    face = v.agreed ? FACES.visitYes : slotPick(h, 'visitNo', no);
+  show({
+    kicker: bi(`Day ${S.day} of ${RULES.start.days} · Late evening`, `День ${S.day} из ${RULES.start.days} · Поздний вечер`),
+    title: bi('A knock at the tent pole', 'Стук по шесту палатки'),
+    art: { bg: 'camp', time: 'night', talk: h.id, mood: face },
+    body: [visitSaid(h, v, face)],
+    choices: [{ label: v.agreed ? bi('Put out the lamp', 'Погасить лампу') : bi('Try to sleep', 'Попытаться уснуть'), fn: nightComes }]
+  });
 }
 // the one who stays in your tent tonight, if she is still free to; on night n, her id (people/alibis.js)
 const guestOn = n => {
@@ -82,16 +102,27 @@ const visitGuest = () => (guestOn(S.day) ? C(guestOn(S.day)) : null);
 // robbing the dig, not by your tent pole, not the first to come on a body at dawn (game/night.js, people/thief.js,
 // world/deaths.js)
 const inYourTent = (id, n = S.day) => !!id && guestOn(n) === id;
-// how the evening ended, told first in the night
-function visitEvening() {
-  const v = S.log.visit;
-  if (!v || v.day !== S.day) return '';
-  const h = C(v.id);
+// how the evening ended, as her face has it (visitReply)
+const VISIT_NO = {
+  sad: ['She nods, as if she had known you would, and goes without a word.', 'Она кивает, будто знала, что так и будет, и уходит молча.'],
+  surprised: [
+    'She stares at you as if she had not heard you right; then she pulls the shawl tight and goes, and does not look back.',
+    'Она смотрит на вас так, будто ослышалась; потом плотнее запахивает шаль и уходит, не оборачиваясь.'
+  ],
+  angry: [
+    'Her face shuts like a door. She goes without a word, and does not look back.',
+    'Её лицо захлопывается, как дверь. Она уходит молча и не оборачивается.'
+  ]
+};
+function visitSaid(h, v, face) {
   return v.agreed
-    ? bi(`<p>${h.short} stays. Some time later the lamp goes out.</p>`, `<p>${ru.c(h)} остаётся. Чуть позже лампа гаснет.</p>`)
+    ? bi(
+        `<p>${h.short} stays. She lets the shawl slip from her shoulders, and some time later the lamp goes out.</p>`,
+        `<p>${ru.c(h)} остаётся. Шаль соскальзывает с её плеч, и чуть позже лампа гаснет.</p>`
+      )
     : bi(
-        `<p>You send ${h.short} back to her tent as gently as you can. She goes without a word, and does not look back.</p>`,
-        `<p>Вы отправляете ${ru.c(h, 'a')} обратно так мягко, как только можете. Она уходит молча и не оборачивается.</p>`
+        `<p>You send ${h.short} back to her tent as gently as you can. ${VISIT_NO[face][0]}</p>`,
+        `<p>Вы отправляете ${ru.c(h, 'a')} обратно так мягко, как только можете. ${VISIT_NO[face][1]}</p>`
       ) + (v.hurt ? trustNote([], [h.id]) : '');
 }
 // One of the cult in your tent may do the cult's work herself (strike), and mostly she does it (kills: the season ends);

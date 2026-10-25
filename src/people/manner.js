@@ -43,12 +43,26 @@ function masked(c, roll) {
   return roll('mask') < m || (c.role === 'cult' && roll('court') < m);
 }
 const masks = c => masked(c, () => rand());
-// the faces of flirting: coy mostly, but now and then another (a smile, a sly look, a wink); and of a joke about love and
-// marriage: sly mostly. A priest's vows keep the flirtation out of it.
-const flirtFaces = c => (temperOf(c) === 'lightheaded' ? { ...FACES.flirt, wink: FACES.winkLight } : FACES.flirt),
+// the faces of flirting: coy mostly, but now and then another (a smile, a smirk, a sly look); and of a joke about love
+// and marriage: a smirk mostly. A priest's vows keep the flirtation out of it.
+const flirtFaces = c => (temperOf(c) === 'lightheaded' ? { ...FACES.flirt, sly: FACES.slyLight } : FACES.flirt),
   jokeFaces = c => (VOWS.includes(c.id) ? FACES.jokeVows : FACES.joke);
-const flirtFace = c => wpick(flirtFaces(c));
-const jokeFace = c => wpick(jokeFaces(c));
+// The sly look, in a joke (ctx 'joke') or a flirtation ('flirt'): which looks it may be is whose it is (FACES.sly: in a
+// joke, a man's a wink, a sidelong glance or an arched brow, Constance's a wink or an arched brow, Ilse's a sidelong
+// glance or an arched brow; flirting, Constance's a sidelong glance, an arched brow or heavy lids, Ilse's those or a look
+// from under the lashes), and which of them, fixed for the slot without the dice, as a greeting is.
+function slyFace(c, ctx) {
+  const by = FACES.sly[ctx],
+    looks = by[c.id] || by[c.p === 'she' ? 'she' : 'he'];
+  return hashPick(looks, S.salt, c.id, S.day, S.slot, 'sly-' + ctx);
+}
+const slyOr = (c, ctx, f) => (f === 'sly' ? slyFace(c, ctx) : f);
+// the day the camp heard the night she spent in your tent told badly before her (people/camp.js, STIRS.scandal), it
+// shows in her face, mostly (FACES.shamed): in the picture of the place and as she greets you, fixed for the slot
+const shamed = c =>
+  !!S.log && !!S.log.visit && S.log.visit.shamed === S.day && S.log.visit.id === c.id && slotChance(c, 'shamed', FACES.shamed);
+const flirtFace = c => slyOr(c, 'flirt', wpick(flirtFaces(c)));
+const jokeFace = c => slyOr(c, 'joke', wpick(jokeFaces(c)));
 
 // ---------- greetings, answers and partings ----------
 // How they greet you, and the face they greet you with. A flirtatious word now and then, from a woman with a soft spot
@@ -63,8 +77,12 @@ function greeting(c) {
 }
 function greetNow(c) {
   const M = RULES.manner;
+  if (shamed(c)) {
+    const line = tellOne('greet-' + c.id, GREET[c.id]);
+    return { text: bi(line), face: 'sad', cool: HURRIED.has(line) };
+  }
   if (flirtsWithYou(c) && slotChance(c, 'flirt', RULES.flirt.greet * showMul(c) * talkSoft()))
-    return { text: flirtGreet(c), face: slotPick(c, 'face', flirtFaces(c)) };
+    return { text: flirtGreet(c), face: slyOr(c, 'flirt', slotPick(c, 'face', flirtFaces(c))) };
   // (each person's greetings of each kind gone through in turn, none twice running: core/text.js, tellOne)
   const warm = () => bi(tellOne('greetWarm-' + c.id, GREET_WARM[c.id])),
     cold = () => bi(tellOne('greetCold-' + c.id, GREET_COLD[c.id]));
@@ -82,7 +100,7 @@ function greetNow(c) {
 }
 function plainFace(c, line) {
   const M = RULES.manner;
-  if (JOKES.has(line) && slotChance(c, 'joke', M.joke)) return slotPick(c, 'face', jokeFaces(c));
+  if (JOKES.has(line) && slotChance(c, 'joke', M.joke)) return slyOr(c, 'joke', slotPick(c, 'face', jokeFaces(c)));
   if (c.rapport >= 2) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'warm' : 'smile';
   if (c.rapport <= -1) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'cold' : 'neutral';
   return c.rapport >= 1 ? 'smile' : 'neutral';
@@ -142,8 +160,9 @@ function parting(c) {
 function castMood(c) {
   const h = k => slotRoll(c, k),
     M = RULES.manner;
+  if (shamed(c)) return 'sad';
   if (flirtsWithYou(c) && h('flirt') < M.flirt * showMul(c) * FACES.castFlirt)
-    return hashPick(FACES.castFlirtFaces, S.salt, c.id, S.day, S.slot);
+    return slyOr(c, 'flirt', hashPick(FACES.castFlirtFaces, S.salt, c.id, S.day, S.slot));
   if (suspectedBy(c.id).length >= 2 && h('sus') < FACES.suspected * showMul(c)) return h('fear') < FACES.sad ? 'sad' : 'fear';
   if (c.rapport >= 1 && slotChance(c, 'warm', showP(c, 'warm'))) return 'warm';
   if (c.rapport <= -1 && slotChance(c, 'cold', showP(c, 'cold'))) return 'cold';

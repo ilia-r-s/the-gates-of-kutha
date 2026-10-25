@@ -19,7 +19,9 @@ window.__T = (() => {
       LANG = keep;
       if (/[\u0001\u0002\u0003]|undefined|NaN|\bnull\b|\{[a-z.:]+\}|\[object/.test(t))
         bad.push(`${where} marker (${l}): ${t.slice(0, 140)}`);
-      if (l === 'ru' && /[A-Za-z]{3,}/.test(t.replace(/Dr |Marlowe/g, ''))) bad.push(`${where} latin in ru: ${t.slice(0, 140)}`);
+      // (a season's code, 1A2B-3C4D, is written the same in both languages)
+      if (l === 'ru' && /[A-Za-z]{3,}/.test(t.replace(/Dr |Marlowe|\b[0-9A-F]{4}-[0-9A-F]{4}\b/g, '')))
+        bad.push(`${where} latin in ru: ${t.slice(0, 140)}`);
       if (l === 'en' && /[А-Яа-яЁё]/.test(t)) bad.push(`${where} cyrillic in en: ${t.slice(0, 140)}`);
       if (l === 'ru' && /\s[,.]|«\s|\s»/.test(t)) bad.push(`${where} spacing in ru: ${t.slice(0, 140)}`);
     });
@@ -47,9 +49,10 @@ window.__T = (() => {
   // ---------- clicking ----------
   const buttons = () => [...document.querySelectorAll('#choices .choice')];
   const text = b => b.textContent;
-  // a new season: a background, then the casebook kept the default way (hardcore: true for the bare record)
-  const start = (bg = 0, hardcore = false) => {
-    introScene();
+  // a new season: a background, then the casebook kept the default way (hardcore: true for the bare record); seed: the
+  // season's own (core/random.js), else a new one from the page's stream
+  const start = (bg = 0, hardcore = false, seed = null) => {
+    introScene(seed);
     buttons()[bg].click();
     buttons()[hardcore ? 1 : 0].click();
   };

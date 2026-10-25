@@ -4,7 +4,8 @@
 //   node sim/balance.js                       the published run: 7 ways of playing × 150 seasons × 3 seeds = 3,150
 //   node sim/balance.js --seasons=50 --seeds=1 --pols=human,cheat
 //   node sim/balance.js --rules='{"night":{"priestless":0.5}}'    the same with numbers in rules.js changed
-//   node sim/balance.js --by=bg,nature,mood,style --out=rows.json  breakdowns, and every season as JSON
+//   node sim/balance.js --by=bg,nature,mood,mood0,power,style --out=rows.json  breakdowns (mood: the one that lasted
+//        longest; mood0: the one the season began in), and every season as JSON
 // Policies (test/lib/inpage.js): human (a person's habits) and the same with a lean (sleuth, scholar, quiet, inquisitor,
 // confidant, delver); cheat (knows the cult) and random, for comparison only. Each seed's policies play side by side.
 const fs = require('fs');
@@ -58,6 +59,8 @@ async function play(browser, seed) {
                 // (the deaths that came later and the end you chose, as the ending page told them: decided without the
                 // dice, so asking again changes nothing: game/fates.js)
                 later = S.ended ? Object.values(afterDeaths()) : [],
+                // (after a doom, what it did to each of the seven, by where it found them: game/fates.js, doomFates)
+                dooms = S.ended === 'doom' ? doomFates() : null,
                 last = S.ended ? yourLast(won, Object.fromEntries(later.map(o => [o.id, o]))) : null;
               out.push({
                 pol,
@@ -67,6 +70,7 @@ async function play(browser, seed) {
                 day: S.day,
                 fin: !!S.fin,
                 mood: Object.entries(days).sort((a, b) => b[1] - a[1])[0][0],
+                mood0: S.tenor.log[0].mood, // (the mood the season began in)
                 power: S.patron,
                 nature: S.aspectOf[S.patron],
                 bg: S.bg,
@@ -75,7 +79,23 @@ async function play(browser, seed) {
                 laterChosen: later.filter(o => o.kind === 'chosen').length,
                 chose: last ? last.where : null,
                 style: r ? endStyle(r) : null,
-                score: r ? r.score : null
+                score: r ? r.score : null,
+                tier: r ? endTier(won, r.score, RULES.reckoning.tiers, !!r.blood) : null,
+                // the season in numbers, and its rarer turns: a scribe's error read, a stray sign seen, a habit noted
+                // that was only that day's
+                wounds: S.log.woundsTaken,
+                nerveLost: S.log.nerveLost,
+                scribe: S.factKnown.some(i => S.facts[i].scribe),
+                stray: S.omenLog.some(o => o.stray),
+                misnoted: S.order.map(C).some(c => CATS.some(k => c.known[k] && c.known[k] !== c.traits[k])),
+                doom: dooms
+                  ? S.order.map(id => {
+                      const c = C(id),
+                        d = dooms[id];
+                      if (c.status === 'taken') return ['dead', d ? 'unburied' : 'buried'];
+                      return [c.role === 'cult' ? (c.status === 'exposed' ? 'cell' : 'cult') : doomAt(c), d ? d.kind : 'none'];
+                    })
+                  : null
               });
             }
             return out;
@@ -140,6 +160,26 @@ function summary(rows) {
     `A death that came later: ${pct(later.length, n)} of seasons (two or more: ${pct(rows.filter(r => r.later > 1).length, n)}); by their own hand ${deaths ? ((100 * rows.reduce((t, r) => t + r.laterChosen, 0)) / deaths).toFixed(0) : 0}% of ${deaths}`,
     `Ended: ${ended.length} of ${n}`
   );
+  // the season in numbers, on average, and its rarer turns
+  const mean = f => (rows.reduce((t, r) => t + (r[f] || 0), 0) / n).toFixed(1);
+  out.push(
+    '',
+    `On average: ${mean('wounds')} wounds taken, ${mean('nerveLost')} nerve lost`,
+    `A scribe's error read: ${pct(rows.filter(r => r.scribe).length, n)}; a stray sign seen: ${pct(rows.filter(r => r.stray).length, n)}; a habit noted that was only that day's: ${pct(rows.filter(r => r.misnoted).length, n)}`
+  );
+  // how cleanly each outcome was done (the conduct score's tier: game/endings.js, endTier)
+  out.push('', 'Conduct, by outcome:');
+  ['clean', 'hard', 'defeat'].forEach(o => {
+    const rs = rows.filter(r => r.tier && cls(r) === o),
+      t = count(rs, r => r.tier);
+    out.push(
+      `  ${o.padEnd(7)} n=${String(rs.length).padStart(4)}  ` +
+        ['clean', 'steady', 'costly', 'ruinous', 'close', 'far']
+          .filter(k => t[k])
+          .map(k => `${k} ${((100 * t[k]) / rs.length).toFixed(0)}%`)
+          .join(' · ')
+    );
+  });
   out.push('', 'The style the ending names:');
   Object.entries(
     count(
@@ -149,6 +189,30 @@ function summary(rows) {
   )
     .sort((a, b) => b[1] - a[1])
     .forEach(([st, k]) => out.push(`  ${st.padEnd(14)} ${pct(k, n)}`));
+  // after a doom: what it did to each of the seven, by where the end found them
+  const dooms = rows.filter(r => r.doom);
+  if (dooms.length) {
+    out.push('', `After a doom (${dooms.length} seasons), by where the end found each of the seven:`);
+    const by = {};
+    dooms.forEach(r =>
+      r.doom.forEach(([at, kind]) => {
+        const b = (by[at] = by[at] || {});
+        b[kind] = (b[kind] || 0) + 1;
+      })
+    );
+    ['heart', 'stair', 'camp', 'away', 'cult', 'cell', 'dead']
+      .filter(at => by[at])
+      .forEach(at => {
+        const n = Object.values(by[at]).reduce((a, b) => a + b, 0);
+        out.push(
+          `  ${at.padEnd(6)} n=${String(n).padStart(4)}  ` +
+            Object.entries(by[at])
+              .sort((a, b) => b[1] - a[1])
+              .map(([k, v]) => `${k} ${((100 * v) / n).toFixed(0)}%`)
+              .join(' · ')
+        );
+      });
+  }
   out.push('', 'Every ending:');
   Object.entries(count(rows, r => r.id))
     .sort((a, b) => b[1] - a[1])

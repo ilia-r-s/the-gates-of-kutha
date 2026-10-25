@@ -9,3 +9,5 @@ src/page/
 # recordings
 test/golden/
 node_modules/
+# the GitHub Pages site, when put together by hand
+_site/

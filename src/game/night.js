@@ -93,7 +93,7 @@ function startDay() {
 function theNight() {
   const swore = id => (id && isFree(C(id)) ? id : null); // a promise only the one still at the dig can keep, or break
   const night = {
-    out: [visitEvening(), tenorNight()], // the night itself (and how the evening ended, if someone came to your tent)
+    out: [tenorNight()], // the night itself (how the evening ended, if someone came to your tent, is told before it: people/visit.js)
     found: [], // what first light finds: the dead and their trace, or nobody missing
     cult: freeCult(),
     npcs: freeChars().filter(c => c.role !== 'cult'),

@@ -1246,12 +1246,12 @@ function fxDeed({ add }) {
       ? add(
           'n',
           'That night the power below came for you by itself while you were out, and the Watcher drove it off from your empty tent.',
-          'В ту ночь, пока вас не было, сила из-под земли сама приходила за вами — и Страж прогнал её от вашей пустой палатки.'
+          'В ту ночь, пока вас не было, сила из-под земли сама приходила за вами — и страж прогнал её от вашей пустой палатки.'
         )
       : add(
           'n',
           'That night the cult came for you while you were out, and the Watcher drove it off from your empty tent.',
-          'В ту ночь, пока вас не было, культ приходил за вами — и Страж прогнал его от вашей пустой палатки.'
+          'В ту ночь, пока вас не было, секта приходила за вами — и страж прогнал её от вашей пустой палатки.'
         );
   if (d.vote)
     add(

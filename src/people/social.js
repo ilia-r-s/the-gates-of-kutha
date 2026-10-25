@@ -35,6 +35,30 @@ function assignLikes() {
   S.pending = [];
 }
 const likes = (a, b) => (S.like && S.like[a] ? S.like[a][b] || 0 : 0);
+// a's liking for b moves a step (d), from cannot bear (−2) to fond (2); false if it could not move (people/camp.js:
+// resent, and what the camp makes of a night in your tent, STIRS.scandal)
+function likeShift(a, b, d) {
+  if (!S.like || !S.like[a]) return false;
+  const v = Math.max(-2, Math.min(2, likes(a, b) + d));
+  if (v === likes(a, b)) return false;
+  S.like[a][b] = v;
+  return true;
+}
+// What has passed between two of the camp, as far as anyone could see: quarrels between them and feasts they sat
+// through together (game/events.js), how far a suspects b (people/camp.js), and whether either named the other guilty
+// before everyone (S.said: accused, a named b; accusedBy, b named a). An old score colours how someone takes what they
+// hear (people/camp.js, STIRS.scandal).
+function pastBetween(a, b) {
+  const pair = t => (t.about === a && t.verdict === b) || (t.about === b && t.verdict === a),
+    named = (x, y) => S.said.some(z => z.by === x && z.about === y && z.verdict === 'cult');
+  return {
+    quarrels: S.testimony.filter(t => t.kind === 'quarrel' && pair(t)).length,
+    feasts: S.testimony.filter(t => t.kind === 'feast' && pair(t)).length,
+    suspects: sus(a, b),
+    accused: named(a, b),
+    accusedBy: named(b, a)
+  };
+}
 // someone from a pool, leaning toward those the chooser feels strongly about: sign -1 seeks out the disliked, +1 the liked
 function pickByLike(from, pool, sign) {
   if (!pool.length) return null;
@@ -98,17 +122,23 @@ const bondSay = (a, b, close) =>
         `${a.short} cannot bear ${b.short}. Watch them at dinner.`,
         `${ru.c(a)} терпеть не может ${ru.c(b, 'a')}. Посмотрите на них за ужином.`
       );
-// one piece of gossip from s, about anyone but s and those listening; it goes into your casebook as testimony. sure:
+// One piece of gossip from s, about anyone but s and those listening; it goes into your casebook as testimony. sure:
 // the talk is heavy (it comes seldom in the season's mood, game/tenor.js), and true to what the speaker knows; heard:
-// said to someone else, and overheard
+// said to someone else, and overheard. Returns { t: whom it is about, text, hear?: how those who hear it may take it
+// (people/camp.js, a row of STIRS, and what it is told with) } or null (nothing worth saying).
 function gossipLine(s, not = [], sure = false, heard = false) {
-  // a thief who saw something hints at it; now and then, the talk is of who is sweet on whom
+  // a thief who saw something hints at it; while the camp still talks of it, of the night someone spent in your tent;
+  // now and then, the talk is of who is sweet on whom, or of what someone thinks of you
   const w = thiefSaw(s);
   if (w && !not.includes(w.actor) && chance(RULES.thief.gossip)) return thiefGossip(s, w);
+  const vg = visitGossip(s, not, heard);
+  if (vg) return vg;
   const f = chance(RULES.flirt.gossip) && flirtGossip(s, not, heard);
   if (f) return f;
   const pool = freeChars().filter(o => o.id !== s.id && !not.includes(o.id));
   if (!pool.length) return null;
+  const y = chance(RULES.gossip.you) && thinksGossip(s, pool, sure, heard);
+  if (y) return y;
   if (pool.length < 2 || chance(RULES.gossip.temper)) {
     const t = pickByLike(s, pool, chance(0.5) ? -1 : 1),
       l = likes(s.id, t.id),
@@ -135,17 +165,198 @@ function gossipLine(s, not = [], sure = false, heard = false) {
   addTest(s.id, a.id, 'bond', (close ? 'close:' : 'feud:') + b.id);
   return { t: a, text: bondSay(a, b, close) };
 }
+// ---------- what someone thinks of you ----------
+// Gossip about what someone else thinks of you (gossip.you of the time it could be told): a strong feeling, for you
+// (trust 2 or more: good) or against you (−1 or less: bad), told true at the speaker's gossipTrue, the less so of someone
+// they feel strongly about (gossip.likeBias); when it is not, misreported, or made up where there is nothing much
+// either way, leaning as the speaker does (kind to a friend, hard on someone they dislike, the suspicious hard on
+// anyone), at the odds gossip about a friendship or a feud has (gossip.flipBond, inventBond). Your casebook's word for
+// their trust always tells the truth: gossip is only as true as the gossip.
+const THINKS_SAID = {
+  bad: [
+    (s, t) => bi(`${t.short} does not trust you, Doctor. Not an inch.`, `${ru.c(t)} вам не доверяет, доктор. Ни на грош.`),
+    (s, t) =>
+      bi(
+        `You should hear what ${t.short} says of you when you are out of earshot.`,
+        `Послушали бы вы, что ${ru.c(t)} говорит о вас за глаза.`
+      ),
+    (s, t) =>
+      bi(
+        `${t.short} would be glad to see you on the lorry to Hillah, Doctor. ${EP.He(t)} has as good as said so.`,
+        `${ru.c(t)} ${ru.gs(t, 'был бы рад', 'была бы рада')} увидеть вас в грузовике до Хиллы, доктор. ${ru.gs(t, 'Он', 'Она')} почти так и ${ru.gs(t, 'сказал', 'сказала')}.`
+      )
+  ],
+  good: [
+    (s, t) =>
+      bi(
+        `${t.short} thinks the world of you, Doctor, though ${t.p} would never say so to your face.`,
+        `${ru.c(t)} о вас самого высокого мнения, доктор, хоть в глаза никогда этого и не скажет.`
+      ),
+    (s, t) =>
+      bi(`${t.short} speaks up for you whenever the others grumble.`, `${ru.c(t)} всякий раз заступается за вас, когда остальные ворчат.`),
+    (s, t) =>
+      bi(
+        `If it comes to it, ${t.short} will stand by you. ${EP.He(t)} told me as much.`,
+        `Если дойдёт до дела, ${ru.c(t)} будет на вашей стороне. ${ru.gs(t, 'Он мне сам так сказал', 'Она мне сама так сказала')}.`
+      )
+  ]
+};
+// ... said of you to someone else, and overheard
+const THINKS_HEARD = {
+  bad: [
+    (s, t) => bi(`${t.short} does not trust the Doctor. Not an inch.`, `${ru.c(t)} не доверяет доктору. Ни на грош.`),
+    (s, t) =>
+      bi(
+        `You should hear what ${t.short} says of the Doctor behind the Doctor’s back.`,
+        `Послушали бы вы, что ${ru.c(t)} говорит о докторе за глаза.`
+      ),
+    (s, t) =>
+      bi(
+        `${t.short} would be glad to see the Doctor on the lorry to Hillah.`,
+        `${ru.c(t)} ${ru.gs(t, 'был бы рад', 'была бы рада')} увидеть доктора в грузовике до Хиллы.`
+      )
+  ],
+  good: [
+    (s, t) =>
+      bi(
+        `${t.short} thinks the world of the Doctor, though ${t.p} would never say so.`,
+        `${ru.c(t)} о докторе самого высокого мнения, хоть никогда этого и не скажет.`
+      ),
+    (s, t) =>
+      bi(
+        `${t.short} speaks up for the Doctor whenever the rest of us grumble.`,
+        `${ru.c(t)} всякий раз заступается за доктора, когда мы все ворчим.`
+      ),
+    (s, t) => bi(`If it comes to it, ${t.short} will stand by the Doctor.`, `Если дойдёт до дела, ${ru.c(t)} будет на стороне доктора.`)
+  ]
+};
+function thinksGossip(s, pool, sure, heard) {
+  const t = pickByLike(s, pool, chance(0.5) ? -1 : 1),
+    l = likes(s.id, t.id),
+    r = trustOf(t),
+    real = r >= 2 ? 'good' : r <= -1 ? 'bad' : null;
+  let v = real;
+  if (!sure && !chance(TP(s).gossipTrue - RULES.gossip.likeBias * Math.abs(l))) {
+    const lean = l > 0 ? 'good' : l < 0 || temperOf(s) === 'suspicious' ? 'bad' : null;
+    v =
+      real === null
+        ? chance(RULES.gossip.inventBond)
+          ? lean || pick(['good', 'bad'])
+          : null
+        : chance(RULES.gossip.flipBond)
+          ? lean || (real === 'good' ? 'bad' : 'good')
+          : null;
+  }
+  if (!v) return null; // (nothing worth saying)
+  addTest(s.id, t.id, 'thinks', v);
+  return { t, text: tellOne(`thinks-${v}${heard ? '-heard' : ''}`, (heard ? THINKS_HEARD : THINKS_SAID)[v])(s, t) };
+}
+// ---------- the night someone spent in your tent ----------
+// Gossip about it (gossip.visit), from the morning the camp knows of it (people/visit.js) while she is still at the dig:
+// at odds, × fade for each day after the first. Told badly, as a scandal (she hardly knows the Doctor), or kindly, as the
+// speaker is inclined: badly at bad, + spite a step they dislike her, + jealous if they are sweet on you or on her, + foe
+// a step they are against you, + their temperament's prudery (TEMPERS prude), + vows for a priest; − friend a step they
+// like her, − ally a step they are past fond of you. Whoever hears it may make something of it, once each: of her, and
+// of you (people/camp.js, STIRS.scandal).
+const VISIT_SAID = {
+  bad: [
+    h =>
+      bi(
+        `You have not been here a week, Doctor, and ${h.short} is already in your tent. The camp is talking, and not kindly.`,
+        `Вы здесь и недели нет, доктор, а ${ru.c(h)} уже у вас в палатке. Лагерь об этом говорит — и говорит недоброе.`
+      ),
+    h =>
+      bi(
+        `${h.short} hardly knows you, Doctor, and spent the night in your tent all the same. In my day a lady waited to be courted.`,
+        `${ru.c(h)} вас почти не знает, доктор, и всё же провела ночь в вашей палатке. В моё время дама ждала, пока за ней поухаживают.`
+      ),
+    h =>
+      bi(
+        `People are saying ${h.short} did not wait to be asked twice. I only tell you what is said.`,
+        `Говорят, ${ru.c(h, 'a')} не пришлось просить дважды. Я лишь передаю, что говорят.`
+      )
+  ],
+  kind: [
+    h =>
+      bi(
+        `${h.short}? Good for her, Doctor, and for you. Life is short out here, and shorter this season.`,
+        `${ru.c(h)}? Тем лучше для неё, доктор, — и для вас. Жизнь здесь коротка, а в этот сезон и того короче.`
+      ),
+    h =>
+      bi(
+        `Never mind what they say about ${h.short}, Doctor. Half of them are only jealous.`,
+        `Не слушайте, что говорят ${ru.ob(h)}, доктор: половина из них просто завидует.`
+      )
+  ]
+};
+// ... said to someone else, and overheard
+const VISIT_HEARD = {
+  bad: [
+    h =>
+      bi(
+        `The Doctor has not been here a week, and ${h.short} is already in the Doctor’s tent. In my day a lady waited to be courted.`,
+        `Доктор здесь и недели нет, а ${ru.c(h)} уже в докторской палатке. В моё время дама ждала, пока за ней поухаживают.`
+      ),
+    h =>
+      bi(
+        `${h.short} hardly knows the Doctor, and stays the night all the same. Well. Now we know what to think of her.`,
+        `${ru.c(h)} доктора почти не знает — и всё же остаётся на ночь в докторской палатке. Что ж. Теперь мы знаем, что о ней думать.`
+      ),
+    h => bi(`Did you hear? ${h.short} did not wait to be asked twice.`, `Слыхали? ${ru.c(h, 'a')} не пришлось просить дважды.`)
+  ],
+  kind: [
+    h =>
+      bi(
+        `${h.short} and the Doctor? Good for them. Life is short out here.`,
+        `${ru.c(h)} и доктор? Тем лучше для них. Жизнь здесь коротка.`
+      ),
+    h => bi(`Let them talk about ${h.short}. Half of them are only jealous.`, `Пусть болтают ${ru.ob(h)}: половина из них просто завидует.`)
+  ]
+};
+function visitGossip(s, not, heard) {
+  const v = S.log && S.log.visit,
+    G = RULES.gossip.visit;
+  if (!v || !v.agreed || !v.morning || !S.chars[v.id]) return null;
+  const h = C(v.id);
+  if (!isFree(h) || h.id === s.id || not.includes(h.id) || !chance(G.odds * G.fade ** Math.max(0, S.day - v.day - 1))) return null;
+  const l = likes(s.id, h.id),
+    tr = trustOf(s),
+    bad = chance(
+      clamp(
+        G.bad +
+          G.spite * Math.max(0, -l) -
+          G.friend * Math.max(0, l) +
+          (flirtsWithYou(s) || flirtsWith(s.id, h.id) ? G.jealous : 0) +
+          G.foe * Math.max(0, -tr) -
+          G.ally * Math.max(0, tr - 2) +
+          TP(s).prude +
+          (VOWS.includes(s.id) ? G.vows : 0)
+      )
+    ),
+    k = bad ? 'bad' : 'kind';
+  addTest(s.id, h.id, 'scandal', k);
+  return {
+    t: h,
+    text: tellOne(`visit-${k}${heard ? '-heard' : ''}`, (heard ? VISIT_HEARD : VISIT_SAID)[k])(h),
+    hear: { kind: 'scandal', o: { by: s.id, about: h.id, bad } }
+  };
+}
 const quoted = (lead, text) => lead + text + bi('”', '»');
+// Gossip at breakfast, before everyone (those who hear it may take it up: people/camp.js, stir); and gossip overheard as
+// you go about the dig, when two or more people are together (only the one it is told to hears it, but for you).
 function breakfastGossip() {
   const pool = freeChars().filter(c => chance(TP(c).gossip));
   if (!pool.length) return '';
   const s = pick(pool),
-    g = gossipLine(s, [], weighty('talk'));
+    heavy = weighty('talk'),
+    g = gossipLine(s, [], heavy);
   if (!g) return '';
   stirred('talk');
-  return `<p class="notice">${quoted(bi(`Over breakfast, ${s.short} says of ${g.t.short}: “`, `За завтраком ${ru.c(s)} говорит ${ru.ob(g.t)}: «`), g.text)}</p>`;
+  return (
+    `<p class="notice">${quoted(bi(`Over breakfast, ${s.short} says of ${g.t.short}: “`, `За завтраком ${ru.c(s)} говорит ${ru.ob(g.t)}: «`), g.text)}</p>` +
+    (g.hear ? stir(g.hear.kind, { ...g.hear.o, heavy, before: true }) : '')
+  );
 }
-// overheard as you go about the dig, when two or more people are together
 function overheard(here) {
   if (here.length < 2) return '';
   const w = {};
@@ -154,10 +365,14 @@ function overheard(here) {
   });
   const s = C(wpick(w)),
     l = pick(here.filter(o => o.id !== s.id)),
-    g = gossipLine(s, [l.id], weighty('talk'), true);
+    heavy = weighty('talk'),
+    g = gossipLine(s, [l.id], heavy, true);
   if (!g) return '';
   stirred('talk');
-  return `<p class="notice">${quoted(bi(`As you go, you overhear ${s.short} telling ${l.short}: “`, `Уходя, вы слышите, как ${ru.c(s)} говорит ${ru.c(l, 'd')}: «`), g.text)}</p>`;
+  return (
+    `<p class="notice">${quoted(bi(`As you go, you overhear ${s.short} telling ${l.short}: “`, `Уходя, вы слышите, как ${ru.c(s)} говорит ${ru.c(l, 'd')}: «`), g.text)}</p>` +
+    (g.hear ? stir(g.hear.kind, { ...g.hear.o, heavy, only: [l.id] }) : '')
+  );
 }
 // someone suspicious, or with a grudge, or sure of someone, blames another out loud: rightly now and then, mostly not
 function breakfastBlame() {

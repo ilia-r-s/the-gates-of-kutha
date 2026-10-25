@@ -63,6 +63,18 @@ The exceptions, each for a reason:
    in the camp is only between a man and a woman, and toward you comes only from the women at the dig. These are part of
    who the cast are, like their names.
 
+## How the project is kept
+
+- **Every season comes from one seed.** The dice of a season are thrown from its seed (`core/random.js`; `S.seed`), so
+  that the same seed deals the same season, whatever background you choose, and the same choices play it the same way.
+  The casebook (Kit) and the ending page show its code; the title screen takes one, and the tests and simulators deal
+  their seasons from seeds too (`test/replay.js` plays any code, or fuzzes thousands of them and names the ones that went
+  wrong). Pictures and music use their own randomness and never touch the season's.
+- **The environment is written down.** [REQUIREMENTS.md](REQUIREMENTS.md) says what the game needs to run (browsers,
+  language level, web platform), every tool it is built and tested with and its exact version (`package.json`,
+  `package-lock.json`, `.nvmrc`), and the browsers, systems, screen sizes and devices it has actually been tested on, and
+  on which it has not. Each release brings it up to date before it ships.
+
 ## The season
 
 - **Five days** of three slots each (morning, afternoon, evening), each followed by a night. Some days have only two
@@ -437,9 +449,16 @@ their trust is the one thing that tells you exactly (the counting, above).
   face in the picture of the place: a conversation opened again after thinking better of it opens the same way.
 - **Faces.** Each answer's own expression is warmed or cooled by the feeling, when it shows. A lie that shows
   (temperament `tell`) shows on the face, as a practised liar's half-smile or anyone else's unease.
-- **Flirting** looks coy mostly, but not always: a smile, a sly look, a wink. A joke about love and marriage
-  (Constance's cigarette, a colonel's proposal by heliograph, three aunts and three cousins) is told with a sly face,
-  mostly (`manner.joke`).
+- **Flirting** looks coy mostly, but not always: a smile, a smirk, a warm look, or a sly one (`FACES.flirt`; the
+  light-headed give the sly look more, `FACES.slyLight`). A joke about love and marriage (Constance's cigarette, a
+  colonel's proposal by heliograph, three aunts and three cousins) is told with a sly face, mostly (`manner.joke`;
+  `FACES.joke`; a priest's with a smile or a smirk only, `FACES.jokeVows`).
+- **The sly look** is each person's own (`FACES.sly`), one of their looks fixed for the slot without the dice: in a joke,
+  a man's is a wink, a sidelong glance or an arched brow; Constance's a wink or an arched brow; Ilse's a sidelong glance or
+  an arched brow. Flirting, Constance's is a sidelong glance, an arched brow or heavy-lidded bedroom eyes; Ilse's any of
+  those or a look from under the lashes.
+- **The day the camp heard a night someone spent in your tent told badly before her** (The night visit, below), she is
+  sad, mostly (`FACES.shamed`, 70%): in the picture of the place and as she greets you.
 - **Partings.** As you leave, a lingering look from someone sweet on you (`flirt.parting`), a warm word from a friend
   (`manner.parting`), or a back turned by someone against you (`talk.coldParting`), each only if it shows.
 - **About the dig** the same holds; those the camp suspects in earnest look worried, if it shows.
@@ -797,15 +816,18 @@ and every answer is told the same way, whoever gives it:
 
 Seven, dealt at random, whatever the part. The full table is `TEMPERS` in `rules.js`; in short:
 
-|  | Lies | Truth from a cultist | Comes clean (per day) | Gossip: often · true | Names a real cultist |
-| --- | --- | --- | --- | --- | --- |
-| **Honest** | hardly ever, 1% (evades) | 99%, except about the cult | 45% | 20% · 95% | 45%, or declines |
-| **Conscientious** | rarely | 70% | 30% | 25% · 90% | 40% |
-| **A liar** | about anything | 1% | 3% | 40% · 35% | 25% |
-| **Calculating** | when it pays | 60%, and strategic truths | 5% | 40% · 55% | 30%; points at accusers |
-| **Detached** | seldom | 40% | 12% | 5% · 90% | 30%, or declines |
-| **Light-headed** | to be liked; misremembers | 40% | 25% | 60% · 65% | 30% |
-| **Suspicious** | to hide | 30% | 8% | 50% · 60% | 20%; blames aloud |
+|  | Lies | Truth from a cultist | Comes clean (per day) | Gossip: often · true | Names a real cultist | Prudery (`prude`) |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Honest** | hardly ever, 1% (evades) | 99%, except about the cult | 45% | 20% · 95% | 45%, or declines | 5% |
+| **Conscientious** | rarely | 70% | 30% | 25% · 90% | 40% | 20% |
+| **A liar** | about anything | 1% | 3% | 40% · 35% | 25% | 0 |
+| **Calculating** | when it pays | 60%, and strategic truths | 5% | 40% · 55% | 30%; points at accusers | 0 |
+| **Detached** | seldom | 40% | 12% | 5% · 90% | 30%, or declines | −5% |
+| **Light-headed** | to be liked; misremembers | 40% | 25% | 60% · 65% | 30% | −15% |
+| **Suspicious** | to hide | 30% | 8% | 50% · 60% | 20%; blames aloud | 15% |
+
+Prudery is how readily someone thinks ill of a night a woman spent in your tent, told as gossip, and of you for it; below
+nothing, how readily they take it well (The night visit, above).
 
 How they show: your own impression of a person's manner (true, but for now and then a wrong one, the likelier the less
 their feelings show: `talk.mienWrong`, 8%, ÷ `MANNER.shows`), what others say of them (as true as the speaker), and
@@ -828,7 +850,16 @@ getting in first; in the same words, and the casebook records it the same way.
   `sour`; `likes.toYou`).
 - **Gossip** (at breakfast, in conversation, overheard): a person's temperament (`gossip.temper`) or a friendship or
   feud, true at the speaker's `gossipTrue`, less so about those they feel strongly about (`gossip.likeBias`), and
-  slanted toward the bad for the disliked; heavy talk (above) is true to what the speaker knows.
+  slanted toward the bad for the disliked; heavy talk (above) is true to what the speaker knows. In its turn, before
+  the talk of temperaments and friendships: a thief's hint, a night someone spent in your tent (The night visit, above),
+  who is sweet on whom (`flirt.gossip`), and **what someone else thinks of you** (`gossip.you`, 30% of the times it
+  could be told): a strong feeling, for you (their trust 2 or more: they think the world of you, speak up for you, will
+  stand by you) or against you (−1 or less: they do not trust you, talk behind your back, would be glad to see you on
+  the lorry), told to you or, overheard, to someone else. It is true at the speaker's `gossipTrue`, less so of someone
+  they feel strongly about; when it is not, a strong feeling is told backwards (`gossip.flipBond`) or one made up where
+  there is nothing much either way (`gossip.inventBond`), leaning the way the speaker does (kind to a friend, hard on
+  someone they dislike, the suspicious hard on anyone), and otherwise nothing is said. The casebook's word for their
+  trust always tells the truth: gossip is only as true as the gossip.
 - **What you do gets round.** By morning, the friends of someone you pressed may cool (`rumours.pressFriend` × like),
   and the friends of someone you confided in may warm (the same deed to the same person is talked of once). An
   accusation at an inquiry is a public moment (below), taken up at once; a wrongly accused innocent hardly ever forgives
@@ -847,15 +878,17 @@ getting in first; in the same words, and the casebook records it the same way.
   it hardest; and once two of the camp have suspected the dead, the camp now and then will not take them for innocent
   (`morning.withhold`, 25%).
 - **Feelings move.** Someone accused before everyone may hold it against their accuser for good (below): they suspect
-  them, and like them less.
+  them, and like them less. A night someone spent in your tent, told as gossip, may change what those who hear it think
+  of her, and of you (The night visit, above). A liking moves a step at a time, from −2 to 2.
 
 ## The camp: suspicion, and moments that move many at once
 
 Everyone keeps their own count of whom they suspect, from 0 to 3, apart from whom they like. Some things happen before
 the whole camp, and each of them is a **public moment**: every onlooker (everyone still at the dig, except whoever
-started it and whoever it is about) gets one roll, and is moved one step or not at all. So one moment may leave the camp
-unmoved, or move one, two or three people at once (`camp.cap`, 3, each way): in their trust in you, or in their
-suspicion of each other. The one who speaks up at a moment is moved a step in their trust in you, all but always
+started it and whoever it is about; or, for something told to one of the camp only, that one) gets one roll for each
+way it may move them, and is moved one step or not at all. So one moment may leave the camp unmoved, or move one, two
+or three people at once (`camp.cap`, 3, each way): in their trust in you, in their suspicion of each other, or, for
+gossip about a night in your tent, in their liking for her. The one who speaks up at a moment is moved a step in their trust in you, all but always
 (`camp.spoke`, 90%). A heavy moment (one that comes seldom in the season's mood) moves each onlooker × `camp.heavy` as
 readily. In each row, `p` is every onlooker's chance, and the rest adds to it or takes from it. Suspicion is told by how
 far it goes: someone begins to wonder about another (1), suspects them (2: in earnest), is all but sure (3); and on the
@@ -877,6 +910,7 @@ way down, is less sure, no longer suspects them in earnest, no longer suspects t
 | **A watch told of** (`kept`) | Someone who swore to watch your tent says they saw someone off | Whoever doubted them may think again (`p` 30%). |
 | **Proven right** (`proven`) | The truth bears out what someone said before everyone | Whoever suspected the speaker may think again (`clear` 60%). |
 | **Proven wrong** (`disproven`) | The truth gives it the lie | Each onlooker suspects the speaker at `p` 15%, +`friend` 30% if they liked the one wronged. |
+| **A night in your tent, told** (`scandal`) | Gossip about it, badly or kindly, at breakfast or overheard | Each who hears it, once: their liking for her, and their trust in you, a step one way or the other (The night visit, above). |
 
 The truth about someone comes out, as the camp sees it, when they are exposed as a cultist, sent away after an inquiry,
 or taken by the night (whom the camp takes for innocent, and is fooled when one of the cult has killed another).
@@ -918,8 +952,13 @@ Once a season at most, from day `visit.from` (2), a woman with a soft spot for y
 says, that they may not see the light of day, and not wanting to spend the night alone. She comes at `visit.odds`
 (4%) + `perDead` (2%) for each of the night's dead so far, never above `max` (15%), the fonder the likelier; never on
 the night you go out yourself (the deed, above). An occultist may feel the cult's cold as she comes in, or a cold that
-is only the night, as in any conversation (`talk.chillCult`, 30%; `chillOther`, 5%).
+is only the night, as in any conversation (`talk.chillCult`, 30%; `chillOther`, 5%). At the tent pole her face is sad,
+whatever she is (`FACES.visit`): neither flirting nor telling anything of what she is.
 
+- **Your answer shows in her face**, fixed for the season without the dice: let her stay, and her look turns to heavy-lidded
+  bedroom eyes (`FACES.visitYes`); sent back, she stays as sad as she came, or stares as if she had not heard you right,
+  or her face closes against you (`FACES.visitNo`, by weight: sad 3, surprised 2, angry 1.5, angry × `visitHurt` 2 when it
+  cost her trust in you), and her going is told the same way.
 - **Sent back**, she trusts you less (`visit.hurt`, 90%; a second step less at `hurtMore`, 30%), and her friends think
   the less of you for it (`rumours.visitFriend`, 0.2, × liking).
 - **She stays**, and if she is of the cult she may do the cult's work herself in the small hours (`visit.strike`, 30%;
@@ -946,6 +985,30 @@ is only the night, as in any conversation (`talk.chillCult`, 30%; `chillOther`, 
   (`visit.warm`, 50%). The camp talks the more readily (× `visit.talk`, 2): a friend of hers takes it well or badly
   (`rumours.visitFriend` × liking), one taken with her badly (`rumours.rival`, 50%). A flirtation that came to this is
   likelier to come to more (above).
+- **Then it is gossip.** From that morning, while she is at the dig, a piece of gossip may be about it (`gossip.visit.odds`,
+  45%, × `fade`, 0.55, for each day after the first): at breakfast before everyone, overheard, or said to you in
+  conversation, like any gossip (Sympathies, gossip and rumours, below). It is told badly, as a scandal (the Doctor has
+  not been here a week; she hardly knows the Doctor; in my day a lady waited to be courted), at `bad` (55%) + `spite`
+  (15%) a step the speaker dislikes her + `jealous` (25%) if they are sweet on her or on you + `foe` (8%) a step they are
+  against you + their temperament's prudery (`TEMPERS prude`: the conscientious 20%, the suspicious 15%, the honest 5%,
+  the detached −5%, the light-headed −15%) + `vows` (25%) for a priest, − `friend` (25%) a step they like her, − `ally`
+  (15%) if they are devoted to you; else kindly (good for her; half of them are only jealous).
+- **Whoever hears it makes up their mind once** (`RULES.camp.scandal`; a public moment, below, with only those who heard
+  it watching): the camp at breakfast, the one it was told to when you overhear it, nobody but you in conversation. Of her,
+  each thinks the less or the better, one or the other as the reasons weigh: the less, told badly, at `cool` (20%), told
+  kindly at `coolKind` (4%), + their prudery (and `vows`, 25%, for a priest) + `dislike` (10%) a step they dislike her −
+  `friend` (10%) a step they like her + their history with her (`quarrel`, 10%, for each quarrel between them;
+  `suspect`, 5%, a step they suspect her; `named`, 15%, if either named the other guilty before everyone; − `feast`,
+  10%, for each feast they sat through together) and, told badly, `believe` (8%) a step they like the speaker +
+  `credit` (5%) for the speaker's word proven before the camp; the better, told badly, at `rally` (12%) a step they like
+  her + `spurn` (8%) a step they dislike the speaker, told kindly at `warm` (6%) + `friend` a step + `believe`, and in
+  either case `easy` (40%) × how little prudish they are. Of you, the less at `youCool` (12%; told kindly `youCoolKind`,
+  3%) + prudery + `jealous` (30%) if they are sweet on her or on you, told badly + `believe`, − `loyal` (8%) a step past
+  warm; or the better at `youWarm` (3%) + `easy` × ease, told badly + `spurn` a step they dislike the speaker, told kindly
+  + `glad` (8%) a step they like her. Their liking for her moves a step (from −2 to 2); their trust in you a step, as
+  talk moves it. Told before her, she holds it against one who told it badly (`hurt`, 80%: she likes them a step less),
+  or warms to one who told it kindly (`thanks`, 50%), and that day, told badly, she is sad (Manner, above). The casebook
+  keeps who told it and how, on her card and among what people say of each other, and what the camp made of it.
 
 Nothing of it is ever explained; the ending tells what she was, and what the night held.
 
@@ -1190,8 +1253,8 @@ someone's spite.
   with you; × `friend` (0.8) for each friend who came through, up to three; × `loved` (0.4) if someone loves you; at
   most `max` (25%). It is told by one of its reasons, the weightier likelier (`fates.last.why`; an innocent you sent
   away only if they did not die later), and told last of all; your other epilogue is then one line at most, and never
-  the same thing. Measured on the bots: about 3½% of seasons, nearly all of them a mind that broke (about 8% of the
-  madness endings), almost never a season won.
+  the same thing. Measured on the bots (3,150 seasons): about 3½% of seasons (3.4%), nearly all of them a mind that broke
+  (about 7½% of the madness endings), almost never a season won.
 - **A death that came later.** Now and then one of the seven who came through the season does not come through what it
   left in them (`fates.after`; `FATE_AFTER`): by their own hand, or in a way nobody can account for. For each who is
   still at the dig, sent away, or of the cult in a cell: `base` (4.5%), × `gone` (1.3) if you did not come home, ×
@@ -1201,35 +1264,59 @@ someone's spite.
   of its reasons, the weightier likelier (`fates.after.why`; one of the cult in a cell only as a prisoner: what else
   weighed on it is not told), and by their own hand at `fates.after.chosen` for that reason (none for one who went
   below, or the thief; never a priest, who keeps his vows); it is all that is told of them. Never one spoken for in a
-  romance, never one of the cult still at large, never after a season the gate opened. Measured (2,100 seasons): one in
-  about 18% of seasons (two in 1–2%), a third of them by their own hand.
+  romance, never one of the cult still at large, never after a season the gate opened. Measured (3,150 seasons): one in
+  about 18% of seasons (two in about 2%), a third of them by their own hand.
+- **After a doom.** When the gate opened, what rose did something to each of the seven, decided without the dice
+  (`fates.doom`; `game/fates.js`, `doomFates`): one way each, by weight, by where the end found them: in the circle with
+  you (`heart`: taken 5, marked 2.5, fled 0.4, helped 0.3, untouched 0.8), left on the stair or holding the seventh gate
+  (`stair`: 3.5, 3, 0.6, 0.4, 1.2), at the dig (`camp`: 2, 2.5, 2, 1.5, 3), or sent away (`away`: 0.6, 1.2, 2, 0.8, 6);
+  × what they were and did (`fates.doom.mul`): by temperament (the honest and the conscientious stay to help, the liar,
+  the calculating and the suspicious get clear, the light-headed are taken or marked the more), by part (the Dreamer
+  taken or marked the more, the Watcher helps, the thief gets clear), a priest's vows (helps × 3, flees × 0.4), a home
+  beyond the two rivers (flees × 1.5) or between them (flees × 0.6, helps × 1.3), fond of you or one who kept watch over
+  your tent (helps × 1.3), grieving one the night took (taken × 1.3), one who owned a night's fear (flees × 1.4), one the
+  night came for and missed (taken × 1.5, marked × 1.3), one who left Kutha with someone (flees × 2), and the true
+  Dreamer when what rose was madness (taken × 1.5); no way rarer than 1% of the whole. Taken: it killed them (told by
+  where it found them); marked: they live and carry its mark; fled: they got clear of the two rivers in time; helped:
+  they stayed to help others, and died at it at `helpedDies` by its nature (30–50%); untouched: their ordinary epilogue.
+  One of the cult still at large: joined what rose 3, taken 2, waits for it 1.5, fled 1, marked 1, walked away and lived
+  0.6; one of the cult in a cell at Hillah: freed (and went to it) 2, taken 2, its ordinary fate 4. One of the night's
+  dead not yet buried is never buried (`unburied`, by nature: 25–50%; never one you killed), told after the night they
+  were taken. Each in its nature's own words (`DOOM_FATE` in `data/fates.js`), nobody twice alike in an ending.
+  Measured over 3,150 seasons, 782 of them a doom (`sim/balance.js`): in the circle with you, taken 60%, marked 26%,
+  untouched 5%, fled 4%, helped 6% (half of them died at it); on the stair, marked 39%, taken 36%, untouched 13%, fled
+  6%, helped 6%; at the dig, untouched 23%, fled 21%, taken 19%, marked 19%, helped 18% (a third of them died at it);
+  sent away (seldom anyone: 17 in all), untouched about half; of the cult at large, joined 36%, taken 20%, waits 16%,
+  marked 11%, fled 10%, walked away 7%; in a cell, its ordinary fate 52%, freed 26%, taken 23%; of the night's dead,
+  never buried 36%.
 
 ## How seasons end
 
-The odds of the outcomes on build 27.0, from 3,150 simulated seasons (`sim/balance.js`): bots that play the real page
+The odds of the outcomes on build 27.1, from 3,150 simulated seasons (`sim/balance.js`): bots that play the real page
 the way a person might, in seven styles (each leaning toward one way of working, on top of the same sensible play), 450
 seasons each, every background and every season's mood as the dice dealt them. A person who reads the casebook well
 should do better than these bots; one who plays carelessly, worse. The intervals are 95% (Wilson).
 
 | Outcome | Odds (95% interval) |
 | --- | --- |
-| **Defeat** | **90.0% (88.9–91.0)** |
-| — madness | 41.3% (39.6–43.0) |
-| — death | 22.4% (21.0–23.9) |
-| — the rite completes | 25.9% (24.4–27.5) |
-| — sent away on the lorry to Hillah | 0.4% (0.3–0.7) |
-| **Hard victory** | **7.8% (6.9–8.8)** |
-| **Clean victory** | **2.2% (1.7–2.8)** |
+| **Defeat** | **90.2% (89.1–91.2)** |
+| — madness | 42.8% (41.0–44.5) |
+| — death | 22.2% (20.8–23.7) |
+| — the rite completes | 24.8% (23.3–26.4) |
+| — sent away on the lorry to Hillah | 0.4% (0.2–0.7) |
+| **Hard victory** | **7.6% (6.7–8.5)** |
+| **Clean victory** | **2.3% (1.8–2.8)** |
 
-No style does markedly better than another: each one's defeats lie between 88.2% and 92.2%, within the noise from one
-run to the next (450 seasons a style are good to about ±3 points). By background: the philologist 91.0%, the soldier
-87.3%, the occultist 91.7% (the soldier dies least, 10%, and sees the rite complete most, 36%; the occultist goes mad
-about half the time, 48.5%). By the power's nature, defeat lies between 87.5% (fire) and 91.4% (the sea).
+No style does markedly better than another: each one's defeats lie between 87.3% and 92.2%, within the noise from one
+run to the next (450 seasons a style are good to about ±3 points). By background: the philologist 89.7%, the soldier
+89.5%, the occultist 91.3% (the soldier dies least, 10%, and sees the rite complete most, 37%; the occultist goes mad
+about half the time, 50.6%). By the power's nature, defeat lies between 89.0% (the sea) and 91.2% (plague).
 
-The style the ending names: the field director (nothing out of the ordinary) 22.2% of seasons; the delver 16.0%, the
-scholar 14.7%, the confidant 13.0%, the quiet one 12.5%, the sleuth 11.2%, the inquisitor 8.2%; the avenger (the deed
-done) 2.1%. Three seasons in four come to the descent (77.6%); a season sees about two and a half of the camp taken by
-the night (2.5).
+The style the ending names: the field director (nothing out of the ordinary) 23.2% of seasons; the delver 15.8%, the
+scholar 14.2%, the confidant 12.6%, the quiet one 12.4%, the sleuth 11.2%, the inquisitor 8.1%; the avenger (the deed
+done) 2.5%. Three seasons in four come to the descent (77.8%); a season sees about two and a half of the camp taken by
+the night (2.55).
 
-The end you chose comes in about 4½% of seasons (4.4%), nearly all of them a mind that broke (about 10% of the madness
-endings); a death that came later, in about 18% (17.6%; two in 1.8%), a third of them by their own hand (35%).
+The end you chose comes in about 3½% of seasons (3.4%), nearly all of them a mind that broke (about 7½% of the madness
+endings); a death that came later, in about 18% (17.9%; two in 2.0%), a third of them by their own hand (36%). After a
+doom, what became of each of the seven: Endings, above.

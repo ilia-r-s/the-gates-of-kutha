@@ -1,8 +1,11 @@
 // ===================== THE DICE =====================
-// One seeded generator (mulberry32) throws every die in the game, so a season can be replayed from its seed: the page
-// may set window.__seed before the game loads, or the clock decides. Only the rules throw these dice; music and
-// pictures use Math.random, so that sound and drawing never change what happens.
-let _seed = ((typeof window !== 'undefined' && window.__seed) || Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
+// One seeded generator (mulberry32) throws every die in the game. Every season is dealt and played from a seed of its
+// own (S.seed: game/state.js, newGame), so that the same seed deals the same season, and the same choices play it the
+// same way. The page keeps a stream of its own from which each new season's seed is drawn (newSeed): the page may set
+// window.__seed before the game loads, or the clock decides. Only the rules throw these dice; music and pictures use
+// Math.random, so that sound and drawing never change what happens.
+let _seed = ((typeof window !== 'undefined' && window.__seed) || Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0,
+  _page = _seed;
 function rand() {
   _seed = (_seed + 0x6d2b79f5) | 0;
   let t = Math.imul(_seed ^ (_seed >>> 15), 1 | _seed);
@@ -25,6 +28,30 @@ function shuffle(a) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+// ---------- seeds ----------
+// the dice from a season's seed onward (game/state.js, newGame)
+const reseed = n => {
+  _seed = n >>> 0;
+};
+// a new season's seed, from the page's own stream (so that how one season went never changes the next one's seed)
+function newSeed() {
+  const keep = _seed;
+  _seed = _page;
+  const n = Math.floor(rand() * 4294967296) >>> 0;
+  _page = _seed;
+  _seed = keep;
+  return n;
+}
+// a seed as the casebook and the ending page write it, and as the title screen takes it: eight hex digits, two groups of
+// four (any other characters are ignored when it is read back; null if there is no seed in it)
+const seedCode = n => {
+  const h = (n >>> 0).toString(16).toUpperCase().padStart(8, '0');
+  return h.slice(0, 4) + '-' + h.slice(4);
+};
+function parseSeed(t) {
+  const h = String(t == null ? '' : t).replace(/[^0-9a-f]/gi, '');
+  return h.length && h.length <= 8 ? parseInt(h, 16) >>> 0 : null;
 }
 // a key of o, chosen with probability in proportion to its value
 function wpick(o) {

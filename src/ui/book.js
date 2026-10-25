@@ -142,6 +142,17 @@ const CHIPS = {
       : bi(`${f}: sweet on ${C(t.verdict).short}`, `${ru.c(fr)}: ${ru.gs(a, 'неравнодушен', 'неравнодушна')} к ${ru.c(t.verdict, 'd')}`)
   ],
   hint: (t, a, f, fr) => ['warnc', bi(`${f} hints at ${a.pp} nights`, `${ru.c(fr)} намекает на ${ru.gs(a, 'его', 'её')} ночные прогулки`)],
+  // what someone else says this one thinks of you (people/social.js, thinksGossip); and of the night she spent in your tent
+  thinks: (t, a, f, fr) => [
+    'dimc',
+    t.verdict === 'good'
+      ? bi(`${f}: on your side`, `${ru.c(fr)}: на вашей стороне`)
+      : bi(`${f}: against you`, `${ru.c(fr)}: ${ru.gs(a, 'настроен', 'настроена')} против вас`)
+  ],
+  scandal: (t, a, f, fr) =>
+    t.verdict === 'bad'
+      ? ['warnc', bi(`${f} gossips about her night in your tent`, `${ru.c(fr)} сплетничает о её ночи в вашей палатке`)]
+      : ['dimc', bi(`${f} is kind about her night in your tent`, `${ru.c(fr)} по-доброму говорит о её ночи в вашей палатке`)],
   // what you saw for yourself
   quarrel: (t, a) => [
     'dimc',
@@ -207,6 +218,20 @@ function sayingLine(t) {
         );
   if (t.kind === 'hint')
     return bi(`${f} hints that ${a} is out at night`, `${ru.c(t.from)} намекает, что ${ru.c(t.about)} бродит по ночам`);
+  if (t.kind === 'thinks')
+    return t.verdict === 'good'
+      ? bi(`${f} says ${a} speaks well of you`, `${ru.c(t.from)}: ${ru.c(t.about)} хорошо о вас отзывается`)
+      : bi(`${f} says ${a} does not trust you`, `${ru.c(t.from)}: ${ru.c(t.about)} вам не доверяет`);
+  if (t.kind === 'scandal')
+    return t.verdict === 'bad'
+      ? bi(
+          `${f} made a scandal of ${a}’s night in your tent`,
+          `${ru.c(t.from)} ${ru.gs(t.from, 'раздул', 'раздула')} скандал из ночи, которую ${ru.c(t.about)} провела в вашей палатке`
+        )
+      : bi(
+          `${f} spoke kindly of ${a}’s night in your tent`,
+          `${ru.c(t.from)} по-доброму ${ru.gs(t.from, 'отозвался', 'отозвалась')} о ночи, которую ${ru.c(t.about)} провела в вашей палатке`
+        );
   if (t.kind === 'temper')
     return bi(
       `${f} says ${a} is ${TEMPER_NAMES[t.verdict][0]}`,
@@ -533,7 +558,9 @@ function evTestimony() {
 // What people say of each other: temper, liking, tips.
 function evSayings() {
   let h = '';
-  const says = S.testimony.filter(t => ['temper', 'bond', 'tip', 'feel', 'flirt', 'hint', 'quarrel', 'feast'].includes(t.kind));
+  const says = S.testimony.filter(t =>
+    ['temper', 'bond', 'tip', 'feel', 'flirt', 'hint', 'thinks', 'scandal', 'quarrel', 'feast'].includes(t.kind)
+  );
   if (says.length)
     h += `<h4>${bi('What people say of each other', 'Что люди говорят друг о друге')}</h4><p class="dim rk-rules">${bi('Gossip is only as true as the gossip, and people are kind to their friends.', 'Сплетня правдива ровно настолько, насколько правдив сплетник, а к друзьям люди снисходительны.')}</p><ul class="tlog">${says
       .slice()
@@ -610,6 +637,27 @@ const STIR_SAID = {
         ]
       : [`The camp remembered that the dead had named ${a.short}`, `Лагерь вспомнил, что на ${ru.c(a, 'a')} указали ещё до этой смерти`],
   planted: (b, a) => [`A trace of ${a.short}’s found by a tent`, `У палатки нашли след ${ru.c(a, 'g')}`],
+  // (the night she spent in your tent, told as gossip: before everyone, or to one of the camp, r.to)
+  scandal: (b, a, r) =>
+    r.bad
+      ? r.to
+        ? [
+            `${b.short} made a scandal of ${a.short}’s night in your tent, to ${C(r.to).short}`,
+            `${ru.c(b)} ${ru.gs(b, 'раздул', 'раздула')} скандал из ночи ${ru.c(a, 'g')} в вашей палатке — в разговоре с ${ru.c(r.to, 'i')}`
+          ]
+        : [
+            `${b.short} made a scandal of ${a.short}’s night in your tent, before everyone`,
+            `${ru.c(b)} при всех ${ru.gs(b, 'раздул', 'раздула')} скандал из ночи ${ru.c(a, 'g')} в вашей палатке`
+          ]
+      : r.to
+        ? [
+            `${b.short} spoke kindly of ${a.short}’s night in your tent, to ${C(r.to).short}`,
+            `${ru.c(b)} по-доброму ${ru.gs(b, 'отозвался', 'отозвалась')} о ночи ${ru.c(a, 'g')} в вашей палатке — в разговоре с ${ru.c(r.to, 'i')}`
+          ]
+        : [
+            `${b.short} spoke kindly of ${a.short}’s night in your tent, before everyone`,
+            `${ru.c(b)} при всех по-доброму ${ru.gs(b, 'отозвался', 'отозвалась')} о ночи ${ru.c(a, 'g')} в вашей палатке`
+          ],
   kept: (b, a) => [
     `${a.short} claimed to have seen someone off from your tent`,
     `${ru.c(a)} ${ru.gs(a, 'уверял', 'уверяла')}, что ${ru.gs(a, 'спугнул', 'спугнула')} кого-то у вашей палатки`
@@ -637,14 +685,14 @@ const STIR_SAID = {
         ]
 };
 function stirLine(r) {
-  const [en, rus] = STIR_SAID[r.kind](r.by && C(r.by), C(r.about));
+  const [en, rus] = STIR_SAID[r.kind](r.by && C(r.by), C(r.about), r);
   const eff = r.moved
     .map(([what, whom, d, ids, lvl]) => {
       if (what === 'trust')
         return d < 0
           ? bi(`cooler towards you: ${nameList(ids)}`, `охладели к вам: ${nameListRu(ids)}`)
           : bi(`warmer towards you: ${nameList(ids)}`, `потеплели к вам: ${nameListRu(ids)}`);
-      const said = susSay(ids, C(whom), d, lvl);
+      const said = what === 'like' ? likeSay(ids, C(whom), d) : susSay(ids, C(whom), d, lvl);
       return bi(`${nameList(ids)} ${said[0]}`, `${nameListRu(ids)} ${said[1]}`);
     })
     .concat(r.after ? [r.after] : [])
@@ -654,7 +702,7 @@ function stirLine(r) {
 function evCamp() {
   const seen = (S.stirs || []).filter(r => r.moved.length || r.after || r.spoke); // the moments that moved someone, or had a voice
   if (!seen.length) return '';
-  return `<h4>${bi('What the camp makes of it', 'Что думает лагерь')}</h4><p class="dim rk-rules">${bi('What happens before everyone moves people, each in their own way: their trust in you, and whom they suspect.', 'Всё, что происходит при всех, задевает людей — каждого по-своему: их доверие к вам и их подозрения.')}</p><ul class="tlog">${seen
+  return `<h4>${bi('What the camp makes of it', 'Что думает лагерь')}</h4><p class="dim rk-rules">${bi('What happens before everyone moves people, each in their own way: their trust in you, whom they suspect, and what they think of each other.', 'Всё, что происходит при всех, задевает людей — каждого по-своему: их доверие к вам, их подозрения и то, что они думают друг о друге.')}</p><ul class="tlog">${seen
     .slice()
     .reverse()
     .map(r => `<li><span class="c-day">${dayLabel(r.day)}</span> ${stirLine(r)}</li>`)
@@ -775,6 +823,8 @@ function bookKit() {
     }[S.bg]
   }</p>`;
   h += searchedNote();
+  // (the season's code: the same code, given on the title screen, deals it again: core/random.js)
+  h += `<h4>${bi('Season', 'Сезон')}</h4><p><span class="seedcode">${seedCode(S.seed)}</span> <span class="dim">${bi('· given on the title screen, this code deals the same season again', '· введённый на титульном экране, этот код сдаст тот же сезон заново')}</span></p>`;
   return h;
 }
 // Where you have searched, and how often; and what a search still gives.

@@ -26,6 +26,8 @@ run(async browser => {
       gossipBy: {},
       bond: { n: 0, right: 0 },
       sums: { confess: 0, cultTruth: 0, rumours: 0, mien: 0, tips: 0, evade: 0, friends: 0, enemies: 0 },
+      gossipKinds: {},
+      scandal: { visits: 0, bad: 0, kind: 0, heard: 0, herDown: 0, herUp: 0, youDown: 0, youUp: 0 },
       victims: [0, 0, 0],
       stirs: {},
       flirt: { you: 0, pairs: 0, said: 0 },
@@ -52,6 +54,23 @@ run(async browser => {
     };
     const add = (o, k, n = 1) => {
       o[k] = (o[k] || 0) + n;
+    };
+    // what someone says another thinks of you, true or not as it stood when it was said; a night in your tent told as
+    // gossip only once the camp knows of it, and never by her or of anyone else
+    const thinks = { n: 0, right: 0 },
+      keepAddTest = window.addTest;
+    window.addTest = function (from, about, kind, verdict) {
+      if (kind === 'thinks') {
+        thinks.n++;
+        const r = trustOf(C(about));
+        if ((verdict === 'good' && r >= 2) || (verdict === 'bad' && r <= -1)) thinks.right++;
+        if (from === about) bad.push('gossip about what one thinks of you, by that one');
+      }
+      if (kind === 'scandal') {
+        const v = S.log.visit;
+        if (!v || !v.agreed || !v.morning || v.id !== about || from === about) bad.push('gossip about a night in your tent that was not');
+      }
+      return keepAddTest.apply(this, arguments);
     };
     // talkative: goes where people are, talks a great deal, holds inquiries now and then
     const rnd = __T.lcg(99),
@@ -147,6 +166,29 @@ run(async browser => {
             real = likes(t.about, o) + likes(o, t.about);
           if ((k === 'close' && real >= 2) || (k === 'feud' && real <= -2)) st.bond.right++;
         });
+      // what the gossip was about, by kind; and what a night in your tent told as gossip did
+      S.testimony
+        .filter(t => ['temper', 'bond', 'flirt', 'hint', 'thinks', 'scandal'].includes(t.kind))
+        .forEach(t => add(st.gossipKinds, t.kind));
+      if (S.log.visit && S.log.visit.agreed) {
+        const sc = st.scandal;
+        sc.visits++;
+        S.testimony.filter(t => t.kind === 'scandal').forEach(t => sc[t.verdict]++);
+        sc.heard += (S.log.visit.heard || []).length;
+        S.stirs
+          .filter(r => r.kind === 'scandal')
+          .forEach(r =>
+            r.moved.forEach(([w, , d, ids]) => {
+              sc[(w === 'like' ? 'her' : 'you') + (d < 0 ? 'Down' : 'Up')] += ids.length;
+            })
+          );
+      }
+      // sympathies stay in range, however much the camp has made of what it heard
+      Object.values(S.like).forEach(m =>
+        Object.values(m).forEach(v => {
+          if (v < -2 || v > 2) bad.push('liking out of range: ' + v);
+        })
+      );
       const sums = st.sums;
       sums.mien += S.testimony.filter(t => t.kind === 'mien').length;
       sums.tips += S.testimony.filter(t => t.kind === 'tip').length;
@@ -330,6 +372,9 @@ run(async browser => {
       gossipTrue: `${pc(st.gossip.right, st.gossip.n)} of ${st.gossip.n}`,
       gossipTrueBy: Object.fromEntries(Object.entries(st.gossipBy).map(([k, [n, r2]]) => [k, `${pc(r2, n)} of ${n}`])),
       bondTrue: `${pc(st.bond.right, st.bond.n)} of ${st.bond.n}`,
+      thinksTrue: `${pc(thinks.right, thinks.n)} of ${thinks.n}`,
+      gossipKinds: st.gossipKinds,
+      scandal: st.scandal,
       victimsByCultLikes: share(st.victims),
       publicMoments: st.stirs,
       flirtation: st.flirt,

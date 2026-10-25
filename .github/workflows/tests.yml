@@ -1,0 +1,30 @@
+# The whole test suite on every push and pull request (DEVELOPING.md, "Publishing a build"), on the Node version in
+# .nvmrc and the Chromium that the pinned Playwright installs (REQUIREMENTS.md).
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: The whole suite (the build first)
+        run: node test/run.js full

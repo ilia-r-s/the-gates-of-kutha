@@ -124,9 +124,28 @@ const EARX = { oval: 60, long: 64, square: 58, round: 55 };
 const TORSO = 'M16 236C18 188 50 162 100 160C150 162 182 188 184 236Z';
 
 // ---------- the faces ----------
-// neutral, smile, fear, angry; and warm, sad, thoughtful, surprised, cold, coy, smirk, wink. Every face is drawn from
-// the same parts (eyes and lids, brows, mouth, cheeks), so each person keeps their own features in every mood.
-const MOODS = ['neutral', 'smile', 'warm', 'coy', 'smirk', 'wink', 'thoughtful', 'surprised', 'sad', 'fear', 'cold', 'angry'];
+// neutral, smile, fear, angry; and warm, sad, thoughtful, surprised, cold, coy, smirk, wink; and the sly looks of a joke
+// or a flirtation: a sidelong glance, an arched brow, a look from under the lashes, heavy lids (people/manner.js,
+// slyFace). Every face is drawn from the same parts (eyes and lids, brows, mouth, cheeks), so each person keeps their own
+// features in every mood.
+const MOODS = [
+  'neutral',
+  'smile',
+  'warm',
+  'coy',
+  'smirk',
+  'wink',
+  'thoughtful',
+  'surprised',
+  'sad',
+  'fear',
+  'cold',
+  'angry',
+  'glance',
+  'arch',
+  'demure',
+  'sultry'
+];
 // a lid across the top of the eye, filled with skin: lower toward the nose (angry) or toward the ear (sad), or level
 const upperLid = (x, i, sk, inner, outer, bow) => {
   const yl = i ? inner : outer, // the left end of the lid: the outer corner (by the ear) of the eye on the left, the
@@ -140,7 +159,59 @@ const upperLid = (x, i, sk, inner, outer, bow) => {
 const lowerLid = (x, sk, top, bow, sw = 2.5) =>
   `<path d="M${x - 11} 108L${x - 11} ${top}Q${x} ${bow} ${x + 11} ${top}L${x + 11} 108Z" fill="${sk}"/>` +
   ln(`M${x - 10} ${top + 1}Q${x} ${bow + 1} ${x + 10} ${top + 1}`, INK, sw);
-function eyes(m, lk, sk, lashes) {
+// An eye as much of it as shows between the lids: the white and the pupil cut to that shape, then outlined, the upper
+// lid's line part of the outline. Nothing is painted over the skin, so the shading on the far cheek is left alone.
+// top: the upper lid [height at the left end, at the right end, the height it bows up to], or none for the whole eye;
+// at: the pupil [x, y]; lash: lashes at the outer corner, by the ear (0, 1 or 2); u: the picture's prefix (its clip path).
+function eyeCut(x, i, u, { top, at, lash = 0 }) {
+  const cent = n => Math.round(n * 100) / 100,
+    hw = y => 9 * Math.sqrt(1 - ((y - 94) / 10.5) ** 2), // the eye's half-width at the height y
+    [yl, yr, bow] = top || [94, 94],
+    xl = cent(x - hw(yl)),
+    xr = cent(x + hw(yr)),
+    d = top
+      ? `M${xl} ${yl}Q${x} ${bow} ${xr} ${yr}A9 10.5 0 ${yl + yr < 188 ? 1 : 0} 1 ${xl} ${yl}Z`
+      : `M${xl} 94A9 10.5 0 0 1 ${xr} 94A9 10.5 0 0 1 ${xl} 94Z`,
+    [cx, cy] = i ? [xr, yr] : [xl, yl],
+    o = i ? 1 : -1;
+  return (
+    `<clipPath id="${u}e${i}"><path d="${d}"/></clipPath><g clip-path="url(#${u}e${i})">` +
+    `<rect x="${x - 10}" y="82" width="20" height="24" fill="#fff"/><circle cx="${at[0]}" cy="${at[1]}" r="4" fill="${INK}"/>` +
+    `<circle cx="${cent(at[0] + 1.3)}" cy="${cent(at[1] - 1.6)}" r="1.2" fill="#fff"/></g>` +
+    pth(d, 'none') +
+    (lash ? ln(`M${cx} ${cy}l${4.5 * o} -2.5`, INK, 2.5) : '') +
+    (lash > 1 ? ln(`M${cent(cx - 3.2 * o)} ${cent(cy - 2.3)}l${2.6 * o} -3.4`, INK, 2.5) : '')
+  );
+}
+// the sly looks, by their eyes: lids and pupils, lashes for those who wear them
+const SLY_EYES = {
+  // a sidelong glance: heavy lids drooping at the outer corners, the eyes slid into their corners toward you (to the
+  // left, where you stand, whichever way the face is turned)
+  glance: (lk, l) => [
+    { top: [93, 90.5, 88], at: [78.5, 94.5], lash: l * 2 },
+    { top: [90.5, 93, 88], at: [110.5, 94.5], lash: l * 2 }
+  ],
+  // an arch look: one brow up and the eye under it wide open, the other eye half shut under a lowered lid
+  arch: (lk, l) => [
+    { at: [84 + lk, 94.5], lash: l },
+    { top: [92, 92.5, 89], at: [116 + lk, 95.5], lash: l }
+  ],
+  // a look from under the lashes: the lids lowered and the eyes turned up to you from under them
+  demure: (lk, l) => [
+    { top: [91, 90.5, 88], at: [84 + lk, 92.5], lash: l * 2 },
+    { top: [90.5, 91, 88], at: [116 + lk, 92.5], lash: l * 2 }
+  ],
+  // heavy lids: slow, half over the eyes, under raised brows
+  sultry: (lk, l) => [
+    { top: [94, 93, 90], at: [84 + lk, 96.5], lash: l * 2 },
+    { top: [93, 94, 90], at: [116 + lk, 96.5], lash: l * 2 }
+  ]
+};
+function eyes(m, lk, sk, lashes, u) {
+  if (SLY_EYES[m]) {
+    const [a, b] = SLY_EYES[m](lk, lashes ? 1 : 0);
+    return eyeCut(84, 0, u, a) + eyeCut(116, 1, u, b);
+  }
   const wide = m === 'fear' || m === 'surprised',
     ry = wide ? 12 : 10.5,
     pr = wide ? 2.8 : 4;
@@ -184,7 +255,11 @@ function brows(m, L) {
       cold: ['M73 81Q84 80 95 82', 'M105 82Q116 80 127 81'],
       coy: ['M73 79Q84 74 95 78', 'M105 76Q116 68 127 75'],
       smirk: ['M73 80Q84 77 95 80', 'M105 77Q116 69 127 76'],
-      wink: ['M73 76Q84 68 95 74', 'M105 82Q116 79 127 84']
+      wink: ['M73 76Q84 68 95 74', 'M105 82Q116 79 127 84'],
+      glance: ['M73 74Q84 67 95 74', 'M105 80Q116 78 127 81'],
+      arch: ['M73 74Q84 63 95 70', 'M105 80Q116 77 127 81'],
+      demure: ['M73 79Q84 73 95 72', 'M105 72Q116 73 127 79'],
+      sultry: ['M73 76Q84 67 95 72', 'M105 72Q116 67 127 76']
     }[m] || [];
   return ln(B[0], c, w) + ln(B[1], c, w);
 }
@@ -219,6 +294,16 @@ function mouth(m, L, my) {
       : ln(`M89 ${y + 2}Q101 ${y + 5} 112 ${y - 4}`);
   if (m === 'wink')
     return lips ? pth(`M88 ${y}Q101 ${y + 9} 113 ${y - 4}Q101 ${y + 4} 88 ${y}Z`, lips, 2.5) : ln(`M88 ${y}Q101 ${y + 8} 113 ${y - 4}`);
+  if (m === 'glance')
+    return lips
+      ? pth(`M87 ${y - 4}Q98 ${y + 8} 111 ${y + 1}Q98 ${y + 3.5} 87 ${y - 4}Z`, lips, 2.5)
+      : ln(`M87 ${y - 4}Q98 ${y + 7} 111 ${y + 1}`);
+  if (m === 'arch')
+    return lips
+      ? pth(`M90 ${y - 2}Q100 ${y + 6} 110 ${y - 1}Q100 ${y + 2.5} 90 ${y - 2}Z`, lips, 2.5)
+      : ln(`M90 ${y - 2}Q100 ${y + 5} 110 ${y - 1}`);
+  if (m === 'demure') return shut(93, y, 100, y + 4.5);
+  if (m === 'sultry') return shut(89, y, 100, y + 7.5);
   if (m === 'thoughtful')
     return lips
       ? pth(`M95 ${y + 2}Q103 ${y + 4} 110 ${y - 1}Q103 ${y + 1} 95 ${y + 2}Z`, lips, 2.5)
@@ -355,12 +440,17 @@ function portrait(id, mood = 'neutral', look = 0, u = `p-${id}-`) {
   s +=
     `<path d="${face}" fill="${sk}"/><ellipse cx="${210 - ex}" cy="104" rx="30" ry="66" fill="${sh}" clip-path="url(#${u}f)"/>` +
     ln(face, INK, 4);
-  // cheeks: a blush when coy, a little warmth when warm or winking
-  const bl = mood === 'coy' ? [8.5, 5, '.75'] : mood === 'warm' || mood === 'wink' ? [7.5, 4.5, '.5'] : [7, 4, '.35'];
+  // cheeks: a blush when coy or looking up from under the lashes, a little warmth when warm or sly
+  const bl =
+    mood === 'coy' || mood === 'demure'
+      ? [8.5, 5, '.75']
+      : ['warm', 'wink', 'glance', 'arch', 'sultry'].includes(mood)
+        ? [7.5, 4.5, '.5']
+        : [7, 4, '.35'];
   s +=
     ell(78, 116 + my, bl[0], bl[1], '#e98b7d', 0, ` opacity="${bl[2]}"`) +
     ell(122, 116 + my, bl[0], bl[1], '#e98b7d', 0, ` opacity="${bl[2]}"`);
-  s += eyes(mood, look, sk, !!L.lips) + brows(mood, L) + NOSE[L.nose]();
+  s += eyes(mood, look, sk, !!L.lips, u) + brows(mood, L) + NOSE[L.nose]();
   if (L.fh === 'full') s += beard(L);
   s += mouth(mood, L, my) + (L.fh ? FH[L.fh](L) : '') + (L.glasses ? GLASSES[L.glasses]() : '');
   s += (H.front ? H.front(L, u) : '') + (L.acc ? ACC[L.acc](L) : '');

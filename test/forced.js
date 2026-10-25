@@ -2,7 +2,8 @@
 // sign is told, a planted trace seen through, a careless night, a slip of the tongue, every inquiry outcome, the early
 // gate, volunteers and refusals at the stair, a traitor below and one who waits, everything that waits between the
 // gates, the cult taking its place in the circle (the hierophant; one who offered to come; one you asked), the social
-// layer's rarer turns (a confession before the camp, a cultist's retreat, rumours and gossip at breakfast), every kind
+// layer's rarer turns (a confession before the camp, a cultist's retreat, rumours and gossip at breakfast, what someone
+// says another thinks of you, the night in your tent told as gossip, badly and kindly), every kind
 // of public moment, flirtation and its faces, the thief as witness, every ending, the fates (romances among them) and
 // what becomes of you; every way each power takes its dead, the casebook and an inquiry played hardcore, and one of the
 // cult killing another; the night visit, and the deed, every way each turns. Recorded per language, like the golden
@@ -22,7 +23,7 @@ const a = args({ lang: 'en' }),
 const SCRIPT = () => {
   window.sfx = () => {};
   Object.assign(RULES.scale, { rarest: 0, surest: 1 }); // (exact dice: a branch forced here happens, or does not)
-  const caps = [],
+  const caps = (window.__caps = []), // (on the page, to say where it stopped if something throws)
     q = s => document.querySelector(s);
   const cap = tag => {
     const tabs = ['people', 'evidence', 'omens', 'kit'].map(t => {
@@ -339,6 +340,56 @@ const SCRIPT = () => {
     'flirt-gossip',
     until(() => (flirtGossip(p3, [man.id]) || {}).text)
   );
+  // what someone says another thinks of you, said to you and overheard; and the night someone spent in your tent, told
+  // as gossip badly and kindly, before everyone (and her face that day) and overheard
+  {
+    const keepGossip = { ...RULES.gossip, visit: { ...RULES.gossip.visit } },
+      keepShamed = FACES.shamed,
+      lastKind = () => S.testimony[S.testimony.length - 1].kind;
+    RULES.gossip.you = 1;
+    p1.rapport = 2;
+    capHtml(
+      'gossip-thinks',
+      until(() => (g => g && lastKind() === 'thinks' && g.text)(gossipLine(p3, [])))
+    );
+    capHtml(
+      'gossip-thinks-heard',
+      until(() => (g => g && lastKind() === 'thinks' && g.text)(gossipLine(p3, [p2.id], false, true)))
+    );
+    RULES.gossip.you = keepGossip.you;
+    S.log.visit = { id: woman.id, day: S.day - 1, agreed: true, chill: false, hurt: 0, heard: [], morning: true };
+    Object.assign(RULES.gossip.visit, { odds: 1, bad: 10 });
+    FACES.shamed = 1;
+    capHtml(
+      'scandal-bad',
+      until(() => {
+        S.log.visit.heard = [];
+        return (h => h && /class="stir"/.test(h) && lastKind() === 'scandal' && h)(breakfastGossip());
+      })
+    );
+    delete woman.greeted;
+    capState('scandal-shamed', { face: greeting(woman).face, castMood: castMood(woman) });
+    delete woman.greeted;
+    RULES.gossip.visit.bad = -10;
+    capHtml(
+      'scandal-kind',
+      until(() => {
+        S.log.visit.heard = [];
+        return (h => h && /class="stir"/.test(h) && lastKind() === 'scandal' && h)(breakfastGossip());
+      })
+    );
+    RULES.gossip.visit.bad = 10;
+    capHtml(
+      'scandal-overheard',
+      until(() => {
+        S.log.visit.heard = [];
+        return (h => h && lastKind() === 'scandal' && h)(overheard(people.filter(c => c.id !== woman.id && isFree(c)).slice(0, 3)));
+      })
+    );
+    Object.assign(RULES.gossip.visit, keepGossip.visit);
+    FACES.shamed = keepShamed;
+    S.log.visit = null;
+  }
   // (a greeting is fixed for the slot by the season's salt: another salt for each try, and the season's own back after)
   const salt = S.salt;
   capHtml(
@@ -684,15 +735,24 @@ const SCRIPT = () => {
   cap('gate1');
   choose(/slowly|медленно/);
   cap('step1');
+  // (whole again before each step, so that what the dice cost on the way never ends the descent before its scenes are seen)
+  const whole = () => {
+    S.nerve = S.nerveMax;
+    S.wounds = 0;
+  };
+  whole();
   S_ui.scene.choices[0].fn();
   cap('between-early');
+  whole();
   S_ui.scene.choices[0].fn();
   cap('between-early-result');
   const keepPatient = CRAFT[temperOf(cult2)].patient;
   CRAFT[temperOf(cult2)].patient = 0;
+  whole();
   S_ui.scene.choices[0].fn();
   cap('gate2-traitor');
   CRAFT[temperOf(cult2)].patient = keepPatient;
+  whole();
   S_ui.scene.choices[0].fn();
   cap('gate2-result');
   // on to the seventh gate, through whatever waits between, each scene as it comes
@@ -712,6 +772,9 @@ const SCRIPT = () => {
   S_ui.scene.choices[0].fn();
   cap('sanctum');
   S.fin.tries = 0;
+  S.nerve = S.nerveMax;
+  S.wounds = 0;
+  S.fin.acts.push({ kind: 'ward', it: S.charms.find(w => w !== S.wardOf[S.patron]) }); // (the wrong charm, held up)
   finalAct(0, 'ward');
   cap('it-fails');
   // the desperate acts, failing: a shot that does not matter, a fire that goes out
@@ -1245,11 +1308,19 @@ const SCRIPT = () => {
     window.chooseVictim = night => (o.target === 'her' ? h.id : o.target === 'player' ? 'player' : keepVictim(night));
     visitScene(h);
     if (o.no) cap('visit-knock');
+    // (her face as she hears your answer, then the night: people/visit.js, visitReply)
+    const faces = FACES.visitNo;
+    if (o.face) FACES.visitNo = { [o.face]: 1 };
     choose(o.no ? /Send her back|Отправить/ : /Let her stay|Оставить/);
+    FACES.visitNo = faces;
+    if (o.no || tag === 'visit-empty-tent') cap(tag + '-reply');
+    choose(/Put out the lamp|Погасить лампу|Try to sleep|Попытаться уснуть/);
     cap(tag);
     window.chooseVictim = keepVictim;
   };
   visit('visit-sent-back', false, { no: true });
+  visit('visit-sent-back-surprised', false, { no: true, face: 'surprised' });
+  visit('visit-sent-back-angry', false, { no: true, face: 'angry' });
   visit('visit-empty-tent', false, { target: 'her', leaves: 1 });
   visit('visit-found-dead', false, { target: 'her', found: 1, talked: 2 });
   visit('visit-screams', false, { target: 'player', through: 'hurt' });
@@ -1412,7 +1483,10 @@ run(async browser => {
   try {
     caps = await page.evaluate(SCRIPT);
   } catch (e) {
-    errors.push(String(e.message).slice(0, 300));
+    const last = await page
+      .evaluate(() => (window.__caps || []).slice(-3).map(c => c[0] + ' [' + String(c[1]).slice(0, 120) + ']'))
+      .catch(() => []);
+    errors.push(String(e.message).slice(0, 300) + ` (after: ${last.join(', ')})`);
   }
   const missing = a.lang === 'ru' ? await page.evaluate(() => [...MISSING]) : [];
   if (process.env.SHOW && caps)
@@ -1465,7 +1539,7 @@ run(async browser => {
       const text = shownOnly(c.slice(1).join(' '), 'ru')
           .replace(/<[^>]*>/g, ' ')
           .replace(/&[a-z]+;/g, ' '),
-        words = text.match(/[A-Za-z][A-Za-z’'\-]+/g) || [];
+        words = text.replace(/\b[0-9A-F]{4}-[0-9A-F]{4}\b/g, '').match(/[A-Za-z][A-Za-z’'\-]+/g) || []; // (a season's code is the same in both)
       if (words.length) leaks.push([c[0], [...new Set(words)].slice(0, 10)]);
     });
   return (

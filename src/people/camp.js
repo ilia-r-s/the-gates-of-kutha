@@ -46,34 +46,40 @@ function sayPublic(by, about, verdict, how) {
 
 // ---------- a public moment ----------
 // kind names a row of STIRS (below) and of RULES.camp; o = { by, about, ... }. Every onlooker (everyone free, except
-// whoever started it and whoever it is about) gets one roll; their reaction, if any, is one change: trust in you up or
-// down, or suspicion of someone up or down (a heavy moment, one that comes seldom in the season's mood, moves each
-// onlooker × RULES.camp.heavy as readily). A reaction whose odds come to nothing or less stays possible, at the rarest
-// (RULES.scale.rarest): nobody's reaction is ever sure. Returns the moment as the camp sees it, opening line and all (the opening
-// knows who was moved; o.told: the opening has been told already, with others').
+// whoever started it and whoever it is about; o.only: those of them it was told to, if it was told to some only) gets a
+// roll for each reaction it may draw from them, as a rule one: trust in you up or down, suspicion of someone up or down,
+// or liking for someone up or down (a heavy moment, one that comes seldom in the season's mood, moves each onlooker ×
+// RULES.camp.heavy as readily). A reaction whose odds come to nothing or less stays possible, at the rarest
+// (RULES.scale.rarest): nobody's reaction is ever sure. Returns the moment as the camp sees it, opening line and all (the
+// opening knows who was moved; o.told: the opening has been told already, with others').
 function stir(kind, o) {
   const K = STIRS[kind],
     pr = RULES.camp[kind],
     cap = RULES.camp.cap;
   const sp = K.speaker ? K.speaker(o, pr) : null;
-  const look = shuffle(freeChars().filter(c => c.id !== o.about && c.id !== o.by && (!sp || c.id !== sp.id)));
+  const look = shuffle(
+    freeChars().filter(c => c.id !== o.about && c.id !== o.by && (!sp || c.id !== sp.id) && (!o.only || o.only.includes(c.id)))
+  );
   const moved = []; // [what, whom, change, [ids], how far suspicion now goes (for suspicion)]
   if (sp && K.spoke) K.spoke(sp, o, pr);
   look.forEach(l => {
-    const r = K.react(l, o, pr); // [what, whom, change, chance] or null
-    if (!r || !chance(Math.min(RULES.scale.most, Math.max(RULES.scale.rarest, r[3]) * (o.heavy ? RULES.camp.heavy : 1)))) return;
-    const [what, whom, d] = r,
-      same = moved.filter(x => x[0] === what && x[1] === whom && x[2] === d);
-    if (same.reduce((n, x) => n + x[3].length, 0) >= cap) return; // as many as the cap move the same way, and no more
-    if (!(what === 'trust' ? nudge(l, d) : suspect(l.id, whom, d))) return;
-    const lvl = what === 'sus' ? sus(l.id, whom) : null,
-      g = same.find(x => x[4] === lvl);
-    if (g) g[3].push(l.id);
-    else moved.push([what, whom, d, [l.id], lvl]);
+    const rs = K.react(l, o, pr); // [what, whom, change, chance], a list of them, or null
+    (rs && Array.isArray(rs[0]) ? rs : [rs]).forEach(r => {
+      if (!r || !chance(Math.min(RULES.scale.most, Math.max(RULES.scale.rarest, r[3]) * (o.heavy ? RULES.camp.heavy : 1)))) return;
+      const [what, whom, d] = r,
+        same = moved.filter(x => x[0] === what && x[1] === whom && x[2] === d);
+      if (same.reduce((n, x) => n + x[3].length, 0) >= cap) return; // as many as the cap move the same way, and no more
+      if (!(what === 'trust' ? nudge(l, d) : what === 'like' ? likeShift(l.id, whom, d) : suspect(l.id, whom, d))) return;
+      const lvl = what === 'sus' ? sus(l.id, whom) : null,
+        g = same.find(x => x[4] === lvl);
+      if (g) g[3].push(l.id);
+      else moved.push([what, whom, d, [l.id], lvl]);
+    });
   });
   const after = K.after ? K.after(o, pr) : null; // something only the one it was about does
   const record = { day: S.day, kind, by: o.by || (sp && sp.id) || null, about: o.about || null, spoke: !!sp, moved };
   if (after) record.after = after;
+  if (K.keep) Object.assign(record, K.keep(o)); // (what the casebook needs to tell it: ui/book.js, STIR_SAID)
   S.stirs.push(record);
   return (K.open && !o.told ? K.open(sp, o, record) : '') + stirNote(record, !!K.quiet || !sp);
 }
@@ -81,7 +87,7 @@ function stir(kind, o) {
 function stirNote(r, quiet) {
   const lines = r.moved.map(([what, whom, d, ids, lvl]) => {
     if (what === 'trust') return d < 0 ? trustNote([], ids) : trustNote(ids, []);
-    const [en, rus] = susSay(ids, C(whom), d, lvl);
+    const [en, rus] = what === 'like' ? likeSay(ids, C(whom), d) : susSay(ids, C(whom), d, lvl);
     return `<p class="stir">${bi(`${nameList(ids)} ${en}`, `${nameListRu(ids)} ${rus}`)}</p>`;
   });
   if (r.after) lines.push(`<p class="stir">${r.after}</p>`);
@@ -111,6 +117,19 @@ function susSay(ids, w, d, lvl) {
           `no longer ${v('suspects', 'suspect')} ${w.short} at all`,
           `больше ни в чём не ${v('подозревает', 'подозревают')} ${ru.c(w, 'a')}`
         ];
+}
+// a change in someone's liking for w, after their names, as [English, Russian]
+function likeSay(ids, w, d) {
+  const many = ids.length > 1;
+  return d < 0
+    ? [`${many ? 'think' : 'thinks'} the less of ${w.short} now`, `теперь хуже ${many ? 'думают' : 'думает'} ${ru.ob(w)}`]
+    : [`${many ? 'think' : 'thinks'} the better of ${w.short} now`, `теперь лучше ${many ? 'думают' : 'думает'} ${ru.ob(w)}`];
+}
+// one reaction, one way or the other (down, the less: −1; up, the more: +1), as the reasons each way weigh against each
+// other; with no reason either way, the way it would go of itself (d), at the rarest (stir)
+function eitherWay(what, whom, down, up, d) {
+  const t = Math.max(0, down) + Math.max(0, up);
+  return [what, whom, t > 0 ? (chance(Math.max(0, down) / t) ? -1 : 1) : d, t];
 }
 const ofPair = (l, x) => likes(l.id, x); // how an onlooker feels about someone
 const isSusp = l => temperOf(l) === 'suspicious';
@@ -418,6 +437,67 @@ const STIRS = {
     },
     quiet: true
   },
+  // the night a woman spent in your tent, told as gossip, badly or kindly (people/social.js, visitGossip): before
+  // everyone at breakfast (o.before), or to one of the camp (o.only). Each who hears it makes up their mind once
+  // (S.log.visit.heard), about her and about you, by their temperament, a priest's vows, how they feel about her, the
+  // speaker and you, jealousy, and what has passed between them and her (RULES.camp.scandal). Told before her, she holds
+  // it against one who told it badly, or warms to one who told it kindly; and it shows in her face that day.
+  scandal: {
+    react: (l, o, pr) => {
+      const v = S.log.visit,
+        heard = (v.heard = v.heard || []);
+      if (heard.includes(l.id)) return null;
+      heard.push(l.id);
+      const h = o.about,
+        lh = ofPair(l, h),
+        ls = ofPair(l, o.by),
+        hi = pastBetween(l.id, h),
+        prude = TP(l).prude + (VOWS.includes(l.id) ? pr.vows : 0),
+        easy = pr.easy * Math.max(0, -prude),
+        believe = pr.believe * ls + pr.credit * credit(o.by),
+        past = pr.quarrel * hi.quarrels + pr.suspect * hi.suspects + (hi.accused || hi.accusedBy ? pr.named : 0) - pr.feast * hi.feasts,
+        jealous = flirtsWithYou(l) || flirtsWith(l.id, h) ? pr.jealous : 0;
+      const her = o.bad
+          ? eitherWay(
+              'like',
+              h,
+              pr.cool + believe + prude + past + pr.dislike * Math.max(0, -lh) - pr.friend * Math.max(0, lh),
+              pr.rally * Math.max(0, lh) + pr.spurn * Math.max(0, -ls) + easy,
+              -1
+            )
+          : eitherWay(
+              'like',
+              h,
+              pr.coolKind + prude + past + pr.dislike * Math.max(0, -lh),
+              pr.warm + believe + pr.friend * Math.max(0, lh) + easy,
+              1
+            ),
+        you = eitherWay(
+          'trust',
+          null,
+          (o.bad ? pr.youCool + believe : pr.youCoolKind) + prude + jealous - pr.loyal * Math.max(0, l.rapport - 1),
+          pr.youWarm + easy + (o.bad ? pr.spurn * Math.max(0, -ls) : pr.glad * Math.max(0, lh)),
+          o.bad ? -1 : 1
+        );
+      return [her, you];
+    },
+    after: (o, pr) => {
+      if (!o.before) return null;
+      const h = C(o.about),
+        s = C(o.by);
+      if (!isFree(h) || !isFree(s)) return null;
+      if (!o.bad)
+        return chance(pr.thanks) && likeShift(h.id, s.id, 1)
+          ? bi(`${h.short} gives ${s.short} a grateful look`, `${ru.c(h)} с благодарностью смотрит на ${ru.c(s, 'a')}`)
+          : null;
+      S.log.visit.shamed = S.day; // (and it shows in her face today: people/manner.js, shamed)
+      return chance(pr.hurt) && likeShift(h.id, s.id, -1)
+        ? bi(`${h.short} will not look at ${s.short}`, `${ru.c(h)} не смотрит на ${ru.c(s, 'a')}`)
+        : null;
+    },
+    keep: o => ({ bad: !!o.bad, to: o.only ? o.only[0] : null }),
+    quiet: true
+  },
   // the truth gave the lie to what someone had said before everyone (or the camp takes it so): the friends of the one
   // wronged suspect them now
   disproven: {
@@ -477,7 +557,7 @@ function resent(who, of, p) {
     by = C(of);
   if (!isFree(c) || !chance(p)) return null;
   suspect(c.id, by.id, 1);
-  if (S.like[c.id][by.id] > -2) S.like[c.id][by.id]--;
+  likeShift(c.id, by.id, -1);
   return bi(`${c.short} will not look at ${by.short}`, `${ru.c(c)} не смотрит на ${ru.c(by, 'a')}`);
 }
 // The truth about someone is out, as the camp sees it (exposed as a cultist, or proven innocent: sent away after an

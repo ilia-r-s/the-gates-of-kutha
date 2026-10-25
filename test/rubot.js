@@ -44,7 +44,7 @@ const game = ({ gi, steps }) => {
     seen[snap.lang]++;
     const t = snap.text.replace(/♪[^\n]*/g, '');
     if (snap.lang === 'ru') {
-      const words = (t.match(/[A-Za-z][A-Za-z’'\-]+/g) || []).filter(v => v !== 'English');
+      const words = (t.replace(/\b[0-9A-F]{4}-[0-9A-F]{4}\b/g, '').match(/[A-Za-z][A-Za-z’'\-]+/g) || []).filter(v => v !== 'English'); // (a season's code is the same in both)
       if (words.length) bad.push({ gi, k, lang: 'ru', title: snap.title, words: [...new Set(words)].slice(0, 8) });
     } else {
       const cyr = (t.match(/[А-Яа-яЁё][А-Яа-яЁё\-]+/g) || []).filter(v => v !== 'Русский');

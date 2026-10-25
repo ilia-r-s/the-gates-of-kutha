@@ -145,7 +145,9 @@ run(async browser => {
       )
         .replace(/<[^>]*>/g, ' ')
         .replace(/&[a-z]+;/g, ' ');
-      const words = (text.match(/[A-Za-z][A-Za-z’'\-]+/g) || []).filter(w => !allowLatin.test(w));
+      const words = (text.replace(/\b[0-9A-F]{4}-[0-9A-F]{4}\b/g, '').match(/[A-Za-z][A-Za-z’'\-]+/g) || []).filter(
+        w => !allowLatin.test(w)
+      ); // (a season's code is the same in both)
       if (words.length)
         leaks.push({
           seed,

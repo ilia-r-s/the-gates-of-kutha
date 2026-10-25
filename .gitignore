@@ -6,3 +6,5 @@ standalone.html
 Gates of Kutha.html
 # screenshots the visual tests take
 test/shots/
+# the GitHub Pages site, when put together by hand (node .github/publish.js site ...)
+_site/

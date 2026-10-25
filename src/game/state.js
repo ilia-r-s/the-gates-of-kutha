@@ -42,7 +42,8 @@
 //   mourning                        who is grieving whom, since when (people/social.js)
 //   tenor                           the season's mood: mood, heat, pull, quiet, log; after (news made likelier by news),
 //                                   feud (a quarrel that may flare up again), dust (a shamal's second day) (game/tenor.js)
-//   salt                            fixes the choices made without the dice (faces, fates)
+//   seed, salt                      the season's seed, which deals and plays it (core/random.js); the salt fixes the
+//                                   choices made without the dice (faces, fates)
 //   hardcore                        the casebook keeps only the bare record (chosen in your reply to the Trustees, ui/intro.js)
 //   fin                             the descent: named, comp (who is with you), took (who went down with you), left,
 //                                   refused, offered, betrayed (a knife at the fourth gate), turned (joined the rite at
@@ -101,16 +102,21 @@ function backedDown() {
   if (S.backAt !== at) S.log.backDown++;
   S.backAt = at;
 }
-// A new season, dealt in this order (the dice are thrown in this order): the parts, first of all (dealParts); the
-// powers and the one below (freshSeason); the cast's habits and temperaments (dealCast); the powers' signs, wards and
-// titles, and the tablets (dealGods); what people claim (assignClaims), whom they like (assignLikes; campInit throws
-// none), the flirtations (assignFlirts); what your background gives you (backgroundStart); the night Crane died
-// (crane0); the salt that fixes the choices made without the dice; how far each of the camp takes your word (dealWord,
-// by the salt); the season's mood (dealTenor); your own dreams (dealYourDreams); and the cult's patience.
+// A new season, from its seed (seed: a season to deal again; else a new one, from the page's stream: core/random.js),
+// dealt in this order (the dice are thrown in this order): the parts, first of all (dealParts); the powers and the one
+// below (freshSeason); the cast's habits and temperaments (dealCast); the powers' signs, wards and titles, and the
+// tablets (dealGods); what people claim (assignClaims), whom they like (assignLikes; campInit throws none), the
+// flirtations (assignFlirts); the night Crane died (crane0); the salt that fixes the choices made without the dice; how
+// far each of the camp takes your word (dealWord, by the salt); the season's mood (dealTenor); your own dreams
+// (dealYourDreams); the cult's patience; and last, what your background gives you (backgroundStart), so that the same
+// seed deals the same season whoever you are.
 // hardcore: the casebook keeps only the bare record, with nothing joined up for you (ui/book.js)
-function newGame(name, bg, hardcore = false) {
+function newGame(name, bg, hardcore = false, seed = null) {
+  const sd = seed == null ? newSeed() : seed >>> 0;
+  reseed(sd);
   const dealt = dealParts();
   S = freshSeason(name, bg);
+  S.seed = sd;
   S.hardcore = !!hardcore;
   S.nerve = S.nerveMax;
   S.log = freshLog();
@@ -123,7 +129,6 @@ function newGame(name, bg, hardcore = false) {
   assignLikes();
   campInit();
   assignFlirts();
-  backgroundStart(bg);
   crane0();
   S.salt = Math.floor(rand() * 2147483648);
   dealWord();
@@ -132,6 +137,7 @@ function newGame(name, bg, hardcore = false) {
   S.patience = +wpick(RULES.night.low.patience); // (how readily the cult lies low this season: people/cunning.js, liesLow)
   S.turned = {}; // (how far the cult has turned its craft against your way of hunting it: people/cunning.js, cultTurns)
   S.onYou = 0; // (how far the camp suspects you yourself, after the deed: game/deed.js)
+  backgroundStart(bg);
   emit('newgame');
 }
 // The season before anything else is dealt: the clock, your nerve, wounds, kit and fragments by background, the power
