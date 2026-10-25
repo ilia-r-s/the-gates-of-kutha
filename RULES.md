@@ -67,10 +67,10 @@ The exceptions, each for a reason:
 
 - **Every season comes from one seed.** The dice of a season are thrown from its seed (`core/random.js`; `S.seed`), so
   that the same seed deals the same season, whatever background you choose, and the same choices play it the same way.
-  The casebook (Kit) and the ending page show its code; the page's address takes one (the title screen keeps a box for
-  it out of sight: DEVELOPING.md, "Seasons and seeds"), and the tests and simulators deal their seasons from seeds too
-  (`test/replay.js` plays any code, or fuzzes thousands of them and names the ones that went wrong). Pictures and music
-  use their own randomness and never touch the season's.
+  The ending page shows its code (and the casebook's Kit, once the title screen's box for codes has been opened); the
+  page's address takes one (the box is kept out of sight: DEVELOPING.md, "Seasons and seeds"), and the tests and
+  simulators deal their seasons from seeds too (`test/replay.js` plays any code, or fuzzes thousands of them and names
+  the ones that went wrong). Pictures and music use their own randomness and never touch the season's.
 - **The environment is written down.** [REQUIREMENTS.md](REQUIREMENTS.md) says what the game needs to run (browsers,
   language level, web platform), every tool it is built and tested with and its exact version (`package.json`,
   `package-lock.json`, `.nvmrc`), and the browsers, systems, screen sizes and devices it has actually been tested on, and

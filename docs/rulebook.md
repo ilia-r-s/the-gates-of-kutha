@@ -82,7 +82,7 @@ A season is five days of three slots (morning, afternoon, evening), each day fol
 
 **The casebook** is kept the way your reply to the Trustees' wire says, for the whole season. The usual way, it files what you learn under the person it concerns: it marks habits that turn up at a scene, says whom a trace or a sighting fits, flags accounts that disagree and two people claiming one part, and shows on each card who suspects that person in earnest and what has been said of them. Neither way does anything tell you how strong a case is. Played hardcore, it keeps only the bare record and joins nothing up; the rules are otherwise the same.
 
-**The season's code.** Every season is dealt and played from one seed, a code such as 1A2B-3C4D, shown in the casebook's Kit and on the ending page. Given in the game's address (…/?seed=1A2B-3C4D), a code deals the same season again, whatever background you choose, and the same choices play it the same way; without one, the season is a new one. At the end, *Play this season again* does it for you.
+**The season's code.** Every season is dealt and played from one seed, a code such as 1A2B-3C4D, shown on the ending page. Given in the game's address (…/?seed=1A2B-3C4D), a code deals the same season again, whatever background you choose, and the same choices play it the same way; without one, the season is a new one. At the end, *Play this season again* does it for you.
 
 ## The meters in words
 

@@ -1478,6 +1478,12 @@ const SCRIPT = () => {
   seedOpen = false;
   introScene(parseSeed('1A2B-3C4D'));
   cap('title: a code given, the box open and filled');
+  // the casebook's Kit shows the season's code only once the dot has been pressed (everywhere above, it has not)
+  q('#seedKey').click();
+  newGame('Marlowe', 'philologist', false, parseSeed('1A2B-3C4D'));
+  arrivalScene();
+  cap('kit: the season code shown, the dot pressed');
+  seedOpen = false;
   return caps;
 };
 

@@ -4,6 +4,13 @@ Every build of _The Gates of Kutha_, newest first. The build number is set in `p
 top panel. Each build pushed to `main` is published on GitHub Pages and as a GitHub Release, with its section of this
 file as the release notes (`.github/workflows/publish.yml`). Builds before 26.1.0 came before this repository.
 
+## 27.1.3 — 2026-10-25
+
+**Changed.** The casebook's Kit shows the season's code, and what it is for, only once the season-code box on the title
+screen has been opened; the ending page still shows it.
+
+**For developers.** `test/forced.js` checks that the Kit shows the code once the box has been opened.
+
 ## 27.1.2 — 2026-10-25
 
 **Changed.**

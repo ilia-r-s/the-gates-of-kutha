@@ -823,8 +823,10 @@ function bookKit() {
     }[S.bg]
   }</p>`;
   h += searchedNote();
-  // (the season's code: the same code, given on the title screen, deals it again: core/random.js)
-  h += `<h4>${bi('Season', 'Сезон')}</h4><p><span class="seedcode">${seedCode(S.seed)}</span> <span class="dim">${bi('· given on the title screen, this code deals the same season again', '· введённый на титульном экране, этот код сдаст тот же сезон заново')}</span></p>`;
+  // (the season's code, and what it does, only once the dot in the title screen's dateline has opened the box for it:
+  // ui/intro.js, openSeed; the same code, given there, deals the season again: core/random.js)
+  if (seedOpen)
+    h += `<h4>${bi('Season', 'Сезон')}</h4><p><span class="seedcode">${seedCode(S.seed)}</span> <span class="dim">${bi('· given on the title screen, this code deals the same season again', '· введённый на титульном экране, этот код сдаст тот же сезон заново')}</span></p>`;
   return h;
 }
 // Where you have searched, and how often; and what a search still gives.
