@@ -48,7 +48,7 @@ rite, before the camp turns on you, the night takes you or your nerve gives out.
 - **People, not tokens.** Seven temperaments, likes and grudges, gossip true and false, and a camp that moves together
   when something happens before everyone.
 - **Every season is new, and any season can come again.** Parts, powers, tablets and the season's mood are dealt
-  afresh, and every season has a code: give it on the title screen to play that season again, or hand it to a friend.
+  afresh, and every season has a code: put it in the game's address to play that season again, or hand it to a friend.
 - **Nineteen endings,** each with its own picture, and an epilogue for everyone who was there.
 - **English and Russian,** switched at any moment.
 - **One page, drawn and scored in code.** Every picture is drawn as SVG and the music is synthesised as it plays. No
@@ -82,9 +82,9 @@ rite, before the camp turns on you, the night takes you or your nerve gives out.
 - **Sound:** browsers keep it back until you click or tap, so the music starts with your first choice.
 - **It is hard.** Bots that play like careful people lose nine seasons in ten, and a clean victory comes about once in
   forty. Read the casebook well and you will do better.
-- **Season codes:** every season's code is in the casebook's Kit and on the ending page. Give it on the title screen,
-  or as part of the address (`https://ilia-r-s.github.io/the-gates-of-kutha/?seed=1A2B-3C4D`), and the same season is
-  dealt again.
+- **Season codes:** every season's code is in the casebook's Kit and on the ending page. Add it to the address
+  (`https://ilia-r-s.github.io/the-gates-of-kutha/?seed=1A2B-3C4D`), and the same season is dealt again; _Play this
+  season again_, at the end, needs no code at all.
 - **Your casebook, your way:** your reply to the Trustees decides how the casebook is kept for the season, joining up
   what you learn for you, or keeping only the bare record (hardcore).
 - **Browsers:** Chrome or Edge 80+, Firefox 72+, Safari 13.1+, on screens from phones (360 pixels wide) up. The details

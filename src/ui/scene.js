@@ -1,5 +1,5 @@
 // ===================== THE SCREEN: the scene, the meters, the site plan =====================
-// show(scene) puts a scene up: { kicker, title, sub, body: [html], choices: [{ label, sub, cls, fn }], art, intro }.
+// show(scene) puts a scene up: { kicker, kickerHtml, title, sub, body: [html], choices: [{ label, sub, cls, fn }], art, intro }.
 // Everything is drawn from tokens, so switching language repaints the same scene in the other tongue.
 const S_ui = { tab: 'people', scene: null };
 const $ = s => document.querySelector(s);
@@ -70,7 +70,8 @@ function draw(el, html) {
 }
 // the words of a scene, in the current language; called again when the language changes
 function paintScene(sc) {
-  $('#kicker').textContent = X(sc.kicker || '');
+  if (sc.kickerHtml) $('#kicker').innerHTML = X(sc.kicker);
+  else $('#kicker').textContent = X(sc.kicker || '');
   $('#sceneTitle').textContent = X(sc.title || '');
   const sub = $('#sceneSub');
   sub.textContent = X(sc.sub || '');
@@ -298,6 +299,10 @@ function initUI() {
       if (changed) $('#tabPanel').scrollTop = 0; // a new tab opens at its top
     })
   );
+  // the dot in the title screen's dateline opens the season-code box (ui/intro.js)
+  $('#kicker').addEventListener('click', e => {
+    if (e.target.closest('#seedKey')) openSeed();
+  });
   const svg = $('#map');
   // (the second click of a double-click, and a key held down, go once)
   svg.addEventListener('click', e => {

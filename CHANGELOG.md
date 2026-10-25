@@ -4,6 +4,19 @@ Every build of _The Gates of Kutha_, newest first. The build number is set in `p
 top panel. Each build pushed to `main` is published on GitHub Pages and as a GitHub Release, with its section of this
 file as the release notes (`.github/workflows/publish.yml`). Builds before 26.1.0 came before this repository.
 
+## 27.1.2 — 2026-10-25
+
+**Changed.**
+
+- The season-code box no longer shows on the title screen. A code in the page's address (`…/?seed=1A2B-3C4D`) still
+  deals that season, and shows the box with the code filled in; _Play this season again_, at the end, needs no code at
+  all. Whether the box can be opened any other way is left for you to find.
+- The Omens notebook no longer opens with a paragraph explaining how signs, powers, titles and charms fit together; the
+  reckoning starts straight with its rows.
+
+**For developers.** `test/forced.js` checks the title screen's season-code box: out of sight, opened, and filled for a
+code given.
+
 ## 27.1.1 — 2026-10-25
 
 **Fixed.** On the title screen the season-code box starts in line with the surname box, in both languages; on a narrow

@@ -61,8 +61,10 @@ function setLang(l) {
   if (S_ui.scene) paintScene(S_ui.scene);
   const ni = document.getElementById('pname');
   if (ni && typed != null) ni.value = typed === 'Marlowe' || typed === 'Марлоу' ? (l === 'ru' ? 'Марлоу' : 'Marlowe') : typed;
-  const si = document.getElementById('pseed');
+  const si = document.getElementById('pseed'),
+    sr = document.getElementById('seedRow');
   if (si && code != null) si.value = code;
+  if (sr && seedOpen) sr.hidden = false;
   const svg = document.getElementById('map');
   if (svg) svg.removeAttribute('data-ready');
   renderAll();

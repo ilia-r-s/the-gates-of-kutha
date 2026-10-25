@@ -8,11 +8,23 @@ function seedInAddress() {
     return null;
   }
 }
+// The season-code box is out of sight until it is asked for: by the dot in the title screen's dateline, a button that
+// does not look like one (wired in initUI, ui/scene.js), or by a code in the page's address. Once opened, it stays open on
+// every title screen until the page is loaded again.
+let seedOpen = false;
+function openSeed() {
+  seedOpen = true;
+  const row = document.getElementById('seedRow'),
+    sd = document.getElementById('pseed');
+  if (row) row.hidden = false;
+  if (sd) sd.focus();
+}
 // The title screen: your name, your background, and, if you have one, the code of a season to play again (else a new one).
-// seed: a code to offer in the field.
+// seed: a code to offer in the field (which then shows).
 function introScene(seed = seedInAddress()) {
   S = null;
   S_ui.tab = 'people';
+  const open = seedOpen || seed != null;
   const bgs = [
     {
       id: 'philologist',
@@ -52,14 +64,15 @@ function introScene(seed = seedInAddress()) {
     }
   ];
   show({
-    kicker: bi('Baghdad · March 1926', 'Багдад · март 1926'),
+    kicker: `${bi('Baghdad', 'Багдад')} <button type="button" id="seedKey" class="seedkey" aria-label="${bi('Season code', 'Код сезона')}">·</button> ${bi('March 1926', 'март 1926')}`,
+    kickerHtml: true,
     title: bi('The Gates of Kutha', 'Врата Куты'),
     intro: true,
     body: [
       `<p>${bi('Professor Aldous Crane, director of the British expedition to Tell Ibrahim, the ancient city of Kutha, is dead. The Trustees have wired you to take over the season and to close the dig before the dark of the moon, five days from now.', 'Профессор Олдос Крейн, глава британской экспедиции на Телль-Ибрагим — холм, под которым спит древняя Кута, — мёртв. Попечители телеграфируют вам: принять сезон и закрыть раскоп до новолуния. До него пять дней.')}</p>`,
       `<p>${bi('Seven people are still at the camp. Crane’s last diary entry says that two of them serve something under the mound, and that it wants to come up.', 'В лагере остаются семь человек. Последняя запись в дневнике Крейна гласит, что двое из них служат чему-то под холмом — и что оно хочет выйти наверх.')}</p>`,
       `<div class="namefield"><label for="pname">${bi('Your surname', 'Ваша фамилия')}</label><input id="pname" type="text" maxlength="24" value="${bi('Marlowe', 'Марлоу')}" autocomplete="off"></div>`,
-      `<div class="namefield"><label for="pseed">${bi('Season code', 'Код сезона')}</label><input id="pseed" class="seed" type="text" maxlength="12" value="${seed == null ? '' : seedCode(seed)}" placeholder="${bi('a new season', 'новый сезон')}" autocomplete="off" spellcheck="false"><span class="dim">${bi('The code of a season deals it again, whoever you are.', 'Код сезона сдаёт его заново, кем бы вы ни были.')}</span></div>`,
+      `<div class="namefield" id="seedRow"${open ? '' : ' hidden'}><label for="pseed">${bi('Season code', 'Код сезона')}</label><input id="pseed" class="seed" type="text" maxlength="12" value="${seed == null ? '' : seedCode(seed)}" placeholder="${bi('a new season', 'новый сезон')}" autocomplete="off" spellcheck="false"><span class="dim">${bi('The code of a season deals it again, whoever you are.', 'Код сезона сдаёт его заново, кем бы вы ни были.')}</span></div>`,
       `<p class="dim">${bi('Choose who you are:', 'Кто вы?')}</p>`
     ],
     choices: bgs.map(b => ({

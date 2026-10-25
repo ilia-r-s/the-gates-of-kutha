@@ -1,7 +1,7 @@
 # Requirements
 
 What the game needs to run, what it is built and tested with, and where it has been tested. Kept current with every
-release (the project's rule: [RULES.md](RULES.md), "How the project is kept"). Last checked for build 27.1.1.
+release (the project's rule: [RULES.md](RULES.md), "How the project is kept"). Last checked for build 27.1.2.
 
 ## Playing
 

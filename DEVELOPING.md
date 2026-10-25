@@ -20,12 +20,14 @@ up to date in the same commit.
 
 ## Seasons and seeds
 
-Every season is dealt and played from a seed of its own (`core/random.js`; `S.seed`), written as a code like
-`1A2B-3C4D` in the casebook (Kit) and on the ending page: given on the title screen (or as `?seed=1A2B-3C4D` or
-`#seed=1A2B-3C4D` after the page's address), it deals the same season again, whoever you play it as, and the same
-choices play it the same way. The tests and simulators deal their seasons from seeds too: `node test/replay.js
-1A2B-3C4D` plays one season from its code and prints it as a player reads it, and `node test/replay.js --fuzz=300
---from=1A2B-3C4D` plays three hundred, scans every scene, and names the codes that went wrong.
+Every season is dealt and played from a seed of its own (`core/random.js`; `S.seed`), written as a code like `1A2B-3C4D`
+in the casebook (Kit) and on the ending page: given after the page's address (`?seed=1A2B-3C4D` or `#seed=1A2B-3C4D`),
+which shows the title screen's season-code box with it filled in, or typed into that box, it deals the same season
+again, whoever you play it as, and the same choices play it the same way. The box is out of sight until asked for: the
+dot in the title screen's dateline ("Baghdad · March 1926") is a button that opens it (`ui/intro.js`, `openSeed`), and
+it stays open on later title screens until the page is loaded again. The tests and simulators deal their seasons from
+seeds too: `node test/replay.js 1A2B-3C4D` plays one season from its code and prints it as a player reads it, and `node
+test/replay.js --fuzz=300 --from=1A2B-3C4D` plays three hundred, scans every scene, and names the codes that went wrong.
 
 ## Building
 

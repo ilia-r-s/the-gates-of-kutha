@@ -750,7 +750,7 @@ function bookOmens() {
   const fsigns = [...new Set(known.filter(f => f.sign != null).map(f => f.sign))],
     titles = titlesMet();
   const arts = S.charms.filter(w => has(w) || S.log.charms.includes(w) || reads.some(r => r.w === w));
-  let h = `<h4>${bi('Your reckoning', 'Ваши выкладки')}</h4><p class="dim rk-rules">${bi('Every sign answers to two powers, and every power has four signs. In the tablets each power goes by two old titles, the signs are written as omen formulas, and the charms are known only by the marks they bear: match them to what you have seen and what you carry. Six old charms lie in the tell: four are wards, one against each power, and two bind nothing. Tap a name once to rule it in, again to rule it out.', 'Каждое знамение отвечает двум силам, и у каждой силы четыре знамения. В табличках у каждой силы два древних титула, знамения записаны как формулы предсказаний, а амулеты узнаются лишь по приметам, которые на них есть: сопоставьте их с тем, что вы видели и что носите с собой. В холме лежат шесть древних амулетов: четыре из них — обереги, по одному против каждой силы, а два не связывают никого. Нажмите на имя один раз, чтобы принять его, второй — чтобы исключить.')}</p><div class="reck">`;
+  let h = `<h4>${bi('Your reckoning', 'Ваши выкладки')}</h4><div class="reck">`;
   h += gmRow(bi('The power below Kutha', 'Сила под Кутой'), 'p', false);
   if (titles.length)
     h +=

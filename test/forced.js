@@ -1469,6 +1469,15 @@ const SCRIPT = () => {
     cap('ending-last');
     RULES.fates = keepF;
   }
+  // the title screen: the season-code box out of sight; opened by the dot in the dateline; open and filled for a code
+  // given (in the page's address, or by the tests)
+  introScene(null);
+  cap('title: the season-code box out of sight');
+  q('#seedKey').click();
+  cap('title: the box opened by the dateline’s dot');
+  seedOpen = false;
+  introScene(parseSeed('1A2B-3C4D'));
+  cap('title: a code given, the box open and filled');
   return caps;
 };
 
