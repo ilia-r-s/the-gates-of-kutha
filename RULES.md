@@ -223,9 +223,10 @@ by day the cult mostly keeps clear of its own (`company.cultApart`), the better 
   not to the day you looked; and once in a hundred traces the habit it shows was not its owner's own that night
   (`examine.smudge`).
 - **Translate** a fragment at camp (`study.odds` 62%): about `PUZ.lines` (4) lines (now and then three or five), leaning
-  toward what you chose to look for; one line in a hundred is a scribe's error, and false (`PUZ.scribe`). Reading costs
-  nerve, the more the more you know: about a point of it at `study.cost` (50%) + `study.costLine` (3%) for each line you
-  knew already, at most `costMax` (90%; a philologist × `costPhilologist`, 0.75), and about two at `worse` (20%) +
+  toward what you chose to look for (any sign you have seen, charm you carry or title you have met, whether or not any
+  line about it is left); one line in a hundred is a scribe's error, and false (`PUZ.scribe`). Reading costs nerve, the
+  more the more you know: about a point of it at `study.cost` (50%) + `study.costLine` (3%) for each line you knew
+  already, at most `costMax` (90%; a philologist × `costPhilologist`, 0.75), and about two at `worse` (20%) +
   `worseLine` (2%) per line known; signs that will not come clear cost a point all the same at `failCost` (40%), and a
   failure may crumble the fragment (`crumble`, 30%). At night the words may come back to you (`study.linger`, 1.2% per
   line you know, at most `lingerMax`, 40%) for another point. So reading alone can drive you mad: the more of the
@@ -316,7 +317,7 @@ you, speaks against it, or says nothing; the hands are shown by name, and the ca
   2), unless it was the thief (a thief caught is a thief caught, though it counts as a wrong accusation in everything
   else).
 - **Proven right**, each of the camp who stood with you may trust you the more for it (`verdict.stood`). The one
-  unmasked may shout a line of the old liturgy at you from the truck (`inquiry.shout`, 70%: a tablet line about the
+  unmasked may shout a line of the old liturgy at you from the lorry (`inquiry.shout`, 70%: a tablet line about the
   power below, all but always, `PUZ.patronLine`, 90%). Unmasking the last of the cult wins the season, all but always:
   now and then the rite has come too far to die with its priests, and the gate opens of itself (`inquiry.tooLate`, 3%; ×
   `tooLateNear`, 3, once the rite is close), and the descent begins that evening, with nobody of the cult left in the
@@ -386,7 +387,7 @@ the one you went for +`judge.victim` (3), if alive, −`judge.trust` (1) × thei
 night's dead so far, +`verdict.anger` × the camp's anger, +`judge.cult` (0.3) × the craft's `push` for the cult, ± the
 evening's mood and their own whim, as at an inquiry. At `judge.expel` (2.2) or more they would send you away; below
 `keep` (0.6) they speak for you; between, they say nothing. With at least `verdict.need` (2) for sending you away, and
-more of them than speak for you, you are put on the truck to Hillah, and the season ends (*The Truck to Hillah*).
+more of them than speak for you, you are put on the lorry to Hillah, and the season ends (*The Lorry to Hillah*).
 Otherwise you stay: the camp angers (+`deed.angered`, 1) and lets its suspicion of you go a step (`cleared`, 1), and
 those who would have sent you away trust you less.
 
@@ -640,9 +641,10 @@ day gone + `night.takenRite` (20%) × the rite's progress, × the season mood's 
 so most of the dead are always murdered, and the power's own hand shows more as the rite gathers strength. So a death
 almost always tells something of the power below: it is in the power's own manner but for now and then another's of the
 season (`night.manner`, 97%), never told, which the ending tells. Now and then (`night.signed`, 30%) the cult leaves its
-signature besides (seven). In a season no state of the body is told twice while another is left. Crane, the night before
-you came, was the power's own work as a rule (`night.craneTaken`, 70%), otherwise the cult's, like any other death, and
-his scene holds a trace like any other.
+signature besides (seven), one that agrees with how the body lies, as the power's mark does; and no death, nor the night
+coming for you, is told in a way that calls to mind a sign in play you have not yet seen. In a season no state of the
+body is told twice while another is left. Crane, the night before you came, was the power's own work as a rule
+(`night.craneTaken`, 70%), otherwise the cult's, like any other death, and his scene holds a trace like any other.
 
 **Onto them.** If the one the night took had named someone still at the dig guilty before everyone, someone may say so
 aloud at first light, as half the camp is thinking it (`camp.onto`, 45%). It may be what the cult killed them for, and
@@ -658,33 +660,34 @@ it.
 At dawn the season's mood may turn (above). Then: the trace, perhaps a horror of the night (above), the scorched circle,
 a sign of the power below, all but always (`night.dawnSign`, 95%: one not yet seen as a rule, an old one at
 `night.signAgain`, 0.05, of the weight; each sign is told in three ways, the ones not yet heard first; where dread runs
-high, perhaps a second sign; one sign in a hundred is not the power's at all, `PUZ.stray`), perhaps a charm from the
-finds tray (`night.findsTray` × the mood's finds), the Dreamer's dream (of someone still here at first light and not yet
-dreamt of, whom the night came for and missed among them; the night may bring none, `night.dreamless`, 3%; it is true at
-`night.dreamTrue`, 95%, else muddied), and the dreams of anyone who only says they dream, the cult's among them, all by
-the same odds: brought to you before breakfast by one who trusts you or promised you their dreams, mostly
-(`night.seerTells`, 90%), otherwise told aloud at breakfast (`night.dreamAloud`, 30%, as the morning has room), in no
-fixed order; and as you take your leave, by one who has told none that day (`talk.partingDream`, 40%, if they promised
-or trust you; `partingUnpromised`, 10%, otherwise), so that who spoke first tells you nothing; the morning's talk
-(below), and perhaps news, as often as its strand comes (`night.event`: news 0.24, the uncanny 0.1, the camp's own 0.1 a
-morning, each × its strand's rate and the room the morning has left, above). A piece of news already told comes again
-only seldom (`events.again`, 0.1 of its weight); the voice on the wireless, before the rite stirs, seldom
-(`events.early`, 0.2). What each piece does comes all but always, never always (`events`). The world outside: a shamal
-(two slots today, and no evening; now and then it drops by noon, `shamalPasses`, 15%; heavy, it blows on the next day,
-`dustAgain`, 75%); a telegram from the Trustees (about −1 nerve); RAF biplanes, the post from Hillah (about +1 nerve); a
-dealer (a charm, or a small find; a fake now and then, `fake`, 20%; heavy, a second thing that is real, `dealerMore`,
-60%); a cable from the Museum (a tablet line; garbled now and then, `garbled`, 10%); a doctor from Hinaidi (a wound seen
-to, mostly, or about +1 nerve); rain (about a fragment washed out, now and then none or two); an inspector from Baghdad
-(takes a fragment, unless he is satisfied, `satisfied`, 20%); the supply lorry (a torch, `torch`, 85%, else about +1
-nerve; heavy, a flask of brandy, `brandy`, 70%). The uncanny: the diggers refusing Trench B, and seven shadows at noon
-(a sign each); a mirage, someone in your tent in the night, the village well gone bitter, a voice on the wireless
-reading your name (about −1 nerve each); a grave of kneeling men (about a fragment, about −1 nerve); a dervish (an
-incantation bowl, `bowl`, 85%, or about +1 nerve). The uncanny's cost is a horror's, which you may grow used to (above).
-The camp's own: coffee with the headman (trust +1, `coffee`, 75%); a quarrel at breakfast (a feud shows); a wedding
-feast (a friendship shows, or trust +1 for the one beside you, `feast`, 75%); the diggers' song about whoever the camp
-eyes most (anyone at `songAnyone`, 0.25, against each one's suspicion by the camp, squared; the camp may eye them the
-more). A quarrel or a feast is now and then between any two at all (`mislead`, 4%). Heavy, each does twice as much, or
-worse (above); a heavy quarrel leaves each of the two suspecting the other (`heavySus`, 75%).
+high, perhaps a second sign; one sign in a hundred is not the power's at all, `PUZ.stray`, and once seen it may come
+again as any seen sign may), perhaps a charm from the finds tray (`night.findsTray` × the mood's finds), the Dreamer's
+dream (of someone still here at first light and not yet dreamt of, whom the night came for and missed among them; the
+night may bring none, `night.dreamless`, 3%; it is true at `night.dreamTrue`, 95%, else muddied), and the dreams of
+anyone who only says they dream, the cult's among them, all by the same odds: brought to you before breakfast by one who
+trusts you or promised you their dreams, mostly (`night.seerTells`, 90%), otherwise told aloud at breakfast
+(`night.dreamAloud`, 30%, as the morning has room), in no fixed order; and as you take your leave, by one who has told
+none that day (`talk.partingDream`, 40%, if they promised or trust you; `partingUnpromised`, 10%, otherwise), so that
+who spoke first tells you nothing; the morning's talk (below), and perhaps news, as often as its strand comes
+(`night.event`: news 0.24, the uncanny 0.1, the camp's own 0.1 a morning, each × its strand's rate and the room the
+morning has left, above). A piece of news already told comes again only seldom (`events.again`, 0.1 of its weight); the
+voice on the wireless, before the rite stirs, seldom (`events.early`, 0.2). What each piece does comes all but always,
+never always (`events`). The world outside: a shamal (two slots today, and no evening; now and then it drops by noon,
+`shamalPasses`, 15%; heavy, it blows on the next day, `dustAgain`, 75%); a telegram from the Trustees (about −1 nerve);
+RAF biplanes, the post from Hillah (about +1 nerve); a dealer (a charm, or a small find; a fake now and then, `fake`,
+20%; heavy, a second thing that is real, `dealerMore`, 60%); a cable from the Museum (a tablet line; garbled now and
+then, `garbled`, 10%); a doctor from Hinaidi (a wound seen to, mostly, or about +1 nerve); rain (about a fragment washed
+out, now and then none or two); an inspector from Baghdad (takes a fragment, unless he is satisfied, `satisfied`, 20%);
+the supply lorry (a torch, `torch`, 85%, else about +1 nerve; heavy, a flask of brandy, `brandy`, 70%). The uncanny: the
+diggers refusing Trench B, and seven shadows at noon (a sign each); a mirage, someone in your tent in the night, the
+village well gone bitter, a voice on the wireless reading your name (about −1 nerve each); a grave of kneeling men
+(about a fragment, about −1 nerve); a dervish (an incantation bowl, `bowl`, 85%, or about +1 nerve). The uncanny's cost
+is a horror's, which you may grow used to (above). The camp's own: coffee with the headman (trust +1, `coffee`, 75%); a
+quarrel at breakfast (a feud shows); a wedding feast (a friendship shows, or trust +1 for the one beside you, `feast`,
+75%); the diggers' song about whoever the camp eyes most (anyone at `songAnyone`, 0.25, against each one's suspicion by
+the camp, squared; the camp may eye them the more). A quarrel or a feast is now and then between any two at all
+(`mislead`, 4%). Heavy, each does twice as much, or worse (above); a heavy quarrel leaves each of the two suspecting the
+other (`heavySus`, 75%).
 
 **The thief in the Dreamer's dreams.** The god knows who has robbed it: in a true dream of the thief, now and then its
 hand is on the thief's shoulder (`night.thiefDark`, 30%), a guilty dream of one who is no cultist. The ending tells such
@@ -919,7 +922,7 @@ is only the night, as in any conversation (`talk.chillCult`, 30%; `chillOther`, 
   the less of you for it (`rumours.visitFriend`, 0.2, × liking).
 - **She stays**, and if she is of the cult she may do the cult's work herself in the small hours (`visit.strike`, 30%;
   never on a night the cult lies low), and mostly she does it (`kills`, 90%): the season ends. If not, you catch her
-  wrist in time, at the cost of about 2 nerve and a wound, and by first light she is in the truck to Hillah as one of
+  wrist in time, at the cost of about 2 nerve and a wound, and by first light she is on the lorry to Hillah as one of
   them unmasked (the rite set back as at an inquiry; if she was the last of them, the season is won, all but always, as
   at an inquiry).
 - **Otherwise the night goes as any night**, by its own dice. The cult coming for her may know where she sleeps tonight
@@ -1115,9 +1118,9 @@ costs a nerve more when it goes wrong.
 Nineteen endings, each with its own picture: the gate unopened (the whole of the cult unmasked above ground), three
 clean victories below (sealed by the ward, banished by the rite, the sanctum emptied), three hard ones (a shot, fire, a
 scarred rite), two deaths, three madnesses, six dooms (one per nature of the power below: plague's is *None to Bury
-Them*, madness's *The Sleepwalkers*), and *The Truck to Hillah*, a defeat: the camp sent you away for the deed. How
-you died, and who found you, follows what happened: below, or in the night, by the cult's hand, the dig's own dangers
-or someone's spite.
+Them*, madness's *The Sleepwalkers*), and *The Lorry to Hillah*, a defeat: the camp sent you away for the deed. How you
+died, and who found you, follows what happened: below, or in the night, by the cult's hand, the dig's own dangers or
+someone's spite.
 
 - **The conduct score** (`reckoning`): +3 per cultist exposed at an inquiry, +2 per cultist taken down at the fourth
   gate or unmasked in the night (one who came to your tent and failed to kill you), +2 for the hierophant, −3 per wrong
@@ -1212,7 +1215,7 @@ than these bots; one who plays carelessly, worse. The intervals are 95% (Wilson)
 | — madness | 41.6% (39.9–43.3) |
 | — death | 24.1% (22.7–25.7) |
 | — the rite completes | 23.9% (22.4–25.4) |
-| — sent away on the truck to Hillah | 0.7% (0.5–1.1) |
+| — sent away on the lorry to Hillah | 0.7% (0.5–1.1) |
 | **Hard victory** | **7.3% (6.5–8.3)** |
 | **Clean victory** | **2.3% (1.8–2.9)** |
 
