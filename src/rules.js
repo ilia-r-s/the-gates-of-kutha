@@ -599,7 +599,9 @@ const RULES = {
     companion: 0.1, torch: 0.15,                // every gate is easier for each loyal companion, and with a torch
     stairSlow: 0.55, stairFast: 0.6, eyes: 0.5, blind: 0.65,
     traitor: 0.35, traitorTorch: 0.1, traitorOccultist: 0.15, traitorSuspected: 0.2, traitorBlind: 0.15,
-    steal: 0.35,                                // a traitor who waited until the sanctum has taken the true ward from you first
+    steal: 0.35, feint: 0.1,                    // a traitor who waited until the sanctum has taken the true ward from you first; feint:
+                                                // another of your charms instead, to make you give up the rest (and, × steal, one
+                                                // though you carry no ward), so that what burns is the ward only as a rule
     calm: [0.7, 0.3],                           // at the fourth gate, the first one with you walks calm: a cultist waiting, anyone else
     volunteerFriend: [0.05, 0.25, 0.5],         // offers to come down with you, unasked: someone who hardly knows you (trust 0),
                                                 // likes you (1), a friend (2 or more); hardly ever one turned against you (foeOffers)

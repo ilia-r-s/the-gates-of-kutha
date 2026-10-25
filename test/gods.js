@@ -1,7 +1,10 @@
 // The god puzzle is sound: every deal is well formed, every tablet line is true but for a scribe's error, no single line
-// names the power, and all the lines together (with every sign seen) pin down the power, its ward and every title in
-// play. Played with exact dice and no scribe's errors, to prove the shape; then with every line a scribe's error, each
-// of which must be false; then as the game deals them, to count how often a line is.
+// names the power (soloPins: lines that alone, with every sign seen, pin it, ward or no ward), and all the lines
+// together (with every sign seen) pin down the power, its ward and every title in play. No title of a season's own
+// four is dealt to it (TITLES: of), and every charm, ward or toy, has one line saying it has no hold over some power.
+// Every line reads whole in both languages. Played with exact dice and no scribe's errors, to prove the shape; then
+// with every line a scribe's error, each of which must be false; then as the game deals them, to count how often a
+// line is.
 const path = require('path');
 const { run, open } = require('./lib/harness');
 const N = +(process.argv[2] || 400);
@@ -16,6 +19,19 @@ run(async browser => {
       PUZ.scribe = scribe;
     };
     const keep = { scale: { ...RULES.scale }, scribe: PUZ.scribe };
+    // a line as each language shows it, and whether either is broken (a template left open, a word in the other script)
+    const shown = s =>
+      ['en', 'ru'].map(l => {
+        const k = LANG;
+        LANG = l;
+        const t = X(s);
+        LANG = k;
+        return t;
+      });
+    const broken = s => {
+      const [en, rus] = shown(s);
+      return /undefined|NaN|\{|\}/.test(en + rus) || /[А-Яа-яЁё]/.test(en) || /[A-Za-z]{3,}/.test(rus) ? en + ' | ' + rus : null;
+    };
     exact(0);
     const bad = [],
       combos = new Set(),
@@ -42,6 +58,12 @@ run(async browser => {
       if (S.decoys.length !== 2 || S.decoys.some(w => S.godOfWard[w])) bad.push('decoys');
       S.gods.forEach(g => {
         if (S.godOfWard[S.wardOf[g]] !== g) bad.push('ward map');
+        S.titlesOf[g].forEach(e => {
+          if (S.gods.includes(TITLES[e].of)) bad.push('a title of a power in play: ' + e);
+        });
+      });
+      S.charms.forEach(w => {
+        if (S.facts.filter(f => f.form === 'notward' && f.ward === w).length !== 1) bad.push('no-hold lines for ' + w);
       });
       combos.add(S.patron + S.wardOf[S.patron] + S.signsOf[S.patron].slice().sort().join() + S.titlesOf[S.patron].join());
       factCount += S.facts.length;
@@ -81,7 +103,8 @@ run(async browser => {
                               ? !gw
                               : false;
         if (!ok !== !!f.scribe) bad.push((f.scribe ? 'a scribe’s error true: ' : 'false line: ') + f.kind + ' ' + f.text);
-        if (/undefined|NaN|\{|\}/.test(f.text)) bad.push('broken text: ' + f.text);
+        const b = broken(f.text);
+        if (b) bad.push('broken text: ' + b);
       });
       // all four signs seen and every line read
       S.omenLog = [0, 1, 2, 3].map(i => ({ day: 1, i, si: S.signsOf[S.patron][i] }));
@@ -93,12 +116,12 @@ run(async browser => {
       Object.keys(all.titles).forEach(e => {
         if (all.titles[e].length !== 1 || all.titles[e][0] !== S.titleOf[e]) bad.push('title not pinned: ' + e);
       });
-      // each line alone, with all signs seen, never pins the power and its ward
+      // each line alone, with all signs seen, never pins the power, with its ward or without
       if (k < 120)
         S.facts.forEach((f, i) => {
           S.factKnown = [i];
           const r = solve(false);
-          if (r.P.length === 1 && Object.keys(r.wardP).length === 1) soloPins++;
+          if (r.P.length === 1) soloPins++;
         });
     }
     // every line a scribe's error: each false, each well written; then as dealt, how often a line is one
@@ -107,7 +130,7 @@ run(async browser => {
     for (let k = 0; k < 120; k++) {
       newGame('T', 'occultist');
       S.facts.forEach(f => {
-        if (!f.scribe || /undefined|NaN|\{|\}/.test(f.text) || f.text === f.scribe) bad.push('scribe line ' + f.form + ': ' + f.text);
+        if (!f.scribe || broken(f.text) || f.text === f.scribe) bad.push('scribe line ' + f.form + ': ' + f.text);
         wrongLines++;
       });
     }

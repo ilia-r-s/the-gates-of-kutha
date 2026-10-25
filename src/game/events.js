@@ -137,10 +137,21 @@ const EVENT_DO = {
     if (chance(RULES.events.fake))
       return `<p>${bi('You trade a fountain pen for the one thing on his donkey that looks right. By evening the paint is coming off on your fingers.', 'Вы выменяли на вечное перо единственную вещь с его ослика, которая выглядела настоящей. К вечеру краска сходит у вас на пальцы.')}</p>`;
     gain(it);
+    // (a charm bought shows its marks as one dug up does, for the tablets know it by nothing else, and goes into the
+    // journal as a find does)
+    const charm = !!ITEMS[it].ward;
+    if (charm)
+      journal(
+        bi(
+          `Traded a fountain pen for ${theItem(it)} with a dealer passing through.`,
+          `${ru.Item(it)} — ${ru.ig(it, 'выменян', 'выменяна', 'выменяно', 'выменяны')} на вечное перо у заезжего торговца.`
+        )
+      );
     const more = heavy && chance(RULES.events.dealerMore) ? minorItem() : null; // two of his things are not fakes
     if (more) gain(more);
     return (
       `<p class="gain">${bi(`You trade a fountain pen for ${V(it, 'it', 'them')}: ${ITEMS[it].name}`, `Вы выменяли ${ru.ig(it, 'его', 'её', 'его', 'их')} на вечное перо: ${R(ITEMS[it].name)}`)}</p>` +
+      (charm ? `<p class="dim">${bi(...marksSee(it))}</p>` : '') +
       (more
         ? `<p class="gain">${bi(`And your watch for another: ${ITEMS[more].name}`, `А на часы — ещё одну вещь: ${R(ITEMS[more].name)}`)}</p>`
         : '')

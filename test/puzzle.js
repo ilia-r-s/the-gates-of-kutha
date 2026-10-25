@@ -1,11 +1,12 @@
 // A logician who sees only the casebook: how often can the power and its ward be pinned down by the finale?
 // It examines scenes, accuses on strong evidence, asks scholars about titles and charms, studies with a purpose
 // (a sign it has seen, a title it cannot place, a charm that might be the ward) and searches when idle.
-// usage: node test/puzzle.js [games] [half,rel,title,lines ...]
+// usage: node test/puzzle.js [games] [half,rel,title,lines ...]   (with no configurations, the tablets as the game deals
+// them: PUZ in src/rules.js)
 const path = require('path');
 const { run, open } = require('./lib/harness');
 const N = +(process.argv[2] || 200);
-const CFGS = (process.argv.slice(3).length ? process.argv.slice(3) : ['0.5,0.6,0.8,3']).map(s => s.split(',').map(Number));
+const CFGS = process.argv.slice(3).length ? process.argv.slice(3).map(s => s.split(',').map(Number)) : [null];
 const MODE = process.env.MODE || 'mixed'; // cult: hunt the cult first; puzzle: work the tablets first; mixed: a scene in the morning, the tablets by day
 run(async browser => {
   const { page: p, errors: errs } = await open(browser, { file: 'artifact', helpers: false });
@@ -133,11 +134,13 @@ run(async browser => {
           }
         }
         const r = solve();
+        // (down to two, and the ward pinned, only when what is left holds the truth: a casebook misled by a lie, a
+        // stray sign or a scribe's error may pin the wrong one, or leave nothing at all)
         const stat = {
           use,
           god1: r.P.length === 1 && r.P[0] === S.patron,
-          god2: r.P.length <= 2,
-          ward1: Object.keys(r.wardP).length === 1,
+          god2: r.P.length <= 2 && r.P.includes(S.patron),
+          ward1: Object.keys(r.wardP).length === 1 && Object.keys(r.wardP)[0] === S.wardOf[S.patron],
           had: has(S.wardOf[S.patron]),
           seen: r.seen,
           facts: r.facts,
@@ -168,11 +171,15 @@ run(async browser => {
         return { end: Math.random() < 1 - (1 - p1) * (1 - p2) ? 'won below' : 'lost below', ...stat };
       };
       const out = {};
-      for (const [half, rel, title, lines] of CFGS) {
-        PUZ.half = half;
-        PUZ.rel = rel;
-        PUZ.title = title;
-        if (lines) PUZ.lines = lines;
+      for (const cfg of CFGS) {
+        if (cfg) {
+          const [half, rel, title, lines] = cfg;
+          PUZ.half = half;
+          PUZ.rel = rel;
+          PUZ.title = title;
+          if (lines) PUZ.lines = lines;
+        }
+        const { half, rel, title, lines } = PUZ;
         const U = {};
         const t = { n: 0, win: 0, exposed: 0, god1: 0, god2: 0, ward1: 0, had: 0, seen: 0, facts: 0, glosses: 0, ends: {} };
         for (let i = 0; i < N; i++) {
@@ -192,7 +199,7 @@ run(async browser => {
           });
         }
         const pc = k => ((100 * t[k]) / t.n).toFixed(0) + '%';
-        out[`${MODE}: half ${half}, rel ${rel}, title ${title}, lines ${lines || 3}`] = {
+        out[`${MODE}: half ${half}, rel ${rel}, title ${title}, lines ${lines}`] = {
           win: pc('win'),
           exposedBoth: pc('exposed'),
           godPinned: pc('god1'),

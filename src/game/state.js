@@ -43,9 +43,10 @@
 //   salt                            fixes the choices made without the dice (faces, fates)
 //   hardcore                        the casebook keeps only the bare record (chosen in your reply to the Trustees, ui/intro.js)
 //   fin                             the descent: named, comp (who is with you), took (who went down with you), left,
-//                                   refused, offered, betrayed (a knife at the fourth gate), patient, turned (joined the
-//                                   rite at the end), stolen, enc (between the gates), favour, cause (what hurt you
-//                                   last), acts, g1..g3, tries, early
+//                                   refused, offered, betrayed (a knife at the fourth gate), turned (joined the rite at
+//                                   the end), stolen (the ward burned before your eyes), feint (another charm burned in
+//                                   its place), enc (between the gates), favour, cause (what hurt you last), acts,
+//                                   g1..g3, tries, early
 //   romance                         the flirtations that came to more, decided as the season ends (game/fates.js)
 //   inquiries, anger, walkout       every inquiry and how the camp voted; the camp's anger at your inquiries (it cools
 //                                   overnight); the day it would hold no more (and strikeDay: the diggers' day off after);

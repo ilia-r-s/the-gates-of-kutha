@@ -75,6 +75,8 @@ Object.keys(ASPECT_TEXT).forEach(k => {
   ASPECTS[k] = { key: k, ...ASPECT_TEXT[k], short: SHORTS[k] };
 });
 // ---------- how the scribes wrote the signs: omen formulas, the protasis of "If ..." ----------
+// (each is only ever read after "if", so in Russian two clauses joined by a single «и» take no comma between them:
+// both hang on the one «если»)
 const FORMULAS = {
   fire: [
     ['the Seven come down and sit upon the roof of the mountain', 'Семеро спускаются и садятся на кровлю горы'],
@@ -88,19 +90,19 @@ const FORMULAS = {
   ],
   dust: [
     ['the birds of the night gather and turn their faces to the mountain', 'птицы ночи собираются и обращают лица к горе'],
-    ['dust is poured out of a sky that has no cloud', 'из неба, где нет ни облака, сыплется прах'],
-    ['those who sleep in the earth walk in the street with dust in their mouths', 'спящие в земле ходят по улице, и рты их полны праха'],
+    ['dust is poured out of a sky that has no cloud', 'с неба, где нет ни облака, сыплется прах'],
+    ['those who sleep in the earth walk in the street with dust in their mouths', 'спящие в земле ходят по улице и рты их полны праха'],
     ['every door of the house is found open at the coming of the day', 'с приходом дня все двери дома находят открытыми'],
     [
       'the graves of the old dead are found open, and nothing is taken from them',
-      'могилы древних мертвецов находят открытыми, и ничего из них не взято'
+      'могилы древних мертвецов находят открытыми и ничего из них не взято'
     ],
     ['at the height of the day no bird is heard in the land', 'в разгар дня во всей земле не слышно ни одной птицы'],
     ['a shadow is seen upon the wall, and no one stands before it', 'на стене видна тень, а перед стеной никого нет'],
-    ['the lamp burns in the house, and there is no light from it', 'в доме горит светильник, и нет от него света']
+    ['the lamp burns in the house, and there is no light from it', 'в доме горит светильник и нет от него света']
   ],
   sea: [
-    ['the sweet water turns bitter in its bed', 'сладкая вода горчеет в своём русле'],
+    ['the sweet water turns bitter in its bed', 'сладкая вода становится горькой в своём русле'],
     ['men kill in the reeds a horned one that walks on feet', 'люди убивают в тростнике рогатого, что ходит на ногах'],
     ['the four winds rise together and pull the house four ways', 'четыре ветра встают разом и тянут дом на четыре стороны'],
     [
@@ -114,10 +116,10 @@ const FORMULAS = {
   ],
   teeth: [
     ['a dog and a black sow lie down together to suckle at nothing', 'собака и чёрная свинья ложатся рядом и сосут пустоту'],
-    ['a woman’s gifts, a comb and a spindle, are left at the door', 'у порога оставлены дары для женщины — гребень и веретено'],
+    ['a woman’s gifts, a comb and a spindle, are left at the door', 'у порога оставлены гребень и веретено, дары для женщины'],
     ['one with a lion’s face comes to the bed of a woman in labour', 'к ложу роженицы приходит гостья с лицом львицы'],
     ['the teeth of an ass gnaw the leather of the horses', 'зубы осла грызут кожу конской сбруи'],
-    ['a ewe gives birth, and the lamb has two heads', 'овца рожает, и у ягнёнка две головы'],
+    ['a ewe gives birth, and the lamb has two heads', 'овца рожает и у ягнёнка две головы'],
     ['the she-goat gives blood together with her milk', 'коза даёт кровь вместе с молоком'],
     ['the dogs gather at the door of the woman in childbed and howl', 'псы собираются у дверей роженицы и воют'],
     ['the milk of the nursing women dries up in a single night', 'молоко кормящих жён иссякает за одну ночь']
@@ -169,10 +171,14 @@ const fmlEn = si => SIGN_POOL[si].formula,
 // The old titles of the powers, but none of them stays with its own power: the scribes of every age called the
 // powers differently, and a season's tablets deal them anew, so knowing the hymns tells you nothing. Each is a real
 // one, as the texts give it (whose it was, and where, beside it), though some were never a power's below; the
-// Russian ones mix grammatical genders. en; ru: the Russian in six cases.
+// Russian ones mix grammatical genders. en; ru: the Russian in six cases; of: the power below whose own name or
+// epithet it is, if it is one of the eight. A season leaves out the titles of its own four (dealTitles), so that no
+// gloss gives one power's very name to another standing beside it; and since the casebook names the four, leaving
+// them out tells nothing.
 const TITLES = {
   // Nergal's old name Meslamtaea, ‘he who has come out of Meslam’
   meslam: {
+    of: 'nergal',
     en: 'the One Who Came Out of Meslam',
     ru: [
       'Вышедший из Меслама',
@@ -185,6 +191,7 @@ const TITLES = {
   },
   // Nergal's own name, ‘lord of the great city’: the land of the dead
   greatCity: {
+    of: 'nergal',
     en: 'the Lord of the Great City',
     ru: [
       'Владыка Великого Города',
@@ -197,6 +204,7 @@ const TITLES = {
   },
   // Nergal, in a Sumerian hymn to him (Nergal B)
   enlilSon: {
+    of: 'nergal',
     en: 'the Awe-Inspiring Son of Enlil',
     ru: [
       'Грозный Сын Энлиля',
@@ -208,9 +216,14 @@ const TITLES = {
     ]
   },
   // Nergal, who judges at sundown
-  sunset: { en: 'the King of Sunset', ru: ['Царь Заката', 'Царя Заката', 'Царю Заката', 'Царя Заката', 'Царём Заката', 'Царе Заката'] },
+  sunset: {
+    of: 'nergal',
+    en: 'the King of Sunset',
+    ru: ['Царь Заката', 'Царя Заката', 'Царю Заката', 'Царя Заката', 'Царём Заката', 'Царе Заката']
+  },
   // Ereshkigal's name, read as ‘lady of the great place’: the land of the dead
   greatPlace: {
+    of: 'ereshkigal',
     en: 'the Lady of the Great Place',
     ru: [
       'Владычица Великого Места',
@@ -223,6 +236,7 @@ const TITLES = {
   },
   // Ereshkigal, as Inana calls her at the gate (Inana's Descent)
   elderSister: {
+    of: 'ereshkigal',
     en: 'the Elder Sister',
     ru: ['Старшая Сестра', 'Старшей Сестры', 'Старшей Сестре', 'Старшую Сестру', 'Старшей Сестрой', 'Старшей Сестре']
   },
@@ -251,11 +265,20 @@ const TITLES = {
     ]
   },
   // Tiamat (Enūma eliš I)
-  glistening: { en: 'the Glistening One', ru: ['Сверкающая', 'Сверкающей', 'Сверкающей', 'Сверкающую', 'Сверкающей', 'Сверкающей'] },
+  glistening: {
+    of: 'tiamat',
+    en: 'the Glistening One',
+    ru: ['Сверкающая', 'Сверкающей', 'Сверкающей', 'Сверкающую', 'Сверкающей', 'Сверкающей']
+  },
   // Tiamat, who formed all things, the eleven monsters among them (Enūma eliš I)
-  hubur: { en: 'Mother Hubur', ru: ['Матерь Хубур', 'Матери Хубур', 'Матери Хубур', 'Матерь Хубур', 'Матерью Хубур', 'Матери Хубур'] },
-  // Erra, Nergal's other self
+  hubur: {
+    of: 'tiamat',
+    en: 'Mother Hubur',
+    ru: ['Матерь Хубур', 'Матери Хубур', 'Матери Хубур', 'Матерь Хубур', 'Матерью Хубур', 'Матери Хубур']
+  },
+  // Erra, Nergal's other self (and the finale calls Nergal ‘called Erra’)
   carnage: {
+    of: 'nergal',
     en: 'the Lord of Plague and Carnage',
     ru: [
       'Господин Мора и Резни',
@@ -280,11 +303,13 @@ const TITLES = {
   },
   // the fourth of Lamaštu's seven names
   kindles: {
+    of: 'lamashtu',
     en: 'She Who Kindles Fire',
     ru: ['Разжигающая Огонь', 'Разжигающей Огонь', 'Разжигающей Огонь', 'Разжигающую Огонь', 'Разжигающей Огонь', 'Разжигающей Огонь']
   },
   // the fifth of Lamaštu's seven names
   face: {
+    of: 'lamashtu',
     en: 'the Goddess Whose Face Is Horrible',
     ru: [
       'Богиня Ужасного Лика',
@@ -297,6 +322,7 @@ const TITLES = {
   },
   // the second of Lamaštu's seven names
   streets: {
+    of: 'lamashtu',
     en: 'the Sister of the Gods of the Streets',
     ru: ['Сестра Богов Улиц', 'Сестры Богов Улиц', 'Сестре Богов Улиц', 'Сестру Богов Улиц', 'Сестрой Богов Улиц', 'Сестре Богов Улиц']
   },
@@ -307,11 +333,13 @@ const TITLES = {
   },
   // Bēlet-ṣēri's own name
   steppe: {
+    of: 'beletseri',
     en: 'the Lady of the Steppe',
     ru: ['Владычица Степи', 'Владычицы Степи', 'Владычице Степи', 'Владычицу Степи', 'Владычицей Степи', 'Владычице Степи']
   },
   // the third of Lamaštu's seven names
   sword: {
+    of: 'lamashtu',
     en: 'the Sword That Strikes the Head',
     ru: [
       'Разящий Голову Меч',
@@ -324,6 +352,7 @@ const TITLES = {
   },
   // Nergal, in an Old Babylonian song: the Enlil of the land and of the underworld
   underworldEnlil: {
+    of: 'nergal',
     en: 'the Enlil of the Underworld',
     ru: [
       'Энлиль Преисподней',
@@ -337,7 +366,7 @@ const TITLES = {
   // ugallu, one of Tiamat's eleven (Enūma eliš I), later a doorkeeper of Nergal's
   storm: { en: 'the Great Storm', ru: ['Великая Буря', 'Великой Бури', 'Великой Буре', 'Великую Бурю', 'Великой Бурей', 'Великой Буре'] },
   // Pazuzu, in his own words on his statuettes
-  hanbu: { en: 'the Son of Hanbu', ru: ['Сын Ханбу', 'Сына Ханбу', 'Сыну Ханбу', 'Сына Ханбу', 'Сыном Ханбу', 'Сыне Ханбу'] },
+  hanbu: { of: 'pazuzu', en: 'the Son of Hanbu', ru: ['Сын Ханбу', 'Сына Ханбу', 'Сыну Ханбу', 'Сына Ханбу', 'Сыном Ханбу', 'Сыне Ханбу'] },
   // Ḫumbaba: ‘his voice is the Deluge, his speech is fire, his breath is death’ (Gilgameš)
   breath: {
     en: 'the One Whose Breath Is Death',
@@ -367,18 +396,19 @@ const TITLES = {
   destiny: {
     en: 'the Maker of Destiny',
     ru: [
-      'Творительница Судеб',
-      'Творительницы Судеб',
-      'Творительнице Судеб',
-      'Творительницу Судеб',
-      'Творительницей Судеб',
-      'Творительнице Судеб'
+      'Вершительница Судеб',
+      'Вершительницы Судеб',
+      'Вершительнице Судеб',
+      'Вершительницу Судеб',
+      'Вершительницей Судеб',
+      'Вершительнице Судеб'
     ]
   },
   // Nergal (lugal-a-ab-ba)
-  sea: { en: 'the King of the Sea', ru: ['Царь Моря', 'Царя Моря', 'Царю Моря', 'Царя Моря', 'Царём Моря', 'Царе Моря'] },
+  sea: { of: 'nergal', en: 'the King of the Sea', ru: ['Царь Моря', 'Царя Моря', 'Царю Моря', 'Царя Моря', 'Царём Моря', 'Царе Моря'] },
   // the sixth of Lamaštu's seven names
   irnina: {
+    of: 'lamashtu',
     en: 'the Adopted Daughter of Irnina',
     ru: [
       'Приёмная Дочь Ирнины',
@@ -391,6 +421,7 @@ const TITLES = {
   },
   // Nergal, in a Sumerian hymn to him (Nergal B)
   hero: {
+    of: 'nergal',
     en: 'the Great Hero of the Lands',
     ru: [
       'Великий Герой Земель',
@@ -403,11 +434,13 @@ const TITLES = {
   },
   // Qingu, as Tiamat raises him over her host (Enūma eliš I)
   spouse: {
+    of: 'kingu',
     en: 'the Chosen Spouse',
     ru: ['Избранный Супруг', 'Избранного Супруга', 'Избранному Супругу', 'Избранного Супруга', 'Избранным Супругом', 'Избранном Супруге']
   },
   // Lamaštu, on an amulet in the Louvre (AO 8184)
   named: {
+    of: 'lamashtu',
     en: 'the One Named by the Gods',
     ru: ['Наречённая Богами', 'Наречённой Богами', 'Наречённой Богами', 'Наречённую Богами', 'Наречённой Богами', 'Наречённой Богами']
   }
@@ -471,9 +504,11 @@ const CHARM_MARKS = {
     ru: { prep: 'со', ins: 'строкой мелких клиньев', see: 'строка клиньев, слишком мелких, чтобы прочесть' },
     not: ['cone', 'liver']
   },
+  // (in Russian a participle before the noun, not a clause after it: a clause would want a closing comma wherever the
+  // riddle runs on, and would swallow a second mark after it)
   chill: {
     en: { vp: 'stays cold at noon', see: 'a chill that does not leave it, even at noon' },
-    ru: { prep: 'с', ins: 'холодом, что не уходит и в полдень', see: 'холод, который не уходит и в полдень' }
+    ru: { prep: 'с', ins: 'не уходящим и в полдень холодом', see: 'холод, который не уходит и в полдень' }
   },
   weight: {
     en: { vp: 'weighs more than it should', see: 'heavier than the look of it' },
@@ -608,9 +643,13 @@ function dealWards() {
 // which two of the charms share now and then (PUZ.markShared: how many marks are shared so); the tablets name a charm
 // by its own mark alone, or by both (PUZ.markBoth).
 function dealMarks() {
+  // the first free mark that each of ws can bear (CHARM_MARKS: not), taken. With the tables as they stand there is
+  // always one (fifteen marks, ten of them used, few forbidden); a table changed so that there is not must fail
+  // loudly, not give a charm a mark it cannot bear
   const free = shuffle(CHARM_MARK_IDS),
-    take = w => {
-      const i = free.findIndex(m => !(CHARM_MARKS[m].not || []).includes(w));
+    take = (...ws) => {
+      const i = free.findIndex(m => ws.every(w => !(CHARM_MARKS[m].not || []).includes(w)));
+      if (i < 0) throw new Error(`dealMarks: no mark left that ${ws.join(' and ')} can bear`);
       return free.splice(i, 1)[0];
     };
   S.marksOf = {};
@@ -621,10 +660,7 @@ function dealMarks() {
   const order = shuffle(S.charms);
   for (let k = 0; k < PUZ.markShared; k++) {
     const pair = order.splice(0, 2),
-      m = free.splice(
-        free.findIndex(x => pair.every(w => !(CHARM_MARKS[x].not || []).includes(w))),
-        1
-      )[0];
+      m = take(...pair);
     pair.forEach(w => S.marksOf[w].push(m));
   }
   order.forEach(w => S.marksOf[w].push(take(w)));
@@ -632,9 +668,11 @@ function dealMarks() {
     S.refOf[w] = chance(PUZ.markBoth) ? shuffle(S.marksOf[w]).slice() : [S.marksOf[w][0]];
   });
 }
-// the two titles each power goes by in this season's tablets, dealt from all thirty-two
+// The two titles each power goes by in this season's tablets, dealt from the thirty-two but for those of the season's
+// own four (TITLES: of). At most eighteen are left out (Nergal's eight, Lamaštu's six, Tiamat's and Ereshkigal's two
+// each), so fourteen at least are left for the eight a season needs.
 function dealTitles() {
-  const all = shuffle(TITLE_IDS);
+  const all = shuffle(TITLE_IDS.filter(e => !S.gods.includes(TITLES[e].of)));
   S.titlesOf = {};
   S.titleOf = {};
   S.gods.forEach((g, i) => {
@@ -644,10 +682,10 @@ function dealTitles() {
     });
   });
 }
-// Every fact is true, but for a scribe's error now and then (scribeErr). `gods` is who it concerns (for the tablets'
-// lean). Sign lines hold references in `in`/`out`; glosses tie titles together ('gname': a title is a power; 'geq': two
-// titles are one power; 'gneq': they are two); charm lines tie a charm to a sign, a power, a pair of powers, or to
-// another charm. form: how the line is put (LINE, below).
+// Every fact is true, but for a scribe's error now and then (scribeErr). Sign lines hold references in `in`/`out`;
+// glosses tie titles together ('gname': a title is a power; 'geq': two titles are one power; 'gneq': they are two);
+// charm lines tie a charm to a sign, a power, a pair of powers, or to another charm. form: how the line is put (LINE,
+// below); gods: whom it concerns (godsOf).
 // Each line is written in both languages at once; the same random choice picks the wording in each. The tablets hold
 // every line the fragments can give, shuffled; they are written in this order, the order the dice are thrown in.
 function buildFacts() {
@@ -662,8 +700,9 @@ function buildFacts() {
 }
 // a line, in its words: each of its forms, from what it says (the same die picks the wording in both languages)
 const LINE = {
-  // under a sign: the two who wake (signIn2), the two who do not (signOut2), one who wakes (signIn1), one who never
-  // stirs (signOut1)
+  // under a sign: the two who wake (signIn2), the two who do not (signOut2), one who wakes (signIn1), one who does not
+  // (signOut1). Said of the sign alone, never as "has never stirred": a reader who took that for always would rule out
+  // the power below, which these lines name for other powers' signs as often as not.
   signIn2: ({ sign: si, in: [r1, r2] }) =>
     oneOf(
       [`If ${fmlEn(si)}: ${refEn(r1)} or ${refEn(r2)} is waking.`, `Если ${fmlRu(si)}, то пробуждается ${refRu(r1)} или ${refRu(r2)}.`],
@@ -675,7 +714,7 @@ const LINE = {
   signOut2: ({ sign: si, out: [r1, r2] }) =>
     oneOf(
       [
-        `If ${fmlEn(si)}: neither ${refEn(r1)} nor ${refEn(r2)} has ever stirred.`,
+        `If ${fmlEn(si)}: neither ${refEn(r1)} nor ${refEn(r2)} is waking.`,
         `Если ${fmlRu(si)}, то ни ${refRu(r1)}, ни ${refRu(r2)} не пробуждаются.`
       ],
       [
@@ -693,13 +732,15 @@ const LINE = {
     ),
   signOut1: ({ sign: si, out: [r] }) =>
     oneOf(
-      [`If ${fmlEn(si)}: ${refEn(r)} has never stirred.`, `Если ${fmlRu(si)}, то ${refRu(r)} никогда не пробуждается.`],
+      [`If ${fmlEn(si)}: ${refEn(r)} is not among those who wake.`, `Если ${fmlRu(si)}, то ${refRu(r)} не пробуждается.`],
       [`If ${fmlEn(si)}, whatever wakes, it is not ${refEn(r)}.`, `Если ${fmlRu(si)}, то что бы ни пробудилось — это не ${refRu(r)}.`]
     ),
+  // (no quotation marks of its own, in either language: a line is quoted whole, in the casebook and by the scholars
+  // who share one, and marks inside it would nest a third deep, or the same kind twice)
   gname: ({ e, g }) =>
     oneOf(
       [`${capS(ttEn(e))} is one of the names of ${GODS[g].name}.`, `${capS(ttRu(e))} — одно из имён ${ru.god(g, 'g')}.`],
-      [`${capS(ttEn(e))}: so the old hymns call ${GODS[g].name}.`, `„${capS(ttRu(e))}“ — так древние гимны называют ${ru.god(g, 'a')}.`]
+      [`${capS(ttEn(e))}: so the old hymns call ${GODS[g].name}.`, `${capS(ttRu(e))} — так древние гимны называют ${ru.god(g, 'a')}.`]
     ),
   geq: ({ e1, e2 }) =>
     oneOf(
@@ -743,22 +784,44 @@ const LINE = {
       [`${capS(refEn(rx))} laughs at ${rdEn(w)}.`, `${capS(refRu(rx))} смеётся над ${rdRu(w, 'i')}.`],
       [`${capS(rdEn(w))} has no hold over ${refEn(rx)}.`, `${capS(rdRu(w))} не имеет власти над ${refRu(rx, 'i')}.`]
     ),
+  // (the two riddles last: each may hold an "and" of its own, and set first they ran together)
   wpair: ({ wards: pr, ref: rf }) =>
     bi(
-      `Of ${rdEn(pr[0])} and ${rdEn(pr[1])}, one binds nothing at all, and the other binds ${refEn(rf)}.`,
-      `Из двух — ${rdRu(pr[0])} и ${rdRu(pr[1])} — одно не связывает никого, а другое связывает ${refRu(rf, 'a')}.`
+      `Of two things, one binds nothing at all, and the other binds ${refEn(rf)}: ${rdEn(pr[0])}, and ${rdEn(pr[1])}.`,
+      `Из двух вещей одна не связывает никого, а другая связывает ${refRu(rf, 'a')}: ${rdRu(pr[0])} — и ${rdRu(pr[1])}.`
     ),
+  // (why it binds nothing, in words that suit whatever the thing turns out to be: a seal, a foundation cone, a liver
+  // model, two figures)
   decoy: ({ ward: w }) => {
     const [en, rus] = pick([
-      ['It was only ever a charm against scorpions.', 'Это всего лишь амулет от скорпионов.'],
-      ['It is a merchant’s token, nothing more.', 'Это просто купеческий жетон, не более.'],
+      ['No name was ever written into it, and nothing answers to it.', 'В неё не вписано ничьё имя, и ничто ей не отзывается.'],
+      [
+        'It was made for some other use, and no power has any part in it.',
+        'Её делали для иной надобности, и никакой силе до неё нет дела.'
+      ],
       ['Whoever made it meant it for luck, not for binding.', 'Мастер делал это на удачу, а не для того, чтобы кого-то связать.']
     ]);
     return bi(`${capS(rdEn(w))} binds no power at all. ${en}`, `${capS(rdRu(w))} не связывает никакой силы. ${rus}`);
   }
 };
-// a line as the tablets hold it: what it says, and its words
-const inscribe = f => Object.assign(f, { text: LINE[f.form](f) });
+// Whom a line concerns (the tablets lean toward what you look for; what is said of the power below is a line about it;
+// the counter-rite counts the lines about the power you named): under a sign, the two the sign wakes, whichever the
+// line names; a gloss, the powers of its titles; any other charm line, the powers it names. Worked out from what the
+// line says, so that a scribe's error is weighed by the same rule as a true line.
+const godsOf = f =>
+  f.kind === 'sign' || f.kind === 'ward'
+    ? S.signPair[f.sign].slice()
+    : f.kind === 'gname'
+      ? [f.g]
+      : f.kind === 'geq' || f.kind === 'gneq'
+        ? [...new Set([S.titleOf[f.e1], S.titleOf[f.e2]])]
+        : f.kind === 'wardor'
+          ? f.refs.map(refGod)
+          : f.kind === 'decoy'
+            ? []
+            : [refGod(f.ref)]; // wref, notward, wpair
+// a line as the tablets hold it: what it says, whom it concerns, and its words
+const inscribe = f => Object.assign(f, { gods: godsOf(f), text: LINE[f.form](f) });
 // Under each omen two powers wake. Each sign gets one line naming both who wake (or two who do not), or two lines
 // naming one each.
 function tabletSigns(F) {
@@ -767,7 +830,7 @@ function tabletSigns(F) {
       pr = shuffle(S.signPair[si]),
       [a, b] = pr,
       [o1, o2] = shuffle(S.gods.filter(g => !pr.includes(g)));
-    const add = (form, inn, out) => F.push(inscribe({ kind: 'sign', form, sign: si, gods: pr.slice(), in: inn, out }));
+    const add = (form, inn, out) => F.push(inscribe({ kind: 'sign', form, sign: si, in: inn, out }));
     if (!chance(PUZ.half)) {
       if (chance(PUZ.signIn)) add('signIn2', [refOf(a), refOf(b)], []);
       else add('signOut2', [], [refOf(o1), refOf(o2)]);
@@ -778,9 +841,9 @@ function tabletSigns(F) {
 // Glosses: every title is tied to its power, directly or through its twin title; and a couple of titles are said to
 // belong to different powers.
 function tabletGlosses(F) {
-  const gname = (e, g) => F.push(inscribe({ kind: 'gname', form: 'gname', e, g, gods: [g] })),
-    geq = (e1, e2) => F.push(inscribe({ kind: 'geq', form: 'geq', e1, e2, gods: [S.titleOf[e1]] })),
-    gneq = (e1, e2) => F.push(inscribe({ kind: 'gneq', form: 'gneq', e1, e2, gods: [S.titleOf[e1], S.titleOf[e2]] }));
+  const gname = (e, g) => F.push(inscribe({ kind: 'gname', form: 'gname', e, g })),
+    geq = (e1, e2) => F.push(inscribe({ kind: 'geq', form: 'geq', e1, e2 })),
+    gneq = (e1, e2) => F.push(inscribe({ kind: 'gneq', form: 'gneq', e1, e2 }));
   S.gods.forEach(g => {
     const [e1, e2] = shuffle(S.titlesOf[g]);
     if (chance(PUZ.nameBoth)) {
@@ -803,9 +866,10 @@ function tabletGlosses(F) {
   }
 }
 // The charms: each true ward is tied to one of its power's signs, and then to a second sign, to a pair of powers or to
-// its power (by name or by a title); and every ward is said to have no hold over some other power.
+// its power (by name or by a title); and every ward is said to have no hold over some other power (as every toy is
+// too: tabletDecoys).
 function tabletWards(F) {
-  const WS = (w, si) => F.push(inscribe({ kind: 'ward', form: 'ward', ward: w, sign: si, gods: S.signPair[si].slice() }));
+  const WS = (w, si) => F.push(inscribe({ kind: 'ward', form: 'ward', ward: w, sign: si }));
   S.gods.forEach(g => {
     const w = S.wardOf[g],
       mine = S.signsOf[g],
@@ -816,14 +880,14 @@ function tabletWards(F) {
     if (r < PUZ.wardLine[0]) WS(w, pick(mine.filter(si => partner(si) !== partner(s1))));
     else if (r < PUZ.wardLine[1]) {
       const pr = shuffle([g, pick(S.gods.filter(y => y !== g && y !== partner(s1)))]).map(refOf);
-      F.push(inscribe({ kind: 'wardor', form: 'wardor', ward: w, refs: pr, gods: pr.map(refGod) }));
+      F.push(inscribe({ kind: 'wardor', form: 'wardor', ward: w, refs: pr }));
     } else {
       const rf = refOf(g);
-      F.push(inscribe({ kind: 'wref', form: 'wref', ward: w, ref: rf, gods: [g] }));
+      F.push(inscribe({ kind: 'wref', form: 'wref', ward: w, ref: rf }));
     }
     const gx = pick(S.gods.filter(x => x !== g)),
       rx = refOf(gx);
-    F.push(inscribe({ kind: 'notward', form: 'notward', ward: w, ref: rx, gods: [gx] }));
+    F.push(inscribe({ kind: 'notward', form: 'notward', ward: w, ref: rx }));
   });
 }
 // Sometimes a line binds two charms together: one of them is a toy.
@@ -832,12 +896,16 @@ function tabletPair(F) {
     const g = pick(S.gods),
       pr = shuffle([S.wardOf[g], pick(S.decoys)]),
       rf = refOf(g);
-    F.push(inscribe({ kind: 'wpair', form: 'wpair', wards: pr, ref: rf, gods: [g] }));
+    F.push(inscribe({ kind: 'wpair', form: 'wpair', wards: pr, ref: rf }));
   }
 }
-// The toys bind no power at all.
+// The toys bind no power at all; and each, like every ward, is said to have no hold over some power (true of a toy,
+// which holds none), so that a line of that kind tells a ward from a toy no better than any other line does.
 function tabletDecoys(F) {
-  S.decoys.forEach(w => F.push(inscribe({ kind: 'decoy', form: 'decoy', ward: w, gods: [] })));
+  S.decoys.forEach(w => {
+    F.push(inscribe({ kind: 'decoy', form: 'decoy', ward: w }));
+    F.push(inscribe({ kind: 'notward', form: 'notward', ward: w, ref: refOf(pick(S.gods)) }));
+  });
 }
 // A scribe's error: the line as it should have been written, gone wrong in one thing, so that it is false. Never told;
 // the ending tells it (scribe: what it should have said, in its words).
@@ -860,21 +928,13 @@ function scribeErr(f) {
     );
   else if (f.form === 'wardor') e.refs = f.refs.map(r => (refGod(r) === gw ? refOf(other(gw, f.refs.map(refGod))) : r));
   else if (f.form === 'wref') e.ref = refOf(other(gw));
-  else if (f.form === 'notward') e.ref = refOf(gw);
-  else if (f.form === 'wpair') e.ref = refOf(other(refGod(f.ref)));
+  // a ward said to have no hold over its own power; a toy's line (it holds none, so naming another power could never
+  // make it false) puts the named power's own ward in the toy's place
+  else if (f.form === 'notward') {
+    if (gw) e.ref = refOf(gw);
+    else e.ward = S.wardOf[refGod(f.ref)];
+  } else if (f.form === 'wpair') e.ref = refOf(other(refGod(f.ref)));
   else if (f.form === 'decoy') e.ward = pick(S.gods.map(g => S.wardOf[g]));
-  e.gods =
-    e.kind === 'sign'
-      ? [...new Set(e.in.concat(e.out).map(refGod))]
-      : e.kind === 'gname' || e.kind === 'wref' || e.kind === 'notward' || e.kind === 'wpair'
-        ? [e.g || refGod(e.ref)]
-        : e.kind === 'geq' || e.kind === 'gneq'
-          ? [S.titleOf[e.e1], S.titleOf[e.e2]]
-          : e.kind === 'ward'
-            ? S.signPair[e.sign].slice()
-            : e.kind === 'wardor'
-              ? e.refs.map(refGod)
-              : [];
   return inscribe(Object.assign(e, { scribe: f.text }));
 }
 // ---------- what a line mentions ----------
@@ -902,14 +962,20 @@ const factWards = f => (f.ward ? [f.ward] : []).concat(f.wards || []);
 const factsOn = t => S.facts.map((f, i) => i).filter(i => !S.factKnown.includes(i) && speaksOf(S.facts[i], t));
 // whether a line speaks of t (a sign, a title or a ward)
 const speaksOf = (f, t) => (t.sign != null ? f.sign === t.sign : t.title ? factTitles(f).includes(t.title) : factWards(f).includes(t.ward));
-// learning a line makes the sound of it
-// hush: lines about the power below or its ward are not to be told (a cultist sharing a line, people/dialog.js)
-function learnFact(g, topic, hush = false) {
-  const i = readLine(g, topic, hush);
+// Learning a line makes the sound of it. Asked as learnFact({ about, topic, hush }), or as before, learnFact(about,
+// topic, hush): about, the power a line is wanted about (the power below: one that narrows it, readLine); topic, what
+// you chose to look for in the clay; hush, a cultist sharing a line (people/dialog.js), who keeps back every line about
+// the ward of the power below, the one thing that can stop the rite (aboutWard). The rest it shares as anyone would:
+// had it kept back every line about its master, any scholar who quoted a line about a sign you had seen, which is the
+// power's own all but always, would have been as good as cleared.
+function learnFact(about, topic, hush = false) {
+  const o = about && typeof about === 'object' ? about : { about, topic, hush },
+    i = readLine(o.about, o.topic, !!o.hush);
   if (i != null) emit('lore');
   return i;
 }
-const aboutPatron = f => f.gods.includes(S.patron) || factWards(f).includes(S.wardOf[S.patron]);
+const aboutWard = f => factWards(f).includes(S.wardOf[S.patron]);
+const aboutPatron = f => f.gods.includes(S.patron) || aboutWard(f);
 const hintsPatron = f => aboutPatron(f) && f.gods.length >= 2;
 function readLine(g, topic, hush = false) {
   if (topic) {
@@ -920,7 +986,7 @@ function readLine(g, topic, hush = false) {
       return i;
     }
   }
-  const unknown = S.facts.map((f, i) => i).filter(i => !S.factKnown.includes(i) && !(hush && aboutPatron(S.facts[i])));
+  const unknown = S.facts.map((f, i) => i).filter(i => !S.factKnown.includes(i) && !(hush && aboutWard(S.facts[i])));
   if (!unknown.length) return null;
   const seen = S.omenLog.map(o => o.si),
     met = titlesMet(),
@@ -985,14 +1051,19 @@ function scholarRead(c, w) {
   }
   return S.readings[key];
 }
+// what a scholar says of a charm read (r: the reading); of one that binds nothing, in words that suit whatever the thing
+// is, a seal or a foundation cone, a liver model or two clay figures
 function readingSay(r) {
   if (r.none)
     return oneOf(
       [
-        'There is no binding here. A charm against scorpions, the sort every child wore.',
-        'Никакого заклятия здесь нет. Амулет от скорпионов, такие носил каждый ребёнок.'
+        `There is no binding here. Whatever ${V(r.w, 'it was', 'they were')} made for, it was not for that.`,
+        'Никакого заклятия здесь нет. Для чего бы это ни делали — только не для этого.'
       ],
-      ['No binding at all. Something pretty, for luck, no more.', 'Заклятия нет. Красивая вещица на удачу, только и всего.']
+      [
+        `No binding at all. ${V(r.w, 'It is', 'They are')} just what ${V(r.w, 'it seems', 'they seem')}, nothing more.`,
+        'Заклятия нет. Это ровно то, чем кажется, и не более.'
+      ]
     );
   const [a, b] = r.refs;
   return oneOf(

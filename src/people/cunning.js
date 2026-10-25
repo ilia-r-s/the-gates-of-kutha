@@ -258,7 +258,8 @@ function comeSay(c, w) {
 // A cultist behind you on the stair: strike at the fourth gate, or let it pass and wait for the sanctum.
 const waits = t => chance(craft(t).patient);
 // The end of the stair: whoever of the cult came down with you takes their place in the circle; one who waited may have
-// taken the true ward from you on the way. Once, when you first reach the sanctum; returns who turned, and what you see.
+// taken a charm from you on the way, the true ward as a rule. Once, when you first reach the sanctum; returns who
+// turned, and what you see.
 function turnAtTheEnd() {
   const f = S.fin,
     none = { ids: [], html: '' };
@@ -315,14 +316,28 @@ function turnAtTheEnd() {
               `<p class="horror">${ru.c(t)} проходит мимо вас в круг света и занимает место в круге. «Вы ведь сами позвали меня с собой, доктор».</p>`
             );
   });
+  // What burns is the true ward, if you carry it (descent.steal); but now and then another of your charms, a feint to
+  // make you give up the rest, and now and then one though you carry no ward at all (descent.feint): so a burning says
+  // which charm was the ward only as a rule, and never for certain that you had it. Told alike either way; the ending
+  // tells which (stolen: the ward; feint: another).
   const ward = S.wardOf[S.patron],
-    thief = turned[0]; // (one who waited for the end is the first of the cult who came down with you)
-  if (has(ward) && chance(RULES.descent.steal)) {
-    lose(ward);
-    f.stolen = ward;
+    thief = turned[0], // (one who waited for the end is the first of the cult who came down with you)
+    others = S.items.filter(it => ITEMS[it].ward && it !== ward),
+    feint = () => (others.length ? pick(others) : null),
+    burnt = has(ward)
+      ? chance(D.steal)
+        ? (others.length && chance(D.feint) && feint()) || ward
+        : null
+      : chance(D.steal * D.feint)
+        ? feint()
+        : null;
+  if (burnt) {
+    lose(burnt);
+    if (burnt === ward) f.stolen = ward;
+    else f.feint = burnt;
     h += bi(
-      `<p class="horror">You reach for ${theItem(ward)}, and your hand closes on nothing. Across the circle ${thief.short} holds ${V(ward, 'it', 'them')} up for you to see, and lets ${V(ward, 'it', 'them')} fall into the brazier.</p>`,
-      `<p class="horror">Вы тянетесь за ${ru.item(ward, 'i')} — и рука сжимает пустоту. Через круг ${ru.c(thief)} поднимает ${ru.ig(ward, 'его', 'её', 'его', 'их')}, чтобы вы видели, и роняет в жаровню.</p>`
+      `<p class="horror">You reach for ${theItem(burnt)}, and your hand closes on nothing. Across the circle ${thief.short} holds ${V(burnt, 'it', 'them')} up for you to see, and lets ${V(burnt, 'it', 'them')} fall into the brazier.</p>`,
+      `<p class="horror">Вы тянетесь за ${ru.item(burnt, 'i')} — и рука сжимает пустоту. Через круг ${ru.c(thief)} поднимает ${ru.ig(burnt, 'его', 'её', 'его', 'их')}, чтобы вы видели, и роняет в жаровню.</p>`
     );
   }
   return { ids: f.turned, html: h };

@@ -31,7 +31,9 @@ const STEPS = [
   ...(full
     ? [
         ['bots', node('bot.js'), out => !/"stuck": [1-9]/.test(out) && !/"errors": \["/.test(out) && /"cheatOk": true/.test(out), 15],
-        ['puzzle simulation', node('puzzle.js', '200'), out => /win/.test(out), 4]
+        // (the logician pins the power about one season in five as the game deals the tablets: under one in ten, the
+        // puzzle has come apart)
+        ['puzzle simulation', node('puzzle.js', '200'), out => +((out.match(/"godPinned": "(\d+)%"/) || [])[1] || 0) >= 10, 4]
       ]
     : [])
 ];
