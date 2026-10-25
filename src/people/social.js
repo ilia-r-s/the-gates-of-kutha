@@ -52,7 +52,7 @@ const bondSay = (a, b, close) =>
 // One piece of gossip from s, about anyone but s and those listening; it goes into your casebook as testimony. sure:
 // the talk is heavy (it comes seldom in the season's mood, game/tenor.js), and true to what the speaker knows; heard:
 // said to someone else, and overheard. Returns { t: whom it is about, text, hear?: how those who hear it may take it
-// (people/camp.js, a row of STIRS, and what it is told with) } or null (nothing worth saying).
+// (people/moments.js, a row of its moments, and what it is told with) } or null (nothing worth saying).
 function gossipLine(s, not = [], sure = false, heard = false) {
   // a thief who saw something hints at it; while the camp still talks of it, of the night someone spent in your tent;
   // now and then, the talk is of who is sweet on whom, or of what someone thinks of you
@@ -184,7 +184,7 @@ function thinksGossip(s, pool, sure, heard) {
 // speaker is inclined: badly at bad, + spite a step they dislike her, + jealous if they are sweet on you or on her, + foe
 // a step they are against you, + their temperament's prudery (TEMPERS prude), + vows for a priest; − friend a step they
 // like her, − ally a step they are past fond of you. Whoever hears it may make something of it, once each: of her, and
-// of you (people/camp.js, STIRS.scandal).
+// of you (people/moments.js, the scandal).
 const VISIT_SAID = {
   bad: [
     h =>
@@ -269,7 +269,7 @@ function visitGossip(s, not, heard) {
   };
 }
 const quoted = (lead, text) => lead + text + bi('”', '»');
-// Gossip at breakfast, before everyone (those who hear it may take it up: people/camp.js, stir); and gossip overheard as
+// Gossip at breakfast, before everyone (those who hear it may take it up: people/moments.js, stir); and gossip overheard as
 // you go about the dig, when two or more people are together (only the one it is told to hears it, but for you).
 function breakfastGossip() {
   const pool = freeChars().filter(c => chance(TP(c).gossip));
@@ -281,7 +281,7 @@ function breakfastGossip() {
   stirred('talk');
   return (
     `<p class="notice">${quoted(bi(`Over breakfast, ${s.short} says of ${g.t.short}: “`, `За завтраком ${ru.c(s)} говорит ${ru.ob(g.t)}: «`), g.text)}</p>` +
-    (g.hear ? stir(g.hear.kind, { ...g.hear.o, heavy, before: true }) : '')
+    (g.hear ? Moments.stir(g.hear.kind, { ...g.hear.o, heavy, before: true }) : '')
   );
 }
 function overheard(here) {
@@ -298,7 +298,7 @@ function overheard(here) {
   stirred('talk');
   return (
     `<p class="notice">${quoted(bi(`As you go, you overhear ${s.short} telling ${l.short}: “`, `Уходя, вы слышите, как ${ru.c(s)} говорит ${ru.c(l, 'd')}: «`), g.text)}</p>` +
-    (g.hear ? stir(g.hear.kind, { ...g.hear.o, heavy, only: [l.id] }) : '')
+    (g.hear ? Moments.stir(g.hear.kind, { ...g.hear.o, heavy, only: [l.id] }) : '')
   );
 }
 // someone suspicious, or with a grudge, or sure of someone, blames another out loud: rightly now and then, mostly not
@@ -357,7 +357,7 @@ function blameAloud(s, t, feud = false) {
           `“I will say it if no one else will. I do not trust ${t.short}.”`,
           `«Скажу, раз больше никто не решается: я не доверяю ${ru.c(t, 'd')}».`
         )
-  }</p>${stir('blame', { by: s.id, about: t.id, heavy })}`;
+  }</p>${Moments.stir('blame', { by: s.id, about: t.id, heavy })}`;
 }
 // ---------- what they say of their own feelings ----------
 // A word in passing about someone they feel strongly about: fond of them, cannot stand them, or taken with them. True to
@@ -456,8 +456,14 @@ function trustNote(up, down) {
 }
 // people talk about you, the more readily the stronger they feel about you, for you or against you as they feel (or,
 // now and then, the other way: flip; the indifferent either way), and their friends listen (at most RULES.camp.cap of
-// them, as at any public moment; bad talk a little more readily than good, and any talk more readily when it is heavy);
-// a calculating cultist talks you down on purpose, whatever face it shows you
+// them, as at any public moment, though once as many have, the rest are not asked; bad talk a little more readily than
+// good, and any talk more readily when it is heavy); a calculating cultist talks you down on purpose, whatever face it
+// shows you
+const HEARS_TALK_OF_YOU = odds('hears talk of you', [
+  ['base', bad => (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood)],
+  ['* heavy talk', (bad, heavy) => (heavy ? RULES.camp.heavy : 1)],
+  ['cap', () => RULES.scale.most]
+]);
 function gossipAboutYou() {
   const sly = c => c.role === 'cult' && temperOf(c) === 'calculating',
     U = RULES.rumours;
@@ -473,13 +479,12 @@ function gossipAboutYou() {
     // (the sly one's warm face does not quite cover it: slyWarm, a little readier than a friend's turn, flip)
     bad = Ties.against(s) ? !chance(U.flip) : Ties.cordial(s) ? chance(sly(s) ? U.slyWarm : U.flip) : sly(s) ? chance(U.slyBad) : coin(),
     line = pick(GOSSIP_YOU[bad ? 'bad' : 'good']),
-    moved = [];
-  freeChars()
-    .filter(o => o.id !== s.id && Ties.fond(o.id, s.id))
-    .forEach(o => {
-      const p = (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood) * (heavy ? RULES.camp.heavy : 1);
-      if (moved.length < RULES.camp.cap && chance(Math.min(RULES.scale.most, p)) && Ties.moveTrust(o, bad ? -1 : 1)) moved.push(o.id);
-    });
+    heard = Moments.hear(
+      freeChars().filter(o => o.id !== s.id && Ties.fond(o.id, s.id)),
+      () => ['trust', null, bad ? -1 : 1, HEARS_TALK_OF_YOU],
+      { cap: RULES.camp.cap, rollWhenFull: false, args: () => [bad, heavy] }
+    ).moved,
+    moved = heard.length ? heard[0][3] : [];
   S.rumors.push({ day: S.day, kind: bad ? 'bad' : 'good', by: s.id, up: bad ? [] : moved, down: bad ? moved : [] });
   return (
     `<p class="notice">${bi(`Over breakfast you catch ${s.short} talking about you: “${line[0]}”`, `За завтраком вы слышите, как ${ru.c(s)} говорит о вас: «${line[1]}»`)}</p>` +
@@ -518,15 +523,16 @@ function rumorsOfYou() {
     const c = C(r.about),
       up = [],
       down = [];
-    freeChars()
-      .filter(o => o.id !== c.id)
-      .forEach(o => {
-        const d = deedMoves(r.kind, o, c, Ties.likes(o.id, c.id), r.strength || 1);
-        if (d && Ties.moveTrust(o, d)) {
-          (d > 0 ? up : down).push(o.id);
-          net[o.id] = (net[o.id] || 0) + d;
-        }
-      });
+    Moments.hear(
+      freeChars().filter(o => o.id !== c.id),
+      o => {
+        const d = deedMoves(r.kind, o, c, Ties.likes(o.id, c.id), r.strength || 1); // (decided by its own dice)
+        return d ? ['trust', null, d, null] : null;
+      }
+    ).steps.forEach(([id, , , d]) => {
+      (d > 0 ? up : down).push(id);
+      net[id] = (net[id] || 0) + d;
+    });
     if (!up.length && !down.length) return;
     S.rumors.push({ day: S.day, kind: r.kind, about: r.about, up, down });
     said.push(DEED_SAID[r.kind](c));
@@ -563,7 +569,7 @@ function tipLine(t) {
 function mourners(victim) {
   const who = freeChars().filter(c => Ties.fond(c.id, victim) && chance(RULES.morning.mourn));
   who.forEach(c => Ties.mourn(c, victim));
-  const last = S.stirs[S.stirs.length - 1],
+  const last = Moments.last(),
     m = who.length ? C(wpick(Object.fromEntries(who.map(c => [c.id, Ties.likes(c.id, victim) ** 2])))) : null;
   if (!m || (last && last.kind === 'grief' && last.by === m.id)) return '';
   const v = C(victim);
@@ -589,9 +595,9 @@ function consoled(c) {
 // thinking (ontoSaid).
 function griefFor(victim) {
   return (
-    stir('grief', { about: victim }) +
+    Moments.stir('grief', { about: victim }) +
     mourners(victim) +
-    (Suspicion.suspected(victim) && chance(RULES.morning.withhold) ? '' : settleSaid(victim, false)) +
+    (Suspicion.suspected(victim) && chance(RULES.morning.withhold) ? '' : Moments.settle(victim, false)) +
     ontoSaid(victim)
   );
 }
@@ -600,7 +606,7 @@ function griefFor(victim) {
 // for, and it may be what it wanted the camp to think (game/night.js, chooseVictim): the line is the same either way.
 function ontoSaid(victim) {
   const named = Suspicion.accusations(victim).filter(x => isFree(C(x.about)));
-  return named.length && chance(RULES.camp.onto.odds) ? stir('onto', { about: named.pop().about, dead: victim }) : '';
+  return named.length && chance(RULES.camp.onto.odds) ? Moments.stir('onto', { about: named.pop().about, dead: victim }) : '';
 }
 // The rest of breakfast: each one of the morning's extras, crowded out by those that came before it (game/tenor.js,
 // room). victim: whoever the night took, if anyone.

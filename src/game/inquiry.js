@@ -89,7 +89,7 @@ function unmasked(c, vote, hands0 = '') {
   // them before everyone is settled
   weighWord(c, vote, 'right');
   pullTo('still', TENOR.pulls.right); // the camp breathes again
-  return out + stoodWithYou(vote) + stir('praised', { about: c.id, backed: vote.back }) + settleSaid(c.id) + angerAfter(true);
+  return out + stoodWithYou(vote) + Moments.stir('praised', { about: c.id, backed: vote.back }) + Moments.settle(c.id) + angerAfter(true);
 }
 // The last of the cult unmasked, at an inquiry or in the night (people/visit.js): the season is won, all but always; now
 // and then the rite has gone too far to die with its priests (inquiry.tooLate, × tooLateNear once it is close), and the
@@ -150,5 +150,10 @@ function sentAway(c, vote) {
   // the camp takes it in: someone calls you out, others follow, or stand by you
   weighWord(c, vote, 'wrong');
   pullTo('tongues', TENOR.pulls.wrong); // the camp turns on itself
-  return out + (watched ? stir('calledOut', { about: c.id, thief: c.role === 'smuggler' }) : '') + settleSaid(c.id) + angerAfter(false);
+  return (
+    out +
+    (watched ? Moments.stir('calledOut', { about: c.id, thief: c.role === 'smuggler' }) : '') +
+    Moments.settle(c.id) +
+    angerAfter(false)
+  );
 }

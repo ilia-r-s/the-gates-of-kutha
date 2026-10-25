@@ -57,7 +57,7 @@ function slyFace(c, ctx) {
   return hashPick(looks, S.salt, c.id, S.day, S.slot, 'sly-' + ctx);
 }
 const slyOr = (c, ctx, f) => (f === 'sly' ? slyFace(c, ctx) : f);
-// the day the camp heard the night she spent in your tent told badly before her (people/camp.js, STIRS.scandal), it
+// the day the camp heard the night she spent in your tent told badly before her (people/moments.js, the scandal), it
 // shows in her face, mostly (FACES.shamed): in the picture of the place and as she greets you, fixed for the slot
 const shamed = c =>
   !!S.log && !!S.log.visit && S.log.visit.shamed === S.day && S.log.visit.id === c.id && slotChance(c, 'shamed', FACES.shamed);

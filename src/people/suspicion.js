@@ -82,8 +82,8 @@ const Suspicion = (() => {
   const credit = c => (S.credit && S.credit[id(c)]) || 0;
   // The truth about someone has come out (guilty, or not): everything said of them before everyone and not yet settled
   // is settled now, and each who said it gains a step of credit, or loses one, by the last thing they said of them.
-  // Returns those last words, each with whether it was right, in the order each one first spoke (people/camp.js,
-  // settleSaid, tells it).
+  // Returns those last words, each with whether it was right, in the order each one first spoke (people/moments.js,
+  // Moments.settle, tells it).
   function settle(about, guilty) {
     const last = new Map();
     S.said

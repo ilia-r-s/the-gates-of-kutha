@@ -338,7 +338,7 @@ function deedMorning() {
     } else if (owners.length) {
       const o = owners.find(x => x.id === d.plant.owner) || owners[0]; // (whoever truly has that habit, the one you meant first)
       d.plantTook = o.id;
-      h += stir('planted', { about: o.id, at: t.id, cat: d.plant.cat });
+      h += Moments.stir('planted', { about: o.id, at: t.id, cat: d.plant.cat });
     }
   }
   // the cult hears what the camp hears, and guesses at what it does not, whoever it was you went for: once it knows or

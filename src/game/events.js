@@ -288,7 +288,7 @@ const EVENT_DO = {
       x = C(wpick(Object.fromEntries(free.map(c => [c.id, RULES.events.songAnyone + eyed(c) ** 2]))));
     return (
       `<p class="notice">${bi(`The verse about ${x.short} is not kind.`, `Куплет про ${ru.c(x, 'a')} — недобрый.`)}</p>` +
-      stir('song', { about: x.id, heavy })
+      Moments.stir('song', { about: x.id, heavy })
     );
   }
 };

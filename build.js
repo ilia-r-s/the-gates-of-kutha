@@ -38,7 +38,7 @@ const SCRIPT = [
   'people/claims.js',    // who claims which part in Crane's diary
   'people/social.js',    // gossip, rumours, mornings
   'people/pretences.js', // pretences dropped: pressed, trusted, of their own accord, before the camp
-  'people/camp.js',      // public moments that move many at once
+  'people/moments.js',   // public moments that move many at once, and who hears of a thing
   'people/flirt.js',     // a light flirtation, now and then
   'people/visit.js',     // a visit to your tent as the evening ends, once a season at most
   'people/manner.js',    // what shows of a feeling, and what does not: greetings, faces, partings

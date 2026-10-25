@@ -237,20 +237,20 @@ const SCRIPT = () => {
   });
   capHtml(
     'called-out',
-    until(() => moved(stir('calledOut', { about: p0.id })))
+    until(() => moved(Moments.stir('calledOut', { about: p0.id })))
   );
   capHtml(
     'called-out-thief',
-    until(() => moved(stir('calledOut', { about: p1.id, thief: true })))
+    until(() => moved(Moments.stir('calledOut', { about: p1.id, thief: true })))
   );
   capHtml(
     'praised',
-    until(() => moved(stir('praised', { about: dec.id })))
+    until(() => moved(Moments.stir('praised', { about: dec.id })))
   );
   S.confidedIn.push(p0.id);
   capHtml(
     'grief',
-    until(() => moved(stir('grief', { about: p0.id })))
+    until(() => moved(Moments.stir('grief', { about: p0.id })))
   );
   capHtml(
     'slept-watch',
@@ -258,12 +258,12 @@ const SCRIPT = () => {
   );
   capHtml(
     'dreamt',
-    until(() => moved(dreamAloud(p1.id, p2.id, true)))
+    until(() => moved(Moments.dreamAloud(p1.id, p2.id, true)))
   );
   S.sus[p3.id][p2.id] = 2;
   capHtml(
     'dreamt-clean',
-    until(() => moved(dreamAloud(p1.id, p2.id, false)))
+    until(() => moved(Moments.dreamAloud(p1.id, p2.id, false)))
   );
   // what a guilty dream told aloud may draw: a clean dream for the cult's own, a dream in answer (the camp distrusting
   // it, the more for a first dream aloud), a part claimed on the spot, and the three ways of calling it a lie
@@ -306,7 +306,7 @@ const SCRIPT = () => {
   }
   capHtml(
     'confessed',
-    until(() => moved(stir('confessed', { about: p3.id })))
+    until(() => moved(Moments.stir('confessed', { about: p3.id })))
   );
   people.forEach(c => {
     S.sus[c.id][p1.id] = 1;
@@ -315,14 +315,14 @@ const SCRIPT = () => {
     'proven',
     until(() => {
       S.said = [{ day: 2, by: p1.id, about: dec.id, verdict: 'cult', how: 'dream', settled: false }];
-      return moved(settleSaid(dec.id));
+      return moved(Moments.settle(dec.id));
     })
   );
   capHtml(
     'disproven',
     until(() => {
       S.said = [{ day: 2, by: p1.id, about: p2.id, verdict: 'cult', how: 'blame', settled: false }];
-      return moved(settleSaid(p2.id));
+      return moved(Moments.settle(p2.id));
     })
   );
   // what people say of their own feelings, and the light touch of flirtation

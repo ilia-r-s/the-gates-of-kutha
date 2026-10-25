@@ -38,7 +38,7 @@ const PUZ = { half: 0.5, rel: 0.6, title: 0.8, lines: 4, apart: 0.3, apartMax: 2
 //           warm / sour            start the season well or ill disposed toward you
 //           word                   how far they take your word at an inquiry, to begin with (the camp's verdict)
 //           prude                  how readily they think ill of a night someone spent in your tent, told as gossip, and
-//                                  of you for it (below 0: how readily they take it well) (people/camp.js, STIRS.scandal)
+//                                  of you for it (below 0: how readily they take it well) (people/moments.js, the scandal)
 const TEMPERS = {
   honest:        { hideSeer: 0.2,  hideWarden: 0.3,  cover: 0.01,   liked: 0.01,    truth: 0.99,   frame: 0.01,   strategic: 0.05, lieSmall: 0.01,    mistake: 0.01,    confess: 0.45, tell: 0.6,  slip: 0.99,    fear: [0.6, 0.1],   gossip: 0.2,  gossipTrue: 0.95, decline: 0.45, blameAcc: 0.45, chat: 0.25, confide: 0,     warm: 0.01,   sour: 0.01, word: 0, counter: 0.01, retort: 0.8, prude: 0.05 },
   conscientious: { hideSeer: 0.35, hideWarden: 0.45, cover: 0.3, liked: 0.2,  truth: 0.7, frame: 0.4, strategic: 0.25, lieSmall: 0.01,    mistake: 0.01,    confess: 0.3,  tell: 0.5,  slip: 0.85, fear: [0.55, 0.15], gossip: 0.25, gossipTrue: 0.9,  decline: 0.3,  blameAcc: 0.4,  chat: 0.35, confide: 0.05,  warm: 0.1, sour: 0.01, word: 0.2, counter: 0.3, retort: 0.8, prude: 0.2 },
@@ -545,7 +545,7 @@ const RULES = {
     visitFriend: 0.2, rival: 0.5,                                              // a night visit (people/visit.js): her friends, × liking; one taken with her
     diedAny: 0.05                                                              // a death in your tent: anyone at all thinks the less of you, × how hard it is talked of
   },
-  // public moments (people/camp.js): for each onlooker, the base chance (p) of being moved, and what adds to it or takes
+  // public moments (people/moments.js): for each onlooker, the base chance (p) of being moved, and what adds to it or takes
   // from it; odds: that anyone speaks up at all. At most cap onlookers are moved each way by one moment; a heavy one (it
   // came seldom in the season's mood) moves each onlooker × heavy as readily.
   camp: {

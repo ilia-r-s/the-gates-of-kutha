@@ -9,7 +9,7 @@
 // have sent an innocent away. Each innocent sent away and each inquiry refused angers the camp, and for the next evening
 // or two it wants more; each cultist unmasked calms it; an angry camp may hold no more inquiries, and the diggers then
 // down tools for a day. Every hand raised is said before everyone, and remembered until the truth comes out
-// (people/camp.js).
+// (people/moments.js).
 
 // ---------- the case you can make ----------
 // From what you know: traces at the scenes that fit them, as far as you have seen their habits (a planted or a thief's

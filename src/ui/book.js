@@ -600,99 +600,16 @@ function evInquiries() {
     .join('');
   return `<h4>${bi('Inquiries', 'Дознания')}</h4><ul class="tlog">${lines}</ul>${S.walkout ? `<p class="dim">${bi(`Since day ${S.walkout} the camp will hold no more inquiries.`, `С ${S.walkout}-го дня лагерь больше не собирается на дознания.`)}</p>` : ''}`;
 }
-// What the camp made of what happened before everyone, newest first (people/camp.js).
-const STIR_SAID = {
-  calledOut: (b, a) =>
-    b
-      ? [`${b.short} called you out over ${a.short}`, `${ru.c(b)} ${ru.gs(b, 'упрекнул', 'упрекнула')} вас из-за ${ru.c(a, 'g')}`]
-      : [`Silence, when ${a.short} was sent away`, `Молчание, когда ${ru.c(a, 'a')} отослали`],
-  praised: (b, a) =>
-    b
-      ? [
-          `${b.short} praised you for unmasking ${a.short}`,
-          `${ru.c(b)} ${ru.gs(b, 'похвалил', 'похвалила')} вас за разоблачение ${ru.c(a, 'g')}`
-        ]
-      : [`${a.short} unmasked`, `${ru.c(a)}: разоблачение`],
-  grief: (b, a) =>
-    b
-      ? [`${b.short} grieved aloud for ${a.short}`, `${ru.c(b)} ${ru.gs(b, 'горевал', 'горевала')} ${ru.ob(a)} при всех`]
-      : [`The camp mourned ${a.short}`, `Лагерь оплакивал ${ru.c(a, 'a')}`],
-  sleptWatch: (b, a) => [`${a.short} slept through a sworn watch`, `${ru.c(a)} ${ru.gs(a, 'проспал', 'проспала')} обещанный дозор`],
-  dreamt: (b, a) => [
-    `${b.short} dreamt ${a.short} guilty, before everyone`,
-    `${ru.c(b, 'd')} приснилось, что ${ru.c(a)} ${ru.gs(a, 'виновен', 'виновна')}, — сказано при всех`
-  ],
-  dreamtClean: (b, a) => [
-    `${b.short} dreamt ${a.short} clean, before everyone`,
-    `${ru.c(b, 'd')} приснилось, что ${ru.c(a)} ${ru.gs(a, 'невиновен', 'невиновна')}, — сказано при всех`
-  ],
-  blame: (b, a) => [`${b.short} blamed ${a.short} aloud`, `${ru.c(b)} при всех ${ru.gs(b, 'обвинил', 'обвинила')} ${ru.c(a, 'a')}`],
-  song: (b, a) => [`The diggers sang of ${a.short}`, `Землекопы пели про ${ru.c(a, 'a')}`],
-  confessed: (b, a) => [`${a.short} came clean before everyone`, `${ru.c(a)} ${ru.gs(a, 'признался', 'призналась')} при всех`],
-  onto: (b, a) =>
-    b
-      ? [
-          `${b.short} said aloud that the dead had named ${a.short}`,
-          `${ru.c(b)} вслух ${ru.gs(b, 'напомнил', 'напомнила')}, что на ${ru.c(a, 'a')} указали ещё до этой смерти`
-        ]
-      : [`The camp remembered that the dead had named ${a.short}`, `Лагерь вспомнил, что на ${ru.c(a, 'a')} указали ещё до этой смерти`],
-  planted: (b, a) => [`A trace of ${a.short}’s found by a tent`, `У палатки нашли след ${ru.c(a, 'g')}`],
-  // (the night she spent in your tent, told as gossip: before everyone, or to one of the camp, r.to)
-  scandal: (b, a, r) =>
-    r.bad
-      ? r.to
-        ? [
-            `${b.short} made a scandal of ${a.short}’s night in your tent, to ${C(r.to).short}`,
-            `${ru.c(b)} ${ru.gs(b, 'раздул', 'раздула')} скандал из ночи ${ru.c(a, 'g')} в вашей палатке — в разговоре с ${ru.c(r.to, 'i')}`
-          ]
-        : [
-            `${b.short} made a scandal of ${a.short}’s night in your tent, before everyone`,
-            `${ru.c(b)} при всех ${ru.gs(b, 'раздул', 'раздула')} скандал из ночи ${ru.c(a, 'g')} в вашей палатке`
-          ]
-      : r.to
-        ? [
-            `${b.short} spoke kindly of ${a.short}’s night in your tent, to ${C(r.to).short}`,
-            `${ru.c(b)} по-доброму ${ru.gs(b, 'отозвался', 'отозвалась')} о ночи ${ru.c(a, 'g')} в вашей палатке — в разговоре с ${ru.c(r.to, 'i')}`
-          ]
-        : [
-            `${b.short} spoke kindly of ${a.short}’s night in your tent, before everyone`,
-            `${ru.c(b)} при всех по-доброму ${ru.gs(b, 'отозвался', 'отозвалась')} о ночи ${ru.c(a, 'g')} в вашей палатке`
-          ],
-  kept: (b, a) => [
-    `${a.short} claimed to have seen someone off from your tent`,
-    `${ru.c(a)} ${ru.gs(a, 'уверял', 'уверяла')}, что ${ru.gs(a, 'спугнул', 'спугнула')} кого-то у вашей палатки`
-  ],
-  // the night's dead the camp takes for innocent, rightly or not
-  proven: (b, a) =>
-    a.status === 'taken'
-      ? [
-          `The camp took ${a.short}’s death to bear ${b.short} out`,
-          `Лагерь счёл, что смерть ${ru.c(a, 'g')} подтвердила правоту ${ru.c(b, 'g')}`
-        ]
-      : [
-          `${b.short} was proven right about ${a.short}`,
-          `${ru.c(b)} ${ru.gs(b, 'оказался прав', 'оказалась права')} насчёт ${ru.c(a, 'g')}`
-        ],
-  disproven: (b, a) =>
-    a.status === 'taken'
-      ? [
-          `The camp took ${a.short}’s death to give ${b.short} the lie`,
-          `Лагерь счёл, что смерть ${ru.c(a, 'g')} опровергла слова ${ru.c(b, 'g')}`
-        ]
-      : [
-          `${b.short} was proven wrong about ${a.short}`,
-          `${ru.c(b)} ${ru.gs(b, 'оказался неправ', 'оказалась неправа')} насчёт ${ru.c(a, 'g')}`
-        ]
-};
+// What the camp made of what happened before everyone, newest first (people/moments.js).
 function stirLine(r) {
-  const [en, rus] = STIR_SAID[r.kind](r.by && C(r.by), C(r.about), r);
+  const [en, rus] = Moments.told(r);
   const eff = r.moved
     .map(([what, whom, d, ids, lvl]) => {
       if (what === 'trust')
         return d < 0
           ? bi(`cooler towards you: ${nameList(ids)}`, `охладели к вам: ${nameListRu(ids)}`)
           : bi(`warmer towards you: ${nameList(ids)}`, `потеплели к вам: ${nameListRu(ids)}`);
-      const said = what === 'like' ? likeSay(ids, C(whom), d) : susSay(ids, C(whom), d, lvl);
+      const said = Moments.movedSaid(what, ids, whom, d, lvl);
       return bi(`${nameList(ids)} ${said[0]}`, `${nameListRu(ids)} ${said[1]}`);
     })
     .concat(r.after ? [r.after] : [])
@@ -700,7 +617,7 @@ function stirLine(r) {
   return bi(en, rus) + (eff ? ` <span class="dim">(${eff})</span>` : '');
 }
 function evCamp() {
-  const seen = (S.stirs || []).filter(r => r.moved.length || r.after || r.spoke); // the moments that moved someone, or had a voice
+  const seen = Moments.record().filter(r => r.moved.length || r.after || r.spoke); // the moments that moved someone, or had a voice
   if (!seen.length) return '';
   return `<h4>${bi('What the camp makes of it', 'Что думает лагерь')}</h4><p class="dim rk-rules">${bi('What happens before everyone moves people, each in their own way: their trust in you, whom they suspect, and what they think of each other.', 'Всё, что происходит при всех, задевает людей — каждого по-своему: их доверие к вам, их подозрения и то, что они думают друг о друге.')}</p><ul class="tlog">${seen
     .slice()

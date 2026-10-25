@@ -82,7 +82,7 @@ const Ties = (() => {
   }
 
   // ---------- moving them ----------
-  // a's liking for b, a step (d), as far as cannot bear or close; false if it could not move (people/camp.js)
+  // a's liking for b, a step (d), as far as cannot bear or close; false if it could not move (people/moments.js)
   function shiftLike(a, b, d) {
     const i = id(a),
       j = id(b);
@@ -140,9 +140,9 @@ const Ties = (() => {
     return C(wpick(w));
   }
   // What has passed between two of the camp, as far as anyone could see: quarrels between them and feasts they sat
-  // through together (game/events.js), how far a suspects b (people/camp.js), and whether either named the other guilty
+  // through together (game/events.js), how far a suspects b (people/suspicion.js), and whether either named the other guilty
   // before everyone (S.said: accused, a named b; accusedBy, b named a). An old score colours how someone takes what they
-  // hear (people/camp.js, STIRS.scandal).
+  // hear (people/moments.js, the scandal).
   function pastBetween(p, q) {
     const a = id(p),
       b = id(q),

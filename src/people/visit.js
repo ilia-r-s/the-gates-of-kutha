@@ -7,7 +7,7 @@
 // Watcher, the bowl, the revolver and luck, it finds two of you (RULES.visit.through: her dead, you, both, or only the
 // usual harm). The morning after, if you both live, your nerve may mend and her trust may grow. The camp talks of it
 // either way, and from then on someone may tell it as gossip, badly or kindly, and whoever hears it may think the less
-// or the better of her, and of you (people/social.js, visitGossip; people/camp.js, STIRS.scandal); and a flirtation that
+// or the better of her, and of you (people/social.js, visitGossip; people/moments.js, the scandal); and a flirtation that
 // came to this may come to more (game/fates.js). An occultist may feel the cult's
 // cold as she comes in, or a cold that is only the night (as in any conversation). Nothing of it is ever explained: the
 // ending tells what she was, and what the night held (game/debrief.js).
@@ -51,7 +51,7 @@ function visitScene(h) {
 // heard of it by morning (people/social.js, ripple).
 function visitAnswer(h, yes, chill) {
   const VR = RULES.visit;
-  S.log.visit = { id: h.id, day: S.day, agreed: yes, chill, hurt: 0, heard: [] }; // (heard: who has made up their mind about it, told as gossip: people/camp.js, STIRS.scandal)
+  S.log.visit = { id: h.id, day: S.day, agreed: yes, chill, hurt: 0, heard: [] }; // (heard: who has made up their mind about it, told as gossip: people/moments.js, the scandal)
   if (!yes) {
     if (chance(VR.hurt)) {
       Ties.moveTrust(h, -1, 'deed');

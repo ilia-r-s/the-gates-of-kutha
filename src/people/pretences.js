@@ -286,7 +286,7 @@ function morningConfession(c) {
   const aside = chance(RULES.confess.aside);
   return (
     `<p class="event">${quoted(morningLead(c, aside), comeClean(c, aside ? 'aside' : 'confess'))}</p>` +
-    (aside ? '' : stir('confessed', { about: c.id }))
+    (aside ? '' : Moments.stir('confessed', { about: c.id }))
   );
 }
 // at an inquiry, with the whole camp watching, one keeping up a story may get in first (the cult's among them): once
@@ -300,5 +300,5 @@ function inquiryConfession() {
     return p > 0 && chance(Math.min(RULES.confess.cap, p + RULES.confess.publicly));
   });
   if (!c) return '';
-  return `<p class="event">${quoted(inquiryLead(c), comeClean(c, 'public'))}</p>` + stir('confessed', { about: c.id });
+  return `<p class="event">${quoted(inquiryLead(c), comeClean(c, 'public'))}</p>` + Moments.stir('confessed', { about: c.id });
 }

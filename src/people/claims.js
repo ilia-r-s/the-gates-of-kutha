@@ -328,5 +328,5 @@ function failedWatch(id) {
         `Утром ${ru.gs(c, 'он', 'она')} старательно избегает вас и уходит на раскоп, не дождавшись конца завтрака.`
       )
     }[how];
-  return `<p>${swore} ${said}</p>` + stir('sleptWatch', { about: c.id, how });
+  return `<p>${swore} ${said}</p>` + Moments.stir('sleptWatch', { about: c.id, how });
 }

@@ -563,7 +563,7 @@ function findsTray() {
 // The morning after a night someone swore to watch your tent and nothing came for you, the one who swore it may tell the
 // camp they saw someone off (kept): the cult to be trusted for it, anyone else to be thanked, or because they heard
 // something in the dark and believe it; the true Watcher, if they did watch as promised, as readily. Whoever doubted them
-// may think again (people/camp.js). The ending tells what the night truly held.
+// may think again (people/moments.js). The ending tells what the night truly held.
 function keptSaid(night) {
   const id = night.target === 'player' ? null : night.sworn,
     a = id && C(id);
@@ -577,7 +577,7 @@ function keptSaid(night) {
         `<p>At breakfast ${a.short} tells anyone who will listen that ${a.p} sat up by your tent half the night. “Somewhere after two, someone came along the lines without a lamp. When I stood up, they went away.”</p>`,
         `<p>За завтраком ${ru.c(a)} рассказывает всем, кто готов слушать, что полночи ${ru.gs(a, 'просидел', 'просидела')} у вашей палатки. «Где-то после двух кто-то шёл вдоль палаток без лампы. Когда я ${ru.gs(a, 'встал', 'встала')}, он ушёл».</p>`
       )
-    ) + stir('kept', { about: id })
+    ) + Moments.stir('kept', { about: id })
   );
 }
 // Dreams told at breakfast (people/claims.js), by everyone who says they dream and by the same odds, the true Dreamer and
@@ -628,7 +628,7 @@ function breakfastDreams({ seer, vision }) {
       i
         ? bi(`<p>Then ${c.short} speaks up. ${en}</p>`, `<p>Следом слово берёт ${ru.c(c)}. ${rus}</p>`)
         : bi(`<p>At breakfast, ${c.short} speaks up. ${en}</p>`, `<p>За завтраком слово берёт ${ru.c(c)}. ${rus}</p>`),
-      dreamAloud(c.id, d.t.id, d.cult),
+      Moments.dreamAloud(c.id, d.t.id, d.cult),
       answerDream(c, d)
     );
   });
@@ -687,7 +687,7 @@ function answerWith(a, d, c, forOther) {
       : bi(
           `<p>${a.short} is on ${a.pp} feet before ${c.short} has finished. “I dreamt of the seven gates too. ${dreamEn(d.t, d.cult)}”</p>`,
           `<p>${ru.c(a)} вскакивает, не дав ${ru.c(c, 'd')} договорить. «Мне тоже снились семь врат. ${dreamRu(d.t, d.cult)}»</p>`
-        )) + dreamAloud(a.id, d.t.id, d.cult, forOther ? null : { first })
+        )) + Moments.dreamAloud(a.id, d.t.id, d.cult, forOther ? null : { first })
   );
 }
 // named guilty, someone calls the dream a lie before everyone: the hot-tempered in anger, the cold coldly, the
@@ -713,5 +713,5 @@ function retortAloud(t, c) {
               `<p class="notice">“That is not true,” ${t.short} says quietly. “I swear it is not.”</p>`,
               `<p class="notice">«Это неправда, — тихо говорит ${ru.c(t)}. — Клянусь, неправда».</p>`
             );
-  return line + stir('blame', { by: t.id, about: c.id });
+  return line + Moments.stir('blame', { by: t.id, about: c.id });
 }

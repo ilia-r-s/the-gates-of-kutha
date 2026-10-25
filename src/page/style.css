@@ -55,7 +55,7 @@ body { min-height: 100dvh; }
 .tr.thiefhit .tv { color: var(--gold); }
 .rolebadge { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; padding: .05rem .35rem; border: 1px solid currentColor; border-radius: 2px; margin-left: .45rem; vertical-align: 2px; white-space: nowrap; }
 .rb-cult { color: var(--ember); }
-/* the camp's reactions to a public moment (people/camp.js): who now suspects whom, set like the trust lines */
+/* the camp's reactions to a public moment (people/moments.js): who now suspects whom, set like the trust lines */
 .prose .stir { font-family: var(--f-mono); font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; margin-top: -.4em; color: var(--gold); }
 .rb-smuggler { color: var(--gold); }
 .rb-warden, .rb-innocent { color: var(--verdigris); }
