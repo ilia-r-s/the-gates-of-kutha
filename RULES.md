@@ -74,8 +74,9 @@ The exceptions, each for a reason:
   (`adapt.idleRite`: how the cult reads you, below). Exposing a cultist sets it back about `inquiry.doomRight` (2); a
   wrong accusation advances it about `inquiry.doomWrong` (2). From `start.doomStir` (5) the scorched circle at the foot
   of E-meslam is seen to widen now and then (`night.riteNote`); from `start.doomWarn` (8) you are warned every dawn, as
-  the meter itself would tell you. If it completes, the descent begins at once, with the rite at its top
-  (`start.doomMax`) however far past it the last night carried it; below, only what you do there carries it further.
+  the meter itself would tell you. If it completes, the descent begins at once (as night falls, if a wrong accusation at
+  the evening's inquiry completes it), with the rite at its top (`start.doomMax`) however far past it the last night
+  carried it; below, only what you do there carries it further.
 - **You**: nerve `start.nerve` (10), wounds `start.wounds` (3). Nerve at zero: madness. Wounds at the limit: death.
   During play nerve, wounds and trust are never told in numbers, only in words ("your nerve frays", "you are badly
   wounded", "trusts you more now"); a loss of `scale.severe` (2) or more is told as a great one, and so is a gain of
@@ -324,14 +325,14 @@ you, speaks against it, or says nothing; the hands are shown by name, and the ca
   circle.
 - **The camp's anger**: about +`verdict.wrong` (2.5) for each innocent sent away, about +`verdict.refused` (1.5) for
   each inquiry it refused, about −`verdict.right` (1) for each cultist unmasked. After a day without an inquiry it cools
-  overnight by `verdict.cool` (0.5), but not below `verdict.wrong` for each innocent sent away, except on the rare night
-  it lets go of that too (`verdict.forget`, 5%): the camp forgets a refused inquiry in time, if you give it time, and an
-  innocent sent away hardly ever. The inquiry tells you when the camp is restless, when its patience is nearly gone, and
-  when it is tired of inquiries that came to nothing. After an inquiry that went against you, from `verdict.walkoutFrom`
-  (3) of anger, it may walk out, at `verdict.walkoutStep` (20%) for each step of anger from there, never certain: no
-  more inquiries, and the next day the diggers do not dig (`verdict.strike`, 85%, else Hamid talks them round; two
-  actions; not on the last day, which has no tomorrow). Each dawn after, a camp that walked out may think better of it
-  and hear you again (`verdict.relent`, 10%, + `relentDeath`, 15%, the morning after a death).
+  overnight by about `verdict.cool` (0.5), but not below `verdict.wrong` for each innocent sent away, except on the rare
+  night it lets go of that too (`verdict.forget`, 5%): the camp forgets a refused inquiry in time, if you give it time,
+  and an innocent sent away hardly ever. The inquiry tells you when the camp is restless, when its patience is nearly
+  gone, and when it is tired of inquiries that came to nothing. After an inquiry that went against you, from
+  `verdict.walkoutFrom` (3) of anger, it may walk out, at `verdict.walkoutStep` (20%) for each step of anger from there,
+  never certain: no more inquiries, and the next day the diggers do not dig (`verdict.strike`, 85%, else Hamid talks
+  them round; two actions; not on the last day, which has no tomorrow). Each dawn after, a camp that walked out may
+  think better of it and hear you again (`verdict.relent`, 10%, + `relentDeath`, 15%, the morning after a death).
 
 In the build-26 simulations (How seasons end, below), about three inquiries in ten pass (30%), and as often against one
 of the cult (29.5%) as against anyone else (30.5%).
@@ -387,9 +388,10 @@ the one you went for +`judge.victim` (3), if alive, −`judge.trust` (1) × thei
 night's dead so far, +`verdict.anger` × the camp's anger, +`judge.cult` (0.3) × the craft's `push` for the cult, ± the
 evening's mood and their own whim, as at an inquiry. At `judge.expel` (2.2) or more they would send you away; below
 `keep` (0.6) they speak for you; between, they say nothing. With at least `verdict.need` (2) for sending you away, and
-more of them than speak for you, you are put on the lorry to Hillah, and the season ends (*The Lorry to Hillah*).
-Otherwise you stay: the camp angers (+`deed.angered`, 1) and lets its suspicion of you go a step (`cleared`, 1), and
-those who would have sent you away trust you less.
+more of them than speak for you, you are put on the lorry to Hillah, and the season ends (*The Lorry to Hillah*). With
+nobody left at the dig to raise a hand, the police corporal from Hillah decides, and mostly lets you stay
+(`verdict.alone`, 80%). Otherwise you stay: the camp angers by about `deed.angered` (1) and lets its suspicion of you go
+about a step (`cleared`, 1), and each who would have sent you away trusts you less (`deed.sour`, 90%).
 
 The ending counts the deed against you, and a killing names your style (Endings, below).
 
@@ -410,7 +412,7 @@ readily their feelings show; × `offDayFriend`, 0.4, with a friend).
 | Make conversation | One of their habits, mostly (`talk.habit`, 65%); a scholar may share a tablet line (`talk.scholarLine`; one of the cult shares none about the ward of the power below, but for a slip, `readings.cultSlip`; the rest it shares as anyone would); the talkative pass on gossip; you may glimpse their temperament (`talk.mien`); now and then a word about someone they feel strongly about (`talk.feel`, a little more or less often with the season's talk): fond of them, cannot stand them, or taken with them (true to their feelings, but for now and then the opposite, × how untrue their gossip runs: `talk.feelFalse`; and no cultist speaks of the other); small talk may warm them (temperament `chat` + `talk.warmth`; a cultist no more readily than anyone, except toward an occultist, whose interests it may half share: +`cunning.charm`); with someone mourning the night's dead, the day it happened, your company may comfort them instead (`talk.comfort`; trust +1, as far as devoted); with a friend (trust ≥ 2) it may steady your nerve a little (`talk.company`). Someone at trust ≤ −1 keeps it short, if they let it show (`talk.cold` × manner). |
 | Where were you last night | Their account of the night and anything they saw (below). Someone at trust ≤ −1 may keep a sighting back (`talk.withhold`), though not well. |
 | Crane's diary | The part they claim: Dreamer, Watcher, none, or (the honest, hiding something) no answer at all; now and then someone with nothing to claim will not say either, whoever they are (`claims.evadeAny`, 3%; the honest, `evadeHonest`, 15%). A liar may give themselves away (temperament `tell`). |
-| Whom do you distrust | A dream, if they claim to dream (the Dreamer mostly, `talk.dreamTell`, 85%; a pretender now and then, `dreamAnswer`); otherwise a name, or a refusal, mostly in their temperament's own way (`talk.ownWay`). The innocent name whom they suspect most, if anyone in earnest (`talk.nameSuspect`), and a fond friend only on the strongest suspicion (or, hardly ever, out of sorts: `scale.rarest`). A thief who saw something hints at it (below). |
+| Whom do you distrust | A dream, if they claim to dream (the true Dreamer as readily as a pretender, the cult among them: `talk.dreamTell`, 75%); otherwise a name, or a refusal, mostly in their temperament's own way (`talk.ownWay`). The innocent name whom they suspect most, if anyone in earnest (`talk.nameSuspect`), and a fond friend only on the strongest suspicion (or, hardly ever, out of sorts: `scale.rarest`). A thief who saw something hints at it (below). |
 | What does this title mean | Anselm, Ilse and Zahrun gloss an old title. |
 | Show something | How they take a charm (fear, calm, a dealer's greed: the thief's at `talk.greed`, anyone's now and then, `greedOther`, 4%, twice as readily the liar and the calculating); Anselm and Ilse read what a charm binds (a charm shown again is read as before). |
 | Confide | Trust +1, if they take it (`confide.odds` 70% + 10% per trust + temperament; a cultist, an occultist's, +`cunning.listen`; −`confide.again` 15% for each confidence they have already taken). Whoever claims the watch, truly or not, and takes it at trust 2 or more swears to watch your tent, mostly (`talk.promise`, 85%); whoever claims to dream, at trust 1 or more, promises you their dreams as readily. A cultist confided in, whether it takes it or not, alerts the cult (`confide.alerts`, 90%). |
@@ -623,11 +625,11 @@ a soft spot for you as anyone can) may do you a harm in secret: at most one a ni
 trust −2 × their temperament (`spite.temper`: the honest hardly ever, 0.01; the suspicious and the liar most readily) ×
 the season's spite; seldom on a night the cult came for you, or one that brought both a horror and the words (×
 `night.calm`, 0.3). A scorpion in your boot (a wound), salt in your water (two nerve), your lamp oil watered (a nerve),
-or a brandy, a torch or the revolver gone from your kit. It lands at `spite.ok` (70%); otherwise you find it in time.
-Now and then they are caught at it (`spite.caught`, 20%: you see who it was, and it counts against them at an inquiry,
-`verdict.spite`; in the grey light, now and then you take them for someone else, `spite.wrongFace`, 5%, and the ending
-tells it), or leave a trace of themselves by your tent (`spite.trace`, 35%). A wound from it can kill you, as any other;
-the words are in `data/hazards.js`.
+or a brandy, a torch or the revolver gone from your kit (not on a night you took it out with you on the deed). It lands
+at `spite.ok` (70%); otherwise you find it in time. Now and then they are caught at it (`spite.caught`, 20%: you see who
+it was, and it counts against them at an inquiry, `verdict.spite`; in the grey light, now and then you take them for
+someone else, `spite.wrongFace`, 5%, and the ending tells it), or leave a trace of themselves by your tent
+(`spite.trace`, 35%). A wound from it can kill you, as any other; the words are in `data/hazards.js`.
 
 **The words.** The tablet lines you know may come back to you in the night (above, `study.linger`), for a point of
 nerve.

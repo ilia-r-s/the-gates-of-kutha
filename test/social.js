@@ -238,11 +238,13 @@ run(async browser => {
         .filter(t => t.kind === 'blurt')
         .forEach(t => {
           st.craft.blurts++;
-          // outside the cult, only one who knew it innocently: who found the body, or was there by ill luck
+          // the one who did it, or one who knew it innocently: who found the body, or was there by ill luck (the other
+          // of the cult as readily as anyone: people/cunning.js, blurt)
           const [n, why] = t.verdict.split(':'),
             rec = S.nights[+n];
           if (C(t.from).role === 'cult') {
-            if (why) bad.push('a slip of the tongue from the cult, marked as innocent');
+            if (why && (!rec || rec.actor === t.from || !(why === 'found' ? rec.finder === t.from : wasAbout(rec, t.from))))
+              bad.push('a slip of the tongue from the cult, marked as innocent, by one who did not know it innocently');
           } else if (!why || !rec || !(why === 'found' ? rec.finder === t.from : wasAbout(rec, t.from)))
             bad.push('a slip of the tongue from outside the cult, by one who could not have known');
           else st.craft.innocentBlurts = (st.craft.innocentBlurts || 0) + 1;
