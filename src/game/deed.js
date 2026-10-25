@@ -308,7 +308,7 @@ function deedMorning() {
         asked = knower.id !== hm.id && isFree(hm) ? ['Hamid', 'Хамида'] : ['the cook', 'повара'];
       h += bi(
         `<p class="notice">${knower.short} watches you over breakfast and says nothing. Later you hear ${knower.p} asked ${asked[0]} whether the Doctor sleeps well these nights.</p>`,
-        `<p class="notice">${ru.c(knower)} весь завтрак смотрит на вас и молчит. Позже вы слышите, как ${ru.gs(knower, 'он', 'она')} спрашивает ${asked[1]}, хорошо ли доктор спит в последние ночи.</p>`
+        `<p class="notice">${ru.c(knower)} весь завтрак смотрит на вас и молчит. Позже вы узнаёте, что ${ru.gs(knower, 'он спрашивал', 'она спрашивала')} ${asked[1]}, хорошо ли доктор спит в последние ночи.</p>`
       );
     } else d.silent = knower.id;
   }
@@ -393,7 +393,7 @@ function youVote() {
   const hands = `<p class="notice">${bi(
     'The camp sits in judgement on you in the mess tent. ' +
       [
-        out.expel.length ? `${nameList(out.expel)} would put you on the truck to Hillah.` : 'Nobody would put you on the truck.',
+        out.expel.length ? `${nameList(out.expel)} would put you on the lorry to Hillah.` : 'Nobody would put you on the lorry.',
         out.keep.length ? `${nameList(out.keep)} ${out.keep.length > 1 ? 'speak' : 'speaks'} for you.` : '',
         out.silent.length ? `${nameList(out.silent)} ${out.silent.length > 1 ? 'say' : 'says'} nothing.` : ''
       ]

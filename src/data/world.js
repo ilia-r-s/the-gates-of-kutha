@@ -55,7 +55,7 @@ const CHARS = [
     init: 'HS',
     p: 'he',
     pp: 'his',
-    job: 'Foreman of the Sherqati diggers'
+    job: 'Foreman of the Shergati diggers'
   },
   {
     id: 'anselm',

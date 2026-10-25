@@ -42,7 +42,7 @@ const END_TITLES = {
   'doom-teeth': ['The Cradle Rocks', 'Колыбель качается'],
   'doom-plague': ['None to Bury Them', 'Хоронить некому'],
   'doom-madness': ['The Sleepwalkers', 'Лунатики'],
-  truck: ['The Truck to Hillah', 'Грузовик до Хиллы']
+  truck: ['The Lorry to Hillah', 'Грузовик до Хиллы']
 };
 
 // ---------- the story ----------
@@ -137,7 +137,7 @@ function endStory(id, how) {
         p(
           bi(
             `You raise ${theItem(it)} above your head. ${V(it, 'It was', 'They were')} never made for what is here, and for a long moment nothing happens. Then the chant falters all the same, as if whatever was rising had simply lost interest in you.`,
-            `Вы поднимаете над головой ${ru.item(it, 'a')}. Это никогда не делалось против того, что здесь, и долгое мгновение ничего не происходит. А потом пение всё же сбивается — будто то, что поднималось, просто потеряло к вам интерес.`
+            `Вы поднимаете над головой ${ru.item(it, 'a')}. Против того, что обитает здесь, такие вещи никогда не делали, и долгое мгновение ничего не происходит. А потом пение всё же сбивается — будто то, что поднималось, просто потеряло к вам интерес.`
           )
         ),
         p(
@@ -248,7 +248,7 @@ function endStory(id, how) {
         p(
           bi(
             `You climb out with the revolver still in your hand and one round fewer in it. There will be an inquest in Baghdad, and you will tell it the truth, or as much of the truth as a court can hear: that ${c.name} came at you in the dark, and you fired.`,
-            `Вы выбираетесь наверх с револьвером в руке — в барабане на один патрон меньше. В Багдаде будет дознание, и вы расскажете правду — ту её часть, которую способен выслушать суд: ${ru.cf(c)} ${ru.gs(c, 'бросился', 'бросилась')} на вас в темноте, и вы выстрелили.`
+            `Вы выбираетесь наверх с револьвером в руке — в барабане на один патрон меньше. В Багдаде будет следствие, и вы расскажете правду — ту её часть, которую способен выслушать суд: ${ru.cf(c)} ${ru.gs(c, 'бросился', 'бросилась')} на вас в темноте, и вы выстрелили.`
           )
         )
       ];
@@ -336,7 +336,7 @@ function endStory(id, how) {
           p(
             bi(
               `${h.name} came to your tent on that last evening, afraid, she said, that you might not see the light of day. She was one of them. In the small hours she did the cult’s work herself, quietly, and at breakfast she was the first to weep.`,
-              `${capS(ru.cf(h))} пришла к вам в палатку в тот последний вечер — боялась, по её словам, что вы не увидите рассвета. Она была одной из них. Под утро она сама, тихо, сделала то, что было поручено культом, а за завтраком первой заплакала.`
+              `${capS(ru.cf(h))} пришла к вам в палатку в тот последний вечер — боялась, по её словам, что вы не увидите рассвета. Она была одной из них. Под утро она сама, тихо, сделала то, что было поручено сектой, а за завтраком первой заплакала.`
             )
           ),
           museum
@@ -345,7 +345,7 @@ function endStory(id, how) {
         return [
           p(
             bi(
-              `${h.name} came to your tent on that last evening, and she was one of them. You caught her wrist in time, but not her blade. By the time the truck takes her away at first light, ${who[0]} is sitting by your cot, and then there is no need to sit there any longer.`,
+              `${h.name} came to your tent on that last evening, and she was one of them. You caught her wrist in time, but not her blade. By the time the lorry takes her away at first light, ${who[0]} is sitting by your cot, and then there is no need to sit there any longer.`,
               `${capS(ru.cf(h))} пришла к вам в палатку в тот последний вечер — и она была одной из них. Её запястье вы перехватили вовремя, но не её клинок. К тому времени, как на рассвете её увозит грузовик, у вашей койки уже сидит ${who[1]} — и потом сидеть там больше незачем.`
             )
           ),
@@ -393,11 +393,11 @@ function endStory(id, how) {
             way === 'peril'
               ? bi(
                   `In the end it is not the cult that kills you, but the dig. The wound goes bad, as wounds do out here; by midnight you are burning, and before dawn ${who[0]} is sitting by your cot, and then there is no need to sit there any longer.`,
-                  `В конце концов вас убивает не культ, а сами раскопки. Рана воспаляется, как это здесь бывает; к полуночи вы горите в жару, а перед рассветом у вашей койки сидит ${who[1]} — и потом сидеть там больше незачем.`
+                  `В конце концов вас убивает не секта, а сами раскопки. Рана воспаляется, как это здесь бывает; к полуночи вы горите в жару, а перед рассветом у вашей койки сидит ${who[1]} — и потом сидеть там больше незачем.`
                 )
               : bi(
                   `In the end it is not the cult that kills you. Someone in the camp who could not stand you does you one harm too many in the night${none ? '' : ', and the cult has only to wait'}. In the morning ${who[0]} finds you, and the camp agrees that nobody saw anything.`,
-                  `В конце концов вас убивает не культ. Кто-то в лагере, кто вас не выносил, причиняет вам ночью ещё один, последний вред${none ? '' : ', и культу остаётся только ждать'}. Утром вас находит ${who[1]}, и лагерь сходится на том, что никто ничего не видел.`
+                  `В конце концов вас убивает не секта. Кто-то в лагере, кто вас не выносил, причиняет вам ночью ещё один, последний вред${none ? '' : ', и секте остаётся только ждать'}. Утром вас находит ${who[1]}, и лагерь сходится на том, что никто ничего не видел.`
                 )
           ),
           museum
@@ -463,7 +463,7 @@ function endStory(id, how) {
     return [
       p(
         bi(
-          'The camp puts you on the truck to Hillah at noon, under the eye of a police corporal who will not look at you, with your notebooks in a sack at your feet. Nobody waves.',
+          'The camp puts you on the lorry to Hillah at noon, under the eye of a police corporal who will not look at you, with your notebooks in a sack at your feet. Nobody waves.',
           'В полдень лагерь сажает вас в грузовик до Хиллы под присмотром полицейского капрала, который старается на вас не смотреть; записные книжки лежат в мешке у ваших ног. Никто не машет вам вслед.'
         )
       ),
@@ -630,12 +630,12 @@ function fallBelow() {
     );
   if (cause === 'grip')
     return bi(
-      'What took hold of you in the dark does not let go. You feel it draw you, quite gently, toward a door you had not seen.',
+      'What took hold of you in the dark does not let go. You feel it draw you, quite gently, towards a door you had not seen.',
       'То, что схватило вас в темноте, не отпускает. Вы чувствуете, как оно — почти бережно — тянет вас к двери, которой вы прежде не замечали.'
     );
   if (cause === 'bite')
     return bi(
-      'The bite from the wall will not stop bleeding. You go on a little way, and then sit down, and hear the gnawing come along the wall toward you, unhurried.',
+      'The bite from the wall will not stop bleeding. You go on a little way, and then sit down, and hear the gnawing come along the wall towards you, unhurried.',
       'Укус из стены никак не перестаёт кровоточить. Вы проходите ещё немного, потом садитесь — и слышите, как вдоль стены к вам, не торопясь, подбирается грызущий звук.'
     );
   if (cause === 'sickness')
@@ -673,7 +673,7 @@ function fallBelow() {
 const END_STYLE = {
   // the one who went out in the dark and settled it themselves (game/deed.js)
   avenger: {
-    name: ['The Avenger', 'Мститель'],
+    name: ['The Avenger', 'Возмездие'],
     win: [
       'In the end you did what no inquiry would: you went out in the dark and settled it yourself. It worked, or something did. You will spend the rest of your life not quite sure which, and not quite sure it was you who went.',
       'В конце концов вы сделали то, на что не решилось бы ни одно дознание: вышли в темноту и решили всё сами. Это сработало — или сработало что-то другое. Всю оставшуюся жизнь вы так и не будете до конца уверены, что именно, — и что в ту ночь к палатке шли именно вы.'
@@ -684,7 +684,7 @@ const END_STYLE = {
     ]
   },
   inquisitor: {
-    name: ['The Inquisitor', 'Инквизитор'],
+    name: ['The Inquisitor', 'Допрос с пристрастием'],
     win: [
       'You did it the hard way: questions that left marks, accusations made out loud, never once looking away. It worked. Nobody who was at Kutha will ever be quite comfortable in a room with you again, and you find you can live with that.',
       'Вы шли напролом: вопросы, после которых оставались синяки, обвинения вслух, ни разу не отведённый взгляд. И это сработало. Никому из тех, кто был в Куте, уже не будет по-настоящему уютно в одной комнате с вами, — и вы обнаруживаете, что с этим можно жить.'
@@ -695,7 +695,7 @@ const END_STYLE = {
     ]
   },
   quiet: {
-    name: ['The Quiet Guest', 'Тихий гость'],
+    name: ['The Quiet Guest', 'Не повышая голоса'],
     win: [
       'You never raised your voice at Kutha. You kept your lamp low, your counsel to yourself and your hand off the table, and when the time came you were the last thing the rite was watching for.',
       'В Куте вы ни разу не повысили голоса. Вы не поднимали лампу, держали мысли при себе и не открывали карт — и когда настал час, обряд меньше всего ждал удара именно от вас.'
@@ -706,7 +706,7 @@ const END_STYLE = {
     ]
   },
   scholar: {
-    name: ['The Scholar', 'Книжник'],
+    name: ['The Scholar', 'Над табличками'],
     win: [
       'You beat it with grammar. Long nights over the tablets, the lamp turned low, the sign list propped against the inkpot: in the end you knew its name and its nature better than the people who served it.',
       'Вы одолели его грамматикой. Долгие ночи над табличками, привёрнутая лампа, список знаков, прислонённый к чернильнице, — в конце концов вы знали его имя и природу лучше тех, кто ему служил.'
@@ -717,7 +717,7 @@ const END_STYLE = {
     ]
   },
   sleuth: {
-    name: ['The Detective', 'Сыщик'],
+    name: ['The Detective', 'Дедуктивный метод'],
     win: [
       'You solved Kutha the way one solves a murder at a country house: footprints, cigarette ends, who was where at midnight and who says so. Scotland Yard would have been proud of you. Scotland Yard would not have believed a word of the rest.',
       'Вы раскрыли Куту так, как раскрывают убийство в загородной усадьбе: отпечатки подошв, окурки, кто где был в полночь и кто это подтвердит. Скотленд-Ярд гордился бы вами. Правда, всему остальному Скотленд-Ярд не поверил бы ни на слово.'
@@ -728,7 +728,7 @@ const END_STYLE = {
     ]
   },
   delver: {
-    name: ['The Digger', 'Копатель'],
+    name: ['The Digger', 'С лопатой в руках'],
     win: [
       'You trusted the earth more than the people standing on it, and the earth repaid you. Half the season’s finds register is in your hand, and the most important find of all is not in it.',
       'Земле вы доверяли больше, чем людям, что по ней ходят, — и земля отплатила вам. Половина описи находок за сезон написана вашей рукой, а самой важной находки в ней нет вовсе.'
@@ -739,7 +739,7 @@ const END_STYLE = {
     ]
   },
   confidant: {
-    name: ['The Confidant', 'Наперсник'],
+    name: ['The Confidant', 'Разговоры по душам'],
     win: [
       'You won Kutha one conversation at a time: cups of coffee, confidences given and returned, the long talks after supper. When it mattered, the people you had trusted stood with you, and the ones you should not have trusted had long since given themselves away.',
       'Вы выиграли Куту разговор за разговором: чашки кофе, доверие за доверие, долгие беседы после ужина. Когда пришёл час, те, кому вы поверили, встали рядом с вами, а те, кому верить не следовало, давно уже себя выдали.'
@@ -750,7 +750,7 @@ const END_STYLE = {
     ]
   },
   director: {
-    name: ['The Field Director', 'Начальник раскопок'],
+    name: ['The Field Director', 'Во главе раскопа'],
     win: [
       'You ran Kutha the way Crane ought to have: a little of everything, nothing to excess, and an eye on all of it. Nobody will ever write a book about how you did it, which is exactly how you wanted it.',
       'Вы вели Куту так, как следовало бы вести её Крейну: всего понемногу, ничего сверх меры — и за всем зоркий глаз. Никто никогда не напишет книгу о том, как вам это удалось, — ровно так, как вы и хотели.'

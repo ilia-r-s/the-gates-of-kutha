@@ -148,7 +148,7 @@ function fxTreachery({ f, r, add }) {
     add(
       'm',
       `${c.name} walked down beside you all the way, and at the end took a place in the cult’s circle.${h[0]}`,
-      `${capS(ru.cf(c))} ${ru.gs(c, 'шёл', 'шла')} рядом с вами всю дорогу вниз, а в конце ${ru.gs(c, 'занял', 'заняла')} место в круге культа.${h[1]}`
+      `${capS(ru.cf(c))} ${ru.gs(c, 'шёл', 'шла')} рядом с вами всю дорогу вниз, а в конце ${ru.gs(c, 'занял', 'заняла')} место в круге секты.${h[1]}`
     );
   });
   (f.cameBack || []).forEach(x => {
@@ -428,8 +428,8 @@ function fxVerdict({ add }) {
               ? `On day ${v.day} ${o.name} sided with you against ${x.name}, one of ${o.pp} own, to look clean.`
               : `On day ${v.day} ${o.name} spoke up for ${x.name}, one of ${o.pp} own.`,
             backed
-              ? `В день ${v.day} ${ru.cf(o)} ${ru.gs(o, 'поддержал', 'поддержала')} вас против ${ru.cf(x, 'g')}, ${ru.gs(x, 'своего же собрата', 'своей же сестры')} по культу, — чтобы ${ru.gs(o, 'самому', 'самой')} остаться вне подозрений.`
-              : `В день ${v.day} ${ru.cf(o)} ${ru.gs(o, 'вступился', 'вступилась')} за ${ru.cf(x, 'a')}, ${ru.gs(x, 'своего же собрата', 'свою же сестру')} по культу.`
+              ? `В день ${v.day} ${ru.cf(o)} ${ru.gs(o, 'поддержал', 'поддержала')} вас против ${ru.cf(x, 'g')}, ${ru.gs(x, 'своего же собрата', 'своей же сестры')} по секте, — чтобы ${ru.gs(o, 'самому', 'самой')} остаться вне подозрений.`
+              : `В день ${v.day} ${ru.cf(o)} ${ru.gs(o, 'вступился', 'вступилась')} за ${ru.cf(x, 'a')}, ${ru.gs(x, 'своего же собрата', 'свою же сестру')} по секте.`
           );
       });
   });
@@ -488,7 +488,7 @@ function fxCunning({ add }) {
     add(
       'n',
       `On day ${b.day} ${c.name} named ${o.name}, the other of the cult, once ${o.p} looked lost: one given up to save the rest.`,
-      `В день ${b.day} ${ru.cf(c)} ${ru.gs(c, 'назвал', 'назвала')} ${ru.cf(o, 'a')}, ${ru.gs(o, 'своего же собрата', 'свою же сестру')} по культу, когда ${ru.gs(o, 'тот', 'та')} уже ${ru.gs(o, 'казался обречённым', 'казалась обречённой')}: одного отдали, чтобы спасти остальных.`
+      `В день ${b.day} ${ru.cf(c)} ${ru.gs(c, 'назвал', 'назвала')} ${ru.cf(o, 'a')}, ${ru.gs(o, 'своего же собрата', 'свою же сестру')} по секте, когда ${ru.gs(o, 'тот', 'та')} уже ${ru.gs(o, 'казался обречённым', 'казалась обречённой')}: одного отдали, чтобы спасти остальных.`
     );
   });
   // how the cult read your way of hunting it, and turned its craft against it (people/cunning.js, cultTurns), in the
@@ -903,11 +903,11 @@ function fxClaims({ L, add }) {
               ? ['a lie, told to deceive you', 'это была ложь, чтобы вас обмануть']
               : cl.heat
                 ? [
-                    'a lie, told in a temper, to answer a dream against them',
+                    `a lie, told in a temper, to answer a dream against ${EP.him(c)}`,
                     `это была ложь, сказанная сгоряча, в ответ на сон против ${g('него', 'неё')}`
                   ]
                 : cl.why === 'liked'
-                  ? ['a lie, told to be liked', `это была ложь, чтобы с ${g('ним', 'ней')} считались`]
+                  ? ['a lie, told to be liked', 'это была ложь, чтобы понравиться']
                   : ['a cover for night work of another kind', 'это было прикрытие для ночных дел совсем иного рода'];
         add(
           cl.why === 'liked' ? 'n' : 'm',
@@ -952,19 +952,19 @@ function fxCamp({ f, r, add }) {
     add(
       warmed > turned ? 'p' : turned > warmed ? 'm' : 'n',
       `Talk about you around the camp warmed people to you ${enTimes(warmed)}, and turned them against you ${enTimes(turned)}.`,
-      `Разговоры о вас в лагере ${ruTimes(warmed)} располагали к вам людей и ${ruTimes(turned)} настраивали их против вас.`
+      `Разговоры о вас в лагере ${ruTimes(warmed)} расположили к вам людей и ${ruTimes(turned)} настроили их против вас.`
     );
   else if (warmed)
     add(
       'p',
       `Talk about you around the camp warmed people to you ${enTimes(warmed)}.`,
-      `Разговоры о вас в лагере ${ruTimes(warmed)} располагали к вам людей.`
+      `Разговоры о вас в лагере ${ruTimes(warmed)} расположили к вам людей.`
     );
   else if (turned)
     add(
       'm',
       `Talk about you around the camp turned people against you ${enTimes(turned)}.`,
-      `Разговоры о вас в лагере ${ruTimes(turned)} настраивали людей против вас.`
+      `Разговоры о вас в лагере ${ruTimes(turned)} настроили людей против вас.`
     );
   if (f && f.refused && f.refused.length)
     add(
@@ -1185,13 +1185,13 @@ function fxDeed({ add }) {
     add(
       'n',
       `${went[0]}, and the Watcher drove you off${d.knewBy ? ', and knew you' : ''}.${was[0]}`,
-      `${went[1]}, но Страж прогнал вас${d.knewBy ? ' — и узнал' : ''}.${was[1]}`
+      `${went[1]}, но страж прогнал вас${d.knewBy ? ' — и узнал' : ''}.${was[1]}`
     );
   else {
     const tr = S.nights[d.day] && S.nights[d.day].truth[t.id],
       mate = tr && tr.with && S.chars[tr.with] ? C(tr.with) : null,
       why = {
-        errand: [`${t.p} was out doing the cult’s work`, `${g('он', 'она')} делал${g('', 'а')} в ту ночь работу культа`],
+        errand: [`${t.p} was out doing the cult’s work`, `${g('он', 'она')} делал${g('', 'а')} в ту ночь работу секты`],
         thief: [`${t.p} was out robbing the dig`, `${g('он', 'она')} обворовывал${g('', 'а')} раскоп`],
         tryst: mate
           ? [`${t.p} was out with ${mate.name}`, `${g('он был', 'она была')} где-то с ${ru.cf(mate, 'i')}`]
@@ -1202,7 +1202,7 @@ function fxDeed({ add }) {
         ],
         gone:
           t.status === 'taken' && t.takenDay === d.day
-            ? [`the cult had come for ${EP.him(t)} first, out in the dark`, `культ раньше вас нашёл ${g('его', 'её')} в темноте`]
+            ? [`the cult had come for ${EP.him(t)} first, out in the dark`, `секта раньше вас нашла ${g('его', 'её')} в темноте`]
             : [`${t.p} was already gone`, `${g('его', 'её')} уже не было`]
       }[d.away] || ['', ''];
     add('n', `${went[0]}, and found it empty: ${why[0]}.${was[0]}`, `${went[1]} и нашли её пустой: ${why[1]}.${was[1]}`);
@@ -1238,7 +1238,7 @@ function fxDeed({ add }) {
       : add(
           'n',
           'That night the cult came for you, and found your tent empty.',
-          'В ту ночь культ приходил за вами — и нашёл вашу палатку пустой.'
+          'В ту ночь секта приходила за вами — и нашла вашу палатку пустой.'
         );
   if (d.vote)
     add(
@@ -1287,7 +1287,7 @@ function fxVisit({ add }) {
     add(
       'n',
       'In the night she slipped out of your tent and did the cult’s work herself, while you slept.',
-      'Ночью, пока вы спали, она выскользнула из вашей палатки и сама сделала работу культа.'
+      'Ночью, пока вы спали, она выскользнула из вашей палатки и сама сделала работу секты.'
     );
   if (v.empty)
     add(
@@ -1306,7 +1306,7 @@ function fxVisit({ add }) {
       v.found === 'dead'
         ? `В ту ночь ${it[1]} приходила за ней, знала, где она спит, — и убила её рядом с вами, пока вы спали.`
         : v.found === 'watch'
-          ? `В ту ночь ${it[1]} приходила за ней к вашей палатке — и Страж её прогнал.`
+          ? `В ту ночь ${it[1]} приходила за ней к вашей палатке — и страж её прогнал.`
           : `В ту ночь ${it[1]} приходила за ней к вашей палатке — но собаки перебудили лагерь раньше.`
     );
   if (v.through === 'her')
@@ -1315,14 +1315,14 @@ function fxVisit({ add }) {
     add(
       'n',
       `That night ${it[0]} came for you; she screamed, and it fled.`,
-      `В ту ночь ${it[1]} приходила за вами; ${ru.c(h)} закричала, и ${pw ? 'сила отступила' : 'они бежали'}.`
+      `В ту ночь ${it[1]} приходила за вами; ${ru.c(h)} закричала, и ${pw ? 'сила отступила' : 'сектанты бежали'}.`
     );
   if (v.chill)
     add(
       'n',
       cult ? 'The cold you felt as she came in was the cult’s.' : 'The cold you felt as she came in was only the night.',
       cult
-        ? 'Холод, который вы почувствовали, когда она вошла, был холодом культа.'
+        ? 'Холод, который вы почувствовали, когда она вошла, был холодом секты.'
         : 'Холод, который вы почувствовали, когда она вошла, был всего лишь ночным холодом.'
     );
 }
@@ -1367,10 +1367,10 @@ function fxYourself({ haunt, won, r, L, add }) {
     add(
       'm',
       `Kutha came for your nerve of its own accord ${enTimes(L.dread)}, whatever you were doing.`,
-      `Кута ${ruTimes(L.dread)} сама добиралась до ваших нервов — чем бы вы ни были заняты.`
+      `Кута ${ruTimes(L.dread)} сама добралась до ваших нервов — чем бы вы ни были заняты.`
     );
   if (L.perils.length)
-    add('m', `The dig itself hurt you ${enTimes(L.perils.length)}.`, `Сами раскопки ${ruTimes(L.perils.length)} причиняли вам вред.`);
+    add('m', `The dig itself hurt you ${enTimes(L.perils.length)}.`, `Сами раскопки ${ruTimes(L.perils.length)} причинили вам вред.`);
   if (L.minNerve > 0 && L.minNerve <= RULES.reckoning.frayed)
     add(
       'm',
@@ -1445,7 +1445,7 @@ function endNumbers(r) {
     [L.confess, 'Confessions aloud', 'Признания вслух'],
     [r.friends.length, 'Trusted you', 'Доверяли вам'],
     [r.enemies.length, 'Turned against you', 'Против вас'],
-    [sg + Math.abs(r.score), 'Conduct', 'Итог']
+    [sg + Math.abs(r.score), 'Conduct', 'Поведение']
   ];
   return `<div class="numbers">${cells.map(([v, en, rus]) => `<div class="num"><b>${v}</b><span>${bi(en, rus)}</span></div>`).join('')}</div>`;
 }
@@ -1477,7 +1477,7 @@ function claimCell(c) {
           : cl.why === 'reticent'
             ? ['on principle', 'из принципа']
             : cl.why === 'liked'
-              ? ['to be liked', `чтобы с ${g('ним', 'ней')} считались`]
+              ? ['to be liked', 'чтобы понравиться']
               : c.role === 'seer'
                 ? ['for fear', 'из страха']
                 : c.role === 'warden'

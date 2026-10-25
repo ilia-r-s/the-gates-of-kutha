@@ -42,7 +42,7 @@ function finaleIntro(early, why = null) {
             `<p>${bi('The fifth night is the dark of the moon. The camp is silent. A lamp is moving on the ziggurat, then it is gone, into the mound.', 'Пятая ночь — новолуние. Лагерь безмолвен. По зиккурату движется огонёк лампы — и исчезает, уходя в холм.')}</p>`
           ];
   body.push(
-    `<p>${bi('Before you go down, you must decide what you are facing. Name the power behind the cult, and the old words and wards may answer you.', 'Прежде чем спуститься, решите, с чем вы имеете дело. Назовите силу, что стоит за культом, — и древние слова и обереги, быть может, отзовутся.')}</p>`
+    `<p>${bi('Before you go down, you must decide what you are facing. Name the power behind the cult, and the old words and wards may answer you.', 'Прежде чем спуститься, решите, с чем вы имеете дело. Назовите силу, что стоит за сектой, — и древние слова и обереги, быть может, отзовутся.')}</p>`
   );
   show({
     kicker:
@@ -266,11 +266,11 @@ function gate2Traitor(t, next) {
       html =
         (heard
           ? bi(
-              `<p class="horror">You hear the step a moment too late, and turn as the knife comes: it opens your coat and goes no further. ${t.short} is past you before you can catch ${EP.him(t)}, murmuring the old words, and runs ahead into the dark, toward the chanting.</p>`,
+              `<p class="horror">You hear the step a moment too late, and turn as the knife comes: it opens your coat and goes no further. ${t.short} is past you before you can catch ${EP.him(t)}, murmuring the old words, and runs ahead into the dark, towards the chanting.</p>`,
               `<p class="horror">Вы слышите шаг на миг позже, чем нужно, и оборачиваетесь, когда нож уже летит: он распарывает вам куртку — и только. ${ru.c(t)} проскальзывает мимо прежде, чем вы успеваете ${ru.gs(t, 'его', 'её')} схватить, и, бормоча древние слова, убегает вперёд, во тьму, туда, откуда доносится пение.</p>`
             )
           : bi(
-              `<p class="horror">The knife takes you under the ribs. ${t.short} steps past you, murmuring the old words, and runs ahead into the dark, toward the chanting.</p>`,
+              `<p class="horror">The knife takes you under the ribs. ${t.short} steps past you, murmuring the old words, and runs ahead into the dark, towards the chanting.</p>`,
               `<p class="horror">Нож входит вам под рёбра. ${ru.c(t)} переступает через вас, бормоча древние слова, и убегает вперёд, во тьму, туда, откуда доносится пение.</p>`
             )) + costOf(heard ? 'knifeHeard' : 'knife');
     }
@@ -300,7 +300,7 @@ function gate2Traitor(t, next) {
         label: bi('Keep walking and listen', 'Идти дальше и прислушиваться'),
         sub: bi(
           'Let them think you have not noticed, and hear it coming',
-          'Пусть думает, что вы ничего не заметили, — и услышать, когда начнётся'
+          'Сделать вид, что ничего не заметили, — и услышать, когда начнётся'
         ),
         fn: () => {
           S.fin.g2 = 'listen';
@@ -426,7 +426,7 @@ function gate3(said = '') {
             return stepOn(
               bi(
                 `<p>${c.short} sets ${c.pp} back against the gate. You are hardly through when it swings shut on its own, and ${c.short} is through with you, white to the lips. “It let go of me,” ${c.p} says. “It did not want me.”</p>`,
-                `<p>${ru.c(c)} подпирает створку спиной. Едва вы проходите, как врата сами захлопываются — и ${ru.c(c)}, ${ru.gs(c, 'белый', 'белая')} как полотно, оказывается рядом с вами. «Оно меня отпустило, — говорит ${ru.gs(c, 'он', 'она')}. — Я ему не был${ru.gs(c, '', 'а')} нужн${ru.gs(c, 'ен', 'а')}».</p>`
+                `<p>${ru.c(c)} подпирает створку спиной. Едва вы проходите, как врата сами захлопываются — и ${ru.c(c)}, ${ru.gs(c, 'белый', 'белая')} как полотно, оказывается рядом с вами. «Оно меня отпустило, — говорит ${ru.gs(c, 'он', 'она')}. — Я ему не был${ru.gs(c, '', 'а')} ${ru.gs(c, 'нужен', 'нужна')}».</p>`
               ),
               sanctum
             );
@@ -516,8 +516,8 @@ function sanctumBody(cult, hier, turned) {
     `<p>${bi(ASP(S.patron).sanctum)}</p>` +
       (waiting.length
         ? bi(
-            `<p>Around it, robed in the old way, ${waiting.length > 1 ? 'stand ' + listNames(waiting.map(c => c.name)) : 'stands ' + waiting[0].name}.${smiles ? ` ${hier.short} turns from the rite and smiles at you as if you were expected.` : again ? ' The chant has not faltered.' : ''}</p>`,
-            `<p>Вокруг, в древних облачениях, ${waiting.length > 1 ? 'стоят ' + ru.list(waiting.map(c => ru.cf(c))) : 'стоит ' + ru.cf(waiting[0])}.${smiles ? ` ${ru.c(hier)} отворачивается от обряда и улыбается вам так, словно вас здесь ждали.` : again ? ' Пение не сбилось ни на миг.' : ''}</p>`
+            `<p>${waiting.length > 1 ? 'Around it, robed in the old way, stand ' + listNames(waiting.map(c => c.name)) : 'Beside it, robed in the old way, stands ' + waiting[0].name}.${smiles ? ` ${hier.short} turns from the rite and smiles at you as if you were expected.` : again ? ' The chant has not faltered.' : ''}</p>`,
+            `<p>${waiting.length > 1 ? 'Вокруг, в древних облачениях, стоят ' + ru.list(waiting.map(c => ru.cf(c))) : 'Рядом, в древнем облачении, стоит ' + ru.cf(waiting[0])}.${smiles ? ` ${ru.c(hier)} отворачивается от обряда и улыбается вам так, словно вас здесь ждали.` : again ? ' Пение не сбилось ни на миг.' : ''}</p>`
           )
         : '') +
       turned.html

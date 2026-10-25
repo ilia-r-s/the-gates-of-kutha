@@ -374,12 +374,12 @@ function sightLine(cl, sw, c) {
           );
   if (upAllNight(cl, c))
     return bi(
-      `Around two, someone went past the tents toward ${where}. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}.`,
+      `Around two, someone went past the tents towards ${where}. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}.`,
       `Около двух кто-то прошёл мимо палаток в сторону ${wr}. ${nfRu} Но я ${sense} ${RU_WIT[v]}.`
     );
   return cl.loc === 'camp'
     ? bi(
-        `I woke around two. Someone went past my tent toward ${where}. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}.`,
+        `I woke around two. Someone went past my tent towards ${where}. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}.`,
         `Я ${ru.gs(c, 'проснулся', 'проснулась')} около двух. Кто-то прошёл мимо моей палатки в сторону ${wr}. ${nfRu} Но я ${sense} ${RU_WIT[v]}.`
       )
     : bi(

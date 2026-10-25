@@ -110,7 +110,7 @@ const FORMULAS = {
       'из земли выходит тот, у кого хвост скорпиона и лицо человека'
     ],
     ['fish fall out of heaven upon the dry land', 'рыбы падают с неба на сушу'],
-    ['the river turns and runs back toward its source', 'река поворачивает и бежит назад, к своему истоку'],
+    ['the river turns and runs back towards its source', 'река поворачивает и бежит назад, к своему истоку'],
     ['the frogs come up out of the river and fill the houses', 'лягушки выходят из реки и наполняют дома'],
     ['a mist comes up out of the dry earth as out of the sea', 'из сухой земли поднимается туман, как из моря']
   ],
@@ -256,12 +256,12 @@ const TITLES = {
   doorman: {
     en: 'the Chief Doorman of the Underworld',
     ru: [
-      'Главный Привратник Преисподней',
-      'Главного Привратника Преисподней',
-      'Главному Привратнику Преисподней',
-      'Главного Привратника Преисподней',
-      'Главным Привратником Преисподней',
-      'Главном Привратнике Преисподней'
+      'Главный Привратник Подземного мира',
+      'Главного Привратника Подземного мира',
+      'Главному Привратнику Подземного мира',
+      'Главного Привратника Подземного мира',
+      'Главным Привратником Подземного мира',
+      'Главном Привратнике Подземного мира'
     ]
   },
   // Tiamat (Enūma eliš I)
@@ -355,12 +355,12 @@ const TITLES = {
     of: 'nergal',
     en: 'the Enlil of the Underworld',
     ru: [
-      'Энлиль Преисподней',
-      'Энлиля Преисподней',
-      'Энлилю Преисподней',
-      'Энлиля Преисподней',
-      'Энлилем Преисподней',
-      'Энлиле Преисподней'
+      'Энлиль Подземного мира',
+      'Энлиля Подземного мира',
+      'Энлилю Подземного мира',
+      'Энлиля Подземного мира',
+      'Энлилем Подземного мира',
+      'Энлиле Подземного мира'
     ]
   },
   // ugallu, one of Tiamat's eleven (Enūma eliš I), later a doorkeeper of Nergal's
@@ -534,8 +534,12 @@ const VESHCH = ['вещь', 'вещи', 'вещи', 'вещь', 'вещью', '�
 function riddle(w) {
   const m = ((S.refOf && S.refOf[w]) || []).map(k => CHARM_MARKS[k]);
   if (!m.length) return { en: 'what was found', ru: VESHCH };
+  // (two marks told with the same verb share it: "bears seven notches and a fleck of gold", "smells of cedar and of
+  // woodsmoke")
+  const verb = vp => vp.split(' ')[0],
+    en = m.map(x => x.en.vp).map((vp, i, all) => (i && verb(vp) === verb(all[0]) ? vp.slice(verb(vp).length + 1) : vp));
   return {
-    en: 'what ' + m.map(x => x.en.vp).join(' and '),
+    en: 'what ' + en.join(' and '),
     ru: VESHCH.map(v => `${v} ${m[0].ru.prep} ${m.map(x => x.ru.ins).join(' и ')}`)
   };
 }

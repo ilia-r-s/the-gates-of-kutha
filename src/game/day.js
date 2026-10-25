@@ -74,9 +74,12 @@ function planScene() {
     kicker: dayStamp(),
     title: bi('Where will you go?', 'Куда теперь?'),
     body: [
+      // (how the plan works is said on the first day only)
       bi(
-        `<p>${slotIntro()[0]}</p><p class="dim">Choose a place on the site plan or below. What you do there takes up the ${SLOT_NAMES[S.slot].toLowerCase()}.</p>`,
-        `<p>${slotIntro()[1]}</p><p class="dim">Выберите место на плане раскопа или в списке ниже. То, чем вы там займётесь, отнимет ${RU_SLOT_SPAN[S.slot]}.</p>`
+        `<p>${slotIntro()[0]}</p>` +
+          (S.day === 1 ? `<p class="dim">Choose a place on the site plan or below. What you do there takes up the ${SLOT_NAMES[S.slot].toLowerCase()}.</p>` : ''),
+        `<p>${slotIntro()[1]}</p>` +
+          (S.day === 1 ? `<p class="dim">Выберите место на плане раскопа или в списке ниже. То, чем вы там займётесь, отнимет ${RU_SLOT_SPAN[S.slot]}.</p>` : '')
       )
     ],
     choices
@@ -186,7 +189,8 @@ function campActs(body, ch) {
       cls: 'danger',
       fn: deedScene
     });
-  if (S.slot < 2 && !S.walkout)
+  // (where inquiries are held is said until the first one; a short day's warning, always)
+  if (S.slot < 2 && !S.walkout && (S.slotsToday <= 2 || !S.inquiries.length))
     body.push(
       S.slotsToday > 2
         ? `<p class="dim">${bi('Inquiries can be held here in the evening.', 'Вечером здесь можно созвать дознание.')}</p>`
@@ -562,7 +566,7 @@ function tracePlanted(cr, cl) {
     : null;
   return (
     bi(
-      `<p>Look again at ${clueText(cl)}. Nobody walked, or stood, or smoked there: the trace was put there on purpose, for you to find.</p>`,
+      `<p>Look again: ${clueText(cl)}. Nobody walked, or stood, or smoked there: the trace was put there on purpose, for you to find.</p>`,
       `<p>Присмотритесь ещё раз: ${clueTextRu(cl)}. Там никто не ходил, не стоял и не курил — след положили нарочно, чтобы вы его нашли.</p>`
     ) +
     (under

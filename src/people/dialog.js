@@ -127,7 +127,7 @@ function smallTalk(c) {
 const DIALOG = {
   about: {
     label: () => bi('Make conversation', 'Завести разговор'),
-    sub: () => bi('Their work, their habits', 'О работе, о привычках'),
+    sub: c => bi(`${capS(c.pp)} work, ${c.pp} habits`, 'О работе, о привычках'),
     run(c) {
       // someone who has turned against you keeps it short, and gives nothing away: if they let it show
       if (c.rapport <= -1 && chance(RULES.talk.cold * showMul(c))) return curtTalk(c);
@@ -141,7 +141,7 @@ const DIALOG = {
       S.day === 1
         ? bi('Ask where they were the night Crane died', 'Спросить про ночь, когда погиб Крейн')
         : bi('Ask where they were last night', 'Спросить про прошлую ночь'),
-    sub: c => bi('Their account, and anything they saw', ru.gs(c, 'Где был, с кем, что заметил', 'Где была, с кем, что заметила')),
+    sub: c => bi(`${capS(c.pp)} account, and anything ${c.p} saw`, ru.gs(c, 'Где был, с кем, что заметил', 'Где была, с кем, что заметила')),
     off: c => S.claims.some(x => x.night === S.day - 1 && x.id === c.id),
     run(c) {
       const n = S.day - 1,
@@ -183,7 +183,7 @@ const DIALOG = {
     sub: c =>
       SCHOLARS.includes(c.id)
         ? bi('A scholar can read what a charm was made against', 'Учёный прочтёт, против кого сделан амулет')
-        : bi('Watch how they take it', 'Посмотреть, как это примут'),
+        : bi(`Watch how ${c.p} takes it`, `Посмотреть, как ${ru.gs(c, 'он', 'она')} это примет`),
     off: () => !canShow(),
     run(c, id) {
       const th = showables(),
@@ -293,7 +293,7 @@ const DIALOG = {
     }
   },
   press: {
-    label: c => bi('Press them', ru.gs(c, 'Надавить на него', 'Надавить на неё')),
+    label: c => bi(`Press ${EP.him(c)}`, ru.gs(c, 'Надавить на него', 'Надавить на неё')),
     sub: () => bi('Shake something loose · costs trust', 'Вдруг что-то всплывёт · подорвёт доверие'),
     run(c) {
       const ok = chance(pressP(c)),
@@ -431,7 +431,7 @@ function rebuff(c, you, before) {
 }
 DIALOG.distrust = {
   label: () => bi('Ask whom they distrust', 'Спросить, кому здесь нельзя верить'),
-  sub: () => bi('Their suspicions, or their dreams', 'Подозрения — или сны'),
+  sub: c => bi(`${capS(c.pp)} suspicions, or ${c.pp} dreams`, 'Подозрения — или сны'),
   run(c) {
     const others = freeChars().filter(o => o.id !== c.id),
       you = bi(...tellOne('distrust', SAY.distrust));
@@ -551,7 +551,7 @@ function innocentBlames(c, others) {
 }
 DIALOG.title = {
   label: () => bi('Ask what an old title means', 'Спросить, что значит древний титул'),
-  sub: () => bi('They know the names behind the titles. Unless they lie', 'Они знают, чьи это титулы. Если не лгут'),
+  sub: c => bi(`${EP.He(c)} knows the names behind the titles. Unless ${c.p} lies`, `${ru.gs(c, 'Он', 'Она')} знает, чьи это титулы. Если не лжёт`),
   off: c => !GLOSSERS.includes(c.id) || !titlesToAsk(c).length,
   run(c, e) {
     e = e || titlesToAsk(c)[0];
@@ -605,7 +605,7 @@ DIALOG.title = {
 // the diary: a Dreamer, a Watcher, a thief
 DIALOG.diary = {
   label: () => bi('Ask about Crane’s diary', 'Спросить о дневнике Крейна'),
-  sub: () => bi('A Dreamer, a Watcher, a thief: which are they?', 'Сновидец, страж, вор: кто из них этот человек?'),
+  sub: c => bi(`A Dreamer, a Watcher, a thief: which is ${c.p}?`, 'Сновидец, страж, вор: кто из них этот человек?'),
   off: c => claimOf(c).said != null,
   run(c) {
     const cl = claimOf(c),

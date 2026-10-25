@@ -113,12 +113,12 @@ function arrivalScene() {
       `<p class="dim">${
         S.hardcore
           ? bi(
-              'Your casebook keeps only what you hear, see and find; putting it together is up to you. Mark each person as an ally or a suspect as you go. Roles and the god are dealt anew every game.',
-              'Журнал хранит лишь то, что вы слышали, видели и нашли; сопоставлять — вам самим. Отмечайте по ходу дела, кто вам союзник, а кто под подозрением. Роли и бог выпадают заново в каждой игре.'
+              'Your casebook keeps only what you hear, see and find; putting it together is up to you. Mark each person as an ally or a suspect as you go. Roles and the power below are dealt anew every game.',
+              'Журнал хранит лишь то, что вы слышали, видели и нашли; сопоставлять — вам самим. Отмечайте по ходу дела, кто вам союзник, а кто под подозрением. В каждой игре роли — и сила под холмом — новые.'
             )
           : bi(
-              'Your casebook keeps everything you learn. Mark each person as an ally or a suspect as you go. Roles and the god are dealt anew every game.',
-              'Журнал хранит всё, что вы узнаёте. Отмечайте по ходу дела, кто вам союзник, а кто под подозрением. Роли и бог выпадают заново в каждой игре.'
+              'Your casebook keeps everything you learn. Mark each person as an ally or a suspect as you go. Roles and the power below are dealt anew every game.',
+              'Журнал хранит всё, что вы узнаёте. Отмечайте по ходу дела, кто вам союзник, а кто под подозрением. В каждой игре роли — и сила под холмом — новые.'
             )
       }</p>`
     ],

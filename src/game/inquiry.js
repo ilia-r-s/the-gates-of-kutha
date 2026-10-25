@@ -66,14 +66,14 @@ function unmasked(c, vote, hands0 = '') {
   S.stats.right++;
   S.doom = Math.max(0, S.doom - vary(RULES.inquiry.doomRight));
   let out = bi(
-    `<p>Under questioning, ${c.short} breaks. In ${c.pp} kit you find a cylinder seal cut with seven gates, still sticky with bitumen. ${c.short} is taken to Hillah under guard, laughing all the way to the truck.</p>`,
+    `<p>Under questioning, ${c.short} breaks. In ${c.pp} kit you find a cylinder seal cut with seven gates, still sticky with bitumen. ${c.short} is taken to Hillah under guard, laughing all the way to the lorry.</p>`,
     `<p>Под градом вопросов ${ru.c(c)} не выдерживает. В ${ru.gs(c, 'его', 'её')} вещах находится цилиндрическая печать с вырезанными на ней семью вратами, ещё липкая от битума. ${ru.c(c, 'a')} под конвоем увозят в Хиллу, и всю дорогу до грузовика слышен смех.</p>`
   );
   if (chance(RULES.inquiry.shout))
     out += lineOr(
       S.patron,
       bi(
-        `<p>Before the truck pulls away, ${c.short} shouts a line of the old liturgy at you across the yard:</p>`,
+        `<p>Before the lorry pulls away, ${c.short} shouts a line of the old liturgy at you across the yard:</p>`,
         `<p>Когда грузовик уже трогается, ${ru.c(c)} выкрикивает вам через двор строку древней литургии:</p>`
       ),
       ''
@@ -103,7 +103,7 @@ function lastOfThem(kicker, body) {
       title: bi('The gate is opening', 'Врата отворяются'),
       body: [
         ...body,
-        `<p class="horror">${bi('The truck is not out of sight when the ground under the camp gives a long shudder, like a sleeper turning over. At the foot of E-meslam the scorched circle splits open. The rite has come too far to die with its priests.', 'Грузовик ещё не скрылся из виду, когда земля под лагерем долго содрогается — как спящий, что переворачивается на другой бок. У подножия Э-меслама выжженный круг раскалывается. Обряд зашёл слишком далеко, чтобы умереть вместе со своими жрецами.')}</p>`
+        `<p class="horror">${bi('The lorry is not out of sight when the ground under the camp gives a long shudder, like a sleeper turning over. At the foot of E-meslam the scorched circle splits open. The rite has come too far to die with its priests.', 'Грузовик ещё не скрылся из виду, когда земля под лагерем долго содрогается — как спящий, что переворачивается на другой бок. У подножия Э-меслама выжженный круг раскалывается. Обряд зашёл слишком далеко, чтобы умереть вместе со своими жрецами.')}</p>`
       ],
       choices: [{ label: bi('Go to the ziggurat', 'Идти к зиккурату'), cls: 'danger', fn: () => finaleIntro(true, 'priestless') }]
     });
@@ -145,7 +145,7 @@ function sentAway(c, vote) {
   );
   if (c.role === 'smuggler' && thiefSaw(c) && chance(RULES.thief.sent))
     out += `<p class="event">${quoted(
-      bi(`Before the truck pulls away, ${c.short} turns to you. “`, `Перед тем как грузовик трогается, ${ru.c(c)} оборачивается к вам. «`),
+      bi(`Before the lorry pulls away, ${c.short} turns to you. “`, `Перед тем как грузовик трогается, ${ru.c(c)} оборачивается к вам. «`),
       thiefNames(c, ['You want a murderer, Doctor? Then listen. ', 'Вам нужен убийца, доктор? Тогда слушайте. '])
     )}</p>`;
   // the camp takes it in: someone calls you out, others follow, or stand by you

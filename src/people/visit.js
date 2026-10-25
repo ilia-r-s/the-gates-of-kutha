@@ -124,7 +124,7 @@ function guestStrikes(night) {
   );
   const html =
     bi(
-      `<p class="horror">In the small hours you wake to the cold of a blade at your throat, and catch ${h.short}’s wrist just in time. She does not cry out. By first light she is sitting in the back of the truck to Hillah under guard, and in her kit they find a cylinder seal cut with seven gates.</p>`,
+      `<p class="horror">In the small hours you wake to the cold of a blade at your throat, and catch ${h.short}’s wrist just in time. She does not cry out. By first light she is sitting in the back of the lorry to Hillah under guard, and in her kit they find a cylinder seal cut with seven gates.</p>`,
       `<p class="horror">Под утро вы просыпаетесь от холода лезвия у горла и успеваете перехватить запястье ${ru.c(h, 'g')}. Она не издаёт ни звука. На рассвете она уже сидит под охраной в кузове грузовика, идущего в Хиллу, а в её вещах находят цилиндрическую печать с вырезанными на ней семью вратами.</p>`
     ) + hurt(2, 1);
   S.hurtBy = 'wrist'; // (her blade, if that wound is the last: game/endings.js)

@@ -133,7 +133,7 @@ const SPITE = {
   water: {
     ok: [
       'Someone has salted the water in your jar. You find out at the second mouthful, and are sick until noon.',
-      'Воду в вашем кувшине кто-то засолил. Вы понимаете это со второго глотка и до полудня мучаетесь тошнотой.',
+      'Воду в вашем кувшине кто-то подсолил. Вы понимаете это со второго глотка и до полудня мучаетесь тошнотой.',
       2,
       0
     ],

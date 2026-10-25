@@ -122,7 +122,7 @@ function gossipLine(s, not = [], sure = false, heard = false) {
     // (an aside about one they are taken with, mostly; now and then about one they are not: flirt.asideFalse)
     const aside =
       !cultPair(s, t) && (flirtsWith(s.id, t.id) ? chance(RULES.flirt.aside) : mayFlirt(s, t) && chance(RULES.flirt.asideFalse));
-    return { t, text: TEMPER_SAID[v](t) + (aside ? flirtAside(t) : '') };
+    return { t, text: tellOne('said-' + v, TEMPER_SAID[v])(t) + (aside ? flirtAside(t) : '') };
   }
   // a friendship or a feud, as the speaker sees it
   const a = pick(pool),

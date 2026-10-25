@@ -14,7 +14,7 @@ const TENOR_SAY = {
     ],
     haunted: [
       'The workmen will not dig near the ziggurat today, and not one of them will say why.',
-      'Рабочие сегодня не станут копать у зиккурата — и ни один не говорит почему.'
+      'Рабочие сегодня не хотят копать у зиккурата — и ни один не говорит почему.'
     ],
     tongues: [
       'The whole camp is talking about it at once, and everyone has a different story.',

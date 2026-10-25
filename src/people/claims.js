@@ -136,10 +136,10 @@ const dreamRu = (t, cult) =>
   cult
     ? `${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} за седьмыми, и рука бога лежала у ${ru.gs(t, 'него', 'неё')} на плече.`
     : `${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} снаружи и ${ru.gs(t, 'плакал', 'плакала')}. Кем бы ${ru.gs(t, 'он ни был', 'она ни была')}, ${ru.gs(t, 'он', 'она')} не из них.`;
-// a dream as told at breakfast, by c: [English, Russian]
+// a dream as told at breakfast, by c, named just before: [English, Russian]
 const dreamSaid = (c, d) => [
-  `“I dreamt of the seven gates,” ${c.short} says. “${dreamEn(d.t, d.cult)}”`,
-  `«Мне снились семь врат, — говорит ${ru.c(c)}. — ${dreamRu(d.t, d.cult)}»`
+  `“I dreamt of the seven gates,” ${c.p} says. “${dreamEn(d.t, d.cult)}”`,
+  `«Мне снились семь врат, — говорит ${ru.gs(c, 'он', 'она')}. — ${dreamRu(d.t, d.cult)}»`
 ];
 function tellDream(c, d) {
   sayClaim(c);

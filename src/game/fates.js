@@ -105,17 +105,17 @@ function endFate(c, ctx) {
       d = S.log.deed || {},
       inquest =
         S.ended === 'expelled'
-          ? ['The inquest named you.', 'Дознание назвало ваше имя.']
+          ? ['The inquest named you.', 'Следствие назвало ваше имя.']
           : d.vote
             ? [
                 'The camp sat in judgement on you and let you stay; the inquest in Baghdad blamed the cult, and let it go at that.',
-                'Лагерь судил вас и позволил остаться; дознание в Багдаде списало всё на культ — и на том успокоилось.'
+                'Лагерь судил вас и позволил остаться; следствие в Багдаде списало всё на секту — и на том успокоилось.'
               ]
             : d.caught || d.hinted || d.linked
-              ? ['The inquest blamed the cult. Not everyone at Kutha did.', 'Дознание списало всё на культ. В Куте так думали не все.']
+              ? ['The inquest blamed the cult. Not everyone at Kutha did.', 'Следствие списало всё на секту. В Куте так думали не все.']
               : [
                   'The inquest blamed the cult, and nobody ever asked you anything.',
-                  'Дознание списало всё на культ, и вас так никто ни о чём и не спросил.'
+                  'Следствие списало всё на секту, и вас так никто ни о чём и не спросил.'
                 ];
     t = mine
       ? bi(
@@ -238,7 +238,7 @@ function endFateCult(c, { id, won, shot, doom }) {
   if (shot && shot.id === c.id)
     return bi(
       `${n} dies where ${he} fell. The inquest in Baghdad finds that you fired in self-defence, and does not ask what ${he} was wearing.`,
-      `${N} умирает там, где ${ru.gs(c, 'упал', 'упала')}. Дознание в Багдаде признаёт, что вы стреляли, защищая свою жизнь, и не спрашивает, во что ${ru.gs(c, 'он был одет', 'она была одета')}.`
+      `${N} умирает там, где ${ru.gs(c, 'упал', 'упала')}. Следствие в Багдаде признаёт, что вы стреляли, защищая свою жизнь, и не спрашивает, во что ${ru.gs(c, 'он был одет', 'она была одета')}.`
     );
   if (id === 'burned')
     return second

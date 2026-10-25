@@ -8,11 +8,11 @@
 const END_GRAVE = {
   hamid: [
     [
-      'at Sherqat, within sight of the old German spoil heaps where he learned to dig',
+      'at Shergat, within sight of the old German spoil heaps where he learned to dig',
       'в Шергате, откуда видны старые немецкие отвалы, на которых он когда-то учился копать'
     ],
     [
-      'at Sherqat. His men carry him the whole way, and sing the digging songs over the grave',
+      'at Shergat. His men carry him the whole way, and sing the digging songs over the grave',
       'в Шергате. Его люди несут его всю дорогу на руках и поют над могилой рабочие песни'
     ]
   ],
@@ -81,17 +81,17 @@ const END_LIFE = {
         'Следующей весной Хамид снова копает в Куте — но никогда после заката и никогда под зиккуратом.'
       ],
       [
-        'Hamid takes his share of the season’s pay home to Sherqat and buys his son the clerk’s desk he wanted. Clean hands, after all.',
+        'Hamid takes his share of the season’s pay home to Shergat and buys his son the clerk’s desk he wanted. Clean hands, after all.',
         'Хамид везёт свою долю жалованья домой, в Шергат, и покупает сыну конторку, о которой тот мечтал. В конце концов — чистые руки.'
       ]
     ],
     lose: [
       [
-        'Hamid takes his men home to Sherqat and will not say the name of Kutha again.',
+        'Hamid takes his men home to Shergat and will not say the name of Kutha again.',
         'Хамид уводит своих людей домой, в Шергат, и больше не произносит имени Куты.'
       ],
       [
-        'Hamid never digs again. He keeps sheep at Sherqat, and will not plough the field nearest the old mound.',
+        'Hamid never digs again. He keeps sheep at Shergat, and will not plough the field nearest the old mound.',
         'Хамид больше никогда не копает. Он пасёт овец в Шергате и не пашет поле, что ближе всех к старому холму.'
       ]
     ]
@@ -224,7 +224,7 @@ const END_LIFE = {
       ],
       [
         'Zahrun bar Sam leaves Amara for the marshes, and his family hears from him only at the New Year, by boat.',
-        'Захрун бар Сам уходит из Амары в болота, и родные получают от него весточку лишь на Новый год, с лодкой.'
+        'Захрун бар Сам уходит из Амары в болота, и родные получают от него весточку лишь на Новый год, с попутной лодкой.'
       ]
     ]
   }
@@ -321,7 +321,7 @@ const FATE = {
     c =>
       bi(
         `${c.name} is cleared by the inquest in Baghdad, too late for it to matter. ${EP.He(c)} sends you a copy of the verdict without a covering letter.`,
-        `Дознание в Багдаде снимает с ${ru.cf(c, 'g')} все подозрения — слишком поздно, чтобы это что-то значило. ${ru.gs(c, 'Он', 'Она')} присылает вам копию заключения без сопроводительного письма.`
+        `Следствие в Багдаде снимает с ${ru.cf(c, 'g')} все подозрения — слишком поздно, чтобы это что-то значило. ${ru.gs(c, 'Он', 'Она')} присылает вам копию заключения без сопроводительного письма.`
       ),
     c =>
       bi(
@@ -339,7 +339,7 @@ const FATE = {
     c =>
       bi(
         `${c.name} is cleared by the inquest in Baghdad, too late for it to matter to anyone.`,
-        `Дознание в Багдаде снимает с ${ru.cf(c, 'g')} все подозрения — слишком поздно, чтобы это хоть для кого-то что-то значило.`
+        `Следствие в Багдаде снимает с ${ru.cf(c, 'g')} все подозрения — слишком поздно, чтобы это хоть для кого-то что-то значило.`
       )
   ],
   // the thief, sent away
@@ -402,7 +402,7 @@ const FATE = {
       say: c =>
         bi(
           `${c.name}, the hierophant, dies in the lock-up at Hillah before the trial. The guards say ${c.p} died smiling.`,
-          `${capS(ru.cf(c))}, иерофант культа, умирает в арестантской Хиллы, не дождавшись суда. Стражники говорят, что ${ru.gs(c, 'он умер', 'она умерла')} с улыбкой.`
+          `${capS(ru.cf(c))}, иерофант секты, умирает в арестантской Хиллы, не дождавшись суда. Стражники говорят, что ${ru.gs(c, 'он умер', 'она умерла')} с улыбкой.`
         )
     },
     {
@@ -410,7 +410,7 @@ const FATE = {
       say: c =>
         bi(
           `${c.name}, the hierophant, is tried in Baghdad and condemned. Asked for any last words, ${c.p} gives a date, a month and a year, and will not explain them.`,
-          `${capS(ru.cf(c, 'a'))}, иерофанта культа, судят в Багдаде и приговаривают. На просьбу сказать последнее слово ${ru.gs(c, 'он', 'она')} называет число, месяц и год — и ничего не объясняет.`
+          `${capS(ru.cf(c, 'a'))}, иерофанта секты, судят в Багдаде и приговаривают. На просьбу сказать последнее слово ${ru.gs(c, 'он', 'она')} называет число, месяц и год — и ничего не объясняет.`
         )
     }
   ]
@@ -635,7 +635,7 @@ const FATE_YOU = {
     ],
     [
       'You carry Kutha home in your body: a stiffness in the shoulder, a scar you explain as a fall in a trench. It is not a lie, quite.',
-      'Вы увозите Куту домой в собственном теле: скованное плечо, шрам, о котором вы говорите, что упали в траншею. Это не совсем ложь.'
+      'Вы увозите Куту домой в собственном теле: скованное плечо, шрам, который вы объясняете падением в траншею. Это не совсем ложь.'
     ]
   ],
   nearly: [
@@ -1194,13 +1194,13 @@ const FATE_YOU_LAST = {
       ],
       () => [
         'The doctors call it a good spring: you eat, you sleep, you speak of going home. In May the inquest is short and kind, and says nothing of the gate.',
-        'Врачи называют эту весну удачной: вы едите, спите, говорите о возвращении домой. В мае дознание оказывается коротким и милосердным — и ни словом не упоминает о вратах.'
+        'Врачи называют эту весну удачной: вы едите, спите, говорите о возвращении домой. В мае разбирательство у коронера оказывается коротким и милосердным — и ни словом не упоминает о вратах.'
       ]
     ],
     jail: [
       () => [
         'In the prison at Baghdad you are allowed paper. You write the whole of Kutha down for the court, every gate of it, sign it, and do not wait for the court.',
-        'В багдадской тюрьме вам позволяют бумагу. Вы записываете для суда всю Куту, все её врата до единых, ставите подпись — и суда не дожидаетесь.'
+        'В багдадской тюрьме вам дают бумагу. Вы записываете для суда всю Куту, все её врата, до последних, ставите подпись — и суда не дожидаетесь.'
       ],
       () => [
         'The trial is set for the autumn. You are not there for it. The warder who found you says that the evening before you had seemed almost at peace.',
@@ -1327,7 +1327,7 @@ const FATE_AFTER = {
       ],
       c => [
         `${c.name} could bear the disgrace, ${c.p} said, but not the way people were kind about it. ${EP.He(c)} lasts a winter. At the inquest nobody mentions Kutha, and everyone thinks of it.`,
-        `${capS(ru.cf(c))} ${ru.gs(c, 'говорил', 'говорила')}, что ${ru.gs(c, 'вынес', 'вынесла')} бы позор, но не то, как все были к ${ru.gs(c, 'нему', 'ней')} добры. ${ru.gs(c, 'Его', 'Её')} хватает на одну зиму. На дознании никто не упоминает Куту — и все о ней думают.`
+        `${capS(ru.cf(c))} ${ru.gs(c, 'говорил', 'говорила')}, что ${ru.gs(c, 'вынес', 'вынесла')} бы позор, но не то, как все были к ${ru.gs(c, 'нему', 'ней')} добры. ${ru.gs(c, 'Его', 'Её')} хватает на одну зиму. На разбирательстве у коронера никто не упоминает Куту — и все о ней думают.`
       ]
     ],
     grief: [

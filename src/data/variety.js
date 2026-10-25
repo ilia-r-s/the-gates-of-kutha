@@ -92,7 +92,7 @@ const SAY = {
     store: [
       [
         'The finds magazine: shelves to the roof, labels in Crane’s hand, and the dry smell of old clay.',
-        'Магазин находок: полки до потолка, ярлыки почерком Крейна и сухой запах старой глины.'
+        'Хранилище находок: полки до потолка, ярлыки почерком Крейна и сухой запах старой глины.'
       ],
       [
         'Inside the storeroom it is dim and cool. Something on a high shelf ticks as the clay settles.',
@@ -102,7 +102,7 @@ const SAY = {
     village: [
       [
         'The workmen’s village: dogs, children, smoke, and old men on the coffee-house bench who watch you all the way past.',
-        'Деревня землекопов: собаки, дети, дым и старики на скамье у кофейни, которые провожают вас взглядом до самого поворота.'
+        'Деревня рабочих: собаки, дети, дым и старики на скамье у кофейни, которые провожают вас взглядом до самого поворота.'
       ],
       [
         'Mud walls, palm-trunk beams, a donkey tethered at every door. The coffee-house gramophone plays the same record all day.',
@@ -193,7 +193,7 @@ const SAY = {
       `${c.short} goes back to what ${c.p} was doing before you came.`,
       `${ru.c(c)} возвращается к тому, чем ${ru.gs(c, 'был занят', 'была занята')} до вашего прихода.`
     ],
-    c => [`You take your leave, and ${c.short} nods you on your way.`, `Вы прощаетесь, и ${ru.c(c)} кивает вам на прощание.`],
+    c => [`You take your leave, and ${c.short} nods you on your way.`, `Вы прощаетесь, и ${ru.c(c)} кивком провожает вас.`],
     c => [`You leave ${c.short} where you found ${EP.him(c)}.`, `Вы оставляете ${ru.c(c, 'a')} там же, где ${ru.gs(c, 'его', 'её')} нашли.`]
   ],
   // a talk that warmed them to you (said as it happens: the conversation may well go on); pressing them that cooled them
@@ -326,7 +326,7 @@ const SAY = {
     ],
     [
       'The last page of Crane’s diary: a Dreamer and a Watcher. Which are you, if either?',
-      'Последняя страница дневника Крейна: тот, кто видит сны, и тот, кто стоит на страже. Кто из них вы — если вообще кто-то из них?'
+      'Последняя страница дневника Крейна: тот, кто видит вещие сны, и тот, кто стоит на страже. Кто из них вы — если вообще кто-то из них?'
     ]
   ],
   // examining a scene; sitting down to a fragment
@@ -375,7 +375,7 @@ const SAY = {
     ],
     (m, v) => [
       `It is ${m.short} who weeps for ${v.short}, and does not care who sees.`,
-      `Это ${ru.c(m)} плачет по ${ru.c(v, 'd')} и не заботится о том, кто это видит.`
+      `По ${ru.c(v, 'd')} плачет ${ru.c(m)} — и ${ru.gs(m, 'ему', 'ей')} всё равно, кто это видит.`
     ],
     (m, v) => [
       `${m.short} keeps going back to where ${v.short} was found, and standing there.`,

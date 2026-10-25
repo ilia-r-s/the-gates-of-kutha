@@ -260,7 +260,7 @@ function comeSay(c, w) {
       ),
       bi(
         `<p>${c.short} will not come. “I can’t. God forgive me, I can’t.”</p>`,
-        `<p>${ru.c(c)} отказывается идти. «Не могу. Прости меня Господи — не могу».</p>`
+        `<p>${ru.c(c)} отказывается идти. «Не могу. Прости меня, Господи, — не могу».</p>`
       )
     ]);
   if (w.why === 'duty')

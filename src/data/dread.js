@@ -44,7 +44,7 @@ const DREAD = {
         'На миг небо над Э-месламом перестаёт быть небом: это потолок, очень высоко, расписанный под небо.'
       ],
       [
-        'Every shadow on the dig points the same way, toward the ziggurat, whatever the sun has to say about it.',
+        'Every shadow on the dig points the same way, towards the ziggurat, whatever the sun has to say about it.',
         'Все тени на раскопе указывают в одну сторону — на зиккурат, что бы ни говорило на этот счёт солнце.'
       ]
     ]
@@ -145,7 +145,7 @@ const DREAD = {
     canal: [
       [
         [
-          'The reeds lean toward you as you pass, though there is not a breath of wind.',
+          'The reeds lean towards you as you pass, though there is not a breath of wind.',
           'Тростник клонится к вам, когда вы проходите, хотя нет ни ветерка.'
         ]
       ],
@@ -165,7 +165,7 @@ const DREAD = {
     cemetery: [
       [
         [
-          'The faces moulded on the coffin lids seem to have turned a little toward the path.',
+          'The faces moulded on the coffin lids seem to have turned a little towards the path.',
           'Лица, вылепленные на крышках гробов, будто бы слегка повернулись к тропе.'
         ]
       ],

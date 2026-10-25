@@ -15,7 +15,7 @@ const GREET = {
   ],
   constance: [
     'Hold still. No, I’m joking. What is it?',
-    'Doctor. You look like a man who wants a cigarette. Or a woman. Sit.',
+    'Doctor. You look like someone in want of a cigarette, and a little bad company. Sit.',
     'Doctor. Mind the tripod.',
     'There you are. I was about to photograph the flies for want of better subjects.'
   ],
@@ -158,7 +158,7 @@ const SMALLTALK = {
 };
 // Lines that joke about love and marriage: told with a sly face, mostly (people/manner.js).
 const JOKES = new Set([
-  'Doctor. You look like a man who wants a cigarette. Or a woman. Sit.',
+  'Doctor. You look like someone in want of a cigarette, and a little bad company. Sit.',
   'My wife says I love the trench more than I love her. I tell her the trench does not argue.',
   'People ask whether I miss having a wife. I tell them I am married to a dead language. She is very demanding.',
   'My mother wanted me to marry a solicitor in Bath. I bought a Kodak instead.',

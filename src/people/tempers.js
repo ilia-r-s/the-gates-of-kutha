@@ -126,42 +126,127 @@ function mienNote(c, p = RULES.talk.mien) {
   return pick(TEMPER_SEE[k])(c);
 }
 // ---------- gossip: what people say of each other, true or slanted by their likes ----------
+// (three ways each, told in turn without repeats: core/text.js, tellOne)
 const TEMPER_SAID = {
-  honest: t =>
-    bi(
-      `${t.short}? ${EP.He(t)} could not tell a lie to save ${t.pp} life.`,
-      `${ru.c(t)}? ${ru.gs(t, 'Он', 'Она')} и ради спасения жизни не ${ru.gs(t, 'смог', 'смогла')} бы солгать.`
-    ),
-  conscientious: t =>
-    bi(
-      `${t.short} frets over every little thing. Asks forgiveness for the weather.`,
-      `${ru.c(t)} изводится из-за каждой мелочи. ${ru.gs(t, 'Готов', 'Готова')} просить прощения за погоду.`
-    ),
-  liar: t =>
-    bi(
-      `Do not believe half of what ${t.short} tells you. ${EP.He(t)} does not believe it either.`,
-      `Не верьте и половине того, что вам рассказывает ${ru.c(t)}. ${ru.gs(t, 'Он', 'Она')} и ${ru.gs(t, 'сам', 'сама')} в это не верит.`
-    ),
-  calculating: t =>
-    bi(
-      `${t.short} always knows what you want to hear. That is the dangerous kind.`,
-      `${ru.c(t)} всегда знает, что вы хотите услышать. Таких-то и стоит опасаться.`
-    ),
-  detached: t =>
-    bi(
-      `${t.short} lives somewhere else, I think. Only the body comes to dinner.`,
-      `${ru.c(t)}, по-моему, живёт где-то в другом месте. К ужину приходит только тело.`
-    ),
-  lightheaded: t =>
-    bi(
-      `${t.short} would lose ${t.pp} head if it were not fixed on, God bless ${EP.him(t)}.`,
-      `${ru.c(t)} и голову бы где-нибудь ${ru.gs(t, 'забыл', 'забыла')}, не будь она пришита, — храни ${ru.gs(t, 'его', 'её')} Господь.`
-    ),
-  suspicious: t =>
-    bi(
-      `${t.short} thinks we are all in it together. Probably thinks it of you.`,
-      `${ru.c(t)} думает, что мы все тут заодно. Наверное, и про вас так думает.`
-    )
+  honest: [
+    t =>
+      bi(
+        `${t.short}? ${EP.He(t)} could not tell a lie to save ${t.pp} life.`,
+        `${ru.c(t)}? ${ru.gs(t, 'Он', 'Она')} и ради спасения жизни не ${ru.gs(t, 'смог', 'смогла')} бы солгать.`
+      ),
+    t =>
+      bi(
+        `Ask ${t.short} anything you like. You will get the answer, whether you wanted it or not.`,
+        `Спросите ${ru.c(t, 'a')} о чём угодно — получите ответ, хотите вы того или нет.`
+      ),
+    t =>
+      bi(
+        `${t.short} tells the truth the way other people sneeze: without meaning to, and at the worst moment.`,
+        `${ru.c(t)} говорит правду так, как другие чихают: невольно и в самый неподходящий момент.`
+      )
+  ],
+  conscientious: [
+    t =>
+      bi(
+        `${t.short} frets over every little thing. Asks forgiveness for the weather.`,
+        `${ru.c(t)} изводится из-за каждой мелочи. ${ru.gs(t, 'Готов', 'Готова')} просить прощения за погоду.`
+      ),
+    t =>
+      bi(
+        `${t.short} checks the finds register three times before bed, and once more in the night.`,
+        `${ru.c(t)} трижды сверяет журнал находок перед сном — и ещё раз ночью.`
+      ),
+    t =>
+      bi(
+        `If anything goes wrong at Kutha, ${t.short} will be sure it was ${t.pp} fault.`,
+        `Что бы ни стряслось в Куте, ${ru.c(t)} будет ${ru.gs(t, 'уверен', 'уверена')}, что это ${ru.gs(t, 'его', 'её')} вина.`
+      )
+  ],
+  liar: [
+    t =>
+      bi(
+        `Do not believe half of what ${t.short} tells you. ${EP.He(t)} does not believe it either.`,
+        `Не верьте и половине того, что вам рассказывает ${ru.c(t)}. ${ru.gs(t, 'Он', 'Она')} и ${ru.gs(t, 'сам', 'сама')} в это не верит.`
+      ),
+    t =>
+      bi(
+        `${t.short} has told me three different stories about the war. All of them were good.`,
+        `${ru.c(t)} ${ru.gs(t, 'рассказывал', 'рассказывала')} мне о войне три разные истории. И все три — хорошие.`
+      ),
+    t =>
+      bi(
+        `${t.short} lies the way a cat steals: not for need, for practice.`,
+        `${ru.c(t)} лжёт, как кошка ворует: не от нужды, а для практики.`
+      )
+  ],
+  calculating: [
+    t =>
+      bi(
+        `${t.short} always knows what you want to hear. That is the dangerous kind.`,
+        `${ru.c(t)} всегда знает, что вы хотите услышать. Таких-то и стоит опасаться.`
+      ),
+    t =>
+      bi(
+        `${t.short} never says a word that has not been weighed first. You can hear the scales.`,
+        `${ru.c(t)} не скажет ни слова, не взвесив его. Так и слышно, как скрипят весы.`
+      ),
+    t =>
+      bi(
+        `${t.short} is pleasant to everyone. Ask yourself what it buys ${EP.him(t)}.`,
+        `${ru.c(t)} со всеми ${ru.gs(t, 'любезен', 'любезна')}. Спросите себя, что это ${ru.gs(t, 'ему', 'ей')} даёт.`
+      )
+  ],
+  detached: [
+    t =>
+      bi(
+        `${t.short} lives somewhere else, I think. Only the body comes to dinner.`,
+        `${ru.c(t)}, по-моему, живёт где-то в другом месте. К ужину приходит только тело.`
+      ),
+    t =>
+      bi(
+        `${t.short} could sit through an earthquake and ask afterwards whether anything had happened.`,
+        `${ru.c(t)} ${ru.gs(t, 'мог', 'могла')} бы просидеть землетрясение, а потом спросить, не случилось ли чего.`
+      ),
+    t =>
+      bi(
+        `Talking to ${t.short} is like writing to someone abroad: the answer comes, eventually.`,
+        `Говорить с ${ru.c(t, 'i')} — всё равно что писать за границу: ответ приходит, но не сразу.`
+      )
+  ],
+  lightheaded: [
+    t =>
+      bi(
+        `${t.short} would lose ${t.pp} head if it were not fixed on, God bless ${EP.him(t)}.`,
+        `${ru.c(t)} и голову бы где-нибудь ${ru.gs(t, 'забыл', 'забыла')}, не будь она пришита, — храни ${ru.gs(t, 'его', 'её')} Господь.`
+      ),
+    t =>
+      bi(
+        `${t.short} laughs at everything, which is a gift out here, if a tiring one.`,
+        `${ru.c(t)} смеётся надо всем — здесь это дар, пусть и утомительный.`
+      ),
+    t =>
+      bi(
+        `${t.short} has fallen in love with Kutha three times this week, and out of it twice.`,
+        `${ru.c(t)} за эту неделю трижды ${ru.gs(t, 'влюблялся', 'влюблялась')} в Куту и дважды ${ru.gs(t, 'остывал', 'остывала')}.`
+      )
+  ],
+  suspicious: [
+    t =>
+      bi(
+        `${t.short} thinks we are all in it together. Probably thinks it of you.`,
+        `${ru.c(t)} думает, что мы все тут заодно. Наверное, и про вас так думает.`
+      ),
+    t =>
+      bi(
+        `${t.short} counts the spoons after every meal. Twice, lately.`,
+        `${ru.c(t)} после каждой трапезы пересчитывает ложки. В последнее время — дважды.`
+      ),
+    t =>
+      bi(
+        `${t.short} sleeps with a chair against the tent pole. Ask ${EP.him(t)} why, if you like being looked at.`,
+        `${ru.c(t)} спит, приставив стул к шесту палатки. Спросите ${ru.gs(t, 'его', 'её')} почему — если любите, когда на вас так смотрят.`
+      )
+  ]
 };
 const NEG = ['liar', 'calculating', 'suspicious'],
   POS = ['honest', 'conscientious'];

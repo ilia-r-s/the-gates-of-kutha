@@ -287,7 +287,7 @@ const BELOW = {
               B_().learn
             );
           return ok
-            ? plain(h, ['you ate the bread of the dead, and it let you be', 'вы отведали хлеба мёртвых, и он вас не тронул'])
+            ? plain(h, ['you ate the bread of the dead, and it let you be', 'вы отведали хлеба мёртвых, и оно вас не тронуло'])
             : price(h, dearer(1, ['take']), 0, ['you ate the bread of the dead', 'вы отведали хлеба мёртвых']);
         }
       },
@@ -308,7 +308,7 @@ const BELOW = {
               )
             : price(
                 pline(
-                  'The water runs away down a crack in the floor, toward the sound of chanting, and the chanting rises to meet it.',
+                  'The water runs away down a crack in the floor, towards the sound of chanting, and the chanting rises to meet it.',
                   'Вода убегает в трещину в полу — туда, откуда доносится пение, и пение поднимается ей навстречу.'
                 ),
                 dearer(0, ['water', 'offer']),
@@ -684,13 +684,13 @@ const BELOW = {
     },
     choices: () => [
       {
-        label: bi('Feed the flame from the jar', 'Подлить масла в огонь'),
+        label: bi('Feed the flame from the jar', 'Подлить в огонь масла из кувшина'),
         sub: bi('An offering, as the priests made', 'Приношение, как у жрецов'),
         go: () =>
           tried(B_().feed, ['offer'])
             ? favour(
                 pline(
-                  'The flame leans toward you, as if in thanks, and the statue lets you by.',
+                  'The flame leans towards you, as if in thanks, and the statue lets you by.',
                   'Пламя клонится к вам, будто в благодарность, и статуя пропускает вас.'
                 ),
                 ['you fed the brazier below, and were let by', 'вы подлили масла в жаровню внизу, и вас пропустили']
@@ -839,7 +839,7 @@ const BELOW = {
     text: n =>
       pline(
         `Past the ${n.en} gate, a side chamber is full of bones, laid out in rows: the cult’s offerings of other seasons. On top of the nearest heap lies a canvas satchel with the initials A. C.`,
-        `За ${n.i} вратами боковой покой полон костей, разложенных рядами: подношения культа в иные сезоны. На ближайшей груде лежит брезентовая сумка с вытисненными на ней инициалами О. К.`
+        `За ${n.i} вратами боковой покой полон костей, разложенных рядами: подношения секты в иные сезоны. На ближайшей груде лежит брезентовая сумка с вытисненными на ней инициалами О. К.`
       ),
     choices: () => [
       {
@@ -889,12 +889,12 @@ const BELOW = {
                 ),
                 [
                   'you left the cult’s dead in peace, and were thanked for it',
-                  'вы оставили мёртвых культа в покое, и вас за это поблагодарили'
+                  'вы оставили мёртвых секты в покое, и вас за это поблагодарили'
                 ]
               )
             : plain(pline('You go on. The bones do not care either way.', 'Вы идёте дальше. Костям всё равно.'), [
                 'you left the cult’s dead in peace',
-                'вы оставили мёртвых культа в покое'
+                'вы оставили мёртвых секты в покое'
               ])
       }
     ]
@@ -1094,7 +1094,7 @@ const BELOW = {
             S.fin.left.push(c.id);
             return plain(
               pline(
-                `${c.short} goes back up toward the light, and you listen to ${c.pp} footsteps for a long time.`,
+                `${c.short} goes back up towards the light, and you listen to ${c.pp} footsteps for a long time.`,
                 `${ru.c(c)} уходит наверх, к свету, и вы долго слушаете ${ru.gs(c, 'его', 'её')} шаги.`
               ),
               [

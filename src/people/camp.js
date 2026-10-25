@@ -186,7 +186,7 @@ const STIRS = {
     open: (sp, o) => {
       const a = C(o.about);
       if (!sp)
-        return `<p class="notice">${bi('When the truck has gone, the camp goes back to its supper without a word.', 'Когда грузовик уезжает, лагерь молча возвращается к ужину.')}</p>`;
+        return `<p class="notice">${bi('When the lorry has gone, the camp goes back to its supper without a word.', 'Когда грузовик уезжает, лагерь молча возвращается к ужину.')}</p>`;
       const k = pick([0, 1]),
         line = [
           [
@@ -198,7 +198,7 @@ const STIRS = {
             `«Отлично, доктор. Не ${ru.gs(sp, 'думал', 'думала')}, что вы на такое способны».`
           ]
         ][k];
-      return `<p class="notice">${bi(`When the truck has gone, ${sp.short} says, for everyone to hear: ${line[0]}`, `Когда грузовик уезжает, ${ru.c(sp)} говорит во всеуслышание: ${line[1]}`)}</p>`;
+      return `<p class="notice">${bi(`When the lorry has gone, ${sp.short} says, for everyone to hear: ${line[0]}`, `Когда грузовик уезжает, ${ru.c(sp)} говорит во всеуслышание: ${line[1]}`)}</p>`;
     }
   },
   // the night took someone: their friend grieves aloud (a friend in the cult too, whatever it feels), and the camp
@@ -243,7 +243,7 @@ const STIRS = {
                   `“${v.short} is dead, and the Doctor is still asking questions.”`,
                   `«${ru.c(v)} ${ru.gs(v, 'мёртв', 'мертва')}, а доктор всё задаёт вопросы».`
                 ],
-                ['“How many more of us, Doctor?”', '«Сколько ещё из нас, доктор?»']
+                ['“How many more of us, Doctor?”', '«Скольких ещё из нас, доктор?»']
               ]
             : [
                 ['“Find whoever did this, Doctor. Whatever it takes.”', '«Найдите того, кто это сделал, доктор. Чего бы это ни стоило».'],
@@ -371,7 +371,7 @@ const STIRS = {
         d = C(o.dead);
       return `<p class="notice">${bi(
         `${sp.short} says what half the camp is thinking. “${d.short} named ${a.short} before all of us. And now ${d.short} is dead.”`,
-        `${ru.c(sp)} говорит вслух то, о чём думает поллагеря. «${ru.c(d)} при всех ${ru.gs(d, 'назвал', 'назвала')} ${ru.c(a, 'a')}. И вот ${ru.c(d)} ${ru.gs(d, 'мёртв', 'мертва')}».`
+        `${ru.c(sp)} говорит вслух то, о чём думает пол-лагеря. «${ru.c(d)} при всех ${ru.gs(d, 'назвал', 'назвала')} ${ru.c(a, 'a')}. И вот ${ru.c(d)} ${ru.gs(d, 'мёртв', 'мертва')}».`
       )}</p>`;
     },
     quiet: true

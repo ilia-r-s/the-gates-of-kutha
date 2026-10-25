@@ -62,9 +62,9 @@ const dayLabel = d => bi(`Day ${d}`, `День ${d}`);
 const CHIPS = {
   vision: (t, a, f, fr) =>
     t.verdict === 'cult'
-      ? ['bad', bi(`${f} dreamt them guilty`, `${ru.c(fr, 'd')} приснилось: ${ru.gs(a, 'виновен', 'виновна')}`)]
-      : ['good', bi(`${f} dreamt them clean`, `${ru.c(fr, 'd')} приснилось: ${ru.gs(a, 'невиновен', 'невиновна')}`)],
-  distrust: (t, a, f, fr) => ['', bi(`${f} distrusts them`, `${ru.c(fr)} ${ru.gs(a, 'ему', 'ей')} не доверяет`)],
+      ? ['bad', bi(`${f} dreamt ${EP.him(a)} guilty`, `${ru.c(fr, 'd')} приснилось: ${ru.gs(a, 'виновен', 'виновна')}`)]
+      : ['good', bi(`${f} dreamt ${EP.him(a)} clean`, `${ru.c(fr, 'd')} приснилось: ${ru.gs(a, 'невиновен', 'невиновна')}`)],
+  distrust: (t, a, f, fr) => ['', bi(`${f} distrusts ${EP.him(a)}`, `${ru.c(fr)} ${ru.gs(a, 'ему', 'ей')} не доверяет`)],
   react: (t, a) =>
     t.verdict === 'fear'
       ? ['warnc', bi('Flinched at relics', ru.gs(a, 'Вздрогнул при виде находки', 'Вздрогнула при виде находки'))]
@@ -85,7 +85,7 @@ const CHIPS = {
     'bad strong',
     bi('Knew what only the attacker could', ru.gs(a, 'Знал то, что знал лишь нападавший', 'Знала то, что знал лишь нападавший'))
   ],
-  chill: () => ['warnc', bi('A chill when they spoke', 'Холодок при разговоре')],
+  chill: (t, a) => ['warnc', bi(`A chill when ${a.p} spoke`, 'Холодок при разговоре')],
   spite: (t, a) => [
     'bad',
     bi(
@@ -105,7 +105,7 @@ const CHIPS = {
               ? bi('Claims to keep watch', 'Говорит, что стоит на страже')
               : t.verdict === 'evade'
                 ? bi('Will not say', ru.gs(a, 'Уклонился от ответа', 'Уклонилась от ответа'))
-                : bi('Claims no part', 'Говорит, что ни при чём')
+                : bi('Claims no part', ru.gs(a, 'Говорит, что дневник не о нём', 'Говорит, что дневник не о ней'))
         ],
   recant: (t, a) =>
     S.testimony.some(x => x.kind === 'confess' && x.from === a.id)
@@ -130,9 +130,9 @@ const CHIPS = {
   feel: (t, a, f, fr) => [
     'dimc',
     {
-      like: bi(`${f}: fond of them`, `${ru.c(fr)}: ${ru.gs(fr, 'привязан', 'привязана')} к ${ru.gs(a, 'нему', 'ней')}`),
-      dislike: bi(`${f}: cannot stand them`, `${ru.c(fr)}: ${ru.gs(a, 'его', 'её')} не выносит`),
-      flirt: bi(`${f}: rather taken with them`, `${ru.c(fr)}: ${ru.gs(fr, 'увлечён', 'увлечена')} ${ru.gs(a, 'им', 'ею')}`)
+      like: bi(`${f}: fond of ${EP.him(a)}`, `${ru.c(fr)}: ${ru.gs(fr, 'привязан', 'привязана')} к ${ru.gs(a, 'нему', 'ней')}`),
+      dislike: bi(`${f}: cannot stand ${EP.him(a)}`, `${ru.c(fr)}: ${ru.gs(a, 'его', 'её')} не выносит`),
+      flirt: bi(`${f}: rather taken with ${EP.him(a)}`, `${ru.c(fr)}: ${ru.gs(fr, 'увлечён', 'увлечена')} ${ru.gs(a, 'им', 'ею')}`)
     }[t.verdict]
   ],
   flirt: (t, a, f, fr) => [
@@ -141,7 +141,7 @@ const CHIPS = {
       ? bi(`${f}: sweet on you`, `${ru.c(fr)}: ${ru.gs(a, 'неравнодушен', 'неравнодушна')} к вам`)
       : bi(`${f}: sweet on ${C(t.verdict).short}`, `${ru.c(fr)}: ${ru.gs(a, 'неравнодушен', 'неравнодушна')} к ${ru.c(t.verdict, 'd')}`)
   ],
-  hint: (t, a, f, fr) => ['warnc', bi(`${f} hints at their nights`, `${ru.c(fr)} намекает на ${ru.gs(a, 'его', 'её')} ночные прогулки`)],
+  hint: (t, a, f, fr) => ['warnc', bi(`${f} hints at ${a.pp} nights`, `${ru.c(fr)} намекает на ${ru.gs(a, 'его', 'её')} ночные прогулки`)],
   // what you saw for yourself
   quarrel: (t, a) => [
     'dimc',
@@ -153,7 +153,7 @@ const CHIPS = {
   ],
   witness: (t, a, f, fr) => [
     'bad strong',
-    bi(`${f} saw them near the scene`, `${ru.c(fr)} ${ru.gs(fr, 'видел', 'видела')} ${ru.gs(a, 'его', 'её')} у места нападения`)
+    bi(`${f} saw ${EP.him(a)} near the scene`, `${ru.c(fr)} ${ru.gs(fr, 'видел', 'видела')} ${ru.gs(a, 'его', 'её')} у места нападения`)
   ]
 };
 function chipsAbout(id) {
@@ -391,7 +391,7 @@ function evWhereabouts() {
 // what someone said of a night: attacked where it happened, would not say, or where and with whom
 function whereabouts(x) {
   if (x.attacked) return bi(`attacked ${LOCS[x.loc].at}`, `${ru.gs(x.id, 'на него напали', 'на неё напали')} ${ru.loc(x.loc, 'at')}`);
-  if (x.loc === 'evade') return bi('would not say', ru.gs(x.id, 'не сказал', 'не сказала'));
+  if (x.loc === 'evade') return bi('would not say', ru.gs(x.id, 'уклонился от ответа', 'уклонилась от ответа'));
   const there = !bare() && wasThere(x);
   return bi(
     `${PLACE_SHORT[x.loc]}${x.with ? ', with ' + C(x.with).short : ', alone'}${there ? ': where it happened' : ''}`,
@@ -464,7 +464,7 @@ function evClaims() {
               `will not say what part, if any, ${c.p} plays`,
               `не говорит, какая роль ${ru.gs(c, 'ему', 'ей')} отведена, если отведена вообще`
             )
-          : bi(`says ${c.p} has no part in the diary`, `говорит, что ${ru.gs(c, 'непричастен', 'непричастна')} к дневнику`);
+          : bi(`says ${c.p} has no part in the diary`, `говорит, что дневник Крейна не о ${ru.gs(c, 'нём', 'ней')}`);
   };
   const backPhrase = c => {
     const cl = claimOf(c),
@@ -633,8 +633,8 @@ function stirLine(r) {
     .map(([what, whom, d, ids, lvl]) => {
       if (what === 'trust')
         return d < 0
-          ? bi(`cooler toward you: ${nameList(ids)}`, `охладели к вам: ${nameListRu(ids)}`)
-          : bi(`warmer toward you: ${nameList(ids)}`, `потеплели к вам: ${nameListRu(ids)}`);
+          ? bi(`cooler towards you: ${nameList(ids)}`, `охладели к вам: ${nameListRu(ids)}`)
+          : bi(`warmer towards you: ${nameList(ids)}`, `потеплели к вам: ${nameListRu(ids)}`);
       const said = susSay(ids, C(whom), d, lvl);
       return bi(`${nameList(ids)} ${said[0]}`, `${nameListRu(ids)} ${said[1]}`);
     })
