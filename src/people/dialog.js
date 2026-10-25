@@ -109,9 +109,9 @@ function scholarTalk(c) {
 function smallTalk(c) {
   const line = tellOne('small-' + c.id, SMALLTALK[c.id]);
   let them = bi(line);
-  const g = chance(TP(c).gossip) ? gossipLine(c) : null;
+  const g = Gossip.speak('talk', c);
   if (g) them += ' ' + bi('Between ourselves: ', 'Между нами: ') + g.text;
-  const fr = !g && chance(RULES.talk.feel * talkSoft()) ? feelRemark(c) : null;
+  const fr = !g && chance(RULES.talk.feel * talkSoft()) ? Gossip.feelRemark(c) : null;
   if (fr) them += ' ' + fr.text;
   const slip = blurt(c, S.day - 1, RULES.talk.blurtInPassing);
   const themE = fr ? fr.face : JOKES.has(line) && chance(RULES.manner.joke) ? jokeFace(c) : pick(['smile', 'neutral', 'thoughtful']);
@@ -255,7 +255,7 @@ const DIALOG = {
         };
       }
       Ties.confide(c);
-      ripple(c, 'confided');
+      Gossip.wordOf(c, 'confided');
       const tc = tellOne('confideSay', CONFIDE_SAY);
       let them = bi(tc, fmtR(R(tc), { s: c }));
       // what they offer follows what they claim to be, true or not
@@ -297,7 +297,7 @@ const DIALOG = {
     run(c) {
       const ok = chance(pressP(c)),
         you = bi(...tellOne('askPress', SAY.askPress));
-      ripple(c, 'pressed');
+      Gossip.wordOf(c, 'pressed');
       if (!S.log.pressedWho.includes(c.id)) S.log.pressedWho.push(c.id);
       const before = c.rapport;
       // it costs trust, whoever they are and whatever comes of it, mostly

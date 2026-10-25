@@ -104,7 +104,7 @@ function backedDown() {
 // dealt in this order (the dice are thrown in this order): the parts, first of all (dealParts); the powers and the one
 // below (freshSeason); the cast's habits and temperaments (dealCast); the powers' signs, wards and titles, and the
 // tablets (dealGods); what people claim (assignClaims); whom each likes, how far each trusts you, and the flirtations
-// (Ties.deal: people/ties.js; then Suspicion.deal and Moments.deal, which throw none); the night Crane died (crane0); the salt that fixes the
+// (Ties.deal: people/ties.js; then Suspicion.deal, Moments.deal and Gossip.deal, which throw none); the night Crane died (crane0); the salt that fixes the
 // choices made without the dice; how far each of the camp takes your word (dealWord, by the salt); the season's mood
 // (dealTenor); your own dreams (dealYourDreams); the cult's patience; and last, what your background gives you
 // (backgroundStart), so that the same seed deals the same season whoever you are.
@@ -127,6 +127,7 @@ function newGame(name, bg, hardcore = false, seed = null) {
   Ties.deal();
   Suspicion.deal();
   Moments.deal();
+  Gossip.deal();
   crane0();
   S.salt = Math.floor(rand() * 2147483648);
   dealWord();

@@ -526,14 +526,15 @@ const RULES = {
   // of the cult (per step of suspicion), less likely someone the camp already suspects (per suspecter: a useful scapegoat)
   victims: { yourFriend: 0.25, cultLike: 0.35, floor: 0.1, suspects: 0.25, scapegoat: 0.12 },
   confide: { odds: 0.7, trust: 0.1, min: 0.15, max: 0.95, again: 0.15, alerts: 0.9 }, // again: less welcome for each confidence they already took; alerts: a cultist confided in tells the cult
-  // gossip (people/social.js): about a temperament (temper; else a friendship or a feud), the less true of someone the
-  // speaker feels strongly about (likeBias, a step), a bond made up where there is none (inventBond) or told backwards
-  // (flipBond); what someone else thinks of you (you, of the times it could be told, at the same odds as a bond); and the
-  // night someone spent in your tent (visit: at odds from the morning the camp knows, × fade a day after; told badly at
-  // bad + spite a step the speaker dislikes her + jealous, sweet on her or on you + foe a step against you + their
-  // temperament's prude + vows for a priest − friend a step they like her − ally a step past fond of you; else kindly)
+  // gossip (people/gossip.js): about a temperament (temper; else a friendship or a feud, one that their likings for each
+  // other come to bond or more, either way), the less true of someone the speaker feels strongly about (likeBias, a step),
+  // a bond made up where there is none (inventBond) or told backwards (flipBond); what someone else thinks of you (you, of
+  // the times it could be told, at the same odds as a bond); and the night someone spent in your tent (visit: at odds
+  // from the morning the camp knows, × fade a day after; told badly at bad + spite a step the speaker dislikes her +
+  // jealous, sweet on her or on you + foe a step against you + their temperament's prude + vows for a priest − friend a
+  // step they like her − ally a step past warm toward you; else kindly)
   gossip: {
-    temper: 0.65, likeBias: 0.08, inventBond: 0.3, flipBond: 0.5, you: 0.3,
+    temper: 0.65, likeBias: 0.08, inventBond: 0.3, flipBond: 0.5, you: 0.3, bond: 2,
     visit: { odds: 0.45, fade: 0.55, bad: 0.55, spite: 0.15, jealous: 0.25, foe: 0.08, vows: 0.25, friend: 0.25, ally: 0.15 }
   },
   rumours: {
@@ -566,7 +567,7 @@ const RULES = {
     planted:     { p: 0.3, dislike: 0.15, suspicious: 0.1 },
     onto:        { odds: 0.45, p: 0.2, dislike: 0.15, suspicious: 0.1, back: 0.2 },
     kept:        { p: 0.3 },
-    // the night in your tent, told as gossip (people/social.js, visitGossip): each who hears it, once. Of her: the less
+    // the night in your tent, told as gossip (people/gossip.js, a night in your tent): each who hears it, once. Of her: the less
     // (cool told badly, coolKind told kindly; + their temperament's prude, + vows for a priest; + dislike a step they
     // dislike her, − friend a step they like her; + quarrel for each quarrel between them, + suspect a step they suspect
     // her, + named if either named the other guilty before everyone, − feast for each feast sat through together; told

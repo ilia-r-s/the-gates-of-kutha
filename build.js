@@ -36,9 +36,10 @@ const SCRIPT = [
   'people/suspicion.js', // who suspects whom, what was said before everyone, who is closing in on the cult
   'people/tempers.js',   // temperaments: how each person lies, blames and gossips
   'people/claims.js',    // who claims which part in Crane's diary
-  'people/social.js',    // gossip, rumours, mornings
+  'people/social.js',    // mornings: breakfast, grief, blame said aloud
   'people/pretences.js', // pretences dropped: pressed, trusted, of their own accord, before the camp
   'people/moments.js',   // public moments that move many at once, and who hears of a thing
+  'people/gossip.js',    // what people say of each other, and of you
   'people/flirt.js',     // a light flirtation, now and then
   'people/visit.js',     // a visit to your tent as the evening ends, once a season at most
   'people/manner.js',    // what shows of a feeling, and what does not: greetings, faces, partings

@@ -946,8 +946,8 @@ function fxCamp({ f, r, add }) {
       `К концу ${parts.map(x => x[1]).join('; ')}.`
     );
   }
-  const warmed = (S.rumors || []).reduce((n, x) => n + x.up.length, 0),
-    turned = (S.rumors || []).reduce((n, x) => n + x.down.length, 0);
+  const warmed = Gossip.record().reduce((n, x) => n + x.up.length, 0),
+    turned = Gossip.record().reduce((n, x) => n + x.down.length, 0);
   if (warmed && turned)
     add(
       warmed > turned ? 'p' : turned > warmed ? 'm' : 'n',

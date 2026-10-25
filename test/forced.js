@@ -164,8 +164,8 @@ const SCRIPT = () => {
   });
   S.like[people[1].id][people[2].id] = 2;
   S.like[people[2].id][people[1].id] = 2;
-  ripple(people[2], 'pressed');
-  ripple(people[3], 'confided');
+  Gossip.wordOf(people[2], 'pressed');
+  Gossip.wordOf(people[3], 'confided');
   capHtml(
     'rumours',
     until(() => {
@@ -173,16 +173,16 @@ const SCRIPT = () => {
         { day: 1, kind: 'pressed', about: people[2].id },
         { day: 1, kind: 'confided', about: people[3].id }
       ];
-      return rumorsOfYou();
+      return Gossip.rumours();
     })
   );
   capHtml(
     'gossip-you',
-    until(() => gossipAboutYou())
+    until(() => Gossip.ofYou())
   );
   capHtml(
     'gossip',
-    until(() => breakfastGossip())
+    until(() => Gossip.speak('breakfast'))
   );
   people.forEach(c => {
     S.temper[c.id] = 'suspicious';
@@ -334,7 +334,7 @@ const SCRIPT = () => {
   woman.rapport = 2;
   capHtml(
     'feel',
-    until(() => feelRemark(man) && feelRemark(man).text)
+    until(() => Gossip.feelRemark(man) && Gossip.feelRemark(man).text)
   );
   capHtml(
     'flirt-gossip',
@@ -350,11 +350,11 @@ const SCRIPT = () => {
     p1.rapport = 2;
     capHtml(
       'gossip-thinks',
-      until(() => (g => g && lastKind() === 'thinks' && g.text)(gossipLine(p3, [])))
+      until(() => (g => g && lastKind() === 'thinks' && g.text)(Gossip.line(p3, [])))
     );
     capHtml(
       'gossip-thinks-heard',
-      until(() => (g => g && lastKind() === 'thinks' && g.text)(gossipLine(p3, [p2.id], false, true)))
+      until(() => (g => g && lastKind() === 'thinks' && g.text)(Gossip.line(p3, [p2.id], false, true)))
     );
     RULES.gossip.you = keepGossip.you;
     S.log.visit = { id: woman.id, day: S.day - 1, agreed: true, chill: false, hurt: 0, heard: [], morning: true };
@@ -364,7 +364,7 @@ const SCRIPT = () => {
       'scandal-bad',
       until(() => {
         S.log.visit.heard = [];
-        return (h => h && /class="stir"/.test(h) && lastKind() === 'scandal' && h)(breakfastGossip());
+        return (h => h && /class="stir"/.test(h) && lastKind() === 'scandal' && h)(Gossip.speak('breakfast'));
       })
     );
     delete woman.greeted;
@@ -375,7 +375,7 @@ const SCRIPT = () => {
       'scandal-kind',
       until(() => {
         S.log.visit.heard = [];
-        return (h => h && /class="stir"/.test(h) && lastKind() === 'scandal' && h)(breakfastGossip());
+        return (h => h && /class="stir"/.test(h) && lastKind() === 'scandal' && h)(Gossip.speak('breakfast'));
       })
     );
     RULES.gossip.visit.bad = 10;
@@ -383,7 +383,9 @@ const SCRIPT = () => {
       'scandal-overheard',
       until(() => {
         S.log.visit.heard = [];
-        return (h => h && lastKind() === 'scandal' && h)(overheard(people.filter(c => c.id !== woman.id && isFree(c)).slice(0, 3)));
+        return (h => h && lastKind() === 'scandal' && h)(
+          Gossip.speak('overheard', people.filter(c => c.id !== woman.id && isFree(c)).slice(0, 3))
+        );
       })
     );
     Object.assign(RULES.gossip.visit, keepGossip.visit);

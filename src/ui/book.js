@@ -142,7 +142,7 @@ const CHIPS = {
       : bi(`${f}: sweet on ${C(t.verdict).short}`, `${ru.c(fr)}: ${ru.gs(a, 'неравнодушен', 'неравнодушна')} к ${ru.c(t.verdict, 'd')}`)
   ],
   hint: (t, a, f, fr) => ['warnc', bi(`${f} hints at ${a.pp} nights`, `${ru.c(fr)} намекает на ${ru.gs(a, 'его', 'её')} ночные прогулки`)],
-  // what someone else says this one thinks of you (people/social.js, thinksGossip); and of the night she spent in your tent
+  // what someone else says this one thinks of you (people/gossip.js, what someone thinks of you); and of the night she spent in your tent
   thinks: (t, a, f, fr) => [
     'dimc',
     t.verdict === 'good'
@@ -245,14 +245,7 @@ function sayingLine(t) {
     : bi(`${f} says ${a} cannot bear ${C(b).short}`, `${ru.c(t.from)}: ${ru.c(t.about)} терпеть не может ${ru.c(b, 'a')}`);
 }
 function rumorLine(r) {
-  const what = r.by
-    ? r.kind === 'bad'
-      ? bi(
-          `${C(r.by).short} spoke against you at breakfast`,
-          `${ru.c(r.by)} ${ru.gs(r.by, 'говорил', 'говорила')} о вас дурно за завтраком`
-        )
-      : bi(`${C(r.by).short} spoke well of you at breakfast`, `${ru.c(r.by)} ${ru.gs(r.by, 'хвалил', 'хвалила')} вас за завтраком`)
-    : (([en, rus]) => bi(`Word got round ${en}`, `По лагерю разошлось, ${rus}`))(DEED_SAID[r.kind](C(r.about)));
+  const what = Gossip.told(r);
   const eff = [
     r.down.length ? bi(`cooler: ${nameList(r.down)}`, `охладели: ${nameListRu(r.down)}`) : '',
     r.up.length ? bi(`warmer: ${nameList(r.up)}`, `потеплели: ${nameListRu(r.up)}`) : ''
@@ -572,8 +565,8 @@ function evSayings() {
 // What is said of you around the camp.
 function evRumours() {
   let h = '';
-  if (S.rumors && S.rumors.length)
-    h += `<h4>${bi('What is said of you', 'Что говорят о вас')}</h4><ul class="tlog">${S.rumors
+  if (Gossip.record().length)
+    h += `<h4>${bi('What is said of you', 'Что говорят о вас')}</h4><ul class="tlog">${Gossip.record()
       .slice()
       .reverse()
       .map(r => `<li><span class="c-day">${dayLabel(r.day)}</span> ${rumorLine(r)}</li>`)

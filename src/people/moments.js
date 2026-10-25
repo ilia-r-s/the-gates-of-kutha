@@ -5,7 +5,7 @@
 // RULES.camp.cap each way), in their trust in you, in their suspicion of each other (people/suspicion.js), or in their
 // liking for someone (people/ties.js). Every reaction is odds written as named steps (core/odds.js), the pieces the rows
 // share named once (FOND, DISLIKES, …), each ending in the moment's own: never rarer than the rarest, × a heavy moment,
-// never surer than most. Whoever hears of a thing, at a moment or not (people/social.js: talk of you, word of what you
+// never surer than most. Whoever hears of a thing, at a moment or not (people/gossip.js: talk of you, word of what you
 // did), is moved by one helper, hear. What is said against someone before everyone is remembered (people/suspicion.js);
 // when the truth comes out, those who said it are believed again, or are not, and those who had suspected them think
 // again (settle). The record of the season's moments (S.stirs) is kept here, and the casebook tells it (told,
@@ -512,7 +512,7 @@ const Moments = (() => {
               `${ru.c(b)} ${ru.gs(b, 'оказался прав', 'оказалась права')} насчёт ${ru.c(a, 'g')}`
             ]
     },
-    // the night a woman spent in your tent, told as gossip, badly or kindly (people/social.js, visitGossip): before
+    // the night a woman spent in your tent, told as gossip, badly or kindly (people/gossip.js, a night in your tent): before
     // everyone at breakfast (o.before), or to one of the camp (o.only). Each who hears it makes up their mind once
     // (S.log.visit.heard), about her and about you, by their temperament, a priest's vows, how they feel about her, the
     // speaker and you, jealousy, and what has passed between them and her (RULES.camp.scandal). Told before her, she holds

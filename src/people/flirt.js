@@ -72,7 +72,7 @@ const FLIRT_HEARD_YOU = [
 // two who could: a man and a woman, never the priest)
 function flirtGossip(s, not = [], heard = false) {
   const ok = id => id !== s.id && !not.includes(id),
-    made = chance((1 - TP(s).gossipTrue) * RULES.flirt.invent),
+    made = !Gossip.toldTrue(s, { slip: RULES.flirt.invent }),
     f = made
       ? Ties.eachWay(freeChars().map(c => c.id)).filter(([a, b]) => ok(a) && ok(b) && Ties.mayFlirt(C(a), C(b)) && !Ties.sweetOn(a, b))
       : Ties.flirtsNow().filter(([a, b]) => ok(a) && (b === 'you' || ok(b)));

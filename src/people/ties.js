@@ -60,9 +60,6 @@ const Ties = (() => {
       c.rapport = Math.max(RULES.scale.trustMin, Math.min(RULES.scale.talkMax, r));
       S.rap0[i] = c.rapport;
     });
-    // (the talk of you, kept by the gossip: people/social.js)
-    S.rumors = [];
-    S.pending = [];
     dealFlirts();
     S.mourning = {};
     S.confided = {};

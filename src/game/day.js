@@ -207,7 +207,7 @@ function endSlot(html, title) {
     const here = (S.here[S.loc] || []).map(C).filter(isFree),
       ppl = here.filter(c => unknownCats(c).length);
     if (ppl.length && chance(RULES.day.noticeHabit * tenorOf('watch'))) extra = `<p class="notice">${reveal(pick(ppl))}</p>`;
-    if (here.length >= 2 && chance(RULES.day.overhear * rateOf('talk'))) extra += overheard(here);
+    if (here.length >= 2 && chance(RULES.day.overhear * rateOf('talk'))) extra += Gossip.speak('overheard', here);
   }
   // and now and then, whatever you were doing, something finds you; or, out on the tell, the dig itself hurts you
   const dread = dreadNow(S.loc);

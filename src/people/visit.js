@@ -7,7 +7,7 @@
 // Watcher, the bowl, the revolver and luck, it finds two of you (RULES.visit.through: her dead, you, both, or only the
 // usual harm). The morning after, if you both live, your nerve may mend and her trust may grow. The camp talks of it
 // either way, and from then on someone may tell it as gossip, badly or kindly, and whoever hears it may think the less
-// or the better of her, and of you (people/social.js, visitGossip; people/moments.js, the scandal); and a flirtation that
+// or the better of her, and of you (people/gossip.js, a night in your tent; people/moments.js, the scandal); and a flirtation that
 // came to this may come to more (game/fates.js). An occultist may feel the cult's
 // cold as she comes in, or a cold that is only the night (as in any conversation). Nothing of it is ever explained: the
 // ending tells what she was, and what the night held (game/debrief.js).
@@ -61,7 +61,7 @@ function visitAnswer(h, yes, chill) {
         S.log.visit.hurt++;
       }
     }
-    ripple(h, 'turnedAway');
+    Gossip.wordOf(h, 'turnedAway');
   }
   journal(
     yes
@@ -218,7 +218,7 @@ function takenInYourTent(h) {
   S.stats.taken++;
   const k = +wpick(RULES.visit.talked);
   S.log.visit.talked = k;
-  if (k) ripple(h, 'diedInTent', k);
+  if (k) Gossip.wordOf(h, 'diedInTent', k);
   if (k > 1) Suspicion.suspectYou(1);
   journal(bi(`${h.name} was taken in the night, in your tent.`, `Ночь забрала ${ru.cf(h, 'a')} — в вашей палатке.`));
 }
@@ -292,7 +292,7 @@ function visitMorning(night) {
   v.morning = true;
   const h = C(v.id);
   if (!isFree(h)) return '';
-  ripple(h, 'visited');
+  Gossip.wordOf(h, 'visited');
   const VR = RULES.visit,
     gone = chance(VR.leaves), // (out on the cult's work, she is back by then at 1 − leaves: the same)
     mend = chance(VR.mend) ? regain(1) : 0,
