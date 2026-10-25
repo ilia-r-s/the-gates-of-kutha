@@ -16,15 +16,13 @@ const endPortrait = cid => portrait(cid, 'neutral', 0, `end-${cid}-`);
 function romances() {
   const RF = RULES.flirt.romance,
     ok = c => c.status === 'present' && c.role !== 'cult',
-    free = c => !VOWS.includes(c.id), // a priest keeps his vows, whoever was taken with him
+    free = c => !Ties.vowed(c), // a priest keeps his vows, whoever was taken with him
     people = S.order.map(C),
     out = { you: null, pairs: [], mourn: [] };
   // (one who spent a night in your tent, and lived, first, and the likelier: people/visit.js)
   const v = S.log.visit,
     stayed = c => !!v && v.agreed && v.id === c.id && !v.struck,
-    her = people
-      .filter(c => ok(c) && S.flirt[c.id] && S.flirt[c.id].you && c.rapport >= RULES.flirt.trust)
-      .sort((a, b) => stayed(b) - stayed(a) || b.rapport - a.rapport)[0];
+    her = people.filter(c => ok(c) && Ties.drawnToYou(c)).sort((a, b) => stayed(b) - stayed(a) || b.rapport - a.rapport)[0];
   if (
     her &&
     fateRoll(her.id, 'love') <
@@ -35,15 +33,13 @@ function romances() {
   // for, and only someone spoken for by nobody mourns
   const spoken = new Set(out.you ? [out.you] : []),
     both = f =>
-      people.forEach((a, i) =>
-        people.slice(i + 1).forEach(b => {
-          const ab = flirtsWith(a.id, b.id),
-            ba = flirtsWith(b.id, a.id);
-          if ((ab || ba) && free(a) && free(b)) f(a, b, ab, ba);
-        })
-      );
+      Ties.pairs(people).forEach(([a, b]) => {
+        const ab = Ties.sweetOn(a.id, b.id),
+          ba = Ties.sweetOn(b.id, a.id);
+        if ((ab || ba) && free(a) && free(b)) f(a, b, ab, ba);
+      });
   both((a, b, ab, ba) => {
-    if (!ok(a) || !ok(b) || Math.min(likes(a.id, b.id), likes(b.id, a.id)) < 1 || spoken.has(a.id) || spoken.has(b.id)) return;
+    if (!ok(a) || !ok(b) || Math.min(Ties.likes(a.id, b.id), Ties.likes(b.id, a.id)) < 1 || spoken.has(a.id) || spoken.has(b.id)) return;
     const fond = Ties.close(a.id, b.id) && Ties.close(b.id, a.id),
       doubt = sus(a.id, b.id) >= 2 || sus(b.id, a.id) >= 2,
       clear = !sus(a.id, b.id) && !sus(b.id, a.id);
@@ -150,18 +146,14 @@ function endFate(c, ctx) {
     if (love.you === c.id) {
       const l = away ? away.love : FATE_LOVE[c.id] || FATE_LOVE.any;
       t += ' ' + bi(l[0], l[1]);
-    } else if (Ties.friend(c) && flirtsWithYou(c)) {
+    } else if (Ties.friend(c) && Ties.sweetOnYou(c)) {
       const l = away ? away.soft : FATE_SOFT[c.id] || FATE_SOFT.any;
       t += ' ' + bi(l[0], l[1]);
     } else if (Ties.friend(c))
       // (the second of the lines told when you did not come home has a child in it, and a priest keeps his vows)
       t +=
         ' ' +
-        fateOf(
-          away ? (away === FATE_GONE.dead && VOWS.includes(c.id) ? away.friend.slice(0, 1) : away.friend) : FATE_FRIEND,
-          c.id,
-          'friend'
-        )(c);
+        fateOf(away ? (away === FATE_GONE.dead && Ties.vowed(c) ? away.friend.slice(0, 1) : away.friend) : FATE_FRIEND, c.id, 'friend')(c);
     else if (Ties.against(c)) t += ' ' + fateOf(away ? away.enemy : FATE_ENEMY, c.id, 'enemy')(c);
   }
   love.pairs
@@ -214,7 +206,7 @@ function afterDeaths() {
     if (jailed) lay('cult', null, A.jailed);
     if (c.status === 'dismissed' && c.role !== 'smuggler') lay('wronged', null, A.sent);
     if (c.role === 'seer') lay('dreams', null, A.dreamer);
-    const m = S.mourning && S.mourning[c.id];
+    const m = Ties.mourning(c);
     if (m && S.chars[m.victim] && C(m.victim).status === 'taken') lay('grief', C(m.victim), A.grief);
     if (f && ((f.took || []).includes(c.id) || (f.g3 && f.g3.kind === 'comp' && f.g3.id === c.id))) lay('below', null, A.below);
     if (c.role === 'smuggler') lay('thief', null, A.thief);
@@ -222,7 +214,7 @@ function afterDeaths() {
       roll = fateRoll(c.id, 'after');
     if (roll >= q) return;
     const o = drawCodas(why, 1, i => fateRoll(c.id, 'afterWhy', i))[0];
-    const kind = fateRoll(c.id, 'afterKind') < (A.chosen[o.k] || 0) && !VOWS.includes(c.id) ? 'chosen' : 'strange',
+    const kind = fateRoll(c.id, 'afterKind') < (A.chosen[o.k] || 0) && !Ties.vowed(c) ? 'chosen' : 'strange',
       k = FATE_AFTER[kind][o.k] ? o.k : 'plain';
     out.push({ id: c.id, kind, k, d: k === o.k ? o.d : null, by: roll / q });
   });
@@ -272,11 +264,11 @@ function doomMul(c, w, D, nat) {
     by = m => m && Object.keys(m).forEach(k => k in w && (w[k] *= m[k]));
   by(M[temperOf(c)]);
   by(M[c.role]);
-  if (VOWS.includes(c.id)) by(M.vows);
+  if (Ties.vowed(c)) by(M.vows);
   by(D.far.includes(c.id) ? M.far : M.near);
   if (Ties.friend(c)) by(M.friend);
   if (S.log.guarded.some(x => x.id === c.id)) by(M.guarded);
-  const m = S.mourning && S.mourning[c.id];
+  const m = Ties.mourning(c);
   if (m && S.chars[m.victim] && C(m.victim).status === 'taken') by(M.grief);
   if (S.nights.some(rec => rec && (rec.afraid || []).includes(c.id))) by(M.afraid);
   if (S.nights.some(rec => rec && rec.target === c.id)) by(M.attacked); // (and missed: they are alive)
@@ -401,12 +393,12 @@ function codaFacts(c, ctx) {
     cell = { trial: 'jailed', asylum: 'asylum' }[end] || null,
     alive = !dead && !jailed && !cult, // still at the dig, or sent away
     home = !!ctx.won;
-  const m = S.mourning && S.mourning[c.id];
+  const m = Ties.mourning(c);
   if (m && m.done && !dead) {
     if (alive) add('consoled', 'alive', C(m.victim), CW.consoled);
     else if (cell) add('consoled', cell, C(m.victim), CW.consoled);
   }
-  if (S.confidedIn.includes(c.id)) add('confided', cult ? 'cult' : dead ? 'dead' : 'alive', null, cult ? CW.confidedCult : CW.confided);
+  if (Ties.confidedIn(c)) add('confided', cult ? 'cult' : dead ? 'dead' : 'alive', null, cult ? CW.confidedCult : CW.confided);
   if (S.log.pressedWho.includes(c.id) && (alive || cell)) add('pressed', alive ? 'alive' : cell, null, CW.pressed);
   if (c.role === 'warden' && S.log.attacks.some(a => a.how === 'guard') && (alive || dead))
     add('savedYou', alive ? 'alive' : 'dead', null, CW.savedYou);
@@ -456,8 +448,7 @@ function codaFacts(c, ctx) {
       yours = home || S.ended === 'expelled',
       youLive = S.ended !== 'death' && S.ended !== 'doom',
       found = !jailed && S.ended === 'death' && !S.fin && NIGHT_FOUND.includes(nightDeath());
-    if (S.flirt[c.id] && S.flirt[c.id].you && c.rapport >= RULES.flirt.trust && (yours || (cell && youLive) || found))
-      add('cultSoft', g2, yours, CW.cultSoft);
+    if (Ties.drawnToYou(c) && (yours || (cell && youLive) || found)) add('cultSoft', g2, yours, CW.cultSoft);
     else if (Ties.friend(c)) add('cultFriend', g2, yours ? 'home' : S.ended === 'doom' ? 'doom' : 'lost', CW.cultFriend);
     else if (Ties.against(c) && cell) add('cultFoe', cell, null, CW.cultFoe);
   }
@@ -545,13 +536,13 @@ function yourLast(won, later = {}) {
   if (wronged.length && living.length)
     lay('wronged', living[living.length - 1], F.wronged ** wronged.length, F.why.wronged * wronged.length);
   else if (wronged.length) p *= F.wronged ** wronged.length;
-  const lost = friendsLost();
+  const lost = Ties.friendsLost();
   if (lost.length) lay('friends', lost[lost.length - 1], F.grief ** lost.length, F.why.friends * lost.length);
   const v = L.visit;
   if (v && (v.found === 'dead' || v.through === 'her')) lay('tent', C(v.id), F.tent, F.why.tent);
   if (L.studyCost >= RULES.fates.read || S.factKnown.length >= RULES.fates.lines) lay('tablets', null, F.read, F.why.tablets);
   if (L.horrorNerve >= RULES.fates.horrors) lay('horrors', null, F.horrors, F.why.horrors);
-  const friends = friendsNow().length;
+  const friends = Ties.friendsNow().length;
   p *= F.friend ** Math.min(3, friends) * (S.romance && S.romance.you ? F.loved : 1);
   if (fateRoll('you', 'last') >= Math.min(F.max, p)) return null;
   // (a reason with no telling where you are is not told there)
@@ -584,14 +575,14 @@ function youCodas(won, last = null, later = {}) {
   if (sp) add('spite', { c: C(sp.id), caught: sp.caught }, YW.spite);
   const wr = L.accused.filter(a => !a.right && !later[a.id]).pop();
   if (wr) add('wronged', C(wr.id), YW.wronged);
-  const gr = friendsLost().pop(); // (never one dead by your own hand: the deed has its own)
+  const gr = Ties.friendsLost().pop(); // (never one dead by your own hand: the deed has its own)
   if (gr) add('grave', gr, YW.grave);
   // (one you left on the stair: not whoever held the seventh gate for you, nor one of the cult, who went to the circle)
   const g3 = S.fin && S.fin.g3,
     left = S.fin ? S.fin.left.filter(id => !(g3 && g3.kind === 'comp' && g3.id === id) && C(id).role !== 'cult') : [],
     lb = left.length ? C(left[left.length - 1]) : null;
   if (lb) add('leftBelow', lb, YW.leftBelow);
-  const fr = friendsNow().length;
+  const fr = Ties.friendsNow().length;
   if (fr >= 2) add('friends', fr, YW.friends);
   if (L.horrorNerve >= RULES.fates.horrors) add('horrors', null, YW.horrors);
   if (L.deed && L.deed.outcome && L.deed.outcome !== 'away')

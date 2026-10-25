@@ -116,7 +116,7 @@ function stoodWithYou(vote) {
     id => isFree(C(id)) && C(id).role !== 'cult' && C(id).rapport < RULES.scale.trustMax && chance(RULES.verdict.stood)
   );
   if (!ids.length) return '';
-  ids.forEach(id => trustUp(C(id)));
+  ids.forEach(id => Ties.moveTrust(C(id), 1, 'deed'));
   const many = ids.length > 1;
   return `<p class="gain">${bi(`${nameList(ids)} stood with you, and ${many ? 'trust' : 'trusts'} you more now`, `${nameListRu(ids)}: ${many ? 'были' : ru.gs(C(ids[0]), 'был', 'была')} на вашей стороне и теперь ${many ? 'доверяют' : 'доверяет'} вам больше`)}</p>`;
 }

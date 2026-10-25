@@ -17,7 +17,7 @@
 function visitTonight() {
   const VR = RULES.visit;
   if (S.log.visit || S.day < VR.from || deedTonight()) return null; // (not the night you go out yourself: game/deed.js)
-  const may = freeChars().filter(flirtsWithYou);
+  const may = freeChars().filter(Ties.sweetOnYou);
   if (!may.length || !chance(Math.min(VR.max, VR.odds + VR.perDead * S.stats.taken))) return null;
   return C(wpick(Object.fromEntries(may.map(c => [c.id, c.rapport]))));
 }
@@ -54,10 +54,10 @@ function visitAnswer(h, yes, chill) {
   S.log.visit = { id: h.id, day: S.day, agreed: yes, chill, hurt: 0, heard: [] }; // (heard: who has made up their mind about it, told as gossip: people/camp.js, STIRS.scandal)
   if (!yes) {
     if (chance(VR.hurt)) {
-      trustDown(h);
+      Ties.moveTrust(h, -1, 'deed');
       S.log.visit.hurt++;
       if (chance(VR.hurtMore)) {
-        trustDown(h);
+        Ties.moveTrust(h, -1, 'deed');
         S.log.visit.hurt++;
       }
     }
@@ -297,7 +297,7 @@ function visitMorning(night) {
     gone = chance(VR.leaves), // (out on the cult's work, she is back by then at 1 − leaves: the same)
     mend = chance(VR.mend) ? regain(1) : 0,
     warm = chance(VR.warm) && h.rapport < RULES.scale.trustMax;
-  if (warm) trustUp(h);
+  if (warm) Ties.moveTrust(h, 1, 'deed');
   return (
     (gone
       ? bi(

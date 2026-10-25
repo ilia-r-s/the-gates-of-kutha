@@ -419,7 +419,7 @@ function youVote() {
   }
   // (each who would have sent you away, mostly, if their trust in you can sink any lower)
   const sour = out.expel.map(C).filter(o => o.rapport > RULES.scale.trustMin && chance(RULES.deed.sour));
-  sour.forEach(o => trustDown(o));
+  sour.forEach(o => Ties.moveTrust(o, -1, 'deed'));
   S.anger = (S.anger || 0) + vary(RULES.deed.angered);
   S.onYou = Math.max(0, (S.onYou || 0) - vary(RULES.deed.cleared));
   return (

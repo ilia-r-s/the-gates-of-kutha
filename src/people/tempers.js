@@ -27,7 +27,7 @@ const FEEL_NAMES = {
   '-2': ['hostile', 'враждебен', 'враждебна']
 };
 const feelName = c => {
-  const f = FEEL_NAMES[trustOf(c)];
+  const f = FEEL_NAMES[Ties.trust(c)];
   return bi(f[0], f[ru.f(c) ? 2 : 1]);
 };
 function assignTempers() {

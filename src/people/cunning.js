@@ -13,7 +13,7 @@ const craft = c => CRAFT[temperOf(c)];
 function framedBy(actor, target) {
   if (!chance(craft(actor).plant * cultTurns('sleuth'))) return null;
   const pool = freeChars().filter(o => o.role !== 'cult' && o.id !== target && !inYourTent(o.id));
-  return pool.length ? pickByLike(actor, pool, -1) : null;
+  return pool.length ? Ties.pickByLike(actor, pool, -1) : null;
 }
 const sloppy = actor => chance(craft(actor).sloppy);
 // a careful attacker leaves nothing else at the scene for an examination to find
@@ -54,14 +54,14 @@ function betrayal(cult) {
 // game/night.js). Never told; the ending tells it (S.turned: how far it went against each way, and from what day).
 // f: how much of the season has gone (what a whole season of it would come to, counted so far as that).
 const STYLE_SO_FAR = {
-  inquisitor: L => 2 * L.press + 2 * (L.accused.length + L.refusedInq.length) + 0.5 * L.distrust + 0.5 * enemiesNow().length,
+  inquisitor: L => 2 * L.press + 2 * (L.accused.length + L.refusedInq.length) + 0.5 * L.distrust + 0.5 * Ties.enemiesNow().length,
   quiet: (L, f) => 2 * L.rest + 2 * f * (L.accused.length + L.refusedInq.length ? 0 : 1),
   scholar: L => 2 * L.study + 1.5 * L.readings + 0.3 * S.factKnown.length,
   sleuth: L => 2 * L.examine + 0.5 * L.night + 0.5 * S.sights.length + 0.5 * (L.diary || 0),
   delver: L => 2 * L.search + 0.5 * L.charms.length,
   confidant: L => {
     const trust = freeChars().reduce((s, c) => s + Math.max(0, c.rapport), 0);
-    return 2 * L.confide + L.about + 0.5 * trust + friendsNow().length + 0.5 * L.confess;
+    return 2 * L.confide + L.about + 0.5 * trust + Ties.friendsNow().length + 0.5 * L.confess;
   }
 };
 function cultReads(k) {

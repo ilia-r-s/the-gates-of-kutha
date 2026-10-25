@@ -308,7 +308,7 @@ function chooseVictim(night) {
 // What most likely made the cult choose someone, as it stood that night: one of it could not bear them or never liked
 // them, they had begun to suspect one of it, or they stood by you; or nothing in particular.
 function victimWhy(v, cult) {
-  const k = cult.filter(c => Ties.dislikes(c.id, v.id)).sort((a, b) => likes(a.id, v.id) - likes(b.id, v.id))[0];
+  const k = cult.filter(c => Ties.dislikes(c.id, v.id)).sort((a, b) => Ties.likes(a.id, v.id) - Ties.likes(b.id, v.id))[0];
   if (k) return { kind: Ties.cannotBear(k.id, v.id) ? 'cannotBear' : 'dislike', by: k.id };
   const s = cult.find(c => sus(v.id, c.id) >= 2);
   if (s) return { kind: 'suspects', of: s.id };

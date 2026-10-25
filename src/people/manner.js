@@ -46,7 +46,7 @@ const masks = c => masked(c, () => rand());
 // the faces of flirting: coy mostly, but now and then another (a smile, a smirk, a sly look); and of a joke about love
 // and marriage: a smirk mostly. A priest's vows keep the flirtation out of it.
 const flirtFaces = c => (temperOf(c) === 'lightheaded' ? { ...FACES.flirt, sly: FACES.slyLight } : FACES.flirt),
-  jokeFaces = c => (VOWS.includes(c.id) ? FACES.jokeVows : FACES.joke);
+  jokeFaces = c => (Ties.vowed(c) ? FACES.jokeVows : FACES.joke);
 // The sly look, in a joke (ctx 'joke') or a flirtation ('flirt'): which looks it may be is whose it is (FACES.sly: in a
 // joke, a man's a wink, a sidelong glance or an arched brow, Constance's a wink or an arched brow, Ilse's a sidelong
 // glance or an arched brow; flirting, Constance's a sidelong glance, an arched brow or heavy lids, Ilse's those or a look
@@ -81,7 +81,7 @@ function greetNow(c) {
     const line = tellOne('greet-' + c.id, GREET[c.id]);
     return { text: bi(line), face: 'sad', cool: HURRIED.has(line) };
   }
-  if (flirtsWithYou(c) && slotChance(c, 'flirt', RULES.flirt.greet * showMul(c) * talkSoft()))
+  if (Ties.sweetOnYou(c) && slotChance(c, 'flirt', RULES.flirt.greet * showMul(c) * talkSoft()))
     return { text: flirtGreet(c), face: slyOr(c, 'flirt', slotPick(c, 'face', flirtFaces(c))) };
   // (each person's greetings of each kind gone through in turn, none twice running: core/text.js, tellOne)
   const warm = () => bi(tellOne('greetWarm-' + c.id, GREET_WARM[c.id])),
@@ -109,7 +109,7 @@ function plainFace(c, line) {
 // then a flirtatious look, a pleasant face put on (above), or a good day or a bad one (anyone's, as at a greeting).
 function faceFor(c, e) {
   if (e === 'smile' || e === 'neutral') {
-    if (flirtsWithYou(c) && chance(RULES.flirt.face * showMul(c))) return flirtFace(c);
+    if (Ties.sweetOnYou(c) && chance(RULES.flirt.face * showMul(c))) return flirtFace(c);
     if (Ties.cordial(c) && shows(c, 'warm')) return 'warm';
     if (Ties.against(c) && shows(c, 'cold')) return 'cold';
     if (masks(c)) return 'smile';
@@ -144,7 +144,7 @@ const COLD_PARTING = [
 // all from someone against you. Returns [the note, the face, its kind (flirt, warm, walk: they walk you to the railway,
 // cold), for the leave line not to gainsay it: ui/talk.js], or null.
 function parting(c) {
-  if (flirtsWithYou(c) && chance(RULES.flirt.parting * showMul(c))) return [pick(FLIRT_PARTING)(c), flirtFace(c), 'flirt'];
+  if (Ties.sweetOnYou(c) && chance(RULES.flirt.parting * showMul(c))) return [pick(FLIRT_PARTING)(c), flirtFace(c), 'flirt'];
   if (Ties.friend(c) && chance(RULES.manner.parting * showMul(c))) {
     const w = pick(WARM_PARTING);
     return [w(c), 'warm', w === WARM_PARTING[0] ? 'walk' : 'warm'];
@@ -161,7 +161,7 @@ function castMood(c) {
   const h = k => slotRoll(c, k),
     M = RULES.manner;
   if (shamed(c)) return 'sad';
-  if (flirtsWithYou(c) && h('flirt') < M.flirt * showMul(c) * FACES.castFlirt)
+  if (Ties.sweetOnYou(c) && h('flirt') < M.flirt * showMul(c) * FACES.castFlirt)
     return slyOr(c, 'flirt', hashPick(FACES.castFlirtFaces, S.salt, c.id, S.day, S.slot));
   if (suspectedBy(c.id).length >= 2 && h('sus') < FACES.suspected * showMul(c)) return h('fear') < FACES.sad ? 'sad' : 'fear';
   if (Ties.cordial(c) && slotChance(c, 'warm', showP(c, 'warm'))) return 'warm';

@@ -49,9 +49,9 @@ function endReckon() {
   const hierX = C(S.hierophant).status === 'exposed';
   const failed = f ? f.acts.filter(a => a.ok === false).length : 0;
   // the people outside the cult still at the dig who trusted you by the end, and those who turned against you during the
-  // season (game/state.js, friendsNow, enemiesNow; whom you sent away is counted as wronged)
-  const friends = friendsNow().map(c => c.id),
-    enemies = enemiesNow().map(c => c.id);
+  // season (people/ties.js, Ties.friendsNow, Ties.enemiesNow; whom you sent away is counted as wronged)
+  const friends = Ties.friendsNow().map(c => c.id),
+    enemies = Ties.enemiesNow().map(c => c.id);
   const W = RULES.reckoning,
     rep = Math.max(-W.reputation, Math.min(W.reputation, friends.length - enemies.length));
   // your body and mind: wounds you carry at the end, nerve steady at the end, nerve that once all but broke

@@ -197,7 +197,7 @@ function fakeDream(c) {
   const K = RULES.claims,
     pool = freeChars().filter(o => o.id !== c.id);
   if (!pool.length) return null;
-  if (!chance(K.fakeGuilty)) return { t: pickByLike(c, pool, 1), cult: false };
+  if (!chance(K.fakeGuilty)) return { t: Ties.pickByLike(c, pool, 1), cult: false };
   const rivals = dreamersHeard(pool);
   if (rivals.length && chance(K.atDreamer)) return { t: pick(rivals), cult: true };
   return { t: fearOf(c, pool), cult: true };
@@ -206,7 +206,7 @@ function fakeDream(c) {
 function fearOf(c, pool) {
   const w = {};
   pool.forEach(o => {
-    w[o.id] = Math.max(RULES.likes.floor, 1 - RULES.likes.pull * likes(c.id, o.id)) * (1 + sus(c.id, o.id));
+    w[o.id] = Math.max(RULES.likes.floor, 1 - RULES.likes.pull * Ties.likes(c.id, o.id)) * (1 + sus(c.id, o.id));
   });
   return C(wpick(w));
 }
@@ -248,7 +248,7 @@ function cultDream(dec) {
   if (threat && chance(K.frame * TP(dec).frame)) return told({ t: threat, cult: true });
   const friends = inno.concat(mate ? [mate] : []);
   if (!friends.length) return null;
-  if (!chance(K.fakeGuilty + K.cultGuilty) || !inno.length) return told({ t: pickByLike(dec, friends, 1), cult: false });
+  if (!chance(K.fakeGuilty + K.cultGuilty) || !inno.length) return told({ t: Ties.pickByLike(dec, friends, 1), cult: false });
   if (mate && !watched && chance(K.distance * (K.distanceBase + craft(dec).sacrifice))) return told({ t: mate, cult: true });
   const rivals = dreamersHeard(inno);
   return told({ t: rivals.length && chance(K.atDreamer) ? pick(rivals) : fearOf(dec, inno), cult: true });

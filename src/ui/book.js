@@ -32,7 +32,7 @@ const TRUST_SAY = {
   3: ['devoted', 'преданно']
 };
 function trustWord(c) {
-  const r = trustOf(c);
+  const r = Ties.trust(c);
   return `<span class="${r < 0 ? 'bad' : r >= 2 ? 'good' : r === 0 ? 'dim' : ''}">${bi(...TRUST_SAY[r])}</span>`;
 }
 const MARKS = { '?': 'Unmarked', ally: 'Ally', foe: 'Suspect' };

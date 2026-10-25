@@ -128,7 +128,7 @@ function planAlibis(n, crimeLoc, actorId, target = null, how = 'watch') {
   // the cult's sightings: only those who will frame an innocent invent one, and they pick someone they dislike
   cult.forEach(c => {
     if (crime && inno.length && chance(A.frame * TP(c).frame))
-      rec.saw[c.id] = { who: pickByLike(c, inno, -1).id, cat: pick(CATS), where: crimeLoc, to: toward };
+      rec.saw[c.id] = { who: Ties.pickByLike(c, inno, -1).id, cat: pick(CATS), where: crimeLoc, to: toward };
   });
   // an alibi made up out of fear names a friend, anywhere but where it happened; the friend may back it (one of the cult
   // gladly: it is an alibi for itself), or, asked, say otherwise
@@ -178,7 +178,7 @@ function planAlibis(n, crimeLoc, actorId, target = null, how = 'watch') {
 function companyFor(a, pool) {
   const w = {};
   pool.forEach(o => {
-    w[o.id] = Math.max(RULES.likes.floor, 1 + RULES.likes.pull * (cultPair(a, o) ? 0 : likes(a.id, o.id)));
+    w[o.id] = Math.max(RULES.likes.floor, 1 + RULES.likes.pull * (cultPair(a, o) ? 0 : Ties.likes(a.id, o.id)));
   });
   return C(wpick(w));
 }
@@ -189,25 +189,20 @@ const wasAbout = (rec, id) =>
 // a fond friend who would bend the truth (or misremember it) backs up p's story of an evening with c; one who merely
 // likes them, now and then (coverLike); anyone else only by misremembering
 function backs(p, c) {
-  const l = likes(p.id, c.id),
+  const l = Ties.likes(p.id, c.id),
     A = RULES.alibis;
   return chance(l >= 2 ? A.cover : l === 1 ? A.cover * A.coverLike : TP(p).mistake);
 }
 // two of them sweet on each other (one taken with the other, who likes them back), if any: one such pair, at random (a
 // priest keeps his vows, whoever is taken with him)
 function trystOf(pool) {
-  const pairs = [];
-  pool.forEach(a =>
-    pool.forEach(b => {
-      if (
-        a.id < b.id &&
-        mayFlirt(a, b) &&
-        (flirtsWith(a.id, b.id) || flirtsWith(b.id, a.id)) &&
-        Ties.fond(a.id, b.id) &&
-        Ties.fond(b.id, a.id)
-      )
-        pairs.push([a, b]);
-    })
+  const pairs = Ties.eachWay(pool).filter(
+    ([a, b]) =>
+      a.id < b.id &&
+      Ties.mayFlirt(a, b) &&
+      (Ties.sweetOn(a.id, b.id) || Ties.sweetOn(b.id, a.id)) &&
+      Ties.fond(a.id, b.id) &&
+      Ties.fond(b.id, a.id)
   );
   return pick(pairs) || null;
 }

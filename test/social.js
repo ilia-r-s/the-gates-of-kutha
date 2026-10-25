@@ -62,7 +62,7 @@ run(async browser => {
     window.addTest = function (from, about, kind, verdict) {
       if (kind === 'thinks') {
         thinks.n++;
-        const r = trustOf(C(about));
+        const r = Ties.trust(C(about));
         if ((verdict === 'good' && r >= 2) || (verdict === 'bad' && r <= -1)) thinks.right++;
         if (from === about) bad.push('gossip about what one thinks of you, by that one');
       }
@@ -163,7 +163,7 @@ run(async browser => {
         .forEach(t => {
           st.bond.n++;
           const [k, o] = t.verdict.split(':'),
-            real = likes(t.about, o) + likes(o, t.about);
+            real = Ties.likes(t.about, o) + Ties.likes(o, t.about);
           if ((k === 'close' && real >= 2) || (k === 'feud' && real <= -2)) st.bond.right++;
         });
       // what the gossip was about, by kind; and what a night in your tent told as gossip did
@@ -197,7 +197,7 @@ run(async browser => {
       sums.rumours += (S.rumors || []).length;
       // the night's victims against everyone who could have been taken: how the cult's likes weigh
       const cult = S.order.filter(id => C(id).role === 'cult'),
-        lean = v => Math.sign(cult.reduce((s, k) => s + likes(k, v), 0)) + 1;
+        lean = v => Math.sign(cult.reduce((s, k) => s + Ties.likes(k, v), 0)) + 1;
       S.order.filter(id => C(id).status === 'taken').forEach(v => st.victims[lean(v)]++);
       S.order.filter(id => C(id).role !== 'cult').forEach(v => st.base[lean(v)]++);
       // public moments: how many each moved (0, 1, 2, 3 ...), which way
@@ -229,13 +229,13 @@ run(async browser => {
       S.order.forEach(a => {
         const f = S.flirt[a];
         if (f.you && C(a).p !== 'she') bad.push('a man dealt a flirtation toward you');
-        if (VOWS.includes(a) && Object.keys(f).some(k => k !== 'you' && f[k])) bad.push('a vow broken');
+        if (Ties.vowed(a) && Object.keys(f).some(k => k !== 'you' && f[k])) bad.push('a vow broken');
         Object.keys(f).forEach(k => {
           if (k !== 'you' && f[k] && C(k).p === C(a).p) bad.push('a flirtation within one sex');
         });
         if (f.you) st.flirt.you++;
       });
-      st.flirt.pairs += S.order.reduce((n, a) => n + S.order.filter(b => b !== a && flirtsWith(a, b)).length, 0);
+      st.flirt.pairs += S.order.reduce((n, a) => n + S.order.filter(b => b !== a && Ties.sweetOn(a, b)).length, 0);
       st.flirt.said += S.testimony.filter(t => t.kind === 'flirt' || (t.kind === 'feel' && t.verdict === 'flirt')).length;
       // the thief: names only someone he saw (the one who did it, all but always), and a second only if he would
       st.thief.saw += S.witness.length ? 1 : 0;
@@ -342,7 +342,7 @@ run(async browser => {
         // between the camp, only a man and a woman; never the priest; and only a woman with you
         S.romance.pairs.forEach(x => {
           if (C(x.a).p === C(x.b).p) bad.push(`a romance between two of one sex: ${x.a}, ${x.b}`);
-          if (VOWS.includes(x.a) || VOWS.includes(x.b)) bad.push(`a romance with the priest: ${x.a}, ${x.b}`);
+          if (Ties.vowed(x.a) || Ties.vowed(x.b)) bad.push(`a romance with the priest: ${x.a}, ${x.b}`);
         });
         S.romance.mourn.forEach(x => {
           if (C(x.a).p === C(x.b).p) bad.push(`mourning between two of one sex: ${x.a}, ${x.b}`);

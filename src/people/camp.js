@@ -14,9 +14,6 @@ function campInit() {
   S.said = [];
   S.stirs = [];
   S.credit = {};
-  S.confidedIn = [];
-  S.confided = {};
-  S.mourning = {};
 }
 const sus = (a, b) => (S.sus && S.sus[a] ? S.sus[a][b] || 0 : 0);
 function suspect(a, b, d) {
@@ -36,7 +33,7 @@ const credit = id => (S.credit && S.credit[id]) || 0;
 function mostSuspected(c, pool) {
   const top = pool
     .filter(o => sus(c.id, o.id) >= (Ties.close(c.id, o.id) ? RULES.scale.suspicion : 2))
-    .sort((a, b) => sus(c.id, b.id) - sus(c.id, a.id) || likes(c.id, a.id) - likes(c.id, b.id));
+    .sort((a, b) => sus(c.id, b.id) - sus(c.id, a.id) || Ties.likes(c.id, a.id) - Ties.likes(c.id, b.id));
   return top[0] || null;
 }
 // said against someone, or for them, before the whole camp: remembered until the truth about them comes out
@@ -69,7 +66,7 @@ function stir(kind, o) {
       const [what, whom, d] = r,
         same = moved.filter(x => x[0] === what && x[1] === whom && x[2] === d);
       if (same.reduce((n, x) => n + x[3].length, 0) >= cap) return; // as many as the cap move the same way, and no more
-      if (!(what === 'trust' ? nudge(l, d) : what === 'like' ? likeShift(l.id, whom, d) : suspect(l.id, whom, d))) return;
+      if (!(what === 'trust' ? Ties.moveTrust(l, d) : what === 'like' ? Ties.shiftLike(l.id, whom, d) : suspect(l.id, whom, d))) return;
       const lvl = what === 'sus' ? sus(l.id, whom) : null,
         g = same.find(x => x[4] === lvl);
       if (g) g[3].push(l.id);
@@ -131,13 +128,13 @@ function eitherWay(what, whom, down, up, d) {
   const t = Math.max(0, down) + Math.max(0, up);
   return [what, whom, t > 0 ? (chance(Math.max(0, down) / t) ? -1 : 1) : d, t];
 }
-const ofPair = (l, x) => likes(l.id, x); // how an onlooker feels about someone
+const ofPair = (l, x) => Ties.likes(l.id, x); // how an onlooker feels about someone
 const isSusp = l => temperOf(l) === 'suspicious';
 // of those who might speak up for or about x, one, the fonder of x the likelier (for: the fond ones' weight, by liking)
 const fondest = (pool, x) =>
   pool.length ? C(wpick(Object.fromEntries(pool.map(c => [c.id, ofPair(c, x) ** 2 || RULES.camp.fondestLeast])))) : null;
 // the one who spoke up moves a step in their trust in you, mostly (camp.spoke)
-const spokeStep = (sp, d) => chance(RULES.camp.spoke) && nudge(sp, d);
+const spokeStep = (sp, d) => chance(RULES.camp.spoke) && Ties.moveTrust(sp, d);
 
 // ---------- the moments: who speaks, and how each onlooker may take it ----------
 const STIRS = {
@@ -234,7 +231,7 @@ const STIRS = {
     // a mourner blames you for it, the less likely the more they trust you; or turns to you to put it right
     spoke: (sp, o, pr) => {
       o.bitter = chance(clamp(pr.bitter - pr.trusting * sp.rapport));
-      if (o.bitter) nudge(sp, -1);
+      if (o.bitter) Ties.moveTrust(sp, -1);
     },
     react: (l, o, pr) => [
       'trust',
@@ -243,7 +240,7 @@ const STIRS = {
       pr.p +
         (Ties.fond(l, o.about) ? pr.friend : 0) +
         pr.late * (S.day - 1) +
-        (S.confidedIn && S.confidedIn.includes(o.about) ? pr.confided : 0) -
+        (Ties.confidedIn(o.about) ? pr.confided : 0) -
         (S.stats.right ? pr.progress : 0) -
         (Ties.friend(l) ? pr.loyal : 0)
     ],
@@ -452,12 +449,12 @@ const STIRS = {
       const h = o.about,
         lh = ofPair(l, h),
         ls = ofPair(l, o.by),
-        hi = pastBetween(l.id, h),
-        prude = TP(l).prude + (VOWS.includes(l.id) ? pr.vows : 0),
+        hi = Ties.pastBetween(l.id, h),
+        prude = TP(l).prude + (Ties.vowed(l) ? pr.vows : 0),
         easy = pr.easy * Math.max(0, -prude),
         believe = pr.believe * ls + pr.credit * credit(o.by),
         past = pr.quarrel * hi.quarrels + pr.suspect * hi.suspects + (hi.accused || hi.accusedBy ? pr.named : 0) - pr.feast * hi.feasts,
-        jealous = flirtsWithYou(l) || flirtsWith(l.id, h) ? pr.jealous : 0;
+        jealous = Ties.sweetOnYou(l) || Ties.sweetOn(l.id, h) ? pr.jealous : 0;
       const her = o.bad
           ? eitherWay(
               'like',
@@ -488,11 +485,11 @@ const STIRS = {
         s = C(o.by);
       if (!isFree(h) || !isFree(s)) return null;
       if (!o.bad)
-        return chance(pr.thanks) && likeShift(h.id, s.id, 1)
+        return chance(pr.thanks) && Ties.shiftLike(h.id, s.id, 1)
           ? bi(`${h.short} gives ${s.short} a grateful look`, `${ru.c(h)} с благодарностью смотрит на ${ru.c(s, 'a')}`)
           : null;
       S.log.visit.shamed = S.day; // (and it shows in her face today: people/manner.js, shamed)
-      return chance(pr.hurt) && likeShift(h.id, s.id, -1)
+      return chance(pr.hurt) && Ties.shiftLike(h.id, s.id, -1)
         ? bi(`${h.short} will not look at ${s.short}`, `${ru.c(h)} не смотрит на ${ru.c(s, 'a')}`)
         : null;
     },
@@ -558,7 +555,7 @@ function resent(who, of, p) {
     by = C(of);
   if (!isFree(c) || !chance(p)) return null;
   suspect(c.id, by.id, 1);
-  likeShift(c.id, by.id, -1);
+  Ties.shiftLike(c.id, by.id, -1);
   return bi(`${c.short} will not look at ${by.short}`, `${ru.c(c)} не смотрит на ${ru.c(by, 'a')}`);
 }
 // The truth about someone is out, as the camp sees it (exposed as a cultist, or proven innocent: sent away after an

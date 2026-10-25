@@ -115,7 +115,7 @@ function leaning(o, x, cs) {
     cs +
     VR.trust * o.rapport +
     word(o) -
-    VR.like * likes(o.id, x.id) +
+    VR.like * Ties.likes(o.id, x.id) +
     VR.fear * Math.min(S.stats.taken, VR.fearCap) -
     VR.anger * (S.anger || 0) -
     VR.again * wearyOf()
@@ -217,7 +217,7 @@ function refusedInquiry(x, v) {
   // who says it: the fondest of the accused among those who spoke against it, for all of them (or, the only one there
   // besides you and the accused, for themself); else, nobody having spoken against it, one of those who said nothing,
   // breaking the silence
-  const likedBest = ids => ids.slice().sort((a, b) => likes(b, x.id) - likes(a, x.id))[0],
+  const likedBest = ids => ids.slice().sort((a, b) => Ties.likes(b, x.id) - Ties.likes(a, x.id))[0],
     against = likedBest(v.against),
     sp = C(against || likedBest(v.silent)),
     many = v.back.length + v.against.length + v.silent.length > 1,
@@ -287,10 +287,10 @@ function grudgeOf(c) {
     soft = ['honest', 'conscientious'].includes(temperOf(c)) || Ties.friend(c);
   if (chance(RULES.scale.rarest)) return 'none';
   if (chance(VR.forgive * (soft ? 2 : 1))) {
-    trustDown(c);
+    Ties.moveTrust(c, -1, 'deed');
     return 'half';
   }
-  c.rapport = chance(VR.grudge) ? -2 : Math.min(c.rapport, -1);
+  Ties.setTrust(c, chance(VR.grudge) ? RULES.ties.hostile : Math.min(c.rapport, RULES.ties.against));
   return 'full';
 }
 // after an inquiry: the camp's anger moves, about so far; after a wrong one, an angry camp may hold no more

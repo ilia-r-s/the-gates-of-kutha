@@ -12,10 +12,10 @@
 //                                   visions, greeted (how they greet you this slot, settled once a slot:
 //                                   people/manner.js); order: the seven in a new order each season, so that no one comes
 //                                   first by habit (the casebook lists them in the cast's own order: castOrder)
-//   temper, like, rap0              temperaments, sympathies, and trust at the start (people/tempers.js, social.js)
+//   temper, like, rap0              temperaments, sympathies, and trust at the start (people/tempers.js, ties.js)
 //   sus, said, credit, stirs        who suspects whom; what was said before everyone, and whose word has been proven;
 //                                   the camp's public moments (people/camp.js); confidedIn: whom you have confided in
-//   flirt                           flirtatious streaks dealt at the start (people/flirt.js)
+//   flirt                           flirtatious streaks dealt at the start (people/ties.js; shown: people/flirt.js)
 //   witness, witnessTold, witnessNamed   what the thief saw; whom he named last, and everyone he has named;
 //                                   witnessMore: whether he would name another he saw (people/thief.js)
 //   recantTried                     the day each hidden Dreamer or Watcher last had their chance to come clean to a
@@ -67,13 +67,6 @@ const freeCult = () => freeChars().filter(c => c.role === 'cult');
 // the evening: the last slot of a full day (RULES.start.slots), when the camp is gathered and an inquiry may be held
 const eveningSlot = () => RULES.start.slots - 1,
   atEvening = () => S.slot === eveningSlot();
-// Your friends: those outside the cult still at the dig who trust you (2 or more); your enemies: those outside it still
-// here who have turned against you since the start (someone who never liked you and still does not was not your doing);
-// friends lost: those who trusted you whom the night took (not one dead by your own hand: game/deed.js). For the ending,
-// and for the cult's reading of you as the season goes (people/cunning.js).
-const friendsNow = () => freeChars().filter(c => c.role !== 'cult' && Ties.friend(c)),
-  enemiesNow = () => freeChars().filter(c => c.role !== 'cult' && Ties.against(c) && c.rapport < (S.rap0 ? S.rap0[c.id] : 0)),
-  friendsLost = () => S.order.map(C).filter(c => c.status === 'taken' && c.takenBy !== 'you' && Ties.friend(c));
 const has = it => S.items.includes(it);
 function gain(it) {
   const had = has(it);
@@ -108,11 +101,11 @@ function backedDown() {
 // A new season, from its seed (seed: a season to deal again; else a new one, from the page's stream: core/random.js),
 // dealt in this order (the dice are thrown in this order): the parts, first of all (dealParts); the powers and the one
 // below (freshSeason); the cast's habits and temperaments (dealCast); the powers' signs, wards and titles, and the
-// tablets (dealGods); what people claim (assignClaims), whom they like (assignLikes; campInit throws none), the
-// flirtations (assignFlirts); the night Crane died (crane0); the salt that fixes the choices made without the dice; how
-// far each of the camp takes your word (dealWord, by the salt); the season's mood (dealTenor); your own dreams
-// (dealYourDreams); the cult's patience; and last, what your background gives you (backgroundStart), so that the same
-// seed deals the same season whoever you are.
+// tablets (dealGods); what people claim (assignClaims); whom each likes, how far each trusts you, and the flirtations
+// (Ties.deal: people/ties.js; then campInit, which throws none); the night Crane died (crane0); the salt that fixes the
+// choices made without the dice; how far each of the camp takes your word (dealWord, by the salt); the season's mood
+// (dealTenor); your own dreams (dealYourDreams); the cult's patience; and last, what your background gives you
+// (backgroundStart), so that the same seed deals the same season whoever you are.
 // hardcore: the casebook keeps only the bare record, with nothing joined up for you (ui/book.js)
 function newGame(name, bg, hardcore = false, seed = null) {
   const sd = seed == null ? newSeed() : seed >>> 0;
@@ -129,9 +122,8 @@ function newGame(name, bg, hardcore = false, seed = null) {
   dealGods();
   S.revealed = {};
   assignClaims();
-  assignLikes();
+  Ties.deal();
   campInit();
-  assignFlirts();
   crane0();
   S.salt = Math.floor(rand() * 2147483648);
   dealWord();

@@ -69,10 +69,10 @@ const YOUR_DREAM = {
     can: () => freeChars().length >= 2,
     dream(night, tru) {
       const [a, b] = shuffle(freeChars()).slice(0, 2),
-        sign = v => (v >= 1 ? 1 : v <= -1 ? -1 : 0),
+        lean = (x, y) => (Ties.fond(x, y) ? 1 : Ties.dislikes(x, y) ? -1 : 0),
         flip = v => (v ? -v : pick([-1, 1]));
-      let ab = sign(likes(a.id, b.id)),
-        ba = sign(likes(b.id, a.id));
+      let ab = lean(a, b),
+        ba = lean(b, a);
       if (!tru) [ab, ba] = coin() ? [flip(ab), ba] : [ab, flip(ba)];
       const [en, rus] =
         ab > 0 && ba > 0
@@ -210,11 +210,7 @@ const YOUR_DREAM = {
 // the parts a dream may show someone keeping
 const PARTS_DREAMT = ['seer', 'warden', 'smuggler'];
 // every two at the dig, one way about, and whether the first suspects the other in earnest
-function fearPairs() {
-  const out = [];
-  freeChars().forEach(a => freeChars().forEach(b => a !== b && out.push([a, b, sus(a.id, b.id) >= 2])));
-  return out;
-}
+const fearPairs = () => Ties.eachWay(freeChars()).map(([a, b]) => [a, b, sus(a.id, b.id) >= 2]);
 // the nights there was an attack someone carried out, and you know where
 const pastScenes = () =>
   Object.keys(S.nights || {})

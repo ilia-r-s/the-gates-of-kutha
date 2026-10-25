@@ -102,14 +102,12 @@ function strongPair(sign, least) {
   const free = freeChars(),
     pairs = {},
     w = {};
-  free.forEach((a, i) =>
-    free.slice(i + 1).forEach(b => {
-      const k = a.id + ' ' + b.id,
-        x = sign * (likes(a.id, b.id) + likes(b.id, a.id));
-      pairs[k] = sign * likes(a.id, b.id) >= sign * likes(b.id, a.id) ? [a, b] : [b, a];
-      if (x >= least) w[k] = x - least + 1;
-    })
-  );
+  Ties.pairs(free).forEach(([a, b]) => {
+    const k = a.id + ' ' + b.id,
+      x = sign * (Ties.likes(a.id, b.id) + Ties.likes(b.id, a.id));
+    pairs[k] = sign * Ties.likes(a.id, b.id) >= sign * Ties.likes(b.id, a.id) ? [a, b] : [b, a];
+    if (x >= least) w[k] = x - least + 1;
+  });
   const all = Object.keys(pairs);
   if (all.length && chance(RULES.events.mislead)) return pairs[pick(all)];
   return Object.keys(w).length ? pairs[wpick(w)] : null;
@@ -171,7 +169,7 @@ const EVENT_DO = {
       .filter(() => chance(RULES.events.coffee)); // (a cup of coffee warms most people, not all)
     if (!c.length)
       return `<p>${bi('The talk is pleasant, and goes nowhere in particular.', 'Разговор приятный и ни к чему особенному не ведёт.')}</p>`;
-    c.forEach(trustUp);
+    c.forEach(x => Ties.moveTrust(x, 1, 'deed'));
     const ids = c.map(x => x.id),
       many = ids.length > 1;
     return `<p class="gain">${bi(`${nameList(ids)} sat beside you and talked, and ${many ? 'trust' : 'trusts'} you more now`, `${nameListRu(ids)}: долгий разговор за чашкой кофе. Теперь ${many ? 'они доверяют' : ru.gs(c[0], 'он доверяет', 'она доверяет')} вам больше`)}</p>`;
@@ -262,7 +260,7 @@ const EVENT_DO = {
     const c = freeChars().filter(o => o.rapport < RULES.scale.trustMax);
     if (!c.length || !chance(RULES.events.feast)) return h; // (a seat beside you at the feast warms most people, not all)
     const x = pick(c);
-    trustUp(x);
+    Ties.moveTrust(x, 1, 'deed');
     return (
       h +
       `<p class="gain">${bi(`${x.short} sat beside you at the feast, and trusts you more now`, `${ru.c(x)} ${ru.gs(x, 'сидел', 'сидела')} рядом с вами на пиру и теперь доверяет вам больше`)}</p>`

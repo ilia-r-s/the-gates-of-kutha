@@ -987,7 +987,7 @@ function fxCamp({ f, r, add }) {
     });
   S.order
     .map(C)
-    .filter(c => c.status === 'present' && flirtsWithYou(c))
+    .filter(c => c.status === 'present' && Ties.sweetOnYou(c))
     .forEach(c =>
       add(
         'n',

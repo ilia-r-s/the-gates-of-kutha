@@ -327,7 +327,7 @@ const SCRIPT = () => {
   );
   // what people say of their own feelings, and the light touch of flirtation
   const woman = people.find(c => c.p === 'she'),
-    man = people.find(c => c.p === 'he' && !VOWS.includes(c.id));
+    man = people.find(c => c.p === 'he' && !Ties.vowed(c));
   S.flirt[woman.id].you = true;
   S.flirt[man.id][woman.id] = true;
   S.like[man.id][woman.id] = 2;
@@ -982,7 +982,7 @@ const SCRIPT = () => {
   her.rapport = 3;
   const keepR = { ...RULES.flirt.romance };
   Object.assign(RULES.flirt.romance, { you: [1, 1], pair: 1, mourn: 1 });
-  const him = people.find(c => c.p === 'he' && c.role !== 'cult' && !VOWS.includes(c.id) && c.id !== her.id),
+  const him = people.find(c => c.p === 'he' && c.role !== 'cult' && !Ties.vowed(c) && c.id !== her.id),
     she2 = people.find(c => c.p === 'she' && c.id !== her.id);
   [him, she2].forEach(c => {
     c.status = 'present';

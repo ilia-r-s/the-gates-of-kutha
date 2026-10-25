@@ -60,7 +60,7 @@ function talkNotes(c, ...said) {
     m = mienNote(c),
     friend = Ties.friend(c),
     comfort = consoled(c),
-    w = !comfort && chance(TP(c).chat + RULES.talk.warmth + cultOf(c, 'charm')) && nudge(c, 1),
+    w = !comfort && chance(TP(c).chat + RULES.talk.warmth + cultOf(c, 'charm')) && Ties.moveTrust(c, 1),
     steady = friend && chance(RULES.talk.company) && regain(1);
   return [
     habit,
@@ -241,7 +241,7 @@ const DIALOG = {
       if (c.role === 'cult' && chance(RULES.confide.alerts)) S.alerted = true;
       // not everyone wants your confidence: it depends how they feel about you, and who they are
       if (!TAKES_CONFIDENCE.roll(c)) {
-        if (temperOf(c) === 'suspicious' && chance(RULES.talk.sourConfide)) nudge(c, -1);
+        if (temperOf(c) === 'suspicious' && chance(RULES.talk.sourConfide)) Ties.moveTrust(c, -1);
         const k = tellOne('confideNo', [0, 1]);
         return {
           you,
@@ -254,9 +254,7 @@ const DIALOG = {
           note: bi(...tellOne('nothingBack', SAY.nothingBack)(c))
         };
       }
-      trustUp(c);
-      S.confided[c.id] = (S.confided[c.id] || 0) + 1;
-      if (!S.confidedIn.includes(c.id)) S.confidedIn.push(c.id);
+      Ties.confide(c);
       ripple(c, 'confided');
       const tc = tellOne('confideSay', CONFIDE_SAY);
       let them = bi(tc, fmtR(R(tc), { s: c }));
@@ -302,7 +300,8 @@ const DIALOG = {
       ripple(c, 'pressed');
       if (!S.log.pressedWho.includes(c.id)) S.log.pressedWho.push(c.id);
       const before = c.rapport;
-      if (chance(RULES.talk.pressCost)) trustDown(c); // it costs trust, whoever they are and whatever comes of it, mostly
+      // it costs trust, whoever they are and whatever comes of it, mostly
+      if (chance(RULES.talk.pressCost)) Ties.moveTrust(c, -1, 'deed');
       // a story broken may be given up: a part claimed that is not theirs (the cult's as anyone's, in the same words), or
       // a true part hidden (people/claims.js, recantPressed); the thief's is given up with his trade (below)
       const rp = ok && c.role !== 'smuggler' && recantPressed(c);
@@ -526,7 +525,7 @@ function whomToBlame(c, others) {
           t => t.from === o.id && t.about === c.id && (t.kind === 'distrust' || (t.kind === 'vision' && t.verdict === 'cult'))
         )
     );
-    return { target: k === 'calculating' && accusers.length ? pick(accusers) : pickByLike(c, inno, -1) };
+    return { target: k === 'calculating' && accusers.length ? pick(accusers) : Ties.pickByLike(c, inno, -1) };
   }
   if (smug && (k === 'honest' || k === 'conscientious') && chance(RULES.talk.honestTip)) return { tip: smug };
   return { target: innocentBlames(c, others) };
@@ -549,7 +548,7 @@ function innocentBlames(c, others) {
   if (top && chance(RULES.talk.nameSuspect)) return top;
   if (cultNotFriends.length && chance(TP(c).blameAcc + (c.role === 'smuggler' ? RULES.talk.smugglerSight : 0))) return pick(cultNotFriends);
   const pool = chance(RULES.scale.rarest) ? others : notFriends; // (hardly ever, out of sorts, even a fond friend)
-  return pool.length ? pickByLike(c, pool, -1) : null;
+  return pool.length ? Ties.pickByLike(c, pool, -1) : null;
 }
 DIALOG.title = {
   label: () => bi('Ask what an old title means', 'Спросить, что значит древний титул'),

@@ -5,79 +5,8 @@
 // it together: rumours, grief, a friend's word, a confession (people/pretences.js), and the day's talk.
 
 // ---------- who likes whom ----------
+// (dealt, moved and asked about by the ties: people/ties.js)
 const cultPair = (a, b) => a.role === 'cult' && b.role === 'cult';
-function assignLikes() {
-  S.like = {};
-  S.order.forEach(a => {
-    S.like[a] = {};
-  });
-  S.order.forEach((a, i) =>
-    S.order.slice(i + 1).forEach(b => {
-      const v = +wpick(LIKE_W),
-        w = chance(RULES.likes.mutual) ? v : +wpick(LIKE_W),
-        pact = cultPair(C(a), C(b)) && chance(RULES.likes.pact) ? 1 : 0;
-      S.like[a][b] = Math.min(2, v + pact);
-      S.like[b][a] = Math.min(2, w + pact);
-    })
-  );
-  // and how each of them feels about you when you arrive
-  S.rap0 = {};
-  S.order.forEach(id => {
-    const c = C(id),
-      t = TP(c);
-    let r = +wpick(RULES.likes.toYou);
-    if (chance(t.warm)) r++;
-    if (chance(t.sour)) r--;
-    c.rapport = Math.max(RULES.scale.trustMin, Math.min(RULES.scale.talkMax, r));
-    S.rap0[id] = c.rapport;
-  });
-  S.rumors = [];
-  S.pending = [];
-}
-const likes = (a, b) => (S.like && S.like[a] ? S.like[a][b] || 0 : 0);
-// a's liking for b moves a step (d), from cannot bear (−2) to fond (2); false if it could not move (people/camp.js:
-// resent, and what the camp makes of a night in your tent, STIRS.scandal)
-function likeShift(a, b, d) {
-  if (!S.like || !S.like[a]) return false;
-  const v = Math.max(-2, Math.min(2, likes(a, b) + d));
-  if (v === likes(a, b)) return false;
-  S.like[a][b] = v;
-  return true;
-}
-// What has passed between two of the camp, as far as anyone could see: quarrels between them and feasts they sat
-// through together (game/events.js), how far a suspects b (people/camp.js), and whether either named the other guilty
-// before everyone (S.said: accused, a named b; accusedBy, b named a). An old score colours how someone takes what they
-// hear (people/camp.js, STIRS.scandal).
-function pastBetween(a, b) {
-  const pair = t => (t.about === a && t.verdict === b) || (t.about === b && t.verdict === a),
-    named = (x, y) => S.said.some(z => z.by === x && z.about === y && z.verdict === 'cult');
-  return {
-    quarrels: S.testimony.filter(t => t.kind === 'quarrel' && pair(t)).length,
-    feasts: S.testimony.filter(t => t.kind === 'feast' && pair(t)).length,
-    suspects: sus(a, b),
-    accused: named(a, b),
-    accusedBy: named(b, a)
-  };
-}
-// someone from a pool, leaning toward those the chooser feels strongly about: sign -1 seeks out the disliked, +1 the liked
-function pickByLike(from, pool, sign) {
-  if (!pool.length) return null;
-  const w = {};
-  pool.forEach(o => {
-    w[o.id] = Math.max(RULES.likes.floor, 1 + RULES.likes.pull * sign * likes(from.id, o.id));
-  });
-  return C(wpick(w));
-}
-// move someone's feeling for you one step if it can move; talk alone never makes anyone devoted, or worse than hostile
-function nudge(o, d) {
-  if ((d > 0 && o.rapport >= RULES.scale.talkMax) || (d < 0 && o.rapport <= RULES.scale.trustMin)) return false;
-  o.rapport += d;
-  return true;
-}
-// trust moved by what happens rather than by talk: up as far as devoted, down as far as hostile
-const trustUp = c => (c.rapport = Math.min(RULES.scale.trustMax, c.rapport + 1)),
-  trustDown = c => (c.rapport = Math.max(RULES.scale.trustMin, c.rapport - 1)),
-  trustOf = c => Math.max(RULES.scale.trustMin, Math.min(RULES.scale.trustMax, c.rapport));
 // The night's victim: a cultist hesitates over someone they like and not over someone they don't; the cult would
 // rather take the people who stand by you, and those who have begun to suspect one of its own, and would rather spare
 // someone the camp already suspects, who is more use to it alive.
@@ -88,7 +17,7 @@ function victimWeights(npcs) {
   npcs.forEach(v => {
     let x = 1 + vw.yourFriend * Math.max(0, v.rapport) * cultTurns('confidant'); // (your friends the more, once it knows you lean on them)
     cult.forEach(k => {
-      x *= (1 - vw.cultLike * likes(k.id, v.id)) * (1 + vw.suspects * sus(v.id, k.id));
+      x *= (1 - vw.cultLike * Ties.likes(k.id, v.id)) * (1 + vw.suspects * sus(v.id, k.id));
     });
     x *= 1 - vw.scapegoat * suspectedBy(v.id).length;
     w[v.id] = Math.max(vw.floor, x);
@@ -105,7 +34,7 @@ const TAKES_CONFIDENCE = odds('takes your confidence', [
   ['+ trust in you', c => RULES.confide.trust * c.rapport],
   ['+ temperament', c => TP(c).confide],
   ['+ the cult, to an occultist', c => cultOf(c, 'listen')],
-  ['- confidences taken already', c => RULES.confide.again * ((S.confided && S.confided[c.id]) || 0)],
+  ['- confidences taken already', c => RULES.confide.again * Ties.confidences(c)],
   ['clamp', () => [RULES.confide.min, RULES.confide.max]]
 ]);
 
@@ -138,8 +67,8 @@ function gossipLine(s, not = [], sure = false, heard = false) {
   const y = chance(RULES.gossip.you) && thinksGossip(s, pool, sure, heard);
   if (y) return y;
   if (pool.length < 2 || chance(RULES.gossip.temper)) {
-    const t = pickByLike(s, pool, coin() ? -1 : 1),
-      l = likes(s.id, t.id),
+    const t = Ties.pickByLike(s, pool, coin() ? -1 : 1),
+      l = Ties.likes(s.id, t.id),
       real = temperOf(t);
     let v = real;
     if (!sure && !chance(TP(s).gossipTrue - RULES.gossip.likeBias * Math.abs(l)))
@@ -148,13 +77,13 @@ function gossipLine(s, not = [], sure = false, heard = false) {
     // (no cultist speaks of what it feels for the other: feelRemark)
     // (an aside about one they are taken with, mostly; now and then about one they are not: flirt.asideFalse)
     const aside =
-      !cultPair(s, t) && (flirtsWith(s.id, t.id) ? chance(RULES.flirt.aside) : mayFlirt(s, t) && chance(RULES.flirt.asideFalse));
+      !cultPair(s, t) && (Ties.sweetOn(s.id, t.id) ? chance(RULES.flirt.aside) : Ties.mayFlirt(s, t) && chance(RULES.flirt.asideFalse));
     return { t, text: tellOne('said-' + v, TEMPER_SAID[v])(t) + (aside ? flirtAside(t) : '') };
   }
   // a friendship or a feud, as the speaker sees it
   const a = pick(pool),
     b = pick(pool.filter(o => o.id !== a.id)),
-    real = likes(a.id, b.id) + likes(b.id, a.id);
+    real = Ties.likes(a.id, b.id) + Ties.likes(b.id, a.id);
   let close = real >= 2 ? true : real <= -2 ? false : null;
   // a strong friendship or feud is reported, or now and then misreported; a weak one is sometimes invented
   if (!sure && !chance(TP(s).gossipTrue))
@@ -229,9 +158,9 @@ const THINKS_HEARD = {
   ]
 };
 function thinksGossip(s, pool, sure, heard) {
-  const t = pickByLike(s, pool, coin() ? -1 : 1),
-    l = likes(s.id, t.id),
-    r = trustOf(t),
+  const t = Ties.pickByLike(s, pool, coin() ? -1 : 1),
+    l = Ties.likes(s.id, t.id),
+    r = Ties.trust(t),
     real = r >= 2 ? 'good' : r <= -1 ? 'bad' : null;
   let v = real;
   if (!sure && !chance(TP(s).gossipTrue - RULES.gossip.likeBias * Math.abs(l))) {
@@ -317,18 +246,18 @@ function visitGossip(s, not, heard) {
   if (!v || !v.agreed || !v.morning || !S.chars[v.id]) return null;
   const h = C(v.id);
   if (!isFree(h) || h.id === s.id || not.includes(h.id) || !chance(G.odds * G.fade ** Math.max(0, S.day - v.day - 1))) return null;
-  const l = likes(s.id, h.id),
-    tr = trustOf(s),
+  const l = Ties.likes(s.id, h.id),
+    tr = Ties.trust(s),
     bad = chance(
       clamp(
         G.bad +
           G.spite * Math.max(0, -l) -
           G.friend * Math.max(0, l) +
-          (flirtsWithYou(s) || flirtsWith(s.id, h.id) ? G.jealous : 0) +
+          (Ties.sweetOnYou(s) || Ties.sweetOn(s.id, h.id) ? G.jealous : 0) +
           G.foe * Math.max(0, -tr) -
           G.ally * Math.max(0, tr - 2) +
           TP(s).prude +
-          (VOWS.includes(s.id) ? G.vows : 0)
+          (Ties.vowed(s) ? G.vows : 0)
       )
     ),
     k = bad ? 'bad' : 'kind';
@@ -389,7 +318,7 @@ function breakfastBlame() {
     t = busFor(s, others); // (the other of the cult, once it looks lost, by one ruthless enough)
     if (!t) {
       if (!inno.length || !chance(TP(s).frame)) return '';
-      t = pickByLike(s, inno, -1);
+      t = Ties.pickByLike(s, inno, -1);
     }
   } else t = innocentBlames(s, others);
   return t ? blameAloud(s, t) : '';
@@ -470,11 +399,11 @@ const FEEL_FACE = { like: ['warm', 'smile'], dislike: ['cold', 'neutral'], flirt
 const feelShows = k => ({ like: RULES.manner.warm[1], dislike: RULES.manner.cold[0], flirt: RULES.manner.flirt })[k];
 function feelRemark(c) {
   const pool = freeChars().filter(o => o.id !== c.id && !cultPair(c, o));
-  const taken = pool.filter(o => flirtsWith(c.id, o.id)),
-    strong = pool.filter(o => Math.abs(likes(c.id, o.id)) >= 2);
+  const taken = pool.filter(o => Ties.sweetOn(c.id, o.id)),
+    strong = pool.filter(o => Math.abs(Ties.likes(c.id, o.id)) >= 2);
   const t = taken.length && chance(RULES.flirt.feel) ? pick(taken) : strong.length ? pick(strong) : null;
   if (!t) return null;
-  const own = flirtsWith(c.id, t.id) ? 'flirt' : Ties.fond(c.id, t.id) ? 'like' : 'dislike',
+  const own = Ties.sweetOn(c.id, t.id) ? 'flirt' : Ties.fond(c.id, t.id) ? 'like' : 'dislike',
     k = chance((1 - TP(c).gossipTrue) * RULES.talk.feelFalse) ? (own === 'dislike' ? 'like' : 'dislike') : own;
   addTest(c.id, t.id, 'feel', k);
   const face = chance(Math.min(RULES.scale.most, feelShows(k) * showMul(c)))
@@ -549,7 +478,7 @@ function gossipAboutYou() {
     .filter(o => o.id !== s.id && Ties.fond(o.id, s.id))
     .forEach(o => {
       const p = (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood) * (heavy ? RULES.camp.heavy : 1);
-      if (moved.length < RULES.camp.cap && chance(Math.min(RULES.scale.most, p)) && nudge(o, bad ? -1 : 1)) moved.push(o.id);
+      if (moved.length < RULES.camp.cap && chance(Math.min(RULES.scale.most, p)) && Ties.moveTrust(o, bad ? -1 : 1)) moved.push(o.id);
     });
   S.rumors.push({ day: S.day, kind: bad ? 'bad' : 'good', by: s.id, up: bad ? [] : moved, down: bad ? moved : [] });
   return (
@@ -578,7 +507,7 @@ function deedMoves(kind, o, c, l, k = 1) {
   if (kind === 'confided') return l >= 1 && chance(U.confideFriend * l) ? 1 : 0;
   // a night in your tent: a friend of hers takes it well or badly, as it falls; one taken with her, badly (rival); a
   // woman turned away: her friends think the less of you for it
-  if (kind === 'visited') return flirtsWith(o.id, c.id) && chance(U.rival) ? -1 : l >= 1 && chance(U.visitFriend * l) ? pick([-1, 1]) : 0;
+  if (kind === 'visited') return Ties.sweetOn(o.id, c.id) && chance(U.rival) ? -1 : l >= 1 && chance(U.visitFriend * l) ? pick([-1, 1]) : 0;
   return l >= 1 && chance(U.visitFriend * l) ? -1 : 0;
 }
 function rumorsOfYou() {
@@ -592,8 +521,8 @@ function rumorsOfYou() {
     freeChars()
       .filter(o => o.id !== c.id)
       .forEach(o => {
-        const d = deedMoves(r.kind, o, c, likes(o.id, c.id), r.strength || 1);
-        if (d && nudge(o, d)) {
+        const d = deedMoves(r.kind, o, c, Ties.likes(o.id, c.id), r.strength || 1);
+        if (d && Ties.moveTrust(o, d)) {
           (d > 0 ? up : down).push(o.id);
           net[o.id] = (net[o.id] || 0) + d;
         }
@@ -633,11 +562,9 @@ function tipLine(t) {
 // is named, unless they spoke.
 function mourners(victim) {
   const who = freeChars().filter(c => Ties.fond(c.id, victim) && chance(RULES.morning.mourn));
-  who.forEach(c => {
-    S.mourning[c.id] = { day: S.day, victim };
-  });
+  who.forEach(c => Ties.mourn(c, victim));
   const last = S.stirs[S.stirs.length - 1],
-    m = who.length ? C(wpick(Object.fromEntries(who.map(c => [c.id, likes(c.id, victim) ** 2])))) : null;
+    m = who.length ? C(wpick(Object.fromEntries(who.map(c => [c.id, Ties.likes(c.id, victim) ** 2])))) : null;
   if (!m || (last && last.kind === 'grief' && last.by === m.id)) return '';
   const v = C(victim);
   return `<p class="notice">${bi(...tellOne('hardest', SAY.hardest)(m, v))}</p>`;
@@ -645,10 +572,9 @@ function mourners(victim) {
 // Sitting with someone who mourns the night's dead, the day it happened: it may comfort them, and they will not forget
 // it.
 function consoled(c) {
-  const m = S.mourning && S.mourning[c.id];
+  const m = Ties.mourning(c);
   if (!m || m.day !== S.day || m.done || !chance(RULES.talk.comfort)) return null;
-  m.done = true;
-  trustUp(c);
+  Ties.comfort(c);
   const v = C(m.victim);
   return bi(
     `You sit with ${c.short} a while and talk about ${v.short}. ${EP.He(c)} will not forget it.`,

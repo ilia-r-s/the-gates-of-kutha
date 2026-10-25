@@ -1,38 +1,11 @@
 // ===================== FLIRTATION: a light touch, now and then =====================
-// Dealt once, at the start of a season: each woman may have a flirtatious streak toward you, and anyone may toward a
-// particular person of the other sex. It shows only while the feeling holds (her trust in you; their liking for the
-// other) and comes back if the feeling does; and even then only now and then: in a greeting, a look as you leave, a word
-// that slips out about the other, a piece of gossip. Père Anselm keeps his vows. It may come to more: two who are sweet
-// on each other may slip out together of a night (people/alibis.js), a woman sweet on you may come to your tent
-// (people/visit.js), and either may come to a romance in the epilogue (game/fates.js).
-const VOWS = ['anselm'];
-function assignFlirts() {
-  const F = RULES.flirt;
-  S.flirt = {};
-  S.order.forEach(a => {
-    const me = C(a),
-      f = (S.flirt[a] = { you: me.p === 'she' && chance(F.you) });
-    if (VOWS.includes(a)) return;
-    S.order.forEach(b => {
-      if (b !== a && C(b).p !== me.p) f[b] = chance(F.pair);
-    });
-  });
-}
-// two who could be taken with each other at all: a man and a woman, neither of them the priest
-const mayFlirt = (a, b) => a.id !== b.id && a.p !== b.p && !VOWS.includes(a.id) && !VOWS.includes(b.id);
-const flirtsWithYou = c => !!(S.flirt && S.flirt[c.id] && S.flirt[c.id].you) && c.rapport >= RULES.flirt.trust && isFree(c);
-const flirtsWith = (a, b) => !!(S.flirt && S.flirt[a] && S.flirt[a][b]) && likes(a, b) >= RULES.flirt.like;
-// every flirtation showing just now among those still at the dig: [who, whom], whom being 'you' or a person's id
-function flirtsNow() {
-  const out = [];
-  freeChars().forEach(a => {
-    if (flirtsWithYou(a)) out.push([a.id, 'you']);
-    freeChars().forEach(b => {
-      if (b.id !== a.id && flirtsWith(a.id, b.id)) out.push([a.id, b.id]);
-    });
-  });
-  return out;
-}
+// Dealt once, at the start of a season, with the rest of the ties (people/ties.js: Ties.deal, and asked about there):
+// each woman may have a flirtatious streak toward you, and anyone may toward a particular person of the other sex. It
+// shows only while the feeling holds (her trust in you; their liking for the other) and comes back if the feeling does;
+// and even then only now and then: in a greeting, a look as you leave, a word that slips out about the other, a piece of
+// gossip. Père Anselm keeps his vows. It may come to more: two who are sweet on each other may slip out together of a
+// night (people/alibis.js), a woman sweet on you may come to your tent (people/visit.js), and either may come to a
+// romance in the epilogue (game/fates.js).
 // ---------- how it shows ----------
 const flirtGreet = c => bi(tellOne('greetFlirt-' + c.id, GREET_FLIRT[c.id]));
 const FLIRT_PARTING = [
@@ -101,10 +74,8 @@ function flirtGossip(s, not = [], heard = false) {
   const ok = id => id !== s.id && !not.includes(id),
     made = chance((1 - TP(s).gossipTrue) * RULES.flirt.invent),
     f = made
-      ? freeChars()
-          .flatMap(a => freeChars().map(b => [a.id, b.id]))
-          .filter(([a, b]) => a !== b && ok(a) && ok(b) && mayFlirt(C(a), C(b)) && !flirtsWith(a, b))
-      : flirtsNow().filter(([a, b]) => ok(a) && (b === 'you' || ok(b)));
+      ? Ties.eachWay(freeChars().map(c => c.id)).filter(([a, b]) => ok(a) && ok(b) && Ties.mayFlirt(C(a), C(b)) && !Ties.sweetOn(a, b))
+      : Ties.flirtsNow().filter(([a, b]) => ok(a) && (b === 'you' || ok(b)));
   if (!f.length) return null;
   const [a, b] = pick(f),
     A = C(a);
