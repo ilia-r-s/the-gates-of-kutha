@@ -85,7 +85,10 @@ function deedPlant(t, means) {
   const can = freeChars()
     .filter(o => o.id !== t.id)
     .flatMap(o => CATS.filter(k => o.known[k]).map(k => ({ o, cat: k, val: o.known[k] })));
-  const some = shuffle(can).slice(0, 4);
+  const named = new Set(), // (one habit of each, so that no two choices read alike: the first of theirs the shuffle turns up)
+    some = shuffle(can)
+      .filter(p => !named.has(p.o.id) && named.add(p.o.id))
+      .slice(0, 4);
   show({
     kicker: dayStamp(),
     title: bi('Only one way', 'Единственный способ'),
@@ -130,10 +133,10 @@ function awayTonight(night, t) {
   const A = RULES.deed.away,
     rec = S.nights[S.day],
     tr = rec && rec.truth[t.id];
-  if (!isFree(t) || t.status !== 'present') return 'gone';
+  if (!isFree(t)) return 'gone';
   if (rec && rec.actor === t.id && chance(A.errand)) return 'errand';
   if (tr && tr.loc !== 'camp' && t.role === 'smuggler' && chance(A.thief)) return 'thief';
-  if (tr && tr.with && QUIET.includes(tr.loc) && chance(A.tryst)) return 'tryst';
+  if (tr && tr.with && rec.actor !== t.id && QUIET.includes(tr.loc) && chance(A.tryst)) return 'tryst'; // (its evening is not where it went)
   return chance(A.restless) ? 'restless' : null;
 }
 // Tonight's deed, after the cult has been: what you went through (the night's page), and what the morning will find
@@ -162,12 +165,8 @@ function deedNight(night) {
       `<p>You are a step from ${t.short}’s tent when a lamp comes up out of the dark and someone shouts. You run, and do not stop until you are inside your own tent with the flap tied.</p>`,
       `<p>Вы в шаге от палатки ${ru.c(t, 'g')}, когда из темноты поднимается лампа и кто-то кричит. Вы бежите и останавливаетесь, только завязав за собой полог собственной палатки.</p>`
     );
-    night.found.push(
-      bi(
-        `<p>Someone came for ${t.short} in the night, but a watcher in the dark drove them off.</p>`,
-        `<p>Ночью кто-то приходил за ${ru.c(t, 'i')}, но незримый страж прогнал незваных гостей.</p>`
-      )
-    );
+    // (first light tells it once, if the watcher had driven the cult off from the same one already)
+    if (!(night.target === t.id && night.saved === 'watch')) night.found.push(watchedOff(t));
     h += hurt(...D.cost.watched);
   } else if (chance(clamp(D.kill[d.means] + (S.bg === 'soldier' ? D.soldier : 0)))) {
     d.outcome = 'killed';
@@ -206,8 +205,8 @@ function deedNight(night) {
     h =
       d.means === 'revolver'
         ? bi(
-            `<p>${t.short} sits up as you raise the revolver, and the shot goes into the tent pole. You are out and away in the dark before the lamps come on, and you do not know whether ${t.p} saw your face.</p>`,
-            `<p>${ru.c(t)} садится на койке, когда вы поднимаете револьвер, и пуля уходит в шест палатки. Вы исчезаете в темноте прежде, чем загораются лампы, — и не знаете, ${ru.gs(t, 'видел', 'видела')} ли ${ru.gs(t, 'он', 'она')} ваше лицо.</p>`
+            `<p>${t.short} wakes as you raise the revolver and seizes it by the barrel, and the shot goes into the tent pole. You wrench free and are out and away in the dark before the lamps come on, and you do not know whether ${t.p} saw your face.</p>`,
+            `<p>${ru.c(t)} просыпается, когда вы поднимаете револьвер, и хватается за ствол — пуля уходит в шест палатки. Вы вырываетесь и исчезаете в темноте прежде, чем загораются лампы, — и не знаете, ${ru.gs(t, 'видел', 'видела')} ли ${ru.gs(t, 'он', 'она')} ваше лицо.</p>`
           )
         : bi(
             `<p>${t.short} wakes as you reach the cot, and fights like an animal. You get away in the dark with the knife still in your hand, and you do not know whether ${t.p} saw your face.</p>`,
@@ -215,8 +214,8 @@ function deedNight(night) {
           );
     night.found.push(
       bi(
-        `<p>${t.short} comes to breakfast with a cut across one hand, and tells anyone who will listen that someone came into ${t.pp} tent in the night ${d.means === 'revolver' ? 'and fired at ' + EP.him(t) + ' in the dark' : 'with a knife'}.</p>`,
-        `<p>${ru.c(t)} приходит к завтраку с порезанной рукой и рассказывает всем, кто готов слушать, что ночью кто-то забрался к ${ru.gs(t, 'нему', 'ней')} в палатку ${d.means === 'revolver' ? `и выстрелил в ${ru.gs(t, 'него', 'неё')} в темноте` : 'с ножом'}.</p>`
+        `<p>${t.short} comes to breakfast with ${d.means === 'revolver' ? 'a powder burn across one palm' : 'a cut across one hand'}, and tells anyone who will listen that someone came into ${t.pp} tent in the night ${d.means === 'revolver' ? 'and fired at ' + EP.him(t) + ' in the dark' : 'with a knife'}.</p>`,
+        `<p>${ru.c(t)} приходит к завтраку ${d.means === 'revolver' ? 'с пороховым ожогом на ладони' : 'с порезанной рукой'} и рассказывает всем, кто готов слушать, что ночью кто-то забрался к ${ru.gs(t, 'нему', 'ней')} в палатку ${d.means === 'revolver' ? `и выстрелил в ${ru.gs(t, 'него', 'неё')} в темноте` : 'с ножом'}.</p>`
       )
     );
     h += hurt(...D.cost.failed);
@@ -224,7 +223,7 @@ function deedNight(night) {
   }
   const reached = d.outcome === 'killed' || d.outcome === 'failed';
   // someone about at that hour (the more after a shot), or the Watcher who was watching your tent
-  const pool = freeChars().filter(o => o.id !== t.id && o.status === 'present');
+  const pool = freeChars().filter(o => o.id !== t.id);
   if (pool.length && chance(clamp(D.seen * (reached ? noise : D.quietly))))
     d.seenBy = (night.guard === 'player' && night.watcher && isFree(night.watcher) ? night.watcher : pick(pool)).id;
   if (d.seenBy)
@@ -244,7 +243,26 @@ function deedNight(night) {
       );
     }
   }
-  if (night.youOut)
+  // (the cult came for you while you were out: your tent found empty and slashed; or the Watcher by it drove it off, and
+  // knows your tent was empty, mostly, and is seen, as at any night's watch: night.seen)
+  if (night.youOut === 'guarded') {
+    const w = night.watcher,
+      seen = chance(RULES.night.seen);
+    if (seen) {
+      S.revealed[w.id] = 'warden';
+      fixMark(w);
+      if (!d.knewBy && !d.seenBy) d.seenBy = w.id;
+    }
+    h += seen
+      ? bi(
+          `<p>When you get back, ${w.short} is sitting by your tent with a lamp. “Someone came for you,” ${w.p} says, and looks at your empty cot, and then at you. “They went away again.”</p>`,
+          `<p>Когда вы возвращаетесь, у вашей палатки с лампой сидит ${ru.c(w)}. «За вами приходили, — говорит ${ru.gs(w, 'он', 'она')} и смотрит на вашу пустую койку, а потом на вас. — Они ушли».</p>`
+        )
+      : bi(
+          '<p>When you get back, the ground outside your tent is scuffed, and a lamp is going away between the tents.</p>',
+          '<p>Когда вы возвращаетесь, земля у вашей палатки истоптана, а между палатками удаляется лампа.</p>'
+        );
+  } else if (night.youOut)
     h += bi(
       '<p>When you get back, your tent has been slashed open from top to bottom and your cot torn apart. Whoever came for you tonight found nobody in it.</p>',
       '<p>Когда вы возвращаетесь, ваша палатка распорота сверху донизу, а койка разломана. Тот, кто приходил за вами этой ночью, никого в ней не застал.</p>'
@@ -272,7 +290,7 @@ function deedMorning() {
   };
   // whoever knows: the one you went for, the Watcher who drove you off, or someone you passed
   const knower = d.knewBy ? C(d.knewBy) : d.seenBy ? C(d.seenBy) : null;
-  if (knower && isFree(knower) && knower.status === 'present') {
+  if (knower && isFree(knower)) {
     const surely = !!d.knewBy, // (they saw your face; a passer-by only saw you about)
       tell = clamp(
         D.tell[Math.max(0, Math.min(3, knower.rapport + 1))] + (knower.role === 'cult' ? D.cultTells : 0) + (surely ? D.sure : 0)
@@ -281,13 +299,13 @@ function deedMorning() {
       d.caught = knower.id;
       h += bi(
         `<p class="notice">Before breakfast ${knower.short} stands up in the mess tent and says it in front of everyone: “It was the Doctor. ${surely ? 'I saw your face.' : 'I saw you, between the tents, in the small hours.'}”</p>`,
-        `<p class="notice">Перед завтраком ${ru.c(knower)} встаёт в столовой палатке и говорит это при всех: «Это был доктор. ${surely ? 'Я видел' + ru.gs(knower, '', 'а') + ' ваше лицо.' : 'Я видел' + ru.gs(knower, '', 'а') + ' вас между палатками под утро.'}»</p>`
+        `<p class="notice">Перед завтраком ${ru.c(knower)} встаёт в столовой палатке и говорит это при всех: «Это были вы, доктор. ${surely ? 'Я видел' + ru.gs(knower, '', 'а') + ' ваше лицо.' : 'Я видел' + ru.gs(knower, '', 'а') + ' вас между палатками под утро.'}»</p>`
       );
     } else if (chance(D.hint)) {
       d.hinted = knower.id;
       up(happened ? 1 : 0.5, 'hint');
       const hm = C('hamid'),
-        asked = knower.id !== hm.id && isFree(hm) && hm.status === 'present' ? ['Hamid', 'Хамида'] : ['the cook', 'повара'];
+        asked = knower.id !== hm.id && isFree(hm) ? ['Hamid', 'Хамида'] : ['the cook', 'повара'];
       h += bi(
         `<p class="notice">${knower.short} watches you over breakfast and says nothing. Later you hear ${knower.p} asked ${asked[0]} whether the Doctor sleeps well these nights.</p>`,
         `<p class="notice">${ru.c(knower)} весь завтрак смотрит на вас и молчит. Позже вы слышите, как ${ru.gs(knower, 'он', 'она')} спрашивает ${asked[1]}, хорошо ли доктор спит в последние ночи.</p>`
@@ -312,7 +330,7 @@ function deedMorning() {
   if ((d.outcome === 'killed' || d.outcome === 'failed') && d.means === 'revolver' && chance(D.shot)) up(1, 'shot');
   if (d.planted) {
     const owners = freeChars().filter(o => o.traits[d.plant.cat] === d.plant.val && o.id !== t.id);
-    const sp = pick(freeChars().filter(o => o.id !== t.id && o.status === 'present'));
+    const sp = pick(freeChars().filter(o => o.id !== t.id));
     if (sp && chance(D.plantSeen)) {
       d.plantSeen = sp.id;
       if (chance(D.plantLink)) up(1, 'plant');
@@ -350,7 +368,7 @@ function youVote() {
   const d = S.log.deed,
     J = RULES.deed.judge,
     VR = RULES.verdict,
-    crowd = freeChars().filter(o => o.status === 'present'),
+    crowd = freeChars(),
     out = { expel: [], keep: [], silent: [] },
     mood = VR.mood * tenorOf('swing') * (2 * rand() - 1),
     cs = (S.onYou || 0) + (d.caught ? J.caught : 0);

@@ -36,7 +36,10 @@ function deathHow(v, loc, byHand = false) {
   } else how = { kind: 'body', k: pick(fresh('body', DEATH_BODY[asp].length)) };
   how.asp = asp;
   told.push(how.kind + how.k);
-  const others = freeChars().filter(c => c.id !== v.id);
+  // who comes on the body at first light: anyone up and about, but not one who spent the night in your tent, nor the one
+  // you go for yourself tonight (who may not see the dawn: game/deed.js)
+  const deed = deedTonight(),
+    others = freeChars().filter(c => c.id !== v.id && !inYourTent(c.id) && !(deed && deed.id === c.id));
   how.f = others.length ? pick(others).id : null;
   const finder = how.f ? C(how.f) : null;
   how.open = pick(DEATH_FOUND.map((o, i) => i).filter(i => DEATH_FOUND[i](v, '', finder)));

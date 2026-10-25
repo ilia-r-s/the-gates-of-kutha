@@ -349,8 +349,8 @@ const RULES = {
     // ground may hold no trace at all (swept)
     watched: 0.9, watchKept: 0.9, seen: 0.9, bowl: 0.9, dreamless: 0.03, dreamTrue: 0.95, mark: 0.9,
     spared: 0.03, swept: 0.03,
-    // nor is the rest: it comes for you though you gave nothing away (you, + youDay for each day gone); a Dreamer who trusts
-    // you or promised brings you the night's dream (seerTells); a death, the power's mark, an attack on you are in the
+    // nor is the rest: it comes for you though you gave nothing away (you, + youDay for each day gone); anyone who says they
+    // dream, true or not, who trusts you or promised, brings you the night's dream (seerTells); a death, the power's mark, an attack on you are in the
     // power's own manner (manner; otherwise another power's of the season, never told, and the ending tells it), and
     // Crane was the power's own work (craneTaken; otherwise the cult's, with its mark, mostly); a night that came for you
     // brings a horror or harm in secret only at calm × the usual (and harm in secret after both a horror and the words,
@@ -370,7 +370,7 @@ const RULES = {
     betrayLess: 0.3,                            // × that, on the first night; × that, if the killer is under any suspicion itself
     smugglerTrace: 0.25, smugglerTraceOut: 0.6, // the thief's trace at the scene instead of the cult's (more when he swore a watch)
     strayTrace: 0.55,                           // ... else, if anyone else had been there that day or night, theirs, from earlier
-    seerAloud: 0.35, pretender: 0.25,           // who tells a dream at breakfast, unasked: the Dreamer; anyone who only says so
+    dreamAloud: 0.3,                            // who tells a dream aloud at breakfast, unasked: anyone who says they dream, true or not
     // the nights the cult lies low and comes for no one (people/cunning.js, liesLow): odds × the season's patience (dealt
     // by weight), × (1 + heat for each who suspects in earnest the one of it most suspected), × after the night after one
     // of it was unmasked, × (1 + ahead) once the rite is far along (start.doomWarn), × threatened while someone the camp
@@ -397,16 +397,16 @@ const RULES = {
     kinds: { verdict: 2.5, death: 1, likes: 2, habit: 1.5, part: 1, fear: 1, line: 0.7, gate: 0.4 },
     self: 0.12, youFalse: 0.25, someoneFalse: 0.7
   },
-  // the nights (people/alibis.js): where the innocent spend them, and who spends one together; what anyone says of it, and
-  // what they saw. fib: how far someone's temperament lets them lie (1 − truth).
+  // the nights (people/alibis.js): where everyone spends them, the cult as anyone (the one of it who did the night's work
+  // went out to it later: its evening is its cover), and who spends one together; what anyone says of it, and what they
+  // saw. fib: how far someone's temperament lets them lie (1 − truth).
   alibis: {
     smugglerStore: 0.5, where: { camp: 5, village: 2, store: 1, canal: 1, trench: 0.4, ziggurat: 0.4, cemetery: 0.3 }, pair: 0.6,
     tryst: 0.3, hide: 0.75,                     // two sweet on each other slip out together; each (not the honest) says they were in camp
     astray: 0.2,                                // someone alone was where it happened, by ill luck
     fear: 0.75, alibi: 0.08, fearFriend: 0.45,  // × fib: one who was there (alibi: one out alone) says they were in camp; or with a friend
-    cultPair: 0.38, cover: 0.5,                 // a cultist claims an evening with someone alone (as often as anyone claims company); a fond friend who bends the truth backs it
+    cover: 0.5,                                 // a fond friend who bends the truth backs a story of an evening together
     cultCover: 0.7,                             // a cultist named in a frightened alibi backs it: an alibi for itself
-    bold: 0.2,                                  // the attacker owns being out near the place, rather than be caught lying
     frame: 0.72,                                // × the cultist's temperament: invents a sighting of an innocent
     invent: 0.12,                               // × temperament frame: one sure of someone, or who cannot bear them, says they saw them
     knew: 0.35,                                 // × craft blurt: one who found the body, or was there, lets slip what they know
@@ -451,7 +451,7 @@ const RULES = {
     // or refuses a favour (offDay × how readily they show it; × offDayFriend with a friend)
     habit: 0.65, greedOther: 0.04, promise: 0.85, falseSlip: 0.03, falseSlipThief: 0.1, cultTip: 0.75, tipWrong: 0.08,
     dreamTell: 0.85, ownWay: 0.75, offDay: 0.05, offDayFriend: 0.4,
-    partingTrue: 0.6, partingUnpromised: 0.1,   // a dream told as you leave: by the true Dreamer; by a pretender who never promised you any
+    partingUnpromised: 0.1,                     // a dream told as you leave (partingDream: by one who promised you dreams or trusts you; this: anyone else who says they dream)
     mienWrong: 0.08,                            // your impression of someone's manner is wrong (÷ how readily their feelings show)
     feelFalse: 0.3                              // a word about their own feelings is the opposite (× how untrue their gossip runs)
   },
@@ -554,6 +554,7 @@ const RULES = {
     from: 2, odds: 0.04, perDead: 0.02, max: 0.15, hurt: 0.9, hurtMore: 0.3, strike: 0.3, kills: 0.9,
     through: { her: 0.4, you: 0.25, both: 0.15, hurt: 0.2 }, mend: 0.6, warm: 0.5, talk: 2, love: 0.25,
     found: 0.5,                                 // the cult coming for her knows where she sleeps tonight (else it finds her tent empty)
+    spares: 0.5,                                // the last of the cult in your tent lets you be (else the power below comes for you by itself)
     leaves: 0.45,                               // she is gone before you wake (one of the cult out on the night's work is not yet back)
     talked: { 0: 1, 1: 2, 2: 1 }                // how hard the camp talks of a death in your tent (by weight: hardly, readily, wildly)
   },

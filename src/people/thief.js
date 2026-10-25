@@ -14,11 +14,12 @@ const FROM_EN = {
   canal: 'the canal',
   cemetery: 'the Parthian graves'
 };
-// the night n: was the thief there to see it? (his trace at the scene means he came to rob it before it was cold)
+// the night n: was the thief there to see it? (his trace at the scene means he came to rob it before it was cold; and one
+// who spent the night in your tent saw nothing out on the tell)
 function thiefSees(n, loc, actorId, robbed) {
   const smug = freeChars().find(c => c.role === 'smuggler'),
     rec = S.nights[n];
-  if (!smug || !rec || !rec.truth[smug.id] || rec.truth[smug.id].attacked || loc === 'camp') return; // (attacked: he saw neither face)
+  if (!smug || inYourTent(smug.id, n) || !rec || !rec.truth[smug.id] || rec.truth[smug.id].attacked || loc === 'camp') return; // (attacked: he saw neither face)
   const th = RULES.thief,
     p = rec.truth[smug.id].loc === loc ? th.near : robbed ? th.robbed : th.witness;
   if (!chance(p)) return;

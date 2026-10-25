@@ -127,7 +127,7 @@ const YOUR_DREAM = {
         cat = pick(CATS),
         val = tru ? actor.traits[cat] : pick(Object.keys(TRAITS[cat].vals).filter(v => v !== actor.traits[cat])),
         clue = TRAITS[cat].vals[val].clue,
-        at = LOCS[rec.crimeLoc === 'camp' ? 'camp' : rec.crimeLoc];
+        at = LOCS[rec.crimeLoc];
       return {
         about: actor.id,
         en: `You dream of the night of an attack, ${at.at}: ${clue}, and nobody there.`,

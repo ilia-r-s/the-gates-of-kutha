@@ -146,13 +146,15 @@ function tellDream(c, d) {
 // who says they dream and does not: anyone at all, the cult's own as anyone's. Nobody outside can tell them apart by
 // what they do, only, now and then, by what they dream.
 const claimsToDream = c => c.role !== 'seer' && claimOf(c).role === 'seer';
-// the true Dreamer's dream to tell, if they own the gift: the latest about someone still here (fresh: not yet told)
+// the true Dreamer's dream to tell, if they own the gift: the latest about someone still here (fresh: not yet told);
+// once told, it is the Dreamer's dream of the day, as a made-up one is anyone else's (dreamtToday)
 function trueDream(c, fresh = false) {
   if (c.role !== 'seer' || claimOf(c).role !== 'seer') return null;
   const v = c.visions.filter(x => isFree(C(x.about)) && !(fresh && x.told)).pop();
   if (!v) return null;
   v.told = true;
-  return tellDream(c, { t: C(v.about), cult: v.cult });
+  c.dreamt = { day: S.day, d: { t: C(v.about), cult: v.cult } };
+  return tellDream(c, c.dreamt.d);
 }
 // whether someone has told a dream before everyone already, this season
 const aloudBefore = c => S.said.some(x => x.by === c.id && x.how === 'dream');
@@ -251,17 +253,16 @@ function cultDream(dec) {
   const rivals = dreamersHeard(inno);
   return told({ t: rivals.length && chance(K.atDreamer) ? pick(rivals) : fearOf(dec, inno), cult: true });
 }
-// A dream told as you take your leave: by the Dreamer, if they trust you and have one you have not heard yet, mostly
-// (talk.partingTrue); or, if they have told none today, by anyone who only claims to dream, now and then if they
-// promised you their dreams (talk.partingDream), seldom if not (partingUnpromised).
+// A dream told as you take your leave, by anyone who says they dream and has told none today, the true Dreamer by the
+// same odds as anyone who only says so: now and then if they promised you their dreams or trust you
+// (talk.partingDream), seldom if not (partingUnpromised). The true Dreamer tells one you have not heard yet, if there is
+// one; anyone else, the day's made-up dream.
 function partingDream(c) {
-  const v = c.rapport >= 1 && c.role === 'seer' && chance(RULES.talk.partingTrue) && trueDream(c, true);
-  if (v) return v;
-  if (claimsToDream(c) && !dreamtToday(c) && chance(c.promised ? RULES.talk.partingDream : RULES.talk.partingUnpromised)) {
-    const d = madeUpDream(c);
-    return d && tellDream(c, d);
-  }
-  return null;
+  if (claimOf(c).role !== 'seer' || dreamtToday(c)) return null;
+  if (!chance(c.promised || c.rapport >= 1 ? RULES.talk.partingDream : RULES.talk.partingUnpromised)) return null;
+  if (c.role === 'seer') return trueDream(c, true);
+  const d = madeUpDream(c);
+  return d && tellDream(c, d);
 }
 // Who answers for one named guilty in a dream told aloud (t, by c): anyone else here who claims to dream, the true
 // Dreamer among them, for one they would protect (a friend; for the cult, the other of it as well), as readily as they

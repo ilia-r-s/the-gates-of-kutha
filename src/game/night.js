@@ -55,7 +55,7 @@ function resolveNight() {
       m = theMorning(night);
     if (checkEnd()) return null;
     parts.push(
-      [bi('At first light', 'На рассвете'), [...night.found, diedInTentSaid(), m.grief, after, turn, ...m.first]],
+      [bi('At first light', 'На рассвете'), [after, ...night.found, diedInTentSaid(), m.grief, turn, ...m.first]],
       [bi('At breakfast', 'За завтраком'), m.breakfast],
       [bi('The day’s news', 'Новости дня'), m.news]
     );
@@ -93,7 +93,9 @@ function theNight() {
     cult: freeCult(),
     npcs: freeChars().filter(c => c.role !== 'cult'),
     falseGuard: swore(S.falseGuard), // one of the cult swore to watch your tent tonight (kept, mostly, like anyone's)
-    sworn: swore(S.falseGuard) || swore(S.fakeGuard), // someone swore to watch your tent tonight
+    // someone swore to watch your tent tonight: one of the cult, one who only says they keep watch, or the true Watcher
+    // (whose broken promise is told as anyone's)
+    sworn: swore(S.falseGuard) || swore(S.fakeGuard) || swore(S.guardPromise),
     smugOut: !!swore(S.fakeGuard) && C(S.fakeGuard).role === 'smuggler' // ... and it was the smuggler, out on business
   };
   const out = night.out,
@@ -106,10 +108,17 @@ function theNight() {
   night.quiet = !night.power && (!night.cult.length || liesLow(night));
   night.target = night.quiet ? null : chooseVictim(night);
   if (night.power && night.target !== 'player') night.why = { kind: 'power' };
-  // (the last of the cult in your tent, who let you be: if it comes for anyone tonight, it is someone else)
+  // (the last of the cult in your tent lets you be, as often as not, and if it comes for anyone tonight, it is someone
+  // else; otherwise the power below comes for you by itself, as on a night with nobody of the cult left at large, so
+  // that a night that came for you says nothing of what she is: visit.spares)
   if (night.target === 'player' && night.guest && night.guest.role === 'cult' && night.cult.length === 1 && night.npcs.length) {
-    night.target = wpick(victimWeights(night.npcs));
-    night.why = victimWhy(C(night.target), night.cult);
+    if (chance(RULES.visit.spares)) {
+      night.target = wpick(victimWeights(night.npcs));
+      night.why = victimWhy(C(night.target), night.cult);
+    } else {
+      night.power = true;
+      night.why = { kind: 'power' };
+    }
   }
   if (night.falseGuard && night.target !== 'player') S.log.keptWatch.push({ day: S.day, id: night.falseGuard });
   S.falseGuard = null;
@@ -119,7 +128,6 @@ function theNight() {
   night.promised = S.guardPromise; // (the true Watcher's promise is for tonight, like anyone's)
   S.guardPromise = null;
   night.seer = night.npcs.find(c => c.role === 'seer');
-  night.vision = night.seer && !chance(N.dreamless) ? dreamTonight(night.seer, night.target) : null; // (a night without dreams, now and then)
   night.loc = wpick(N.where); // (where the night takes anyone but you)
   night.deed = deedTonight(); // (you go out tonight yourself: game/deed.js)
   out.push(yourDream(night)); // (before anything the night has done is known: game/yourdreams.js)
@@ -135,16 +143,27 @@ function theNight() {
   }
   if (night.quiet || night.foiled) quietNight(night);
   else if (night.target === 'player' && night.deed) {
-    night.loc = 'camp'; // (you were out: it found your tent empty, and you find it so when you get back)
-    night.youOut = true;
-    S.log.attacks.push({ day: S.day, how: 'out' });
+    // you were out: whatever came found your tent empty, and you find it so when you get back; unless the Watcher by it
+    // drove it off first, all but always, and then the Watcher knows your tent was empty (game/deed.js); one who only
+    // swore to watch it slept, as on any night
+    night.loc = 'camp';
+    if (night.guard === 'player' && chance(N.watched)) {
+      night.youOut = 'guarded';
+      S.log.attacks.push({ day: S.day, how: 'guard', out: true });
+    } else {
+      night.youOut = true;
+      S.log.attacks.push({ day: S.day, how: 'out' });
+    }
     night.found.push(leaveTrace(night));
+    if (night.youOut === true && night.sworn && night.guard !== 'player') night.found.push(failedWatch(night.sworn));
   } else if (night.target === 'player') {
     night.loc = 'camp';
     out.push(attackOnYou(night));
     if (S.wounds >= S.woundsMax) return night;
-    if (night.sworn && night.guard !== 'player') out.push(failedWatch(night.sworn));
-    out.push(leaveTrace(night));
+    // (first light finds the scene by your tent; and by breakfast the camp knows that whoever swore to watch it did not,
+    // unless they spent the night in it)
+    night.found.push(leaveTrace(night));
+    if (night.sworn && night.guard !== 'player' && !inYourTent(night.sworn)) night.found.push(failedWatch(night.sworn));
   } else if (night.guest && night.target === night.guest.id) {
     night.loc = 'camp'; // (her own tent, or yours: she was in yours)
     out.push(herNight(night));
@@ -152,6 +171,8 @@ function theNight() {
   } else night.found.push(attackOnThem(night), leaveTrace(night));
   guestAccount(night); // (whether the one in your tent slipped out on the cult's work: people/visit.js)
   out.push(deedNight(night)); // (in the small hours, after the cult has been, you go yourself: game/deed.js)
+  // the Dreamer's dream of the night, of someone still here at first light (now and then a night without dreams)
+  night.vision = night.seer && isFree(night.seer) && !chance(N.dreamless) ? dreamTonight(night.seer) : null;
   if (night.quiet || night.foiled) night.found.unshift(quietSaid()); // (what first light finds, the deed told)
   // the rite grows by those of the cult still at large come the dawn, so much each, about; and the faster the longer you
   // sit still and leave it be (people/cunning.js, cultTurns: quiet)
@@ -205,7 +226,8 @@ function theMorning(night) {
     m = {
       grief: (victim ? griefFor(victim) : '') + (night.deedDead ? griefFor(night.deedDead) : ''),
       first: [chance(RULES.night.dawnSign) ? omenP(nextOmen()) : ''],
-      breakfast: [deedMorning() || deedDawn()], // (what the camp makes of the deed, and whether it judges you: game/deed.js)
+      // (what the camp makes of the deed, and whether it judges you: the morning after, or at a later dawn: game/deed.js)
+      breakfast: [S.log.deed && S.log.deed.day === S.day - 1 ? deedMorning() : deedDawn()],
       news: []
     };
   if (S.ended) return m;
@@ -288,8 +310,9 @@ function victimWhy(v, cult) {
   return v.rapport >= 2 ? { kind: 'stood' } : { kind: 'none' };
 }
 // The Watcher watches over you the night they promised to, if they trust you, mostly; otherwise over anyone at all, you
-// included, and the cult too: the Watcher cannot tell.
+// included, and the cult too: the Watcher cannot tell. The Watcher who spent the night in your tent watched nobody's.
 function chooseWatch({ watcher: w }) {
+  if (inYourTent(w.id)) return null;
   const pool = [
     'player',
     ...freeChars()
@@ -298,11 +321,12 @@ function chooseWatch({ watcher: w }) {
   ];
   return S.guardPromise === w.id && w.rapport >= 2 && chance(RULES.night.watchKept) ? 'player' : pick(pool);
 }
-// The Dreamer dreams of someone not yet dreamt of (and not of whoever the night comes for), and the dream is true,
-// almost always (muddied: the one that is not); but the god knows who has robbed it, and now and then its hand is on the
-// thief's shoulder too (dark: a dream of guilt, and no cultist). The ending tells both.
-function dreamTonight(seer, target) {
-  const cand = freeChars().filter(c => c.id !== seer.id && c.id !== target && !seer.visions.some(v => v.about === c.id));
+// The Dreamer dreams of someone not yet dreamt of who is still here at first light (whom the night came for and missed
+// as readily as anyone: a made-up dream may be of them too), and the dream is true, almost always (muddied: the one that
+// is not); but the god knows who has robbed it, and now and then its hand is on the thief's shoulder too (dark: a dream
+// of guilt, and no cultist). The ending tells both.
+function dreamTonight(seer) {
+  const cand = freeChars().filter(c => c.id !== seer.id && !seer.visions.some(v => v.about === c.id));
   if (!cand.length) return null;
   const t = pick(cand),
     clear = chance(RULES.night.dreamTrue),
@@ -390,6 +414,12 @@ function attackOnYou(night) {
   journal(bi('You were attacked in the night.', 'Ночью на вас напали.'));
   return html;
 }
+// one the night came for and a watcher in the dark saved, as first light tells it (the cult's coming, or your own)
+const watchedOff = v =>
+  bi(
+    `<p>Someone came for ${v.short} in the night, but a watcher in the dark drove them off.</p>`,
+    `<p>Ночью кто-то приходил за ${ru.c(v, 'i')}, но незримый страж прогнал незваных гостей.</p>`
+  );
 // They come for someone else: the Watcher may be there, or luck (spared: the dogs, a light, a sleeper stirring);
 // otherwise the night takes them, and they are found where it happened, in one of the power's ways. It shakes you,
 // most likely if they had come to trust you. (saved: 'watch' or 'luck', if they live)
@@ -402,16 +432,13 @@ function attackOnThem(night) {
   if (betrayer) S.betrayals.push({ day: S.day, by: betrayer, victim: v.id, saved });
   if (saved === 'watch') {
     S.log.guarded.push({ day: S.day, id: v.id });
-    return bi(
-      `<p>Someone came for ${v.short} in the night, but a watcher in the dark drove them off.</p>`,
-      `<p>Ночью кто-то приходил за ${ru.c(v, 'i')}, но незримый страж прогнал незваных гостей.</p>`
-    );
+    return watchedOff(v);
   }
   if (saved) {
     S.log.spared.push({ day: S.day, id: v.id });
     return bi(
-      `<p>Someone came for ${v.short} in the night. The pariah dogs set up a howl, lamps came on along the tents, and whoever it was was gone before anyone got there.</p>`,
-      `<p>Ночью кто-то приходил за ${ru.c(v, 'i')}. Бродячие собаки подняли вой, вдоль палаток зажглись лампы — и кто бы это ни был, он исчез прежде, чем кто-нибудь подоспел.</p>`
+      `<p>Someone came for ${v.short} in the night. The pariah dogs set up a howl, ${v.short} shouted, and by the time anyone came running there was nobody to be seen.</p>`,
+      `<p>Ночью кто-то приходил за ${ru.c(v, 'i')}. Бродячие собаки подняли вой, ${ru.c(v)} ${ru.gs(v, 'закричал', 'закричала')} — и когда люди сбежались, вокруг уже никого не было.</p>`
     );
   }
   fixMark(v);
@@ -442,6 +469,7 @@ function leaveTrace({ cult, target, loc, smugOut, betrayer, why, finder, saved, 
   rec.target = target;
   rec.why = why || null;
   rec.finder = finder || null;
+  rec.saved = saved || null; // (how the one it came for lived, if they did: people/cunning.js, blurt)
   return sceneTrace(S.day, loc, actor, target, smugOut, at);
 }
 // What the scene of night n holds (its accounts planned already), the night Crane died among them: what the page tells
@@ -532,15 +560,14 @@ function findsTray() {
 }
 // The morning after a night someone swore to watch your tent and nothing came for you, the one who swore it may tell the
 // camp they saw someone off (kept): the cult to be trusted for it, anyone else to be thanked, or because they heard
-// something in the dark and believe it; the true Watcher, who did watch as promised, as readily. Whoever doubted them may
-// think again (people/camp.js). The ending tells what the night truly held.
+// something in the dark and believe it; the true Watcher, if they did watch as promised, as readily. Whoever doubted them
+// may think again (people/camp.js). The ending tells what the night truly held.
 function keptSaid(night) {
-  const w = night.watcher,
-    // (the true Watcher who watched your tent, as promised for that night: theNight, night.promised)
-    fresh = w && night.guard === 'player' && night.promised === w.id,
-    id = night.target === 'player' ? null : night.sworn || (fresh ? w.id : null),
+  const id = night.target === 'player' ? null : night.sworn,
     a = id && C(id);
-  if (!a || !isFree(a) || a.status !== 'present' || !chance(room('talk') * RULES.night.kept)) return '';
+  // (not one who spent the night in your tent, nor the true Watcher who watched elsewhere after all)
+  if (!a || !isFree(a) || inYourTent(id, S.day - 1) || (a === night.watcher && night.guard !== 'player')) return ''; // (told at dawn: last night's)
+  if (!chance(room('talk') * RULES.night.kept)) return '';
   S.log.kept.push({ day: S.day - 1, id });
   return (
     brought(
@@ -551,42 +578,47 @@ function keptSaid(night) {
     ) + stir('kept', { about: id })
   );
 }
-// Dreams told at breakfast (people/claims.js): the Dreamer's (to you, if they trust you, or aloud to everyone), and those
-// of anyone who only says they dream, the cult's among them and as readily.
+// Dreams told at breakfast (people/claims.js), by everyone who says they dream and by the same odds, the true Dreamer and
+// anyone who only says so alike, the cult among them: brought to you before breakfast by one who promised you their
+// dreams or trusts you, mostly (seerTells), or else told aloud to everyone (dreamAloud), as the morning has room. The
+// true Dreamer's is the night's vision, if the night brought one; anyone else's, the day's made-up dream. A Dreamer who
+// hides the gift keeps the dreams to themself.
 function breakfastDreams({ seer, vision }) {
   const N = RULES.night,
     out = [],
     told = []; // who dreams aloud this morning, and what: told in no order that would give the true Dreamer away
-  // a Dreamer who hides the gift keeps the dreams to themself
-  if (seer && seer.status === 'present' && vision && claimOf(seer).role === 'seer') {
-    const d = { t: C(vision.about), cult: vision.cult };
-    if ((seer.rapport >= 1 || seer.promised) && chance(N.seerTells)) {
-      vision.told = true;
-      tellDream(seer, d);
-      const [en, rus] = dreamSaid(seer, d);
-      out.push(
-        brought(
-          bi(
-            `<p>${seer.short} finds you before breakfast, hollow-eyed. ${en}</p>`,
-            `<p>${ru.c(seer)} находит вас ещё до завтрака — с запавшими, бессонными глазами. ${rus}</p>`
-          )
-        )
-      );
-    } else if (chance(room('talk') * N.seerAloud * talkSoft())) {
-      vision.told = true;
-      S.seerPublic = true;
-      told.push(brought([seer, d]));
-    }
-  }
-  // whoever only says they dream wants to be heard (the cult, for what its dreams can do), and dreams aloud at breakfast
   freeChars()
-    .filter(c => claimsToDream(c) && c.status === 'present')
+    .filter(c => claimOf(c).role === 'seer')
     .forEach(c => {
-      if (!chance(room('talk') * N.pretender * talkSoft())) return;
-      const d = madeUpDream(c);
-      if (!d) return;
-      S.loud = c.id;
-      told.push(brought([c, d]));
+      const own = c.role === 'seer';
+      if (own && (c !== seer || !vision)) return; // (the night brought the Dreamer nothing to tell)
+      // the dream itself, once it is to be told: the vision, or one made up for the day
+      const dream = () => {
+        if (!own) return madeUpDream(c);
+        vision.told = true;
+        c.dreamt = { day: S.day, d: { t: C(vision.about), cult: vision.cult } }; // (told today: people/claims.js, dreamtToday)
+        return c.dreamt.d;
+      };
+      if ((c.rapport >= 1 || c.promised) && chance(N.seerTells)) {
+        const d = dream();
+        if (!d) return;
+        tellDream(c, d);
+        const [en, rus] = dreamSaid(c, d);
+        out.push(
+          brought(
+            bi(
+              `<p>${c.short} finds you before breakfast, hollow-eyed. ${en}</p>`,
+              `<p>${ru.c(c)} находит вас ещё до завтрака — с запавшими, бессонными глазами. ${rus}</p>`
+            )
+          )
+        );
+      } else if (chance(room('talk') * N.dreamAloud * talkSoft())) {
+        const d = dream();
+        if (!d) return;
+        if (own) S.seerPublic = true;
+        S.loud = c.id; // (the last to dream aloud: game/night.js, chooseVictim)
+        told.push(brought([c, d]));
+      }
     });
   shuffle(told).forEach(([c, d], i) => {
     const [en, rus] = dreamSaid(c, tellDream(c, d));

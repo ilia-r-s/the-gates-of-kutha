@@ -150,8 +150,8 @@ const SPITE = {
       0
     ],
     foiled: [
-      'The oil in your lamp has been watered. You notice before dark, and fetch more from the store.',
-      'Масло в вашей лампе разбавлено водой. Вы замечаете это ещё засветло и приносите масла из хранилища.'
+      'In the small hours your lamp gutters and spits: someone has watered the oil. There is a spare tin under your cot, and you sit up with it until morning.',
+      'Под утро ваша лампа начинает трещать и гаснуть: кто-то разбавил масло водой. Под койкой у вас есть запасная жестянка, и до утра вы сидите со светом.'
     ]
   },
   theft: {

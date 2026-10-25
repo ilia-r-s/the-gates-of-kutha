@@ -8,10 +8,11 @@
 // rules.js.
 const craft = c => CRAFT[temperOf(c)];
 // The trace at tonight's scene: an innocent's, laid there by the attacker: someone the attacker dislikes, never the one
-// the night took (the more readily once the cult has seen you live at the scenes: cultTurns).
+// the night took, nor one who spent the night in your tent, whom you would know was nowhere near it (the more readily
+// once the cult has seen you live at the scenes: cultTurns).
 function framedBy(actor, target) {
   if (!chance(craft(actor).plant * cultTurns('sleuth'))) return null;
-  const pool = freeChars().filter(o => o.role !== 'cult' && o.id !== target);
+  const pool = freeChars().filter(o => o.role !== 'cult' && o.id !== target && !inYourTent(o.id));
   return pool.length ? pickByLike(actor, pool, -1) : null;
 }
 const sloppy = actor => chance(craft(actor).sloppy);
@@ -109,11 +110,12 @@ function liesLow(night) {
 // ---------- what only the one who did it could know ----------
 // Asked about the night before (or, half as often, in small talk), the one who did it may let slip a detail nobody has
 // told the camp: once a night. So, less readily, may someone who knew it innocently: who found the body, or was there
-// that night by ill luck (people/alibis.js); it sounds the same, and counts as much against them.
+// that night by ill luck (people/alibis.js), the other of the cult as readily as anyone; it sounds the same, and counts
+// as much against them.
 function blurt(c, n, scale = 1) {
   const rec = S.nights[n];
   if (!rec || rec.blurted) return null;
-  const knew = rec.actor === c.id ? null : c.role !== 'cult' && (rec.finder === c.id ? 'found' : wasAbout(rec, c.id) ? 'there' : null);
+  const knew = rec.actor === c.id ? null : rec.finder === c.id ? 'found' : wasAbout(rec, c.id) ? 'there' : null;
   if ((rec.actor !== c.id && !knew) || !chance(craft(c).blurt * scale * (knew ? RULES.alibis.knew : 1))) return null;
   rec.blurted = true;
   addTest(c.id, c.id, 'blurt', knew ? `${n}:${knew}` : String(n));
@@ -160,6 +162,24 @@ function blurt(c, n, scale = 1) {
         `${ru.c(c)} вслух удивляется, зачем было нести ${ru.c(v, 'a')} так далеко от палаток. Никто не говорил, что ${ru.c(v, 'a')} несли.`
       )
     ]);
+  // the one it came for lived: something only one who was there could know of how (rec.saved: the dogs, an empty tent,
+  // a watcher in the dark; the morning told only that it happened)
+  if (v && rec.saved === 'luck')
+    return bi(
+      `${c.short} says it was the dogs at the village end that started it, and then stops. Nobody has said which dogs.`,
+      `${ru.c(c)} говорит, что первыми залаяли собаки со стороны деревни, — и осекается. Никто не говорил, какие собаки.`
+    );
+  if (v && rec.saved === 'away')
+    return bi(
+      `${c.short} asks whether anyone has seen to the loose pegs at the back of ${v.short}’s tent, and then looks as if ${c.p} wishes ${c.p} had not asked. Nobody has said how anyone got in.`,
+      `${ru.c(c)} спрашивает, поправил ли кто-нибудь расшатанные колышки у задней стенки палатки ${ru.c(v, 'g')}, — и тут же жалеет, что ${ru.gs(c, 'спросил', 'спросила')}. Никто не говорил, как туда проникли.`
+    );
+  if (v)
+    return bi(
+      `${c.short} says whoever drove them off last night carried a lamp shuttered under a coat, and then stops. Nobody has said what the watcher carried.`,
+      `${ru.c(c)} говорит, что у того, кто прогнал их прошлой ночью, лампа была прикрыта полой, — и осекается. Никто не говорил, что было у незримого стража.`
+    );
+  // (the night they came for you, and something turned them at your tent: who, only you could tell)
   return bi(
     `${c.short} asks who it was that drove them off last night, and then looks as if ${c.p} wishes ${c.p} had not asked.`,
     `${ru.c(c)} спрашивает, кто же прогнал их прошлой ночью, — и тут же жалеет, что ${ru.gs(c, 'спросил', 'спросила')}.`

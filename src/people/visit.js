@@ -15,7 +15,7 @@
 function visitTonight() {
   const VR = RULES.visit;
   if (S.log.visit || S.day < VR.from || deedTonight()) return null; // (not the night you go out yourself: game/deed.js)
-  const may = freeChars().filter(c => c.status === 'present' && flirtsWithYou(c));
+  const may = freeChars().filter(flirtsWithYou);
   if (!may.length || !chance(Math.min(VR.max, VR.odds + VR.perDead * S.stats.taken))) return null;
   return C(wpick(Object.fromEntries(may.map(c => [c.id, c.rapport]))));
 }
@@ -78,6 +78,10 @@ const guestOn = n => {
   return v && v.agreed && v.day === n && S.chars[v.id] && isFree(C(v.id)) ? v.id : null;
 };
 const visitGuest = () => (guestOn(S.day) ? C(guestOn(S.day)) : null);
+// whether id spent night n in your tent, and so was nowhere else that night: not keeping watch elsewhere, not out
+// robbing the dig, not by your tent pole, not the first to come on a body at dawn (game/night.js, people/thief.js,
+// world/deaths.js)
+const inYourTent = (id, n = S.day) => !!id && guestOn(n) === id;
 // how the evening ended, told first in the night
 function visitEvening() {
   const v = S.log.visit;
