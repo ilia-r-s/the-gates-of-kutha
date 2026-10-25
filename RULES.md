@@ -49,13 +49,18 @@ The exceptions, each for a reason:
 5. **The inquiry's verdict.** Once the camp backs an inquiry, the accused's true part comes out (a seal in their kit, or
    every answer true). As in Mafia, where a player put out shows their card, this is what anchors the deduction: without
    it you could never learn whether you were getting anywhere, and the inquiry would be a coin tossed in the dark.
-   Whether the camp backs you is a throw for every hand.
+   Whether the camp backs you is a throw for every hand. So too with what you catch with your own eyes, once the throw
+   to catch it has gone your way: one of the cult caught at your tent in the night, or turning on you below, is
+   unmasked; the Watcher seen at your tent with the lamp is the Watcher.
 6. **The cult never confesses to being the cult.** It may tell the truth about other things, slip, flinch, blurt what
    only the attacker knew, or be named by a witness; but its faith does not break of itself. One confession would end
    the mystery for nothing, and the cult is meant to be hard to find.
 7. **Presentation**: faces in the pictures, the casebook's words, the ending page's wording, the epilogues, the music.
    These are fixed by the season without the dice (`hash01`), so that drawing or reading never changes what happens;
    they decide nothing.
+8. **Who the people are.** A priest keeps his vows: Père Anselm flirts with nobody and pairs off with nobody. Flirtation
+   in the camp is only between a man and a woman, and toward you comes only from the women at the dig. These are part
+   of who the cast are, like their names.
 
 ## The season
 
@@ -561,13 +566,14 @@ and nobody believes it; the rite grows all the same. With nobody of the cult lef
 own hand: below), the rite no longer grows, but the power below comes by itself, mostly (`night.priestless`, 85%), for
 whom the cult would have chosen and as the cult would have come (the Watcher and luck may turn it as they would turn
 anyone), so that the night tells nothing of who is left; the scene holds what any scene may (the thief's trace, or that
-of someone who had been there earlier: anyone's, if nobody was about) but nothing of an attacker's own, and nobody saw
-anyone at it. The ending tells it. The
+of someone who had been there earlier: anyone's, if nobody was about) but nothing of an attacker's own, and nobody saw an
+attacker, though someone may have been seen about. The ending tells it. The
 ending says why each quiet night was quiet, when it had a reason: the camp closing in on one of it, one of it unmasked
 that evening, or the rite far enough along to risk nothing.
 
 Otherwise it chooses its victim in this order: **you**, if you confided in a cultist (`night.alerted`, 55%) or made an
-enemy of one (trust −1 or lower: `night.enemy`, 20%), but not on a night one of it swore to watch your tent (above), or
+enemy of one (trust −1 or lower: `night.enemy`, 20%), half as readily on a night one of it swore to watch your tent
+(`night.holds`, above), or
 for no reason you will ever know (`night.you`, 1%, + `youDay`, 0.5%, for each day gone); otherwise, rarely, one of its
 own (above); otherwise the dreamer the camp has heard name one of it guilty most often (`night.threat`, 70%: the true
 Dreamer, as a rule, since it goes by what was dreamt, not by who dreams true); the last pretender to dream aloud at
@@ -665,7 +671,7 @@ a dark dream, and a muddied one, for what it was, if it was told.
 **A spoiler: the game never explains any of this.**
 
 Now and then you dream yourself (`RULES.yourDreams`; `game/yourdreams.js`). Each season deals, unseen, how often a night
-brings you a dream (`rate`: never at weight 2.5, 15% at 2, 30% at 2.5, 45% at 2) and how often a dream is true
+brings you a dream (`rate`: 1% at weight 2.5, 15% at 2, 30% at 2.5, 45% at 2) and how often a dream is true
 (`truth`: 45% at weight 1.5, 60% at 2, 75% at 2, 90% at 1.5). A dream comes in the night, told before anything the
 night has done is known, and goes into your journal. It is of one kind, by weight (`kinds`; a kind that cannot be
 dreamt that night is passed over):
@@ -1008,7 +1014,7 @@ stair (`descent.company`, about 1 nerve each, whatever they are).
   likewise), or one of the two desperate acts, last resorts that owe nothing to what you learned, each to be tried once:
   shoot the hierophant (`descent.shootOne`, 25%, if only one cultist is left, else `descent.shootMore`, 6%; a miss, and
   the revolver is torn from you) or set the bitumen alight (`descent.fire`, 6%, +4% per loyal companion, −0.5% per step
-  of the rite; a fire that goes out is out). No chance down here is under 5% or over 95%, but the wrong charm's or the
+  of the rite; a fire that goes out is out). No act's chance down here is under 5% or over 95%, but the wrong charm's or the
   wrong name's. The bonus: companions (`descent.companion`, 10% each), nerve above 5 (`descent.nerve`, 2% a point; as
   much less for each point below), the favour you won between the gates (`descent.favour`, 6% each), less
   `descent.doom` (3%) for each step of the rite and `descent.extraCultist` (7%) for each cultist beyond one. A failed

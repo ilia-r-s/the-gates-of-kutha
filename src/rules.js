@@ -392,7 +392,7 @@ const RULES = {
   // coming (else yourself: youFalse), and nobody when someone is (else someone else: someoneFalse); a dream of what is to
   // come is only ever of what is sure, and true
   yourDreams: {
-    rate: { 0: 2.5, 0.15: 2, 0.3: 2.5, 0.45: 2 },
+    rate: { 0.01: 2.5, 0.15: 2, 0.3: 2.5, 0.45: 2 },   // (a season of almost no dreams: never none for certain)
     truth: { 0.45: 1.5, 0.6: 2, 0.75: 2, 0.9: 1.5 },
     kinds: { verdict: 2.5, death: 1, likes: 2, habit: 1.5, part: 1, fear: 1, line: 0.7, gate: 0.4 },
     self: 0.12, youFalse: 0.25, someoneFalse: 0.7
