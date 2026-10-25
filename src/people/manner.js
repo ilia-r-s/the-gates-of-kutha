@@ -36,7 +36,7 @@ function slotPick(c, k, w) {
 // it were, a second time over: a little more readily than anyone, never twice as readily, so that a pleasant face from
 // someone who feels nothing for you says little of what they are. roll(k): a number in [0, 1) for each try (k: mask,
 // court), from the dice or fixed for the slot.
-const courteous = c => c.rapport >= 0 && c.rapport < 2;
+const courteous = c => !Ties.against(c) && !Ties.friend(c); // (reserved or cordial)
 function masked(c, roll) {
   if (!courteous(c)) return false;
   const m = Math.min(RULES.scale.surest, Math.max(RULES.scale.rarest, MANNER[temperOf(c)].mask));
@@ -86,9 +86,9 @@ function greetNow(c) {
   // (each person's greetings of each kind gone through in turn, none twice running: core/text.js, tellOne)
   const warm = () => bi(tellOne('greetWarm-' + c.id, GREET_WARM[c.id])),
     cold = () => bi(tellOne('greetCold-' + c.id, GREET_COLD[c.id]));
-  if (c.rapport >= 1 && slotChance(c, 'warm', showP(c, 'warm'))) return { text: warm(), face: slotPick(c, 'face', FACES.warm) };
-  if (c.rapport <= -1 && slotChance(c, 'cold', showP(c, 'cold')))
-    return { text: cold(), face: c.rapport <= -2 && slotChance(c, 'angry', FACES.angry) ? 'angry' : 'cold', cool: true };
+  if (Ties.cordial(c) && slotChance(c, 'warm', showP(c, 'warm'))) return { text: warm(), face: slotPick(c, 'face', FACES.warm) };
+  if (Ties.against(c) && slotChance(c, 'cold', showP(c, 'cold')))
+    return { text: cold(), face: Ties.hostile(c) && slotChance(c, 'angry', FACES.angry) ? 'angry' : 'cold', cool: true };
   if (masked(c, k => slotRoll(c, k))) return { text: warm(), face: slotPick(c, 'face', FACES.mask) };
   // a good day or a bad one, whatever they feel about you: a friend can be curt, and someone against you civil
   if (slotChance(c, 'whim', M.whim * showMul(c)))
@@ -101,22 +101,22 @@ function greetNow(c) {
 function plainFace(c, line) {
   const M = RULES.manner;
   if (JOKES.has(line) && slotChance(c, 'joke', M.joke)) return slyOr(c, 'joke', slotPick(c, 'face', jokeFaces(c)));
-  if (c.rapport >= 2) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'warm' : 'smile';
-  if (c.rapport <= -1) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'cold' : 'neutral';
-  return c.rapport >= 1 ? 'smile' : 'neutral';
+  if (Ties.friend(c)) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'warm' : 'smile';
+  if (Ties.against(c)) return slotChance(c, 'leak', M.leak * showMul(c)) ? 'cold' : 'neutral';
+  return Ties.cordial(c) ? 'smile' : 'neutral';
 }
 // The face they make as they answer: the answer's own, warmed or cooled by how they feel about you if it shows, now and
 // then a flirtatious look, a pleasant face put on (above), or a good day or a bad one (anyone's, as at a greeting).
 function faceFor(c, e) {
   if (e === 'smile' || e === 'neutral') {
     if (flirtsWithYou(c) && chance(RULES.flirt.face * showMul(c))) return flirtFace(c);
-    if (c.rapport >= 1 && shows(c, 'warm')) return 'warm';
-    if (c.rapport <= -1 && shows(c, 'cold')) return 'cold';
+    if (Ties.cordial(c) && shows(c, 'warm')) return 'warm';
+    if (Ties.against(c) && shows(c, 'cold')) return 'cold';
     if (masks(c)) return 'smile';
     if (chance(RULES.manner.whim * showMul(c))) return wpick(chance(FACES.goodDay) ? FACES.good : FACES.bad);
     return e;
   }
-  if (e === 'thoughtful' && c.rapport <= -1 && shows(c, 'cold')) return 'cold';
+  if (e === 'thoughtful' && Ties.against(c) && shows(c, 'cold')) return 'cold';
   return e;
 }
 const WARM_PARTING = [
@@ -145,11 +145,11 @@ const COLD_PARTING = [
 // cold), for the leave line not to gainsay it: ui/talk.js], or null.
 function parting(c) {
   if (flirtsWithYou(c) && chance(RULES.flirt.parting * showMul(c))) return [pick(FLIRT_PARTING)(c), flirtFace(c), 'flirt'];
-  if (c.rapport >= 2 && chance(RULES.manner.parting * showMul(c))) {
+  if (Ties.friend(c) && chance(RULES.manner.parting * showMul(c))) {
     const w = pick(WARM_PARTING);
     return [w(c), 'warm', w === WARM_PARTING[0] ? 'walk' : 'warm'];
   }
-  if (c.rapport <= -1 && chance(RULES.talk.coldParting * showMul(c))) return [pick(COLD_PARTING)(c), 'cold', 'cold'];
+  if (Ties.against(c) && chance(RULES.talk.coldParting * showMul(c))) return [pick(COLD_PARTING)(c), 'cold', 'cold'];
   return null;
 }
 
@@ -164,8 +164,8 @@ function castMood(c) {
   if (flirtsWithYou(c) && h('flirt') < M.flirt * showMul(c) * FACES.castFlirt)
     return slyOr(c, 'flirt', hashPick(FACES.castFlirtFaces, S.salt, c.id, S.day, S.slot));
   if (suspectedBy(c.id).length >= 2 && h('sus') < FACES.suspected * showMul(c)) return h('fear') < FACES.sad ? 'sad' : 'fear';
-  if (c.rapport >= 1 && slotChance(c, 'warm', showP(c, 'warm'))) return 'warm';
-  if (c.rapport <= -1 && slotChance(c, 'cold', showP(c, 'cold'))) return 'cold';
+  if (Ties.cordial(c) && slotChance(c, 'warm', showP(c, 'warm'))) return 'warm';
+  if (Ties.against(c) && slotChance(c, 'cold', showP(c, 'cold'))) return 'cold';
   if (masked(c, h)) return slotPick(c, 'face', FACES.mask);
   if (slotChance(c, 'whim', M.whim * showMul(c))) return hashPick(FACES.castWhim, S.salt, c.id, S.day, S.slot, 'whimFace'); // (its own key: the whim's would always pick the first)
   return 'neutral';
@@ -175,7 +175,7 @@ function castMood(c) {
 function inquiryMood(c) {
   const k = hash01(S.salt, c.id, S.day, 'inquiry'),
     I = FACES.inquiry;
-  return byShare(k, c.rapport >= 2 ? I.friend : I.other);
+  return byShare(k, Ties.friend(c) ? I.friend : I.other);
 }
 // the face whose share of [0, 1) holds k, the shares taken in order: [[face, share], ...]
 function byShare(k, shares) {

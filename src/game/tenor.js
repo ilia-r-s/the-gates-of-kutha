@@ -44,7 +44,7 @@ function rateOf(s) {
 // whether a happening of a strand is heavy: the more seldom the strand comes now, the likelier
 const weighty = s => chance(TENOR.heavy * Math.max(TENOR.floor, 1 - rateOf(s)));
 // a softer measure of talk, for what talk only tilts (dreams told aloud, remarks in passing)
-const talkSoft = () => Math.min(1.4, Math.max(0.6, 0.6 + 0.4 * rateOf('talk')));
+const talkSoft = () => Math.min(TENOR.soft.max, Math.max(TENOR.soft.min, TENOR.soft.base + TENOR.soft.per * rateOf('talk')));
 // something of a strand happened (k: how much of a happening it was): the strand warms, and draws the mood toward its own
 function stirred(s, k = 1) {
   const tn = S.tenor;

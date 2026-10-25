@@ -45,7 +45,7 @@ const backToTalk = (c, st) => ({ label: bi('Back to the conversation', 'Верн
 // curt answer since, so that a third question allowed is not told as their being in no hurry: talkAfter).
 function meet(c) {
   const { g, owned } = openTalk(c),
-    st = { asked: [], lines: [{ who: 'them', text: g.text }], chill: false, limit: null, cool: !!g.cool || c.rapport <= -1 };
+    st = { asked: [], lines: [{ who: 'them', text: g.text }], chill: false, limit: null, cool: !!g.cool || Ties.against(c) };
   S.cv = { youE: 'neutral', themE: g.face, speaking: 'them' };
   if (owned) {
     st.lines.push({ who: 'them', text: owned });

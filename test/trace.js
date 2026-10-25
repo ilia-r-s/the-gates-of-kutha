@@ -8,6 +8,8 @@
 //                                              play the seasons in <ref>'s code and in the working tree side by side,
 //                                              and show the first step that differs: its words, or its dice and who
 //                                              threw them
+//   node test/trace.js why --seed=n [--name=…] every die of one season rolled on odds written as steps (core/odds.js),
+//                                              with each step's share
 //   node test/trace.js browser                 some of the same seasons played in Chromium: the kernel must agree
 const fs = require('fs');
 const os = require('os');
@@ -59,12 +61,22 @@ function explain(a, b) {
     return { ...d, then: (p[i] || '').slice(0, 400), now: (q[i] || '').slice(0, 400) };
   }
   const i = x[4].findIndex((e, j) => !y[4][j] || JSON.stringify(e.slice(0, 3)) !== JSON.stringify(y[4][j].slice(0, 3)));
-  const show = (dice, j) =>
-    dice.slice(Math.max(0, j - 2), j + 1).map(e => `${e[0]} ${JSON.stringify(e[1])} → ${JSON.stringify(e[2])}   [${e[3]}]`);
+  const show = (dice, j) => dice.slice(Math.max(0, j - 2), j + 1).map(e => dieSaid(e) + `   [${e[3]}]`);
   return { ...d, die: i, then: show(x[4], i < 0 ? x[4].length : i), now: show(y[4], i < 0 ? y[4].length : i) };
 }
 
 const report = r => console.log(JSON.stringify(r, null, 1));
+// a die as the trace keeps it: its kind, what it was asked and what came up, and the odds it was rolled on, step by
+// step, when they were written as odds (core/odds.js)
+const num = v => (typeof v === 'number' ? +v.toPrecision(6) : JSON.stringify(v));
+const dieSaid = e =>
+  `${e[0]} ${JSON.stringify(e[1])} → ${JSON.stringify(e[2])}` +
+  (e.why
+    ? `   ${e.why[0]}: ${e.why
+        .slice(1)
+        .map(([label, v]) => `${label} ${num(v)}`)
+        .join(', ')}`
+    : '');
 
 if (mode === 'record') {
   const k = kernel(),
@@ -89,6 +101,16 @@ if (mode === 'record') {
   report(
     s == null ? { seasons: seeds.length, differ: 0 } : { seasons: seeds.length, first: explain(base.season(s, true), now.season(s, true)) }
   );
+} else if (mode === 'why') {
+  // every die of one season rolled on odds written as steps, with its steps (--name: only odds whose name has it)
+  const k = kernel(),
+    s = k.season(+opt('seed') || GOLD[0], true),
+    only = opt('name');
+  const dice = [];
+  s.steps.forEach((x, i) =>
+    (x[4] || []).forEach(e => e.why && (!only || e.why[0].includes(only)) && dice.push(`step ${i}: ${dieSaid(e)}`))
+  );
+  report({ seed: s.seed, rolled: dice.length, dice: dice.slice(0, +opt('max') || 40) });
 } else if (mode === 'browser') {
   const { run, open } = require('./lib/harness');
   run(async browser => {
@@ -109,6 +131,6 @@ if (mode === 'record') {
     return { seasons: seeds.length, differ: differ.length, first: differ.slice(0, 5), errors: errors.slice(0, 5) };
   });
 } else {
-  console.error('usage: node test/trace.js record | check [quick] | diff --base=<ref> [--seed=n] | browser');
+  console.error('usage: node test/trace.js record | check [quick] | diff --base=<ref> [--seed=n] | why --seed=n [--name=] | browser');
   process.exit(2);
 }

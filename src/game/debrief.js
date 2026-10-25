@@ -1446,9 +1446,9 @@ function endNumbers(r) {
     [S.stats.taken, 'Taken by the night', 'Забрала ночь'],
     [`${L.examineOk}/${L.examine}`, 'Scenes read', 'Прочитаны следы'],
     [L.search, 'Searches', 'Поиски'],
-    [`${L.charms.length}/6`, 'Charms found', 'Найдены амулеты'],
+    [`${L.charms.length}/${S.charms.length}`, 'Charms found', 'Найдены амулеты'],
     [S.factKnown.length, 'Tablet lines', 'Строки с табличек'],
-    [`${S.omenSeen.length}/4`, 'Signs seen', 'Знамения'],
+    [`${S.omenSeen.length}/${S.signsOf[S.patron].length}`, 'Signs seen', 'Знамения'],
     [L.horror + L.dread, 'Horrors', 'Ужасы'],
     [L.attacks.length, 'Attacks on you', 'Нападения на вас'],
     [`${S.nerve}/${S.nerveMax}`, 'Nerve at the end', 'Нервы в конце'],
@@ -1461,7 +1461,7 @@ function endNumbers(r) {
       'Planted traces seen',
       'Раскрыто подброшенных следов'
     ],
-    [`${r.mR}/7`, 'Marked rightly', 'Верные отметки'],
+    [`${r.mR}/${S.order.length}`, 'Marked rightly', 'Верные отметки'],
     [L.confess, 'Confessions aloud', 'Признания вслух'],
     [r.friends.length, 'Trusted you', 'Доверяли вам'],
     [r.enemies.length, 'Turned against you', 'Против вас'],
@@ -1672,10 +1672,10 @@ function endTruth() {
   const tl = S.titlesOf[S.patron];
   return (
     bi(
-      `<p>The power under Kutha was <b>${g.name}</b>, ${g.title}. ${named ? (named === S.patron ? 'You named it correctly.' : `You named ${GODS[named].name}.`) : ''} The tablets called it ${ttEn(tl[0])} and ${ttEn(tl[1])}. Its ward, ${theItem(pw)} (“${rdEn(pw)}” in this season’s tablets), ${V(pw, 'was', 'were')} hidden ${LOCS[S.wardAt[pw]].at}${has(pw) ? `, and you had ${V(pw, 'it', 'them')}` : ''}. ${capS(theItem(S.decoys[0]))} and ${theItem(S.decoys[1])} bound nothing.</p>
-    <p>Its four signs: ${S.signsOf[S.patron].map(si => SIGN_POOL[si].short).join('; ')}.</p>${natureSay()[0]}`,
-      `<p>Под Кутой ${fem ? 'таилась' : 'таился'} <b>${ru.god(S.patron)}</b>, ${R(g.title).charAt(0).toLowerCase() + R(g.title).slice(1)}. ${named ? (named === S.patron ? `Вы назвали ${fem ? 'её' : 'его'} верно.` : `Вы назвали другое имя: ${ru.god(named)}.`) : ''} В табличках ${fem ? 'её' : 'его'} называли так: «${ttRu(tl[0])}» и «${ttRu(tl[1])}». Оберегом против ${fem ? 'неё' : 'него'} был${ru.ig(pw, '', 'а', 'о', 'и')} ${ru.item(pw)} (в табличках этого сезона — «${rdRu(pw)}»); ${ru.ig(pw, 'он лежал', 'она лежала', 'оно лежало', 'они лежали')} ${ru.loc(S.wardAt[pw], 'at')}${has(pw) ? ` — и ${ru.ig(pw, 'был', 'была', 'было', 'были')} при вас` : ''}. ${ru.Item(S.decoys[0])} и ${ru.item(S.decoys[1])} не связывали никого.</p>
-    <p>${fem ? 'Её' : 'Его'} четыре знамения: ${S.signsOf[S.patron].map(si => R(SIGN_POOL[si].short)).join('; ')}.</p>${natureSay()[1]}`
+      `<p>The power under Kutha was <b>${g.name}</b>, ${g.title}. ${named ? (named === S.patron ? 'You named it correctly.' : `You named ${GODS[named].name}.`) : ''} The tablets called it ${ttEn(tl[0])} and ${ttEn(tl[1])}. Its ward, ${theItem(pw)} (“${rdEn(pw)}” in this season’s tablets), ${V(pw, 'was', 'were')} hidden ${LOCS[S.wardAt[pw]].at}${has(pw) ? `, and you had ${V(pw, 'it', 'them')}` : ''}. ${capS(listNames(S.decoys.map(w => theItem(w))))} bound nothing.</p>
+    <p>Its ${enNum(S.signsOf[S.patron].length)} signs: ${S.signsOf[S.patron].map(si => SIGN_POOL[si].short).join('; ')}.</p>${natureSay()[0]}`,
+      `<p>Под Кутой ${fem ? 'таилась' : 'таился'} <b>${ru.god(S.patron)}</b>, ${R(g.title).charAt(0).toLowerCase() + R(g.title).slice(1)}. ${named ? (named === S.patron ? `Вы назвали ${fem ? 'её' : 'его'} верно.` : `Вы назвали другое имя: ${ru.god(named)}.`) : ''} В табличках ${fem ? 'её' : 'его'} называли так: «${ttRu(tl[0])}» и «${ttRu(tl[1])}». Оберегом против ${fem ? 'неё' : 'него'} был${ru.ig(pw, '', 'а', 'о', 'и')} ${ru.item(pw)} (в табличках этого сезона — «${rdRu(pw)}»); ${ru.ig(pw, 'он лежал', 'она лежала', 'оно лежало', 'они лежали')} ${ru.loc(S.wardAt[pw], 'at')}${has(pw) ? ` — и ${ru.ig(pw, 'был', 'была', 'было', 'были')} при вас` : ''}. ${ru.list(S.decoys.map((w, i) => (i ? ru.item(w) : ru.Item(w))))} не связывали никого.</p>
+    <p>${fem ? 'Её' : 'Его'} ${ruNum(S.signsOf[S.patron].length, 'n')} ${ruN(S.signsOf[S.patron].length, 'знамение', 'знамения', 'знамений')}: ${S.signsOf[S.patron].map(si => R(SIGN_POOL[si].short)).join('; ')}.</p>${natureSay()[1]}`
     ) +
     strayOmensSaid() +
     mannerSaid() +

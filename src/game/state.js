@@ -64,13 +64,16 @@ const freeChars = () => S.order.map(C).filter(isFree);
 // ids in the cast's own order, as the casebook and the ending list them
 const castOrder = ids => CHARS.map(c => c.id).filter(id => ids.includes(id));
 const freeCult = () => freeChars().filter(c => c.role === 'cult');
+// the evening: the last slot of a full day (RULES.start.slots), when the camp is gathered and an inquiry may be held
+const eveningSlot = () => RULES.start.slots - 1,
+  atEvening = () => S.slot === eveningSlot();
 // Your friends: those outside the cult still at the dig who trust you (2 or more); your enemies: those outside it still
 // here who have turned against you since the start (someone who never liked you and still does not was not your doing);
 // friends lost: those who trusted you whom the night took (not one dead by your own hand: game/deed.js). For the ending,
 // and for the cult's reading of you as the season goes (people/cunning.js).
-const friendsNow = () => freeChars().filter(c => c.role !== 'cult' && c.rapport >= 2),
-  enemiesNow = () => freeChars().filter(c => c.role !== 'cult' && c.rapport <= -1 && c.rapport < (S.rap0 ? S.rap0[c.id] : 0)),
-  friendsLost = () => S.order.map(C).filter(c => c.status === 'taken' && c.takenBy !== 'you' && c.rapport >= 2);
+const friendsNow = () => freeChars().filter(c => c.role !== 'cult' && Ties.friend(c)),
+  enemiesNow = () => freeChars().filter(c => c.role !== 'cult' && Ties.against(c) && c.rapport < (S.rap0 ? S.rap0[c.id] : 0)),
+  friendsLost = () => S.order.map(C).filter(c => c.status === 'taken' && c.takenBy !== 'you' && Ties.friend(c));
 const has = it => S.items.includes(it);
 function gain(it) {
   const had = has(it);

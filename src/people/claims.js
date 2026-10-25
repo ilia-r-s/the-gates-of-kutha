@@ -249,7 +249,7 @@ function cultDream(dec) {
   const friends = inno.concat(mate ? [mate] : []);
   if (!friends.length) return null;
   if (!chance(K.fakeGuilty + K.cultGuilty) || !inno.length) return told({ t: pickByLike(dec, friends, 1), cult: false });
-  if (mate && !watched && chance(K.distance * (0.5 + craft(dec).sacrifice))) return told({ t: mate, cult: true });
+  if (mate && !watched && chance(K.distance * (K.distanceBase + craft(dec).sacrifice))) return told({ t: mate, cult: true });
   const rivals = dreamersHeard(inno);
   return told({ t: rivals.length && chance(K.atDreamer) ? pick(rivals) : fearOf(dec, inno), cult: true });
 }
@@ -259,7 +259,7 @@ function cultDream(dec) {
 // one; anyone else, the day's made-up dream.
 function partingDream(c) {
   if (claimOf(c).role !== 'seer' || dreamtToday(c)) return null;
-  if (!chance(c.promised || c.rapport >= 1 ? RULES.talk.partingDream : RULES.talk.partingUnpromised)) return null;
+  if (!chance(c.promised || Ties.cordial(c) ? RULES.talk.partingDream : RULES.talk.partingUnpromised)) return null;
   if (c.role === 'seer') return trueDream(c, true);
   const d = madeUpDream(c);
   return d && tellDream(c, d);
@@ -274,7 +274,7 @@ function defenderOf(t, c) {
     shuffle(freeChars()).find(a => {
       if (a.id === t.id || a.id === c.id || claimOf(a).role !== 'seer') return false;
       const mate = a.role === 'cult' && t.role === 'cult';
-      if (!(likes(a.id, t.id) >= 1 || mate)) return false;
+      if (!(Ties.fond(a.id, t.id) || mate)) return false;
       const can = a.role === 'seer' ? a.visions.some(v => v.about === t.id && !v.cult) : !dreamtToday(a);
       return can && chance(K.defend * craft(a).defend * (mate ? mateOdds(a, t) : 1));
     }) || null

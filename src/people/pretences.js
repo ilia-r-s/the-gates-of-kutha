@@ -24,33 +24,44 @@ const rivalClaim = c => freeChars().some(o => o.id !== c.id && claimOf(o).role =
 // The chance someone drops a pretence of their own accord tomorrow morning. It is never certain: some keep a lie to
 // the very end. It grows when the story is in danger (someone else claims the same part, a dream named them, a
 // sworn watch failed, people say they are lying) and when they have come to trust you.
-function confessChance(c, takenToday) {
-  const k = pretence(c);
-  if (!k) return 0;
-  const tp = TP(c),
-    about = f => S.testimony.filter(t => t.about === c.id && f(t)).length;
-  const K = RULES.confess;
-  // one of the cult that answered a dream for the other of it (game/night.js, answerWith) holds to its story: dropped,
-  // it would undo the answer and give the two of them away; only the rash let it go as readily as anyone (TEMPERS
-  // counter, at most 1)
-  const held = c.role === 'cult' && claimOf(c).stood ? Math.min(1, tp.counter) : 1;
-  if (k === 'staged') return K.staged;
-  if (k === 'thief') return Math.min(K.cap, tp.confess * K.thief + (c.rapport >= 2 ? K.trusting : 0));
-  if (k.indexOf('hid') === 0)
-    return Math.min(K.cap, tp.confess * K.hidden + (takenToday ? K.afterDeath : 0) + (c.rapport >= 2 ? K.trusting : 0));
-  return (
-    held *
-    Math.min(
-      K.cap,
-      tp.confess +
-        (rivalClaim(c) ? K.rival : 0) +
-        (about(t => t.kind === 'vision' && t.verdict === 'cult') ? K.dreamt : 0) +
-        (about(t => t.kind === 'failwatch') ? K.caught : 0) +
-        (about(t => t.kind === 'distrust') >= 2 ? K.blamed : 0) +
-        (c.rapport >= 2 ? K.trusting : 0)
-    )
-  );
-}
+// (the testimony about someone, of one kind)
+const testimonyAbout = (c, f) => S.testimony.filter(t => t.about === c.id && f(t)).length;
+const DROPS_PRETENCE = byCase(
+  'drops a pretence',
+  c => {
+    const k = pretence(c);
+    return !k ? 'none' : k === 'staged' || k === 'thief' ? k : k.indexOf('hid') === 0 ? 'hidden' : 'false part';
+  },
+  {
+    none: odds('nothing to drop', [['base', () => 0]]),
+    staged: odds('stages coming clean, as the Watcher', [['base', () => RULES.confess.staged]]),
+    thief: odds('owns his trade', [
+      ['base', c => TP(c).confess * RULES.confess.thief],
+      ['+ trusts you', c => (Ties.friend(c) ? RULES.confess.trusting : 0)],
+      ['cap', () => RULES.confess.cap]
+    ]),
+    hidden: odds('owns the part it hid', [
+      ['base', c => TP(c).confess * RULES.confess.hidden],
+      ['+ a death today', (c, takenToday) => (takenToday ? RULES.confess.afterDeath : 0)],
+      ['+ trusts you', c => (Ties.friend(c) ? RULES.confess.trusting : 0)],
+      ['cap', () => RULES.confess.cap]
+    ]),
+    // one of the cult that answered a dream for the other of it (game/night.js, answerWith) holds to its story: dropped,
+    // it would undo the answer and give the two of them away; only the rash let it go as readily as anyone (TEMPERS
+    // counter, at most 1)
+    'false part': odds('drops a part it claimed', [
+      ['base', c => TP(c).confess],
+      ['+ another claims the part', c => (rivalClaim(c) ? RULES.confess.rival : 0)],
+      ['+ dreamt guilty', c => (testimonyAbout(c, t => t.kind === 'vision' && t.verdict === 'cult') ? RULES.confess.dreamt : 0)],
+      ['+ slept on a sworn watch', c => (testimonyAbout(c, t => t.kind === 'failwatch') ? RULES.confess.caught : 0)],
+      ['+ two or more distrust it', c => (testimonyAbout(c, t => t.kind === 'distrust') >= 2 ? RULES.confess.blamed : 0)],
+      ['+ trusts you', c => (Ties.friend(c) ? RULES.confess.trusting : 0)],
+      ['cap', () => RULES.confess.cap],
+      ['* holds a story told for the other of the cult', c => (c.role === 'cult' && claimOf(c).stood ? Math.min(1, TP(c).counter) : 1)]
+    ])
+  }
+);
+const confessChance = (c, takenToday) => DROPS_PRETENCE.p(c, takenToday);
 // Someone drops a pretence: their claim is set right and the camp's record notes it; ownUp says what it means and what
 // they say. how = pressed (you broke the story), trust (they trust you enough), aside (of their own accord, to you alone
 // before breakfast), confess (of their own accord, before everyone at breakfast) or public (before the whole camp, at
@@ -105,7 +116,7 @@ const OWN_UP = {
     const said = OWN_UP['hid-warden'](c, how, ctx);
     if (S.guardPromise === c.id) {
       S.guardPromise = null;
-      if (c.rapport >= 2) {
+      if (Ties.friend(c)) {
         if (c.role === 'cult') S.falseGuard = c.id;
         else S.fakeGuard = c.id;
       }
@@ -169,7 +180,7 @@ const OWN_UP = {
           );
     if (how === 'trust' || how === 'aside') {
       // (tonight they watch over your tent, if they trust you enough: a promise for one night, as any: game/night.js)
-      const yours = c.rapport >= 2 ? [' Tonight I will keep it by your tent.', ' Этой ночью я посижу с ней у вашей палатки.'] : ['', ''];
+      const yours = Ties.friend(c) ? [' Tonight I will keep it by your tent.', ' Этой ночью я посижу с ней у вашей палатки.'] : ['', ''];
       return lied
         ? bi(
             `What I told you before was not the truth. I sit up every night with a lamp, walking between the tents.${yours[0]}`,

@@ -95,7 +95,7 @@ function weighWord(x, vote, outcome) {
           : outcome === 'wrong'
             ? [
                 VR.doubt +
-                  (likes(o.id, x.id) >= 1 ? VR.doubtFriend : 0) -
+                  (Ties.fond(o.id, x.id) ? VR.doubtFriend : 0) -
                   (backed ? VR.doubtShared : 0) -
                   (VR.doubtCase * vote.case) / VR.caseCap,
                 -VR.loss
@@ -284,7 +284,7 @@ function refusedInquiry(x, v) {
 // Returns how it went: 'none', 'half' (they half understood) or 'full'.
 function grudgeOf(c) {
   const VR = RULES.verdict,
-    soft = ['honest', 'conscientious'].includes(temperOf(c)) || c.rapport >= 2;
+    soft = ['honest', 'conscientious'].includes(temperOf(c)) || Ties.friend(c);
   if (chance(RULES.scale.rarest)) return 'none';
   if (chance(VR.forgive * (soft ? 2 : 1))) {
     trustDown(c);

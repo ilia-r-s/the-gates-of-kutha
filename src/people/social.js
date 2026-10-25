@@ -99,17 +99,15 @@ function victimWeights(npcs) {
 // half share.
 const cultOf = (c, k) => (c.role === 'cult' && S.bg === 'occultist' ? RULES.cunning[k] : 0);
 // how readily someone takes your confidence: by their trust in you and their temperament (and the cult, a little more
-// readily, an occultist's: cultOf)
-const confideP = c =>
-  clamp(
-    RULES.confide.odds +
-      RULES.confide.trust * c.rapport +
-      TP(c).confide +
-      cultOf(c, 'listen') -
-      RULES.confide.again * ((S.confided && S.confided[c.id]) || 0),
-    RULES.confide.min,
-    RULES.confide.max
-  );
+// readily, an occultist's: cultOf), the less for each confidence they have taken already
+const TAKES_CONFIDENCE = odds('takes your confidence', [
+  ['base', () => RULES.confide.odds],
+  ['+ trust in you', c => RULES.confide.trust * c.rapport],
+  ['+ temperament', c => TP(c).confide],
+  ['+ the cult, to an occultist', c => cultOf(c, 'listen')],
+  ['- confidences taken already', c => RULES.confide.again * ((S.confided && S.confided[c.id]) || 0)],
+  ['clamp', () => [RULES.confide.min, RULES.confide.max]]
+]);
 
 // ---------- gossip: what people say of each other, true or slanted by their likes ----------
 const bondSay = (a, b, close) =>
@@ -140,7 +138,7 @@ function gossipLine(s, not = [], sure = false, heard = false) {
   const y = chance(RULES.gossip.you) && thinksGossip(s, pool, sure, heard);
   if (y) return y;
   if (pool.length < 2 || chance(RULES.gossip.temper)) {
-    const t = pickByLike(s, pool, chance(0.5) ? -1 : 1),
+    const t = pickByLike(s, pool, coin() ? -1 : 1),
       l = likes(s.id, t.id),
       real = temperOf(t);
     let v = real;
@@ -160,7 +158,7 @@ function gossipLine(s, not = [], sure = false, heard = false) {
   let close = real >= 2 ? true : real <= -2 ? false : null;
   // a strong friendship or feud is reported, or now and then misreported; a weak one is sometimes invented
   if (!sure && !chance(TP(s).gossipTrue))
-    close = close === null ? (chance(RULES.gossip.inventBond) ? chance(0.5) : null) : chance(RULES.gossip.flipBond) ? !close : null;
+    close = close === null ? (chance(RULES.gossip.inventBond) ? coin() : null) : chance(RULES.gossip.flipBond) ? !close : null;
   if (close === null) return null; // nothing worth saying
   addTest(s.id, a.id, 'bond', (close ? 'close:' : 'feud:') + b.id);
   return { t: a, text: bondSay(a, b, close) };
@@ -231,7 +229,7 @@ const THINKS_HEARD = {
   ]
 };
 function thinksGossip(s, pool, sure, heard) {
-  const t = pickByLike(s, pool, chance(0.5) ? -1 : 1),
+  const t = pickByLike(s, pool, coin() ? -1 : 1),
     l = likes(s.id, t.id),
     r = trustOf(t),
     real = r >= 2 ? 'good' : r <= -1 ? 'bad' : null;
@@ -377,7 +375,7 @@ function overheard(here) {
 // someone suspicious, or with a grudge, or sure of someone, blames another out loud: rightly now and then, mostly not
 function breakfastBlame() {
   const free = freeChars(),
-    grudge = c => free.some(o => o.id !== c.id && likes(c.id, o.id) <= -2);
+    grudge = c => free.some(o => o.id !== c.id && Ties.cannotBear(c.id, o.id));
   const pool = free.filter(c => temperOf(c) === 'suspicious' || grudge(c) || free.some(o => sus(c.id, o.id) >= RULES.scale.suspicion));
   if (!pool.length) return '';
   const s = pick(pool),
@@ -476,7 +474,7 @@ function feelRemark(c) {
     strong = pool.filter(o => Math.abs(likes(c.id, o.id)) >= 2);
   const t = taken.length && chance(RULES.flirt.feel) ? pick(taken) : strong.length ? pick(strong) : null;
   if (!t) return null;
-  const own = flirtsWith(c.id, t.id) ? 'flirt' : likes(c.id, t.id) > 0 ? 'like' : 'dislike',
+  const own = flirtsWith(c.id, t.id) ? 'flirt' : Ties.fond(c.id, t.id) ? 'like' : 'dislike',
     k = chance((1 - TP(c).gossipTrue) * RULES.talk.feelFalse) ? (own === 'dislike' ? 'like' : 'dislike') : own;
   addTest(c.id, t.id, 'feel', k);
   const face = chance(Math.min(RULES.scale.most, feelShows(k) * showMul(c)))
@@ -494,7 +492,7 @@ function volunteerSighting() {
   if (!rec) return '';
   const c = pick(
     freeChars().filter(
-      o => o.rapport >= 2 && rec.saw[o.id] && S.chars[rec.saw[o.id].who] && !S.claims.some(x => x.night === n && x.id === o.id)
+      o => Ties.friend(o) && rec.saw[o.id] && S.chars[rec.saw[o.id].who] && !S.claims.some(x => x.night === n && x.id === o.id)
     )
   );
   if (!c || !chance(room('talk') * RULES.talk.volunteer)) return '';
@@ -544,11 +542,11 @@ function gossipAboutYou() {
   });
   const s = C(wpick(w)),
     // (the sly one's warm face does not quite cover it: slyWarm, a little readier than a friend's turn, flip)
-    bad = s.rapport <= -1 ? !chance(U.flip) : s.rapport >= 1 ? chance(sly(s) ? U.slyWarm : U.flip) : chance(sly(s) ? U.slyBad : 0.5),
+    bad = Ties.against(s) ? !chance(U.flip) : Ties.cordial(s) ? chance(sly(s) ? U.slyWarm : U.flip) : sly(s) ? chance(U.slyBad) : coin(),
     line = pick(GOSSIP_YOU[bad ? 'bad' : 'good']),
     moved = [];
   freeChars()
-    .filter(o => o.id !== s.id && likes(o.id, s.id) >= 1)
+    .filter(o => o.id !== s.id && Ties.fond(o.id, s.id))
     .forEach(o => {
       const p = (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood) * (heavy ? RULES.camp.heavy : 1);
       if (moved.length < RULES.camp.cap && chance(Math.min(RULES.scale.most, p)) && nudge(o, bad ? -1 : 1)) moved.push(o.id);
@@ -607,7 +605,7 @@ function rumorsOfYou() {
   S.pending = [];
   const ids = Object.keys(net);
   if (!said.length) return '';
-  stirred('talk', 0.5);
+  stirred('talk', TENOR.stirs.rumour);
   return (
     `<p class="notice">${bi(`Word has got round the camp ${listNames(said.map(x => x[0]))}.`, `По лагерю разошлось, ${ru.list(said.map(x => x[1]))}.`)}</p>` +
     trustNote(
@@ -634,7 +632,7 @@ function tipLine(t) {
 // Those who liked the night's dead mourn them today, nearly all; the one who takes it hardest (the fonder, the likelier)
 // is named, unless they spoke.
 function mourners(victim) {
-  const who = freeChars().filter(c => likes(c.id, victim) >= 1 && chance(RULES.morning.mourn));
+  const who = freeChars().filter(c => Ties.fond(c.id, victim) && chance(RULES.morning.mourn));
   who.forEach(c => {
     S.mourning[c.id] = { day: S.day, victim };
   });

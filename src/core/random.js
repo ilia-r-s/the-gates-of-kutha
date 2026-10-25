@@ -20,9 +20,11 @@ function rand() {
 // set, each entry also names the functions that threw it. The trace throws nothing itself, and in play it is off.
 let TRACE = null,
   TRACE_WHO = false,
+  TRACE_WHY = null, // (the odds a die is rolled on, step by step: core/odds.js)
   _inDie = false;
 function traceDie(kind, asked, got) {
   const e = [kind, typeof asked === 'number' ? +asked.toPrecision(12) : asked, got]; // (odds to 12 places)
+  if (TRACE_WHY) e.why = TRACE_WHY;
   if (TRACE_WHO)
     e.push(
       String(new Error().stack)
@@ -48,7 +50,9 @@ const chance = p => {
 // How much something costs or gives back, as it turns out: n mostly, now and then one more or one less (at spread),
 // never less than nothing. Nerve lost and regained and the rite's steps vary at RULES.scale.spread; wounds, which
 // weigh more, at the narrower RULES.scale.graze (game/state.js: hurt, regain, heal).
-const vary = (n, spread = RULES.scale.spread) => (n > 0 && chance(spread) ? Math.max(0, n + (chance(0.5) ? 1 : -1)) : n);
+// a fair coin: one way or the other, alike
+const coin = () => chance(0.5);
+const vary = (n, spread = RULES.scale.spread) => (n > 0 && chance(spread) ? Math.max(0, n + (coin() ? 1 : -1)) : n);
 const pick = a => {
   _inDie = true;
   const i = Math.floor(rand() * a.length);

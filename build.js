@@ -20,6 +20,7 @@ const SCRIPT = [
   'core/random.js',      // the seeded dice
   'core/text.js',        // English and Russian text, and the grammar both need
   'rules.js',            // every number that decides how the game plays
+  'core/odds.js',        // every chance written as named steps, each step's share told to the dice trace
   'data/world.js',       // people, powers, charms, places, events: the English tables
   'data/lines.js',       // what people say, as tables
   'data/dread.js',       // what finds you outside the tomb, and how the rite shows its progress
@@ -31,6 +32,7 @@ const SCRIPT = [
   'world/deaths.js',     // how the night's dead are found: put together
   'game/state.js',       // the state of a season and the small verbs on it
   'game/tenor.js',       // the season's mood: how much happens of itself, and how it drifts
+  'people/ties.js',      // who likes whom, and how far each trusts you
   'people/tempers.js',   // temperaments: how each person lies, blames and gossips
   'people/claims.js',    // who claims which part in Crane's diary
   'people/social.js',    // who likes whom, gossip, rumours, mornings

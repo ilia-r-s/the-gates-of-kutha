@@ -29,8 +29,8 @@ function perilNow(l, k = 1) {
 // the deed you went out on tonight, if any (game/deed.js): a revolver you took with you is not in your kit to be taken.
 function spiteNight(k = 1, deed = null) {
   const SP = RULES.spite,
-    who = shuffle(freeChars().filter(c => c.rapport <= -1)).find(c =>
-      chance(SP.try * (c.rapport <= -2 ? SP.hate : 1) * SP.temper[temperOf(c)] * tenorOf('spite') * k)
+    who = shuffle(freeChars().filter(c => Ties.against(c))).find(c =>
+      chance(SP.try * (Ties.hostile(c) ? SP.hate : 1) * SP.temper[temperOf(c)] * tenorOf('spite') * k)
     );
   if (!who) return '';
   const loot = ['brandy', 'torch', 'revolver'].filter(it => has(it) && !(it === 'revolver' && deed && deed.means === 'revolver')),

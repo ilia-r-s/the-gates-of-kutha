@@ -44,7 +44,7 @@ function romances() {
       );
   both((a, b, ab, ba) => {
     if (!ok(a) || !ok(b) || Math.min(likes(a.id, b.id), likes(b.id, a.id)) < 1 || spoken.has(a.id) || spoken.has(b.id)) return;
-    const fond = likes(a.id, b.id) >= 2 && likes(b.id, a.id) >= 2,
+    const fond = Ties.close(a.id, b.id) && Ties.close(b.id, a.id),
       doubt = sus(a.id, b.id) >= 2 || sus(b.id, a.id) >= 2,
       clear = !sus(a.id, b.id) && !sus(b.id, a.id);
     const p = (ab && ba ? RF.pair : RF.pair / 2) + (fond ? RF.fond : 0) + (clear ? RF.clear : 0) - (doubt ? RF.doubt : 0);
@@ -150,10 +150,10 @@ function endFate(c, ctx) {
     if (love.you === c.id) {
       const l = away ? away.love : FATE_LOVE[c.id] || FATE_LOVE.any;
       t += ' ' + bi(l[0], l[1]);
-    } else if (c.rapport >= 2 && flirtsWithYou(c)) {
+    } else if (Ties.friend(c) && flirtsWithYou(c)) {
       const l = away ? away.soft : FATE_SOFT[c.id] || FATE_SOFT.any;
       t += ' ' + bi(l[0], l[1]);
-    } else if (c.rapport >= 2)
+    } else if (Ties.friend(c))
       // (the second of the lines told when you did not come home has a child in it, and a priest keeps his vows)
       t +=
         ' ' +
@@ -162,7 +162,7 @@ function endFate(c, ctx) {
           c.id,
           'friend'
         )(c);
-    else if (c.rapport <= -1) t += ' ' + fateOf(away ? away.enemy : FATE_ENEMY, c.id, 'enemy')(c);
+    else if (Ties.against(c)) t += ' ' + fateOf(away ? away.enemy : FATE_ENEMY, c.id, 'enemy')(c);
   }
   love.pairs
     .filter(p => p.b === c.id && !(ctx.dooms[p.a] && DOOM_GONE.has(ctx.dooms[p.a].kind)))
@@ -274,7 +274,7 @@ function doomMul(c, w, D, nat) {
   by(M[c.role]);
   if (VOWS.includes(c.id)) by(M.vows);
   by(D.far.includes(c.id) ? M.far : M.near);
-  if (c.rapport >= 2) by(M.friend);
+  if (Ties.friend(c)) by(M.friend);
   if (S.log.guarded.some(x => x.id === c.id)) by(M.guarded);
   const m = S.mourning && S.mourning[c.id];
   if (m && S.chars[m.victim] && C(m.victim).status === 'taken') by(M.grief);
@@ -389,6 +389,7 @@ function endFateCult(c, { id, won, shot }) {
 // of (FATE_CODA): { k, g (which of its tellings: alive, dead, jailed, free, cult), d (what it is about), w (how much it
 // weighs) }.
 function codaFacts(c, ctx) {
+  const CW = RULES.fates.coda; // (the weight of each kind of coda: rules.js)
   const out = [],
     add = (k, g, d, w) => out.push({ k, g, d, w }),
     cult = c.role === 'cult',
@@ -402,29 +403,29 @@ function codaFacts(c, ctx) {
     home = !!ctx.won;
   const m = S.mourning && S.mourning[c.id];
   if (m && m.done && !dead) {
-    if (alive) add('consoled', 'alive', C(m.victim), 3);
-    else if (cell) add('consoled', cell, C(m.victim), 3);
+    if (alive) add('consoled', 'alive', C(m.victim), CW.consoled);
+    else if (cell) add('consoled', cell, C(m.victim), CW.consoled);
   }
-  if (S.confidedIn.includes(c.id)) add('confided', cult ? 'cult' : dead ? 'dead' : 'alive', null, cult ? 3 : 2);
-  if (S.log.pressedWho.includes(c.id) && (alive || cell)) add('pressed', alive ? 'alive' : cell, null, 1.5);
+  if (S.confidedIn.includes(c.id)) add('confided', cult ? 'cult' : dead ? 'dead' : 'alive', null, cult ? CW.confidedCult : CW.confided);
+  if (S.log.pressedWho.includes(c.id) && (alive || cell)) add('pressed', alive ? 'alive' : cell, null, CW.pressed);
   if (c.role === 'warden' && S.log.attacks.some(a => a.how === 'guard') && (alive || dead))
-    add('savedYou', alive ? 'alive' : 'dead', null, 3);
+    add('savedYou', alive ? 'alive' : 'dead', null, CW.savedYou);
   const g = S.log.guarded.filter(x => x.id === c.id).pop();
-  if (g && alive) add('guarded', 'alive', g.day, 2.5);
+  if (g && alive) add('guarded', 'alive', g.day, CW.guarded);
   // (the nights as the innocent lived them: what one of the cult found or did is no grief of its own)
   S.nights.forEach((rec, n) => {
     if (!rec || !alive) return;
     const at = rec.crimeLoc ? [LOCS[rec.crimeLoc].at, ru.loc(rec.crimeLoc, 'at')] : null; // (none, a night the cult came for no one)
-    if (at && rec.finder === c.id && rec.target && S.chars[rec.target]) add('found', 'alive', { v: C(rec.target), at }, 2);
-    else if (at && wasAbout(rec, c.id)) add('there', 'alive', { n, at }, 2);
+    if (at && rec.finder === c.id && rec.target && S.chars[rec.target]) add('found', 'alive', { v: C(rec.target), at }, CW.found);
+    else if (at && wasAbout(rec, c.id)) add('there', 'alive', { n, at }, CW.there);
     const asked = S.claims.some(x => x.night === n && x.id === c.id);
-    if (home && asked && (rec.afraid || []).includes(c.id)) add('afraid', 'alive', n, 3);
-    if ((rec.secret || []).includes(c.id) && rec.truth[c.id].with) add('secret', 'alive', { w: C(rec.truth[c.id].with), n }, 3);
+    if (home && asked && (rec.afraid || []).includes(c.id)) add('afraid', 'alive', n, CW.afraid);
+    if ((rec.secret || []).includes(c.id) && rec.truth[c.id].with) add('secret', 'alive', { w: C(rec.truth[c.id].with), n }, CW.secret);
     const sw = rec.saw[c.id];
-    if (sw && sw.made && S.sights.some(x => x.night === n && x.id === c.id)) add('invented', 'alive', C(sw.who), 2.5);
+    if (sw && sw.made && S.sights.some(x => x.night === n && x.id === c.id)) add('invented', 'alive', C(sw.who), CW.invented);
   });
   const sp = S.log.spite.filter(x => x.id === c.id && (x.ok || x.caught)).pop();
-  if (sp && alive) add('spite', 'alive', sp, 3);
+  if (sp && alive) add('spite', 'alive', sp, CW.spite);
   if (alive)
     S.inquiries.forEach(v => {
       const x = C(v.id),
@@ -436,18 +437,18 @@ function codaFacts(c, ctx) {
             : v.against.includes(c.id) && x.role === 'cult'
               ? 'shielded'
               : null;
-      if (k) add('hand', 'alive', { x, k }, 1.5);
+      if (k) add('hand', 'alive', { x, k }, CW.hand);
     });
-  if (alive && credit(c.id)) add('credit', 'alive', Math.sign(credit(c.id)), 1.5);
+  if (alive && credit(c.id)) add('credit', 'alive', Math.sign(credit(c.id)), CW.credit);
   const f = S.fin;
   if (f && alive) {
     const held = f.g3 && f.g3.kind === 'comp' && f.g3.id === c.id;
-    if (held || (f.took || []).includes(c.id)) add('below', 'alive', held ? 'held' : f.left.includes(c.id) ? 'left' : 'took', 2.5);
+    if (held || (f.took || []).includes(c.id)) add('below', 'alive', held ? 'held' : f.left.includes(c.id) ? 'left' : 'took', CW.below);
   }
   const pl = S.clues.find(cl => cl.source === 'plant' && cl.owner === c.id && !cl.extra);
-  if (pl && alive) add('framed', 'alive', pl.day, 3);
-  if (alive && c.role === 'seer' && S.seerPublic) add('dreamer', 'alive', home, 2);
-  if (alive && c.role === 'smuggler' && S.witnessTold) add('told', 'alive', null, 2.5);
+  if (pl && alive) add('framed', 'alive', pl.day, CW.framed);
+  if (alive && c.role === 'seer' && S.seerPublic) add('dreamer', 'alive', home, CW.dreamer);
+  if (alive && c.role === 'smuggler' && S.witnessTold) add('told', 'alive', null, CW.told);
   if (cult && !dead && (!jailed || cell || end === 'fled')) {
     // (yours: you came home, or were sent home; a letter from a cell needs you alive to keep it, and eyes are closed only
     // where you were found, by one still at the dig: data/endings.js, nightDeath)
@@ -456,9 +457,9 @@ function codaFacts(c, ctx) {
       youLive = S.ended !== 'death' && S.ended !== 'doom',
       found = !jailed && S.ended === 'death' && !S.fin && NIGHT_FOUND.includes(nightDeath());
     if (S.flirt[c.id] && S.flirt[c.id].you && c.rapport >= RULES.flirt.trust && (yours || (cell && youLive) || found))
-      add('cultSoft', g2, yours, 4);
-    else if (c.rapport >= 2) add('cultFriend', g2, yours ? 'home' : S.ended === 'doom' ? 'doom' : 'lost', 3);
-    else if (c.rapport <= -1 && cell) add('cultFoe', cell, null, 2);
+      add('cultSoft', g2, yours, CW.cultSoft);
+    else if (Ties.friend(c)) add('cultFriend', g2, yours ? 'home' : S.ended === 'doom' ? 'doom' : 'lost', CW.cultFriend);
+    else if (Ties.against(c) && cell) add('cultFoe', cell, null, CW.cultFoe);
   }
   // one of each kind that has a telling here, the latest (two bodies found, two hands raised, two nights out would be
   // told twice over in the same words)
@@ -563,6 +564,7 @@ function yourLast(won, later = {}) {
 }
 // (later: the deaths that came later, afterDeaths: nobody is written to who is dead by then)
 function youCodas(won, last = null, later = {}) {
+  const YW = RULES.fates.youCoda; // (the weight of each kind of coda: rules.js)
   const L = S.log,
     out = [],
     // where the season left you: home (sent home in disgrace is home all the same), a cell in Baghdad (game/deed.js:
@@ -575,25 +577,25 @@ function youCodas(won, last = null, later = {}) {
         ? FATE_YOU_CODA[k].jail || (['peril', 'grave'].includes(k) ? null : FATE_YOU_CODA[k].home)
         : FATE_YOU_CODA[k][where] || (where !== 'home' ? FATE_YOU_CODA[k].gone : null),
     add = (k, d, w) => tells(k) && !(last && LAST_CODA[last.k] === k) && out.push({ k, d, w });
-  if (L.studyCost >= RULES.fates.read || S.factKnown.length >= RULES.fates.lines) add('read', null, 3);
+  if (L.studyCost >= RULES.fates.read || S.factKnown.length >= RULES.fates.lines) add('read', null, YW.read);
   const p = L.perils.filter(x => x.w || x.k === 'heat').pop();
-  if (p) add('peril', p.k, 2);
+  if (p) add('peril', p.k, YW.peril);
   const sp = L.spite.filter(x => x.ok || x.caught).pop();
-  if (sp) add('spite', { c: C(sp.id), caught: sp.caught }, 2);
+  if (sp) add('spite', { c: C(sp.id), caught: sp.caught }, YW.spite);
   const wr = L.accused.filter(a => !a.right && !later[a.id]).pop();
-  if (wr) add('wronged', C(wr.id), 3);
+  if (wr) add('wronged', C(wr.id), YW.wronged);
   const gr = friendsLost().pop(); // (never one dead by your own hand: the deed has its own)
-  if (gr) add('grave', gr, 2.5);
+  if (gr) add('grave', gr, YW.grave);
   // (one you left on the stair: not whoever held the seventh gate for you, nor one of the cult, who went to the circle)
   const g3 = S.fin && S.fin.g3,
     left = S.fin ? S.fin.left.filter(id => !(g3 && g3.kind === 'comp' && g3.id === id) && C(id).role !== 'cult') : [],
     lb = left.length ? C(left[left.length - 1]) : null;
-  if (lb) add('leftBelow', lb, 2.5);
+  if (lb) add('leftBelow', lb, YW.leftBelow);
   const fr = friendsNow().length;
-  if (fr >= 2) add('friends', fr, 1.5);
-  if (L.horrorNerve >= RULES.fates.horrors) add('horrors', null, 2);
+  if (fr >= 2) add('friends', fr, YW.friends);
+  if (L.horrorNerve >= RULES.fates.horrors) add('horrors', null, YW.horrors);
   if (L.deed && L.deed.outcome && L.deed.outcome !== 'away')
-    add('deed', { t: C(L.deed.id), killed: L.deed.outcome === 'killed', gun: L.deed.means === 'revolver' }, 4); // (game/deed.js)
+    add('deed', { t: C(L.deed.id), killed: L.deed.outcome === 'killed', gun: L.deed.means === 'revolver' }, YW.deed); // (game/deed.js)
   const n = Math.min(out.length, last || fateRoll('you', 'codas') < RULES.fates.youOne ? 1 : 2);
   return drawCodas(out, n, i => fateRoll('you', 'coda', i))
     .map(o => ' ' + bi(...fateOf(tells(o.k), 'you', o.k)(o.d)))

@@ -9,7 +9,7 @@ function placeChars() {
   for (const c of shuffle(freeChars())) {
     const w = { ...RULES.places },
       E = RULES.evening;
-    if (S.slot === 2) {
+    if (atEvening()) {
       w.camp += E.camp;
       if (c.role === 'cult') {
         w.ziggurat += E.cultZiggurat;
@@ -19,12 +19,12 @@ function placeChars() {
     let l = wpick(w);
     // people keep away from someone they cannot bear, and now and then go where a fond friend already is; the cult mostly
     // will not follow one of its own about, the better not to be seen together
-    if (S.here[l].some(id => likes(c.id, id) <= -2) && chance(RULES.company.avoid)) {
+    if (S.here[l].some(id => Ties.cannotBear(c.id, id)) && chance(RULES.company.avoid)) {
       delete w[l];
       l = wpick(w);
     } else {
       const apart = c.role === 'cult' && chance(RULES.company.cultApart);
-      const fond = LOC_IDS.filter(at => S.here[at].some(id => likes(c.id, id) >= 2 && !(apart && C(id).role === 'cult')));
+      const fond = LOC_IDS.filter(at => S.here[at].some(id => Ties.close(c.id, id) && !(apart && C(id).role === 'cult')));
       if (fond.length && chance(RULES.company.follow)) l = pick(fond);
     }
     S.here[l].push(c.id);
@@ -177,7 +177,7 @@ function campActs(body, ch) {
   });
   if (S.walkout)
     body.push(`<p class="dim">${bi('The camp will hold no more inquiries.', 'Лагерь больше не станет собираться на дознания.')}</p>`);
-  else if (S.slot === 2 && !S.inquiryDone && freeChars().length)
+  else if (atEvening() && !S.inquiryDone && freeChars().length)
     ch.push({
       label: bi('Convene an inquiry', 'Созвать дознание'),
       sub: bi('Accuse someone before the whole camp', 'Обвинить кого-то перед всем лагерем'),
@@ -194,9 +194,9 @@ function campActs(body, ch) {
       fn: deedScene
     });
   // (where inquiries are held is said until the first one; a short day's warning, always)
-  if (S.slot < 2 && !S.walkout && (S.slotsToday <= 2 || !S.inquiries.length))
+  if (S.slot < eveningSlot() && !S.walkout && (S.slotsToday <= RULES.start.shortSlots || !S.inquiries.length))
     body.push(
-      S.slotsToday > 2
+      S.slotsToday > RULES.start.shortSlots
         ? `<p class="dim">${bi('Inquiries can be held here in the evening.', 'Вечером здесь можно созвать дознание.')}</p>`
         : `<p class="dim">${bi('The day ends early: there will be no evening in camp today, and no inquiry.', 'День кончится рано: вечера в лагере сегодня не будет, а значит, и дознания.')}</p>`
     );
@@ -302,13 +302,13 @@ function doSearch(l) {
 // What a search gives besides a charm (more: what the same hole gives up after one, where nothing and horrors weigh
 // search.moreOdd × theirs, and nothing more is no news).
 function searchFind(l, more) {
-  const odds = { ...LOCS[l].search };
-  if (odds.horror) odds.horror *= Math.min(2, rateOf('dread'));
+  const weights = { ...LOCS[l].search };
+  if (weights.horror) weights.horror *= Math.min(2, rateOf('dread'));
   if (more)
     ['none', 'horror'].forEach(k => {
-      if (odds[k]) odds[k] *= RULES.search.moreOdd;
+      if (weights[k]) weights[k] *= RULES.search.moreOdd;
     });
-  let kind = wpick(odds);
+  let kind = wpick(weights);
   if (more && kind === 'none') return '';
   const it = kind === 'item' ? minorItem() : null;
   if (kind === 'item' && !it) kind = 'frag';
@@ -340,7 +340,7 @@ function searchFind(l, more) {
   if (kind === 'horror') {
     S.log.horror++;
     const h = `<p class="horror">${bi(tellOne('horror-' + l, HORROR[l]))}</p>` + horrorCost(chance(RULES.search.horrorWorse) ? 2 : 1);
-    stirred('dread', 0.5);
+    stirred('dread', TENOR.stirs.horror);
     return h;
   }
   return `<p>${bi(tellOne('nothing', NOTHING))}</p>`;

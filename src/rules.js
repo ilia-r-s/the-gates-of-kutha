@@ -223,6 +223,8 @@ const TENOR = {
   drift: 0.15, pull: 0.1, driftMax: 0.7,
   pulls: { strand: 0.35, murder: 0.75, taken: 1, rite: 0.5, wrong: 1, refused: 0.5, right: 0.75, calm: 0.5 },
   heat: 0.25, cool: 0.5, heatMax: 1, heavy: 0.9, told: 0.7, second: 0.3,
+  stirs: { horror: 0.5, rumour: 0.5 },          // a horror found warms dread, rumours of you warm talk, half as much as most
+  soft: { base: 0.6, per: 0.4, min: 0.6, max: 1.4 }, // how readily people speak their feelings: base + per × talk's rate, held to [min, max]
   ramp: [0.7, 0.85, 1, 1, 1.1],
   omen: 0.25,                                   // a second sign the same morning, at omen × (dread's rate − 1)
   floor: 0.02,                                  // what the mood all but rules out stays possible: no rate − 1 or 1 − rate below this
@@ -250,6 +252,10 @@ const RULES = {
   // at spread (vary); a wound taken or healed, at graze. Nerve, wounds and trust are never told in numbers, only in
   // words; a loss of severe or more is told as a great one, and so is a gain of more than that.
   scale: { trustMin: -2, trustMax: 3, talkMax: 2, suspicion: 3, least: 0.05, most: 0.95, rarest: 0.01, surest: 0.99, spread: 0.25, graze: 0.1, severe: 2 },
+  // The levels of feeling the rules ask about (people/ties.js, Ties). Trust in you, in the casebook's words: hostile −2,
+  // strained −1, reserved 0, cordial 1, warm 2, devoted 3; a friend is warm or devoted, someone against you strained or
+  // hostile. Liking, from one person toward another: −2 cannot bear them, −1 dislike them, 1 fond of them, 2 close.
+  ties: { friend: 2, cordial: 1, against: -1, hostile: -2, fond: 1, close: 2, dislike: -1, cannotBear: -2 },
   // where people spend a slot (weights); in the evening more of them come back to camp, and the cult goes to its work
   places: { camp: 3, trench: 3, store: 2, village: 2, ziggurat: 1, canal: 1.5, cemetery: 1 },
   evening: { camp: 2, cultZiggurat: 3, cultCemetery: 2 },
@@ -446,6 +452,7 @@ const RULES = {
     questions: 2,                               // questions to a conversation, before it has run its course
     longer: 0.08, shorter: 0.08,                // ... now and then one more, or one fewer
     warmth: 0.2,                                // making conversation warms anyone this much more readily, on top of chat
+    blurtInPassing: 0.5,                        // small talk lets slip what only the attacker knew at this × the usual odds
     comfort: 0.7,                               // sitting with someone who mourns the night's dead, the day it happened, comforts them
     company: 0.35,                              // making conversation with a friend (trust 2 or more) steadies your nerve a little
     press: 0.4, pressSoldier: 0.25, pressTrust: 0.05, pressAlerts: 0.5, pressCost: 0.9,   // pressCost: pressing costs trust, whoever they are
@@ -500,7 +507,7 @@ const RULES = {
   // swore it is tempered (slept: [own, deny]); otherwise not spoken of at all.
   claims: {
     likedSeer: 0.5, cornered: 0.12, fakeGuilty: 0.4, atDreamer: 0.3,
-    shield: 0.8, frame: 0.9, distance: 0.55, cultGuilty: 0.04,
+    shield: 0.8, frame: 0.9, distance: 0.55, distanceBase: 0.5, cultGuilty: 0.04, // distance: × (distanceBase + the dreamer's sacrifice)
     defend: 0.35, counter: [0.1, 0.3], desperate: 2, counterSpot: 0.04, counterTrue: 0.5, retort: 0.3,
     retortLine: 0.75,                           // a retort in their temperament's own way (hot, cold, plain); else another's
     evadeAny: 0.03, evadeHonest: 0.15,          // asked about the diary, one with nothing to claim will not say; the honest, more often
@@ -539,6 +546,7 @@ const RULES = {
   // came seldom in the season's mood) moves each onlooker × heavy as readily.
   camp: {
     cap: 3, heavy: 1.5,
+    fondestLeast: 0.5,                          // who speaks up for someone, by liking²: one who neither likes nor dislikes them weighs this
     spoke: 0.9,                                 // the one who speaks up at a moment moves a step in their trust in you
     calledOut:   { odds: 0.75, p: 0.15, friend: 0.3, suspicious: 0.1, loyal: 0.15, suspected: 0.1, thief: 0.1, defend: 0.3 },
     praised:     { odds: 0.7, p: 0.12, doubted: 0.25, grudge: 0.25 },
@@ -629,7 +637,10 @@ const RULES = {
     judge: { caught: 1, friend: 1, victim: 3, trust: 1, cult: 0.3, expel: 2.2, keep: 0.6 },
     away: { errand: 0.1, thief: 0.08, tryst: 0.6, restless: 0.08 },
     angered: 1, cleared: 1, talk: 2,
-    sour: 0.9                                   // a step less trust in you from each who would have sent you away, at this chance
+    sour: 0.9,                                  // a step less trust in you from each who would have sent you away, at this chance
+    // how far the camp's suspicion of you rises: the knower's hint (a full step if the deed happened, half if it came to
+    // nothing), your trace linked, your tent found empty, the shot heard, the planted trace seen through
+    onYou: { hinted: 1, hintedNothing: 0.5, linked: 1, out: 1, shot: 1, plantLink: 1 }
   },
   // the thief as witness (people/thief.js): sees it (at random, where he was, where he came to rob); hints when asked whom
   // he distrusts and in gossip; names the one he saw when pressed (pressed), coming clean of his own accord, or sent away
@@ -731,6 +742,13 @@ const RULES = {
   // nobody can account for; a priest keeps his vows).
   fates: {
     codaNone: 0.3, codaOne: 0.75, youOne: 0.6, read: 3, lines: 18, horrors: 4,
+    // how much each kind of coda weighs when an epilogue chooses among those that apply: everyone's, and yours
+    coda: {
+      consoled: 3, confided: 2, confidedCult: 3, pressed: 1.5, savedYou: 3, guarded: 2.5, found: 2, there: 2, afraid: 3,
+      secret: 3, invented: 2.5, spite: 3, hand: 1.5, credit: 1.5, below: 2.5, framed: 3, dreamer: 2, told: 2.5,
+      cultSoft: 4, cultFriend: 3, cultFoe: 2
+    },
+    youCoda: { read: 3, peril: 2, spite: 2, wronged: 3, grave: 2.5, leftBelow: 2.5, friends: 1.5, horrors: 2, deed: 4 },
     last: {
       base: 0.014, mad: 5, frayed: 2, jail: 1.5, killedInnocent: 3, killedCult: 1.5, wronged: 1.4, grief: 1.3, tent: 1.6,
       read: 1.5, horrors: 1.4, friend: 0.8, loved: 0.4, max: 0.25,

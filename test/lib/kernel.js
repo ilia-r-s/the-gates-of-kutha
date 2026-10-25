@@ -7,7 +7,8 @@
 //   k.choices(), k.choose(i)         the scene's choices, and choosing one, as a click would
 //   k.scene(lang), k.book(lang)      what the scene and the casebook's four tabs say, in English or Russian
 //   k.season(seed, detail)           a whole season from its seed, step by step, with the dice of each step
-//   k.run(code)                      anything else, evaluated in the game's own scope (S, RULES, …)
+//   k.run(code), k.value(code)       anything else, evaluated in the game's own scope (S, RULES, …); value gives the
+//                                    result as plain data
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -179,6 +180,12 @@ function kernel({ root = ROOT, pageSeed = 1 } = {}) {
   const k = ctx.__k;
   return {
     run: code => vm.runInContext(code, ctx),
+    // the same, the result made plain data of Node's own (arrays and objects made in the game's scope are of another
+    // realm, which strict comparisons refuse)
+    value: code => {
+      const v = vm.runInContext(code, ctx);
+      return v === undefined ? undefined : JSON.parse(JSON.stringify(v));
+    },
     start: (seed, bg = 'philologist', hardcore = false) => k.start(seed, bg, hardcore),
     choices: () => k.choices(),
     choose: i => k.choose(i),

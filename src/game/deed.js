@@ -16,7 +16,7 @@
 // whether it can be done this evening: once a season, in camp, of an evening with no inquiry called (even if the camp
 // will hold no more of them); not on the last evening, when the night belongs to the dark of the moon
 const deedOffered = () =>
-  !S.log.deed && S.slot === 2 && !S.inquiryDone && freeChars().length > 0 && S.day >= RULES.deed.from && S.day < RULES.start.days;
+  !S.log.deed && atEvening() && !S.inquiryDone && freeChars().length > 0 && S.day >= RULES.deed.from && S.day < RULES.start.days;
 // what goes through your head, before (never the same twice in a row)
 const DEED_THOUGHTS = [
   [
@@ -302,7 +302,7 @@ function deedMorning() {
       );
     } else if (chance(D.hint)) {
       d.hinted = knower.id;
-      up(happened ? 1 : 0.5);
+      up(happened ? D.onYou.hinted : D.onYou.hintedNothing);
       const hm = C('hamid'),
         asked = knower.id !== hm.id && isFree(hm) ? ['Hamid', 'Хамида'] : ['the cook', 'повара'];
       h += bi(
@@ -313,26 +313,26 @@ function deedMorning() {
   }
   if (happened && d.trace && chance(D.link)) {
     d.linked = true;
-    up(1);
+    up(D.onYou.linked);
     h += bi(
       `<p class="notice">Someone found a horn button by ${t.short}’s tent. By noon the whole camp has looked at your jacket.</p>`,
       `<p class="notice">У палатки ${ru.c(t, 'g')} кто-то нашёл роговую пуговицу. К полудню весь лагерь уже посмотрел на вашу куртку.</p>`
     );
   }
   if (happened && S.log.attacks.some(a => a.day === d.day && a.how === 'out')) {
-    up(1);
+    up(D.onYou.out);
     h += bi(
       `<p class="notice">The whole camp knows your tent was empty last night when they came for you. Nobody asks where you were. Everyone wonders.</p>`,
       `<p class="notice">Весь лагерь знает, что прошлой ночью, когда за вами пришли, ваша палатка была пуста. Никто не спрашивает, где вы были. Все гадают.</p>`
     );
   }
-  if ((d.outcome === 'killed' || d.outcome === 'failed') && d.means === 'revolver' && chance(D.shot)) up(1);
+  if ((d.outcome === 'killed' || d.outcome === 'failed') && d.means === 'revolver' && chance(D.shot)) up(D.onYou.shot);
   if (d.planted) {
     const owners = freeChars().filter(o => o.traits[d.plant.cat] === d.plant.val && o.id !== t.id);
     const sp = pick(freeChars().filter(o => o.id !== t.id));
     if (sp && chance(D.plantSeen)) {
       d.plantSeen = sp.id;
-      if (chance(D.plantLink)) up(1);
+      if (chance(D.plantLink)) up(D.onYou.plantLink);
       h += bi(
         `<p class="notice">${sp.short} looks for a long time at what was left by ${t.short}’s tent, and says it was put there for someone to find.</p>`,
         `<p class="notice">${ru.c(sp)} долго разглядывает то, что нашли у палатки ${ru.c(t, 'g')}, и говорит, что это подбросили, чтобы кто-нибудь нашёл.</p>`
@@ -375,7 +375,7 @@ function youVote() {
       crowd,
       o =>
         cs +
-        (likes(o.id, d.id) >= 1 ? J.friend : 0) +
+        (Ties.fond(o.id, d.id) ? J.friend : 0) +
         (o.id === d.id ? J.victim : 0) -
         J.trust * o.rapport +
         VR.fear * Math.min(S.stats.taken, VR.fearCap) +

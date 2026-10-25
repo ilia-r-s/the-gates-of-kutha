@@ -37,7 +37,7 @@ function canShow() {
 // ---------- making conversation ----------
 // Anyone may have a bad day and keep it short, or refuse a favour, though they bear you no ill will (talk.offDay, as
 // far as it shows: showMul; the less with a friend: offDayFriend).
-const offDay = c => chance(RULES.talk.offDay * showMul(c) * (c.rapport >= 1 ? RULES.talk.offDayFriend : 1));
+const offDay = c => chance(RULES.talk.offDay * showMul(c) * (Ties.cordial(c) ? RULES.talk.offDayFriend : 1));
 function curtTalk(c, hostile = true) {
   const k = tellOne('curtSay', [0, 1]);
   return {
@@ -58,7 +58,7 @@ function curtTalk(c, hostile = true) {
 function talkNotes(c, ...said) {
   const habit = unknownCats(c).length && chance(RULES.talk.habit) ? reveal(c) : null,
     m = mienNote(c),
-    friend = c.rapport >= 2,
+    friend = Ties.friend(c),
     comfort = consoled(c),
     w = !comfort && chance(TP(c).chat + RULES.talk.warmth + cultOf(c, 'charm')) && nudge(c, 1),
     steady = friend && chance(RULES.talk.company) && regain(1);
@@ -113,7 +113,7 @@ function smallTalk(c) {
   if (g) them += ' ' + bi('Between ourselves: ', 'Между нами: ') + g.text;
   const fr = !g && chance(RULES.talk.feel * talkSoft()) ? feelRemark(c) : null;
   if (fr) them += ' ' + fr.text;
-  const slip = blurt(c, S.day - 1, 0.5);
+  const slip = blurt(c, S.day - 1, RULES.talk.blurtInPassing);
   const themE = fr ? fr.face : JOKES.has(line) && chance(RULES.manner.joke) ? jokeFace(c) : pick(['smile', 'neutral', 'thoughtful']);
   return {
     you: bi(...tellOne('smallTalk', SAY.smallTalk)),
@@ -130,8 +130,8 @@ const DIALOG = {
     sub: c => bi(`${capS(c.pp)} work, ${c.pp} habits`, 'О работе, о привычках'),
     run(c) {
       // someone who has turned against you keeps it short, and gives nothing away: if they let it show
-      if (c.rapport <= -1 && chance(RULES.talk.cold * showMul(c))) return curtTalk(c);
-      if (c.rapport > -1 && offDay(c)) return curtTalk(c, false);
+      if (Ties.against(c) && chance(RULES.talk.cold * showMul(c))) return curtTalk(c);
+      if (!Ties.against(c) && offDay(c)) return curtTalk(c, false);
       // the two scholars are reading tablets too, and like to share a good line
       return (SCHOLARS.includes(c.id) && chance(RULES.talk.scholarLine) && scholarTalk(c)) || smallTalk(c);
     }
@@ -156,7 +156,7 @@ const DIALOG = {
       const slip = blurt(c, n); // the one who did it may let slip what only they could know
       if (sw && S.chars[sw.who] && !told) {
         // someone who has turned against you keeps what they saw to themself, though not well
-        if (c.rapport <= -1 ? chance(RULES.talk.withhold) : offDay(c))
+        if (Ties.against(c) ? chance(RULES.talk.withhold) : offDay(c))
           note = bi(
             `${c.short} answers, and you have the feeling ${c.p} saw more than ${c.p} says.`,
             `${ru.c(c)} отвечает, но вам кажется, что ${ru.gs(c, 'он видел', 'она видела')} больше, чем говорит.`
@@ -202,7 +202,7 @@ const DIALOG = {
       let them = bi(tellOne('react-' + (words ? 'words-' : '') + r, (words ? REACT_WORDS_SAY : REACT_SAY)[r])),
         cool = false;
       if (CHARMS.includes(t.id) && SCHOLARS.includes(c.id)) {
-        if (c.rapport <= -1 ? chance(RULES.talk.refuse) : offDay(c)) {
+        if (Ties.against(c) ? chance(RULES.talk.refuse) : offDay(c)) {
           cool = true;
           them +=
             ' ' +
@@ -240,7 +240,7 @@ const DIALOG = {
       const you = bi(...tellOne('confide', SAY.confide));
       if (c.role === 'cult' && chance(RULES.confide.alerts)) S.alerted = true;
       // not everyone wants your confidence: it depends how they feel about you, and who they are
-      if (!chance(confideP(c))) {
+      if (!TAKES_CONFIDENCE.roll(c)) {
         if (temperOf(c) === 'suspicious' && chance(RULES.talk.sourConfide)) nudge(c, -1);
         const k = tellOne('confideNo', [0, 1]);
         return {
@@ -265,7 +265,7 @@ const DIALOG = {
         rc = recantTrust(c);
       // (a promise, mostly: talk.promise; now and then a Watcher keeps it general)
       if (rc) them += ' ' + rc;
-      else if (c.rapport >= 2 && cl.role === 'warden') {
+      else if (Ties.friend(c) && cl.role === 'warden') {
         sayClaim(c);
         if (chance(RULES.talk.promise)) {
           them += bi(
@@ -282,7 +282,7 @@ const DIALOG = {
             ' Ночью я присматриваю за всем лагерем, доктор, а не за одной палаткой.'
           );
       }
-      if (!rc && !c.promised && c.rapport >= 1 && cl.role === 'seer' && chance(RULES.talk.promise)) {
+      if (!rc && !c.promised && Ties.cordial(c) && cl.role === 'seer' && chance(RULES.talk.promise)) {
         c.promised = true;
         sayClaim(c);
         them += bi(
@@ -439,7 +439,7 @@ DIALOG.distrust = {
     const say = (them, themE = 'stern') => ({ you, youE: 'neutral', them, themE });
     if (!others.length) return say(bi('There is nobody left to distrust.', 'Не доверять больше некому.'), 'grave');
     // some will not say: not to you (one turned against you, mostly; anyone on a bad day, now and then: offDay)
-    if (c.rapport <= -1 ? chance(RULES.talk.hostileSilence) : offDay(c))
+    if (Ties.against(c) ? chance(RULES.talk.hostileSilence) : offDay(c))
       return {
         ...say(
           bi(
@@ -485,7 +485,7 @@ DIALOG.distrust = {
     );
     return say(
       bi(fmt(td, { t: b.target.short, tpp: b.target.pp }).replace(/^“|”$/g, ''), fmtR(R(td), { t: b.target, s: c })),
-      likes(c.id, b.target.id) <= -1 ? 'cold' : 'stern'
+      Ties.dislikes(c.id, b.target.id) ? 'cold' : 'stern'
     );
   }
 };
@@ -544,7 +544,7 @@ function busFor(c, others) {
 // readily); otherwise whomever they dislike most; a fond friend only on the strongest suspicion, or hardly ever (rarest)
 function innocentBlames(c, others) {
   const top = mostSuspected(c, others),
-    notFriends = others.filter(o => likes(c.id, o.id) < 2),
+    notFriends = others.filter(o => !Ties.close(c.id, o.id)),
     cultNotFriends = notFriends.filter(o => o.role === 'cult');
   if (top && chance(RULES.talk.nameSuspect)) return top;
   if (cultNotFriends.length && chance(TP(c).blameAcc + (c.role === 'smuggler' ? RULES.talk.smugglerSight : 0))) return pick(cultNotFriends);
@@ -562,7 +562,7 @@ DIALOG.title = {
       `What does ‘${ttEn(e)}’ mean? The title keeps turning up in the tablets.`,
       `Что значит „${ttRu(e)}“? Этот титул всё время попадается в табличках.`
     );
-    const hostile = c.rapport <= -1;
+    const hostile = Ties.against(c);
     if (hostile ? chance(RULES.talk.refuse) : offDay(c)) {
       return {
         you,

@@ -73,7 +73,7 @@ const YOUR_DREAM = {
         flip = v => (v ? -v : pick([-1, 1]));
       let ab = sign(likes(a.id, b.id)),
         ba = sign(likes(b.id, a.id));
-      if (!tru) [ab, ba] = chance(0.5) ? [flip(ab), ba] : [ab, flip(ba)];
+      if (!tru) [ab, ba] = coin() ? [flip(ab), ba] : [ab, flip(ba)];
       const [en, rus] =
         ab > 0 && ba > 0
           ? [

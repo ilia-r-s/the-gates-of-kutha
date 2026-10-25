@@ -113,6 +113,13 @@ const enName = () => (S.name === 'Марлоу' ? 'Marlowe' : esc(S.name)); // t
 const fmt = (s, m) => s.replace(/\{(\w+)\}/g, (x, k) => (k in m ? m[k] : x));
 const P = c => ({ n: c.short, pp: c.pp, p: c.p });
 const listNames = a => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
+// a number in words up to ten, as a reader would write it (in figures beyond); in Russian, as it stands before a noun in
+// the nominative (with the noun's gender for one and two: m, f, n)
+const NUM_EN = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'],
+  NUM_RU = ['ноль', '', '', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять', 'десять'];
+const enNum = n => NUM_EN[n] || String(n),
+  ruNum = (n, g = 'm') =>
+    n === 1 ? { m: 'один', f: 'одна', n: 'одно' }[g] : n === 2 ? (g === 'f' ? 'две' : 'два') : NUM_RU[n] || String(n);
 const capS = s => s.charAt(0).toUpperCase() + s.slice(1);
 function esc(s) {
   return String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);

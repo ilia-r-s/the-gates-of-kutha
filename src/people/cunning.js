@@ -190,7 +190,7 @@ function blurt(c, n, scale = 1) {
 // all look the same from where you stand.
 function volunteers() {
   const v = freeChars().filter(c =>
-    c.rapport < 0
+    Ties.against(c)
       ? chance(RULES.descent.foeOffers) // (hardly ever, one turned against you)
       : c.role === 'cult'
         ? chance(
@@ -229,12 +229,13 @@ function willCome(c) {
   const D = RULES.descent,
     k = temperOf(c);
   if ((S.fin.offered || []).includes(c.id) && chance(D.offered)) return { ok: true };
-  const foe = S.fin.comp.map(C).find(o => likes(c.id, o.id) <= -2);
-  if (c.rapport <= -2) return chance(D.foe) ? { ok: true, why: 'duty' } : { ok: false, why: 'you' };
-  if (c.rapport === -1)
+  const foe = S.fin.comp.map(C).find(o => Ties.cannotBear(c.id, o.id));
+  if (Ties.hostile(c)) return chance(D.foe) ? { ok: true, why: 'duty' } : { ok: false, why: 'you' };
+  if (Ties.against(c))
+    // (strained: the hostile answered above)
     return chance(k === 'honest' || k === 'conscientious' ? D.duty : D.foe) ? { ok: true, why: 'duty' } : { ok: false, why: 'you' };
   if (foe) return chance(D.grit) ? { ok: true, why: 'grit', foe } : { ok: false, why: 'foe', foe };
-  if (chance(c.rapport <= 1 ? D.afraid : D.afraidFriend)) return { ok: false, why: 'afraid' }; // (a friend, seldom)
+  if (chance(!Ties.friend(c) ? D.afraid : D.afraidFriend)) return { ok: false, why: 'afraid' }; // (a friend, seldom)
   return { ok: true };
 }
 // what they say, coming or not
@@ -287,7 +288,7 @@ function turnAtTheEnd() {
   const D = RULES.descent,
     held = f.g3 && f.g3.kind === 'comp' ? f.g3.id : null,
     cult = f.comp.map(C).filter(c => c.role === 'cult' && isFree(c) && (!f.left.includes(c.id) || c.id === held)),
-    turned = cult.filter(c => chance(D.turn * (c.rapport >= 2 ? 1 - D.turnFond : 1)));
+    turned = cult.filter(c => chance(D.turn * (Ties.friend(c) ? 1 - D.turnFond : 1)));
   // one of them you left behind on the way goes down to the circle by another way, all but always (cameBack: the
   // ending tells it); now and then it does not come at all (stayedAway)
   const behind = f.comp.map(C).filter(c => c.role === 'cult' && isFree(c) && f.left.includes(c.id) && c.id !== held);

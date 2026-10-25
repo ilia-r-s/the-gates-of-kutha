@@ -1038,7 +1038,7 @@ const BELOW = {
           label: bi(`Steady ${him}`, ru.gs(c, 'Успокоить его', 'Успокоить её')),
           sub: bi('It will cost you', 'Это вам дорого обойдётся'),
           go: () => {
-            const well = tried(B_().steady, ['company'], c.rapport >= 2 ? B_().trusted : 0);
+            const well = tried(B_().steady, ['company'], Ties.friend(c) ? B_().trusted : 0);
             // talked down, they come on, mostly (the less if it went badly); else they stay where they stand
             if (chance(B_().comesOn[well ? 0 : 1]))
               return price(
@@ -1108,7 +1108,7 @@ const BELOW = {
           label: bi(`Go on, and let ${him} follow if ${c.p} can`, 'Идти дальше: пусть идёт следом, если сможет'),
           sub: bi(`${EP.He(c)} may not`, `${ru.gs(c, 'Он', 'Она')} может и не пойти`),
           go: () => {
-            if (tried(B_().follow, ['haste'], c.rapport >= 2 ? B_().trusted : 0))
+            if (tried(B_().follow, ['haste'], Ties.friend(c) ? B_().trusted : 0))
               return plain(
                 pline(
                   `After a while you hear ${c.pp} footsteps behind you again.`,

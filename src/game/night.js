@@ -268,7 +268,7 @@ function chooseVictim(night) {
     { cult, npcs } = night,
     holds = night.falseGuard ? 1 - N.holds : 1;
   if (S.alerted && chance(N.alerted * holds)) return 'player'; // you confided in one of them, or it has guessed you
-  if (cult.some(k => k.rapport <= -1) && chance(N.enemy * holds * cultTurns('inquisitor'))) return 'player'; // you made an enemy of one
+  if (cult.some(k => Ties.against(k)) && chance(N.enemy * holds * cultTurns('inquisitor'))) return 'player'; // you made an enemy of one
   // or for no reason you will ever know (the more if you read late or dig where it hides things: people/cunning.js)
   if (chance((N.you + N.youDay * (S.day - 1)) * Math.max(cultTurns('scholar'), cultTurns('delver')))) return 'player';
   const b = betrayal(cult); // now and then one of their own (people/cunning.js)
@@ -308,11 +308,11 @@ function chooseVictim(night) {
 // What most likely made the cult choose someone, as it stood that night: one of it could not bear them or never liked
 // them, they had begun to suspect one of it, or they stood by you; or nothing in particular.
 function victimWhy(v, cult) {
-  const k = cult.filter(c => likes(c.id, v.id) <= -1).sort((a, b) => likes(a.id, v.id) - likes(b.id, v.id))[0];
-  if (k) return { kind: likes(k.id, v.id) <= -2 ? 'cannotBear' : 'dislike', by: k.id };
+  const k = cult.filter(c => Ties.dislikes(c.id, v.id)).sort((a, b) => likes(a.id, v.id) - likes(b.id, v.id))[0];
+  if (k) return { kind: Ties.cannotBear(k.id, v.id) ? 'cannotBear' : 'dislike', by: k.id };
   const s = cult.find(c => sus(v.id, c.id) >= 2);
   if (s) return { kind: 'suspects', of: s.id };
-  return v.rapport >= 2 ? { kind: 'stood' } : { kind: 'none' };
+  return Ties.friend(v) ? { kind: 'stood' } : { kind: 'none' };
 }
 // The Watcher watches over you the night they promised to, if they trust you, mostly; otherwise over anyone at all, you
 // included, and the cult too: the Watcher cannot tell. The Watcher who spent the night in your tent watched nobody's.
@@ -324,7 +324,7 @@ function chooseWatch({ watcher: w }) {
       .filter(c => c.id !== w.id)
       .map(c => c.id)
   ];
-  return S.guardPromise === w.id && w.rapport >= 2 && chance(RULES.night.watchKept) ? 'player' : pick(pool);
+  return S.guardPromise === w.id && Ties.friend(w) && chance(RULES.night.watchKept) ? 'player' : pick(pool);
 }
 // The Dreamer dreams of someone not yet dreamt of who is still here at first light (whom the night came for and missed
 // as readily as anyone: a made-up dream may be of them too), and the dream is true, almost always (muddied: the one that
@@ -604,7 +604,7 @@ function breakfastDreams({ seer, vision }) {
         c.dreamt = { day: S.day, d: { t: C(vision.about), cult: vision.cult } }; // (told today: people/claims.js, dreamtToday)
         return c.dreamt.d;
       };
-      if ((c.rapport >= 1 || c.promised) && chance(N.seerTells)) {
+      if ((Ties.cordial(c) || c.promised) && chance(N.seerTells)) {
         const d = dream();
         if (!d) return;
         tellDream(c, d);

@@ -35,7 +35,7 @@ const credit = id => (S.credit && S.credit[id]) || 0;
 // whom someone suspects most, of a pool: in earnest only, and a friend only on the strongest suspicion
 function mostSuspected(c, pool) {
   const top = pool
-    .filter(o => sus(c.id, o.id) >= (likes(c.id, o.id) >= 2 ? RULES.scale.suspicion : 2))
+    .filter(o => sus(c.id, o.id) >= (Ties.close(c.id, o.id) ? RULES.scale.suspicion : 2))
     .sort((a, b) => sus(c.id, b.id) - sus(c.id, a.id) || likes(c.id, a.id) - likes(c.id, b.id));
   return top[0] || null;
 }
@@ -134,7 +134,8 @@ function eitherWay(what, whom, down, up, d) {
 const ofPair = (l, x) => likes(l.id, x); // how an onlooker feels about someone
 const isSusp = l => temperOf(l) === 'suspicious';
 // of those who might speak up for or about x, one, the fonder of x the likelier (for: the fond ones' weight, by liking)
-const fondest = (pool, x) => (pool.length ? C(wpick(Object.fromEntries(pool.map(c => [c.id, ofPair(c, x) ** 2 || 0.5])))) : null);
+const fondest = (pool, x) =>
+  pool.length ? C(wpick(Object.fromEntries(pool.map(c => [c.id, ofPair(c, x) ** 2 || RULES.camp.fondestLeast])))) : null;
 // the one who spoke up moves a step in their trust in you, mostly (camp.spoke)
 const spokeStep = (sp, d) => chance(RULES.camp.spoke) && nudge(sp, d);
 
@@ -146,7 +147,7 @@ const STIRS = {
     speaker: (o, pr) => {
       const pool = freeChars().filter(c => c.id !== o.about),
         friend = fondest(
-          pool.filter(c => ofPair(c, o.about) >= 1),
+          pool.filter(c => Ties.fond(c, o.about)),
           o.about
         );
       const sp = friend || pick(pool.filter(c => temperOf(c) === 'honest' || isSusp(c)));
@@ -161,9 +162,9 @@ const STIRS = {
             null,
             -1,
             pr.p +
-              (ofPair(l, o.about) >= 1 ? pr.friend : 0) +
+              (Ties.fond(l, o.about) ? pr.friend : 0) +
               (isSusp(l) ? pr.suspicious : 0) -
-              (l.rapport >= 2 ? pr.loyal : 0) -
+              (Ties.friend(l) ? pr.loyal : 0) -
               (sus(l.id, o.about) === 1 ? pr.suspected : 0) -
               (o.thief ? pr.thief : 0)
           ],
@@ -191,17 +192,17 @@ const STIRS = {
     speaker: (o, pr) => {
       const pool = freeChars().filter(c => c.id !== o.about);
       const sp =
-        pick(pool.filter(c => sus(c.id, o.about) >= 1 || ofPair(c, o.about) <= -1)) ||
-        pick(pool.filter(c => c.rapport >= 1 && ofPair(c, o.about) < 1));
+        pick(pool.filter(c => sus(c.id, o.about) >= 1 || Ties.dislikes(c, o.about))) ||
+        pick(pool.filter(c => Ties.cordial(c) && !Ties.fond(c, o.about)));
       return sp && chance(pr.odds) ? sp : null;
     },
     spoke: sp => spokeStep(sp, 1),
     react: (l, o, pr) =>
-      ofPair(l, o.about) >= 1
+      Ties.fond(l, o.about)
         ? (o.backed || []).includes(l.id)
           ? null
           : ['trust', null, -1, pr.grudge]
-        : ['trust', null, 1, pr.p + (sus(l.id, o.about) >= 1 || ofPair(l, o.about) <= -1 ? pr.doubted : 0)],
+        : ['trust', null, 1, pr.p + (sus(l.id, o.about) >= 1 || Ties.dislikes(l, o.about) ? pr.doubted : 0)],
     open: (sp, o) => {
       const a = C(o.about);
       if (!sp)
@@ -225,7 +226,7 @@ const STIRS = {
   grief: {
     speaker: (o, pr) => {
       const friend = fondest(
-        freeChars().filter(c => ofPair(c, o.about) >= 1),
+        freeChars().filter(c => Ties.fond(c, o.about)),
         o.about
       );
       return friend && chance(pr.odds) ? friend : null;
@@ -240,11 +241,11 @@ const STIRS = {
       null,
       -1,
       pr.p +
-        (ofPair(l, o.about) >= 1 ? pr.friend : 0) +
+        (Ties.fond(l, o.about) ? pr.friend : 0) +
         pr.late * (S.day - 1) +
         (S.confidedIn && S.confidedIn.includes(o.about) ? pr.confided : 0) -
         (S.stats.right ? pr.progress : 0) -
-        (l.rapport >= 2 ? pr.loyal : 0)
+        (Ties.friend(l) ? pr.loyal : 0)
     ],
     quiet: true,
     // nobody grieving aloud: then only if the camp's mood moved, a word to say why
@@ -278,7 +279,7 @@ const STIRS = {
       'sus',
       o.about,
       1,
-      pr.p + (ofPair(l, o.about) <= -1 ? pr.dislike : 0) - (ofPair(l, o.about) >= 1 ? pr.friend : 0) + (isSusp(l) ? pr.suspicious : 0)
+      pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) - (Ties.fond(l, o.about) ? pr.friend : 0) + (isSusp(l) ? pr.suspicious : 0)
     ],
     quiet: true,
     open: (sp, o) => {
@@ -302,13 +303,13 @@ const STIRS = {
   // named may never forgive it
   dreamt: {
     react: (l, o, pr) => {
-      if (ofPair(l, o.about) >= 1 || sus(l.id, o.by) >= 2 || (o.answer && ofPair(l, o.by) < 1))
+      if (Ties.fond(l, o.about) || sus(l.id, o.by) >= 2 || (o.answer && !Ties.fond(l, o.by)))
         return [
           'sus',
           o.by,
           1,
           pr.back +
-            (ofPair(l, o.about) >= 1 ? pr.friend : 0) +
+            (Ties.fond(l, o.about) ? pr.friend : 0) +
             (isSusp(l) ? pr.suspicious : 0) +
             (o.answer ? pr.answer[o.answer.first ? 0 : 1] : 0)
         ];
@@ -317,9 +318,9 @@ const STIRS = {
         o.about,
         1,
         pr.p +
-          (ofPair(l, o.by) >= 1 ? pr.believe : 0) +
+          (Ties.fond(l, o.by) ? pr.believe : 0) +
           pr.credit * credit(o.by) +
-          (ofPair(l, o.about) <= -1 ? pr.dislike : 0) -
+          (Ties.dislikes(l, o.about) ? pr.dislike : 0) -
           (sus(l.id, o.by) === 1 ? pr.doubt : 0)
       ];
     },
@@ -329,18 +330,18 @@ const STIRS = {
   // a dream told aloud that clears someone: those who suspected them may think again, if they believe the dreamer
   dreamtClean: {
     react: (l, o, pr) =>
-      sus(l.id, o.about) >= 1 ? ['sus', o.about, -1, pr.p + (ofPair(l, o.by) >= 1 ? pr.believe : 0) + pr.credit * credit(o.by)] : null,
+      sus(l.id, o.about) >= 1 ? ['sus', o.about, -1, pr.p + (Ties.fond(l, o.by) ? pr.believe : 0) + pr.credit * credit(o.by)] : null,
     quiet: true
   },
   // someone says out loud that they do not trust another: much as a dream, though fewer believe it
   blame: {
     react: (l, o, pr) => {
-      if (ofPair(l, o.about) >= 1) return ['sus', o.by, 1, pr.back];
+      if (Ties.fond(l, o.about)) return ['sus', o.by, 1, pr.back];
       return [
         'sus',
         o.about,
         1,
-        pr.p + (ofPair(l, o.about) <= -1 ? pr.dislike : 0) + (ofPair(l, o.by) >= 1 ? pr.believe : 0) + pr.credit * credit(o.by)
+        pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) + (Ties.fond(l, o.by) ? pr.believe : 0) + pr.credit * credit(o.by)
       ];
     },
     after: (o, pr) => resent(o.about, o.by, pr.resent),
@@ -349,15 +350,15 @@ const STIRS = {
   // the diggers sing of someone: those who are not fond of them may eye them the more for it
   song: {
     react: (l, o, pr) =>
-      ofPair(l, o.about) >= 1
+      Ties.fond(l, o.about)
         ? ['sus', o.about, 1, 0] // (a friend, hardly ever)
-        : ['sus', o.about, 1, pr.p + (ofPair(l, o.about) <= -1 ? pr.dislike : 0) + (isSusp(l) ? pr.suspicious : 0)],
+        : ['sus', o.about, 1, pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) + (isSusp(l) ? pr.suspicious : 0)],
     quiet: true
   },
   // someone comes clean before everyone: a friend thinks the better of them for it, others see a liar
   confessed: {
     react: (l, o, pr) =>
-      ofPair(l, o.about) >= 1
+      Ties.fond(l, o.about)
         ? sus(l.id, o.about) >= 1
           ? ['sus', o.about, -1, pr.respect]
           : null
@@ -380,9 +381,9 @@ const STIRS = {
     react: (l, o, pr) =>
       !o.by
         ? null
-        : ofPair(l, o.about) >= 1
+        : Ties.fond(l, o.about)
           ? ['sus', o.by, 1, pr.back]
-          : ['sus', o.about, 1, pr.p + (ofPair(l, o.about) <= -1 ? pr.dislike : 0) + (isSusp(l) ? pr.suspicious : 0)],
+          : ['sus', o.about, 1, pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) + (isSusp(l) ? pr.suspicious : 0)],
     after: o => (o.by ? resent(o.about, o.by, RULES.camp.blame.resent) : null),
     open: (sp, o) => {
       if (!sp) return '';
@@ -399,9 +400,9 @@ const STIRS = {
   // of the one whose habit it is may suspect them for it
   planted: {
     react: (l, o, pr) =>
-      ofPair(l, o.about) >= 1
+      Ties.fond(l, o.about)
         ? null
-        : ['sus', o.about, 1, pr.p + (ofPair(l, o.about) <= -1 ? pr.dislike : 0) + (isSusp(l) ? pr.suspicious : 0)],
+        : ['sus', o.about, 1, pr.p + (Ties.dislikes(l, o.about) ? pr.dislike : 0) + (isSusp(l) ? pr.suspicious : 0)],
     open: (sp, o) => {
       const a = C(o.at);
       return `<p class="notice">${bi(
@@ -501,7 +502,7 @@ const STIRS = {
   // the truth gave the lie to what someone had said before everyone (or the camp takes it so): the friends of the one
   // wronged suspect them now
   disproven: {
-    react: (l, o, pr) => ['sus', o.by, 1, pr.p + (ofPair(l, o.about) >= 1 && o.verdict === 'cult' ? pr.friend : 0)],
+    react: (l, o, pr) => ['sus', o.by, 1, pr.p + (Ties.fond(l, o.about) && o.verdict === 'cult' ? pr.friend : 0)],
     open: (sp, o) => {
       const b = C(o.by),
         a = C(o.about);

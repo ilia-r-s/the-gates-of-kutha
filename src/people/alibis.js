@@ -165,7 +165,7 @@ function planAlibis(n, crimeLoc, actorId, target = null, how = 'watch') {
   inno.forEach(c => {
     if (!crime || rec.saw[c.id]) return;
     const pool = rest.filter(o => o.id !== c.id),
-      t = pick([mostSuspected(c, pool), ...pool.filter(o => likes(c.id, o.id) <= -2)].filter(Boolean));
+      t = pick([mostSuspected(c, pool), ...pool.filter(o => Ties.cannotBear(c.id, o.id))].filter(Boolean));
     if (t && chance(A.invent * TP(c).frame)) rec.saw[c.id] = { who: t.id, cat: pick(CATS), where: crimeLoc, made: true, to: toward };
   });
   // (on a night nothing came for anyone, nobody heard any shouting: people/alibis.js, alibiLine)
@@ -203,8 +203,8 @@ function trystOf(pool) {
         a.id < b.id &&
         mayFlirt(a, b) &&
         (flirtsWith(a.id, b.id) || flirtsWith(b.id, a.id)) &&
-        likes(a.id, b.id) >= 1 &&
-        likes(b.id, a.id) >= 1
+        Ties.fond(a.id, b.id) &&
+        Ties.fond(b.id, a.id)
       )
         pairs.push([a, b]);
     })
