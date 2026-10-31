@@ -1,0 +1,686 @@
+{
+  "passages": {
+    "yourCasebookFillsAs": {
+      "$args": [],
+      "$value": [
+        "Your casebook fills as you work: each person’s habits, the traces left at every attack, the signs, and what the tablets say.",
+        "Ваш журнал заполняется по ходу работы: привычки каждого, следы после каждого нападения, знамения и то, что говорят таблички."
+      ]
+    },
+    "yourMarkForClick": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Your mark for ${c.short}: ${MARKS[c.mark]}. Click to change."
+        },
+        {
+          "$template": "Ваша отметка для ${ru.c(c,\"g\")}: ${ruMark(c).toLowerCase()}. Нажмите, чтобы изменить."
+        }
+      ]
+    },
+    "sweptScene": {
+      "$args": [],
+      "$value": [
+        "The ground swept with a palm frond behind them, all the way back to the path: nothing to examine.",
+        "Землю за собой подмели пальмовой ветвью, до самой тропы: осматривать нечего."
+      ]
+    },
+    "emptyScene": {
+      "$args": [],
+      "$value": ["Nothing there to examine: no trace was left.", "Осматривать нечего: следов не осталось."]
+    },
+    "theSameHabitAs": {
+      "$js": "same=>{const SEEN={genuine:[\"the attacker’s trace\",\"следа нападавшего\"],planted:[\"the planted trace\",\"подброшенного следа\"],stray:[\"the trace left there earlier\",\"следа, оставленного там раньше\"],\nthief:[\"the thief’s trace\",\"следа вора\"],unverified:[\"the unchecked trace\",\"непроверенного следа\"],spite:[\"the trace by your tent pole\",\"следа возле шеста вашей палатки\"]},seen=o=>SEEN[o.source===\"spite\"?\"spite\":SEEN[o.status]?o.status:\"unverified\"],night=(o,k)=>o.day===0?[\"the night Crane died\",\"ночь гибели Крейна\"][k]:[`night ${o.day}`,`ночь ${o.day}`][k];return[`The same habit as ${same.map((o=>`${seen(o)[0]}, ${night(o,0)}`)).join(\"; \")}.`,`Та же примета, что и у ${same.map((o=>`${seen(o)[1]}, ${night(o,1)}`)).join(\"; \")}.`]}"
+    },
+    "anAttackInThe": {
+      "$args": [],
+      "$value": [
+        "An attack in the night usually leaves a trace at the scene. Examine a scene the next day to test it.",
+        "Ночное нападение обычно оставляет на месте след. Осмотрите место на следующий день, чтобы его проверить."
+      ]
+    },
+    "askPeopleWhereThey": {
+      "$args": [],
+      "$value": ["Ask people where they were, then compare their accounts.", "Спрашивайте людей, где они были, и сравнивайте их рассказы."]
+    },
+    "with": {
+      "$args": ["x", "there"],
+      "$value": [
+        {
+          "$template": "${PLACE_SHORT[x.loc]}${x.with?\", with \"+C(x.with).short:\", alone\"}${there?\": where it happened\":\"\"}"
+        },
+        {
+          "$template": "${PLACE_RU[x.loc]}${x.with?\", с \"+ru.c(x.with,\"i\"):ru.gs(x.id,\", один\",\", одна\")}${there?\": там, где всё случилось\":\"\"}"
+        }
+      ]
+    },
+    "saysWasWithSays": {
+      "$args": ["x", "p"],
+      "$value": [
+        {
+          "$template": "${x.short} says ${x.p} was with ${p.short}; ${p.short} says otherwise."
+        },
+        {
+          "$template": "${ru.c(x)} говорит, что ${ru.gs(x,\"был\",\"была\")} с ${ru.c(p,\"i\")}; ${ru.c(p)} говорит иное."
+        }
+      ]
+    },
+    "fits": {
+      "$args": ["fits"],
+      "$value": [
+        {
+          "$template": "· fits ${listNames(fits.map((c=>c.short)))}"
+        },
+        {
+          "$template": "· подходит: ${ru.list(fits.map((c=>ru.c(c))))}"
+        }
+      ]
+    },
+    "passedSomeone": {
+      "$args": ["x", "at", "atRu"],
+      "$value": [
+        {
+          "$template": "${C(x.id).short} passed someone ${at}: ${WIT[x.val]}"
+        },
+        {
+          "$template": "${ru.c(x.id)} ${ru.gs(x.id,\"встретил\",\"встретила\")} кого-то ${atRu}: ${RU_WIT[x.val]}"
+        }
+      ]
+    },
+    "willNotSayWhat": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "will not say what part, if any, ${c.p} plays"
+        },
+        {
+          "$template": "не говорит, какая роль ${ru.gs(c,\"ему\",\"ей\")} отведена, если отведена вообще"
+        }
+      ]
+    },
+    "saidOtherwiseOnDay": {
+      "$args": ["d", "c"],
+      "$value": [
+        {
+          "$template": "(said otherwise on day ${d}, and came clean of it)"
+        },
+        {
+          "$template": "(в день ${d} ${ru.gs(c,\"говорил\",\"говорила\")} иное — и ${ru.gs(c,\"сам признался\",\"сама призналась\")} во лжи)"
+        }
+      ]
+    },
+    "saidOtherwiseOnDay2": {
+      "$args": ["d", "c"],
+      "$value": [
+        {
+          "$template": "(said otherwise on day ${d}, and took it back)"
+        },
+        {
+          "$template": "(в день ${d} ${ru.gs(c,\"говорил\",\"говорила\")} иное — и ${ru.gs(c,\"отказался\",\"отказалась\")} от своих слов)"
+        }
+      ]
+    },
+    "askPeopleAboutCrane": {
+      "$args": [],
+      "$value": [
+        "Ask people about Crane’s diary. One of them dreams true, one keeps watch, one is a thief, and not everyone will tell you the truth.",
+        "Спрашивайте людей о дневнике Крейна. Один из них видит вещие сны, другой стоит на страже, третий — вор, и не каждый скажет вам правду."
+      ]
+    },
+    "sayTheyCraneDiary": {
+      "$args": ["who", "en", "one", "rs", "oneRu"],
+      "$value": [
+        {
+          "$template": "${listNames(who.map((c=>c.short)))} ${who.length===2?\"both\":\"all\"} say they ${en}. Crane’s diary names ${one}."
+        },
+        {
+          "$template": "${capS(ru.list(who.map((c=>ru.c(c)))))} — ${who.length>2?\"все\":who.every(ru.f)?\"обе\":\"оба\"} говорят, что ${rs}. Дневник Крейна называет ${oneRu}."
+        }
+      ]
+    },
+    "askPeopleWhomThey": {
+      "$args": [],
+      "$value": [
+        "Ask people whom they distrust. Some will tell you about their dreams.",
+        "Спрашивайте людей, кому они не доверяют. Кто-то расскажет и о своих снах."
+      ]
+    },
+    "gossipIsOnlyAs": {
+      "$args": [],
+      "$value": [
+        "Gossip is only as true as the gossip, and people are kind to their friends.",
+        "Сплетня правдива ровно настолько, насколько правдив сплетник, а к друзьям люди снисходительны."
+      ]
+    },
+    "sinceDayTheCamp": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "Since day ${S.walkout} the camp will hold no more inquiries."
+        },
+        {
+          "$template": "С ${S.walkout}-го дня лагерь больше не собирается на дознания."
+        }
+      ]
+    },
+    "whatHappensBeforeEveryone": {
+      "$args": [],
+      "$value": [
+        "What happens before everyone moves people, each in their own way: their trust in you, whom they suspect, and what they think of each other.",
+        "Всё, что происходит при всех, задевает людей — каждого по-своему: их доверие к вам, их подозрения и то, что они думают друг о друге."
+      ]
+    },
+    "noneYetKuthaShows": {
+      "$args": [],
+      "$value": [
+        "None yet. Kutha shows them at dawn, and to those who search.",
+        "Пока ни одного. Кута являет их на рассвете — и тем, кто ищет."
+      ]
+    },
+    "nothingTranslatedYetFragments": {
+      "$args": [],
+      "$value": [
+        "Nothing translated yet. Fragments turn up in the trench and the finds magazine.",
+        "Пока ничего не переведено. Обломки табличек попадаются в траншее и в хранилище находок."
+      ]
+    },
+    "anselmIlseAndZahrun": {
+      "$args": [],
+      "$value": [
+        "Anselm, Ilse and Zahrun know the old titles. A cultist would lie about the power below, and might about the others; even an honest memory can slip.",
+        "Ансельм, Ильза и Захрун знают древние титулы. Сектант солгал бы о силе под Кутой, а может, и о других; подвести может и честная память."
+      ]
+    },
+    "anselmAndIlseRead": {
+      "$args": [],
+      "$value": [
+        "Anselm and Ilse read the charms you show them. A cultist would read the ward that matters falsely, and perhaps the rest.",
+        "Ансельм и Ильза читают амулеты, которые вы им показываете. Сектант прочёл бы ложно оберег, который важен, — а может, и остальные."
+      ]
+    },
+    "waitingToBeTranslated": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "${S.fragments} waiting to be translated at camp."
+        },
+        {
+          "$template": "Ждут перевода в лагере: ${S.fragments}."
+        }
+      ]
+    },
+    "philologistTranslationComesEasier": {
+      "$args": [],
+      "$value": ["Philologist: translation comes easier.", "Филолог: переводить легче."]
+    },
+    "oldSoldierPressingAnd": {
+      "$args": [],
+      "$value": ["Old soldier: pressing and examining come easier.", "Ветеран: легче давить на людей и осматривать места."]
+    },
+    "occultistNowAndThen": {
+      "$args": [],
+      "$value": [
+        "Occultist: now and then you feel a chill near one of the cult, and the rite favours you.",
+        "Оккультист: порой рядом с кем-то из секты вас пробирает холод, и обряд к вам благосклонен."
+      ]
+    },
+    "givenOnTheTitle": {
+      "$args": [],
+      "$value": [
+        "· given on the title screen, this code deals the same season again",
+        "· введённый на титульном экране, этот код сдаст тот же сезон заново"
+      ]
+    },
+    "aCharmHiddenIn": {
+      "$args": [],
+      "$value": [
+        "A charm hidden in a place mostly turns up the first time you search it, and if not, perhaps the next. Tablets, signs, small finds and horrors keep turning up, at each place’s own odds, as often as you search.",
+        "Амулет, спрятанный в каком-то месте, чаще всего находится при первом же обыске, а если нет — быть может, при следующем. Таблички, знамения, мелкие находки и ужасы попадаются и дальше — в каждом месте по-своему, сколько бы вы ни искали."
+      ]
+    }
+  },
+  "theNightCraneDied": {
+    "$call": "bi",
+    "$args": ["The night Crane died", "Ночь гибели Крейна"]
+  },
+  "night": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Night ${n}"
+      },
+      {
+        "$template": "Ночь ${n}"
+      }
+    ]
+  },
+  "day": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Day ${d}"
+      },
+      {
+        "$template": "День ${d}"
+      }
+    ]
+  },
+  "suspectedBy": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Suspected by ${nameList(by)}"
+      },
+      {
+        "$template": "${ru.gs(c,\"Его\",\"Её\")} подозревают: ${nameListRu(by)}"
+      }
+    ]
+  },
+  "provenRightBeforeTheCamp": {
+    "$call": "bi",
+    "$args": [
+      "Proven right before the camp",
+      {
+        "$js": "ru.gs(c,\"Оказался прав перед всем лагерем\",\"Оказалась права перед всем лагерем\")"
+      }
+    ]
+  },
+  "provenWrongBeforeTheCamp": {
+    "$call": "bi",
+    "$args": [
+      "Proven wrong before the camp",
+      {
+        "$js": "ru.gs(c,\"Оказался неправ перед всем лагерем\",\"Оказалась неправа перед всем лагерем\")"
+      }
+    ]
+  },
+  "cooler": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "cooler: ${nameList(r.down)}"
+      },
+      {
+        "$template": "охладели: ${nameListRu(r.down)}"
+      }
+    ]
+  },
+  "warmer": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "warmer: ${nameList(r.up)}"
+      },
+      {
+        "$template": "потеплели: ${nameListRu(r.up)}"
+      }
+    ]
+  },
+  "alsoFoundAtAScene": {
+    "$call": "bi",
+    "$args": ["Also found at a scene: ", "Также найдено на месте нападения: "]
+  },
+  "foundByYourTentPole": {
+    "$call": "bi",
+    "$args": ["Found by your tent pole: ", "Найдено у шеста вашей палатки: "]
+  },
+  "trust": {
+    "$call": "bi",
+    "$args": ["trust", "доверие"]
+  },
+  "whatYouNoticed": {
+    "$call": "bi",
+    "$args": ["What you noticed", "Что вы заметили"]
+  },
+  "traces": {
+    "$call": "bi",
+    "$args": ["Traces", "Следы"]
+  },
+  "sweptClean": {
+    "$call": "bi",
+    "$args": ["Swept clean", "Подметено"]
+  },
+  "noTrace": {
+    "$call": "bi",
+    "$args": ["No trace", "Без следов"]
+  },
+  "byYourTentPole": {
+    "$call": "bi",
+    "$args": ["By your tent pole", "У шеста вашей палатки"]
+  },
+  "dead": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${c.short} (dead)"
+      },
+      {
+        "$template": "${ru.c(c)} (${ru.gs(c,\"погиб\",\"погибла\")})"
+      }
+    ]
+  },
+  "fits": {
+    "$call": "bi",
+    "$args": ["Fits:", "Совпадения:"]
+  },
+  "noOneYouKnowOf": {
+    "$call": "bi",
+    "$args": ["no one you know of", "никого из известных вам"]
+  },
+  "unchecked": {
+    "$call": "bi",
+    "$args": ["· unchecked: ", "· не проверены: "]
+  },
+  "whereabouts": {
+    "$call": "bi",
+    "$args": ["Whereabouts", "Кто где был"]
+  },
+  "attackedAt": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "attacked ${LOCS[x.loc].at}"
+      },
+      {
+        "$template": "${ru.gs(x.id,\"на него напали\",\"на неё напали\")} ${ru.loc(x.loc,\"at\")}"
+      }
+    ]
+  },
+  "wouldNotSay": {
+    "$call": "bi",
+    "$args": [
+      "would not say",
+      {
+        "$js": "ru.gs(x.id,\"уклонился от ответа\",\"уклонилась от ответа\")"
+      }
+    ]
+  },
+  "sightings": {
+    "$call": "bi",
+    "$args": ["Sightings", "Кого видели в темноте"]
+  },
+  "saysDreamsTrue": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "says ${c.p} dreams true"
+      },
+      "говорит, что видит вещие сны"
+    ]
+  },
+  "saysKeepsWatchAtNight": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "says ${c.p} keeps watch at night"
+      },
+      "говорит, что по ночам стоит на страже"
+    ]
+  },
+  "saysHasNoPartInThe": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "says ${c.p} has no part in the diary"
+      },
+      {
+        "$template": "говорит, что дневник Крейна не о ${ru.gs(c,\"нём\",\"ней\")}"
+      }
+    ]
+  },
+  "claims": {
+    "$call": "bi",
+    "$args": ["Claims", "Кто кем себя называет"]
+  },
+  "testimony": {
+    "$call": "bi",
+    "$args": ["Testimony", "Показания"]
+  },
+  "whatPeopleSayOfEachOther": {
+    "$call": "bi",
+    "$args": ["What people say of each other", "Что люди говорят друг о друге"]
+  },
+  "whatIsSaidOfYou": {
+    "$call": "bi",
+    "$args": ["What is said of you", "Что говорят о вас"]
+  },
+  "theCampRefused": {
+    "$call": "bi",
+    "$args": ["the camp refused", "лагерь отказал"]
+  },
+  "unmasked": {
+    "$call": "bi",
+    "$args": ["unmasked", "разоблачение"]
+  },
+  "sentAway": {
+    "$call": "bi",
+    "$args": [
+      "sent away",
+      {
+        "$js": "ru.gs(x,\"отослан\",\"отослана\")"
+      }
+    ]
+  },
+  "withYou": {
+    "$call": "bi",
+    "$args": ["With you", "За"]
+  },
+  "nobody": {
+    "$call": "bi",
+    "$args": ["nobody", "никого"]
+  },
+  "against": {
+    "$call": "bi",
+    "$args": ["against", "против"]
+  },
+  "nobody2": {
+    "$call": "bi",
+    "$args": ["nobody", "никого"]
+  },
+  "silent": {
+    "$call": "bi",
+    "$args": ["silent", "молчали"]
+  },
+  "inquiries": {
+    "$call": "bi",
+    "$args": ["Inquiries", "Дознания"]
+  },
+  "coolerTowardsYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "cooler towards you: ${nameList(ids)}"
+      },
+      {
+        "$template": "охладели к вам: ${nameListRu(ids)}"
+      }
+    ]
+  },
+  "warmerTowardsYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "warmer towards you: ${nameList(ids)}"
+      },
+      {
+        "$template": "потеплели к вам: ${nameListRu(ids)}"
+      }
+    ]
+  },
+  "whatTheCampMakesOfIt": {
+    "$call": "bi",
+    "$args": ["What the camp makes of it", "Что думает лагерь"]
+  },
+  "journal": {
+    "$call": "bi",
+    "$args": ["Journal", "Дневник"]
+  },
+  "clickToChange": {
+    "$call": "bi",
+    "$args": ["Click to change.", "Нажмите, чтобы изменить."]
+  },
+  "nothing": {
+    "$call": "bi",
+    "$args": ["Nothing", "Никого"]
+  },
+  "bindsNothing": {
+    "$call": "bi",
+    "$args": ["binds nothing", "не связывает никого"]
+  },
+  "yourReckoning": {
+    "$call": "bi",
+    "$args": ["Your reckoning", "Ваши выкладки"]
+  },
+  "thePowerBelowKutha": {
+    "$call": "bi",
+    "$args": ["The power below Kutha", "Сила под Кутой"]
+  },
+  "oldTitles": {
+    "$call": "bi",
+    "$args": ["Old titles", "Древние титулы"]
+  },
+  "signsAsTheTabletsWriteThem": {
+    "$call": "bi",
+    "$args": ["Signs, as the tablets write them", "Знамения, как их записывают таблички"]
+  },
+  "if": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "If ${fmlEn(si)}…"
+      },
+      {
+        "$template": "Если ${fmlRu(si)}…"
+      }
+    ]
+  },
+  "iSawThis": {
+    "$call": "bi",
+    "$args": ["I saw this", "Замечено"]
+  },
+  "markAsSeenIf": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Mark as seen: if ${fmlEn(si)}"
+      },
+      {
+        "$template": "Отметить как замеченное: если ${fmlRu(si)}"
+      }
+    ]
+  },
+  "charms": {
+    "$call": "bi",
+    "$args": ["Charms", "Амулеты"]
+  },
+  "carried": {
+    "$call": "bi",
+    "$args": ["carried", "при вас"]
+  },
+  "signsSeen": {
+    "$call": "bi",
+    "$args": ["Signs seen", "Замеченные знамения"]
+  },
+  "theTablets": {
+    "$call": "bi",
+    "$args": ["The tablets", "Таблички"]
+  },
+  "whatTheTitlesMean": {
+    "$call": "bi",
+    "$args": ["What the titles mean", "Что значат титулы"]
+  },
+  "readings": {
+    "$call": "bi",
+    "$args": ["Readings", "Прочтения"]
+  },
+  "carried2": {
+    "$call": "bi",
+    "$args": ["Carried", "При вас"]
+  },
+  "oldCharm": {
+    "$call": "bi",
+    "$args": ["old charm", "древний амулет"]
+  },
+  "drinkNowSteadiesYourNerve": {
+    "$call": "bi",
+    "$args": ["Drink now · steadies your nerve", "Выпить сейчас · успокаивает нервы"]
+  },
+  "nothingYetSearchTheSite": {
+    "$call": "bi",
+    "$args": ["Nothing yet. Search the site.", "Пока ничего. Обыщите раскоп."]
+  },
+  "tabletFragments": {
+    "$call": "bi",
+    "$args": ["Tablet fragments", "Обломки табличек"]
+  },
+  "noneWaiting": {
+    "$call": "bi",
+    "$args": ["None waiting.", "Переводить нечего."]
+  },
+  "yourTrade": {
+    "$call": "bi",
+    "$args": ["Your trade", "Ваше ремесло"]
+  },
+  "season": {
+    "$call": "bi",
+    "$args": ["Season", "Сезон"]
+  },
+  "searched": {
+    "$call": "bi",
+    "$args": ["Searched", "Обыскано"]
+  },
+  "TRUST_SAY": {
+    "-2": ["hostile", "враждебно"],
+    "-1": ["strained", "натянуто"],
+    "0": ["reserved", "сдержанно"],
+    "1": ["cordial", "приветливо"],
+    "2": ["warm", "тепло"],
+    "3": ["devoted", "преданно"]
+  },
+  "MARKS": {
+    "?": "Unmarked",
+    "ally": "Ally",
+    "foe": "Suspect"
+  },
+  "PLACE_SHORT": {
+    "camp": "in camp",
+    "village": "at the coffee-house",
+    "store": "in the finds magazine",
+    "canal": "by the canal",
+    "trench": "in Trench B",
+    "ziggurat": "on the ziggurat",
+    "cemetery": "by the Parthian graves"
+  },
+  "PLACE_RU": {
+    "camp": "в лагере",
+    "village": "в кофейне",
+    "store": "в хранилище находок",
+    "canal": "у канала",
+    "trench": "в траншее Б",
+    "ziggurat": "на зиккурате",
+    "cemetery": "у парфянских могил"
+  },
+  "nearGen": [
+    {
+      "$template": "near ${LOCS[x.where].ref}"
+    },
+    {
+      "$template": "у ${ru.loc(x.where, 'gen')}"
+    }
+  ],
+  "aboutTheTents": ["about the tents", "между палатками"],
+  "nearSTentG": [
+    {
+      "$template": "near ${C(x.to).short}’s tent"
+    },
+    {
+      "$template": "у палатки ${ru.c(x.to, 'g')}"
+    }
+  ],
+  "nearYourTent": ["near your tent", "у вашей палатки"],
+  "seerDreamTrueOneDreamerWarden": [
+    ["seer", "dream true", "видят вещие сны", "one Dreamer", "одного сновидца"],
+    ["warden", "keep watch", "стоят на страже", "one Watcher", "одного стража"]
+  ],
+  "text": ["без отметки", "принято", "исключено"]
+}

@@ -1,0 +1,134 @@
+{
+  "passages": {
+    "ifIWereYou": {
+      "$args": ["a", "k", "c"],
+      "$value": [
+        {
+          "$js": "[`If I were you, Doctor, I would ask ${a.short} where ${a.p} walks after midnight. I say nothing more.`,`${a.short} sleeps very little, for an honest ${a.p===\"she\"?\"woman\":\"man\"}. That is all.`][k]"
+        },
+        {
+          "$js": "[`На вашем месте, доктор, я бы ${ru.gs(c,\"спросил\",\"спросила\")} ${ru.c(a,\"a\")}, где ${ru.gs(a,\"он\",\"она\")} гуляет после полуночи. Больше я ничего не скажу.`,`Для ${ru.gs(a,\"честного человека\",\"честной женщины\")} ${ru.c(a)} слишком мало спит. Только и всего.`][k]"
+        }
+      ]
+    },
+    "saysItLightlyAnd": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} says it lightly, and does not quite meet your eye."
+        },
+        {
+          "$template": "${ru.c(c)} говорит это небрежно — и не вполне смотрит вам в глаза."
+        }
+      ]
+    },
+    "keepsVeryLateHours": {
+      "$args": ["a", "k", "c"],
+      "$value": [
+        {
+          "$js": "[`${a.short} keeps very late hours for someone with nothing to do at night.`,`Ask ${a.short} why ${a.pp} boots were muddy the morning after. I would.`][k]"
+        },
+        {
+          "$js": "[`Для человека, которому нечего делать по ночам, ${ru.c(a)} слишком поздно ложится.`,`Спросите ${ru.c(a,\"a\")}, почему наутро у ${ru.gs(a,\"него\",\"неё\")} сапоги были в грязи. Я бы ${ru.gs(c,\"спросил\",\"спросила\")}.`][k]"
+        }
+      ]
+    },
+    "andSinceWeAre": {
+      "$args": ["lead", "said", "saidRu", "c"],
+      "$value": [
+        {
+          "$template": "${lead[0]}And since we are telling the truth: ${said} I said nothing. I did not want to end like Crane."
+        },
+        {
+          "$template": "${lead[1]}И раз уж мы говорим правду: ${saidRu} Я ${ru.gs(c,\"промолчал\",\"промолчала\")}. Мне не хотелось кончить как Крейн."
+        }
+      ]
+    },
+    "iSawComingBack": {
+      "$args": ["en", "comma", "a", "from", "rus", "c", "fromRu"],
+      "$value": [
+        {
+          "$template": "${en}${comma} I saw ${a.short} coming back from ${from}, before the shouting started. I know ${a.pp} walk; I would swear to it."
+        },
+        {
+          "$template": "${rus} я ${ru.gs(c,\"видел\",\"видела\")}, как ${ru.c(a)} ${ru.gs(a,\"возвращался\",\"возвращалась\")} ${fromRu} — ещё до того, как поднялся крик. ${ru.gs(a,\"Его\",\"Её\")} походку я ни с чьей не спутаю, ${ru.gs(c,\"готов\",\"готова\")} поклясться."
+        }
+      ]
+    },
+    "iSawSomeoneComing": {
+      "$args": ["en", "comma", "from", "a", "rus", "c", "fromRu"],
+      "$value": [
+        {
+          "$template": "${en}${comma} I saw someone coming back from ${from}, before the shouting started, and I am all but sure it was ${a.short}."
+        },
+        {
+          "$template": "${rus} я ${ru.gs(c,\"видел\",\"видела\")}, как кто-то возвращался ${fromRu} — ещё до того, как поднялся крик, — и я почти ${ru.gs(c,\"уверен\",\"уверена\")}, что это ${ru.gs(a,\"был\",\"была\")} ${ru.c(a)}."
+        }
+      ]
+    },
+    "iSawSomeoneComing2": {
+      "$args": ["en", "comma", "from", "a", "rus", "c", "fromRu"],
+      "$value": [
+        {
+          "$template": "${en}${comma} I saw someone coming back from ${from}, before the shouting started. ${a.short}, I think; but it was dark, and I could not swear to it."
+        },
+        {
+          "$template": "${rus} я ${ru.gs(c,\"видел\",\"видела\")}, как кто-то возвращался ${fromRu} — ещё до того, как поднялся крик. По-моему, это ${ru.gs(a,\"был\",\"была\")} ${ru.c(a)}; но было темно, и поклясться я бы не ${ru.gs(c,\"смог\",\"смогла\")}."
+        }
+      ]
+    },
+    "sawNearTheScene": {
+      "$args": ["c", "a", "en", "rus"],
+      "$value": [
+        {
+          "$template": "${c.name} saw ${a.name} near the scene ${en}, and said so at last, ready to swear to it."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"видел\",\"видела\")} ${ru.cf(a,\"a\")} у места нападения ${rus} — и наконец ${ru.gs(c,\"сказал\",\"сказала\")} об этом, ${ru.gs(c,\"готовый\",\"готовая\")} в том поклясться."
+        }
+      ]
+    },
+    "saidAtLastThat": {
+      "$args": ["c", "en", "a", "rus"],
+      "$value": [
+        {
+          "$template": "${c.name} said at last that ${c.p} had seen someone near the scene ${en}, and was all but sure it was ${a.name}."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} наконец ${ru.gs(c,\"сказал\",\"сказала\")}, что ${ru.gs(c,\"видел\",\"видела\")} кого-то у места нападения ${rus} — и почти ${ru.gs(c,\"уверен\",\"уверена\")}, что это ${ru.gs(a,\"был\",\"была\")} ${ru.cf(a)}."
+        }
+      ]
+    },
+    "saidAtLastThat2": {
+      "$args": ["c", "en", "a", "rus"],
+      "$value": [
+        {
+          "$template": "${c.name} said at last that ${c.p} had seen someone near the scene ${en}: ${a.name}, ${c.p} thought, but ${c.p} could not swear to it."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} наконец ${ru.gs(c,\"сказал\",\"сказала\")}, что ${ru.gs(c,\"видел\",\"видела\")} кого-то у места нападения ${rus}: по ${ru.gs(c,\"его\",\"её\")} словам, это ${ru.gs(a,\"был\",\"была\")} ${ru.cf(a)}, но поклясться в этом ${ru.gs(c,\"он\",\"она\")} не может."
+        }
+      ]
+    }
+  },
+  "FROM_EN": {
+    "camp": "the camp",
+    "trench": "Trench B",
+    "ziggurat": "the ziggurat",
+    "store": "the finds magazine",
+    "village": "the village",
+    "canal": "the canal",
+    "cemetery": "the Parthian graves"
+  },
+  "theNightCraneDied": ["the night Crane died", "в ночь, когда погиб Крейн,"],
+  "lastNight": ["last night", "прошлой ночью"],
+  "twoNightsAgo": ["two nights ago", "позапрошлой ночью"],
+  "nightsAgo": [
+    {
+      "$template": "${k} nights ago"
+    },
+    {
+      "$template": "${k} ${ruN(k, 'ночь', 'ночи', 'ночей')} назад"
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "passages": {
+    "youKnowWhereI": {
+      "$args": ["c"],
+      "$value": [
+        "You know where I was, Doctor: with you. I heard the dogs, and someone running past the tent, and that is all.",
+        {
+          "$template": "Вы знаете, где я ${ru.gs(c,\"был\",\"была\")}, доктор: с вами. Я ${ru.gs(c,\"слышал\",\"слышала\")} собак и чьи-то шаги мимо палатки — и больше ничего."
+        }
+      ]
+    },
+    "youKnowWhereI2": {
+      "$args": ["c"],
+      "$value": [
+        "You know where I was, Doctor: with you. I slept through all of it, and I am glad I did.",
+        {
+          "$template": "Вы знаете, где я ${ru.gs(c,\"был\",\"была\")}, доктор: с вами. Я всё ${ru.gs(c,\"проспал\",\"проспала\")} — и ${ru.gs(c,\"рад\",\"рада\")} этому."
+        }
+      ]
+    },
+    "youKnowVeryWell": {
+      "$args": ["c"],
+      "$value": [
+        "You know very well where I was, Doctor.",
+        {
+          "$template": "Вы прекрасно знаете, где я ${ru.gs(c,\"был\",\"была\")}, доктор."
+        }
+      ]
+    },
+    "youKnowWhereI3": {
+      "$args": ["cl", "saw", "c"],
+      "$value": [
+        {
+          "$template": "You know where I was: ${LOCS[cl.loc].at}, when someone came for me out of the dark. ${cl.how===\"luck\"?\"Then the dogs woke the camp, and they ran.\":\"Then someone else drove them off.\"}${saw?\"\":\" I saw neither face.\"}"
+        },
+        {
+          "$template": "Вы знаете, где я ${ru.gs(c,\"был\",\"была\")}: ${R(LOCS[cl.loc].at)}, когда кто-то набросился на меня из темноты. ${cl.how===\"luck\"?\"Потом собаки перебудили лагерь, и он убежал.\":\"Потом кто-то другой его прогнал.\"}${saw?\"\":` Ни одного лица я не ${ru.gs(c,\"разглядел\",\"разглядела\")}.`}"
+        }
+      ]
+    },
+    "whereIWasIs": {
+      "$args": ["c"],
+      "$value": [
+        "Where I was is my own affair, Doctor. It has nothing to do with this.",
+        {
+          "$template": "Где я ${ru.gs(c,\"был\",\"была\")} — моё дело, доктор. К этому оно отношения не имеет."
+        }
+      ]
+    },
+    "upWithALamp": {
+      "$args": ["c"],
+      "$value": [
+        "Up with a lamp, as always, walking between the tents until first light.",
+        {
+          "$template": "${ru.gs(c,\"Не спал\",\"Не спала\")}, как всегда: с лампой ходил${ru.gs(c,\"\",\"а\")} между палатками до рассвета."
+        }
+      ]
+    },
+    "atTheCoffeeHouse": {
+      "$args": ["w", "wr"],
+      "$value": [
+        {
+          "$template": "At the coffee-house with ${w}. Backgammon, three glasses of tea, then the walk back."
+        },
+        {
+          "$template": "В кофейне, с ${wr}. Нарды, три стакана чая, потом пешком назад."
+        }
+      ]
+    },
+    "atTheCoffeeHouse2": {
+      "$args": ["c"],
+      "$value": [
+        "At the coffee-house until they put the lamps out. I walked back alone.",
+        {
+          "$template": "В кофейне, пока не погасили лампы. Назад ${ru.gs(c,\"шёл один\",\"шла одна\")}."
+        }
+      ]
+    },
+    "inTheFindsMagazine": {
+      "$args": ["w", "wr"],
+      "$value": [
+        {
+          "$template": "In the finds magazine with ${w}, numbering sherds. Dull work. It passes the night."
+        },
+        {
+          "$template": "В хранилище находок, с ${wr}: нумеровали черепки. Работа скучная, зато ночь проходит."
+        }
+      ]
+    },
+    "inTheFindsMagazine2": {
+      "$args": ["c"],
+      "$value": [
+        "In the finds magazine, numbering sherds until my lamp ran dry.",
+        {
+          "$template": "В хранилище находок: ${ru.gs(c,\"нумеровал\",\"нумеровала\")} черепки, пока в лампе не кончилось масло."
+        }
+      ]
+    },
+    "walkingByTheCanal": {
+      "$args": ["w", "wr", "c", "cl"],
+      "$value": [
+        {
+          "$template": "Walking by the canal with ${w}. Neither of us could sleep."
+        },
+        {
+          "$template": "Гуляли с ${wr} вдоль канала. Нам ${ru.f(c)&&ru.f(cl.with)?\"обеим\":\"обоим\"} не спалось."
+        }
+      ]
+    },
+    "iWalkedAlongThe": {
+      "$args": ["c"],
+      "$value": [
+        "I walked along the canal. I could not sleep.",
+        {
+          "$template": "${ru.gs(c,\"Бродил\",\"Бродила\")} вдоль канала. Не спалось."
+        }
+      ]
+    },
+    "downInTrenchB": {
+      "$args": ["w", "wr"],
+      "$value": [
+        {
+          "$template": "Down in Trench B with ${w}, looking at the shoring by lamplight. The men had been careless with it."
+        },
+        {
+          "$template": "Внизу, в траншее Б, с ${wr}: смотрели при лампе крепления. Рабочие с ними небрежны."
+        }
+      ]
+    },
+    "downInTrenchB2": {
+      "$args": ["c"],
+      "$value": [
+        "Down in Trench B. The shoring worried me, so I went to look at it by lamplight.",
+        {
+          "$template": "Внизу, в траншее Б. Меня беспокоили крепления, и я ${ru.gs(c,\"пошёл\",\"пошла\")} взглянуть на них при лампе."
+        }
+      ]
+    },
+    "upOnTheZiggurat": {
+      "$args": ["w", "wr"],
+      "$value": [
+        {
+          "$template": "Up on the ziggurat with ${w}. You can see the whole plain from up there by moonlight."
+        },
+        {
+          "$template": "Наверху, на зиккурате, с ${wr}. Оттуда при луне видна вся равнина."
+        }
+      ]
+    },
+    "upOnTheZiggurat2": {
+      "$args": ["c"],
+      "$value": [
+        "Up on the ziggurat, alone. You can see the whole plain from up there by moonlight.",
+        {
+          "$template": "Наверху, на зиккурате, ${ru.gs(c,\"один\",\"одна\")}. Оттуда при луне видна вся равнина."
+        }
+      ]
+    },
+    "outByTheParthian": {
+      "$args": ["w", "wr"],
+      "$value": [
+        {
+          "$template": "Out by the Parthian graves with ${w}. It was quiet there. Do not ask me more."
+        },
+        {
+          "$template": "У парфянских могил, с ${wr}. Там было тихо. Больше не спрашивайте."
+        }
+      ]
+    },
+    "outByTheParthian2": {
+      "$args": [],
+      "$value": [
+        "Out by the Parthian graves. I do not sleep well, and the dead are quiet company.",
+        "У парфянских могил. Я плохо сплю, а мёртвые — тихая компания."
+      ]
+    },
+    "inTheMessTent": {
+      "$args": ["w", "wr"],
+      "$value": [
+        {
+          "$template": "In the mess tent with ${w}, playing cards until the lamp gave out. Then bed."
+        },
+        {
+          "$template": "В столовой палатке, с ${wr}: играли в карты, пока не погасла лампа. Потом спать."
+        }
+      ]
+    },
+    "aroundTwoSomeoneWas": {
+      "$args": ["nf", "sw", "v", "nfRu", "sense"],
+      "$value": [
+        {
+          "$template": "Around two, someone was moving about between the tents without a lamp. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}."
+        },
+        {
+          "$template": "Около двух кто-то бродил между палатками без лампы. ${nfRu} Но я ${sense} ${RU_WIT[v]}."
+        }
+      ]
+    },
+    "iWokeAroundTwo": {
+      "$args": ["nf", "sw", "v", "c", "nfRu", "sense"],
+      "$value": [
+        {
+          "$template": "I woke around two. Someone went past my tent, and on between the tents. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}."
+        },
+        {
+          "$template": "Я ${ru.gs(c,\"проснулся\",\"проснулась\")} около двух. Кто-то прошёл мимо моей палатки и дальше, между палатками. ${nfRu} Но я ${sense} ${RU_WIT[v]}."
+        }
+      ]
+    },
+    "onTheWayBack": {
+      "$args": ["sw", "v", "sense"],
+      "$value": [
+        {
+          "$template": "On the way back I passed someone between the tents. Too dark for a face. ${SENSE[sw.cat]} ${WIT[v]}, though."
+        },
+        {
+          "$template": "На обратном пути мне попался кто-то между палатками. Лица в темноте не разглядеть. Зато я ${sense} ${RU_WIT[v]}."
+        }
+      ]
+    },
+    "aroundTwoSomeoneWent": {
+      "$args": ["where", "nf", "sw", "v", "wr", "nfRu", "sense"],
+      "$value": [
+        {
+          "$template": "Around two, someone went past the tents towards ${where}. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}."
+        },
+        {
+          "$template": "Около двух кто-то прошёл мимо палаток в сторону ${wr}. ${nfRu} Но я ${sense} ${RU_WIT[v]}."
+        }
+      ]
+    },
+    "iWokeAroundTwo2": {
+      "$args": ["where", "nf", "sw", "v", "c", "wr", "nfRu", "sense"],
+      "$value": [
+        {
+          "$template": "I woke around two. Someone went past my tent towards ${where}. ${nf} But ${SENSE[sw.cat]} ${WIT[v]}."
+        },
+        {
+          "$template": "Я ${ru.gs(c,\"проснулся\",\"проснулась\")} около двух. Кто-то прошёл мимо моей палатки в сторону ${wr}. ${nfRu} Но я ${sense} ${RU_WIT[v]}."
+        }
+      ]
+    },
+    "onTheWayBack2": {
+      "$args": ["where", "sw", "v", "wr", "sense"],
+      "$value": [
+        {
+          "$template": "On the way back I passed someone heading for ${where}. Too dark for a face. ${SENSE[sw.cat]} ${WIT[v]}, though."
+        },
+        {
+          "$template": "На обратном пути мне попался кто-то, кто шёл в сторону ${wr}. Лица в темноте не разглядеть. Зато я ${sense} ${RU_WIT[v]}."
+        }
+      ]
+    }
+  },
+  "outWhereIsMyOwnAffair": {
+    "$call": "bi",
+    "$args": ["Out. Where is my own affair, Doctor.", "Не в лагере. Где — моё дело, доктор."]
+  },
+  "but": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${nf} But ${SENSE[sw.cat]} ${WIT[v]}."
+      },
+      {
+        "$template": "${nfRu} Но я ${sense} ${RU_WIT[v]}."
+      }
+    ]
+  },
+  "text": "вашей палатки",
+  "text2": "слышал",
+  "text3": "слышала",
+  "text4": "почувствовал",
+  "text5": "почувствовала",
+  "g": {
+    "$template": "палатки ${ru.c(hers, 'g')}"
+  }
+}

@@ -1,0 +1,537 @@
+{
+  "passages": {
+    "chooseAPlaceOn": {
+      "$args": [],
+      "$value": [
+        {
+          "$js": "`<p>${slotIntro()[0]}</p>`+(S.day===1?`<p class=\"dim\">Choose a place on the site plan or below. What you do there takes up the ${SLOT_NAMES[S.slot].toLowerCase()}.</p>`:\"\")"
+        },
+        {
+          "$js": "`<p>${slotIntro()[1]}</p>`+(S.day===1?`<p class=\"dim\">Выберите место на плане раскопа или в списке ниже. То, чем вы там займётесь, отнимет ${RU_SLOT_SPAN[S.slot]}.</p>`:\"\")"
+        }
+      ]
+    },
+    "here": {
+      "$args": ["ppl"],
+      "$value": [
+        {
+          "$js": "\"Here: \"+listNames(ppl.map((c=>c.name)))+\".\""
+        },
+        {
+          "$js": "\"Здесь: \"+ru.list(ppl.map((c=>ru.cf(c))))+\".\""
+        }
+      ]
+    },
+    "andBesideIt": {
+      "$args": ["cl", "more"],
+      "$value": [
+        {
+          "$template": "<p class=\"warn\">${S.day===1?\"Where Crane was found, two traces remain\":\"Last night’s traces are still here\"}: ${clueText(cl)}, and beside it ${clueText(more)}.</p>"
+        },
+        {
+          "$template": "<p class=\"warn\">${S.day===1?\"Там, где нашли Крейна, остались следы\":\"Следы прошлой ночи всё ещё здесь\"}: ${clueTextRu(cl)}, а рядом — ${clueTextRu(more)}.</p>"
+        }
+      ]
+    },
+    "whereCraneWasFound": {
+      "$args": ["cl"],
+      "$value": [
+        {
+          "$template": "<p class=\"warn\">${S.day===1?\"Where Crane was found, a trace remains\":\"Last night’s trace is still here\"}: ${clueText(cl)}.</p>"
+        },
+        {
+          "$template": "<p class=\"warn\">${S.day===1?\"Там, где нашли Крейна, остался след\":\"След прошлой ночи всё ещё здесь\"}: ${clueTextRu(cl)}.</p>"
+        }
+      ]
+    },
+    "sceneSweptHere": {
+      "$args": ["crane"],
+      "$value": [
+        {
+          "$template": "<p class=\"warn\">${crane?\"Where Crane was found\":\"Where it happened last night\"}, the ground has been swept with a palm frond, all the way back to the path. There is nothing left to examine.</p>"
+        },
+        {
+          "$template": "<p class=\"warn\">${crane?\"Там, где нашли Крейна,\":\"Там, где всё случилось этой ночью,\"} землю подмели пальмовой ветвью — до самой тропы. Осматривать здесь больше нечего.</p>"
+        }
+      ]
+    },
+    "sceneEmptyHere": {
+      "$args": ["crane"],
+      "$value": [
+        {
+          "$template": "<p class=\"warn\">${crane?\"Where Crane was found\":\"Where it happened last night\"}, there is nothing to examine: no trace was left.</p>"
+        },
+        {
+          "$template": "<p class=\"warn\">${crane?\"Там, где нашли Крейна,\":\"Там, где всё случилось этой ночью,\"} осматривать нечего: следов не осталось.</p>"
+        }
+      ]
+    },
+    "readTheGroundBefore": {
+      "$args": [],
+      "$value": ["Read the ground before the wind and the workmen do", "Прочесть землю, пока её не замёл ветер и не затоптали рабочие"]
+    },
+    "tabletsSignsObjectsAnd": {
+      "$args": [],
+      "$value": ["Tablets, signs, objects, and whatever else is down there", "Таблички, знамения, вещи — и всё прочее, что скрывает земля"]
+    },
+    "inquiriesCanBeHeld": {
+      "$args": [],
+      "$value": ["Inquiries can be held here in the evening.", "Вечером здесь можно созвать дознание."]
+    },
+    "theDayEndsEarly": {
+      "$args": [],
+      "$value": [
+        "The day ends early: there will be no evening in camp today, and no inquiry.",
+        "День кончится рано: вечера в лагере сегодня не будет, а значит, и дознания."
+      ]
+    },
+    "inTheSameHole": {
+      "$args": ["k"],
+      "$value": [
+        {
+          "$js": "[\"In the same hole lies a broken tablet, its signs still crisp.\",\"Beside it, wrapped in rotten linen, is a fragment of tablet.\"][k]"
+        },
+        {
+          "$js": "[\"В той же яме лежит разбитая табличка, и знаки на ней всё ещё чёткие.\",\"Рядом, в истлевшем полотне, — обломок таблички.\"][k]"
+        }
+      ]
+    },
+    "besideItLiesA": {
+      "$args": [],
+      "$value": ["Beside it lies a second piece of the same tablet.", "Рядом лежит второй кусок той же таблички."]
+    },
+    "aCharmYouCarry": {
+      "$args": [],
+      "$value": ["A charm you carry. The scribes will not call it that", "Амулет, который при вас. Писцы назовут его иначе"]
+    },
+    "theFragmentSaysNothing": {
+      "$args": [],
+      "$value": [
+        "The fragment says nothing about it, but other lines come clear.",
+        "Об этом обломок молчит, зато проясняются другие строки."
+      ]
+    },
+    "copiedIntoYourNotebook": {
+      "$args": [],
+      "$value": ["Copied into your notebook, under Omens.", "Переписано в записную книжку, во вкладку «Знамения»."]
+    },
+    "theFragmentCrumblesTo": {
+      "$args": [],
+      "$value": ["The fragment crumbles to powder in your hands.", "Обломок рассыпается в пыль у вас в руках."]
+    },
+    "youLieOnYour": {
+      "$args": [],
+      "$value": [
+        "You lie on your camp bed with a wet cloth over your eyes until your hands stop shaking.",
+        "Вы лежите на походной кровати с мокрой тряпицей на глазах, пока руки не перестают дрожать."
+      ]
+    },
+    "theLightIsWrong": {
+      "$args": [],
+      "$value": [
+        "The light is wrong, and the ground will not read. There may be more to see another time.",
+        "Свет не тот, и земля ничего не говорит. Возможно, в другой раз удастся разглядеть больше."
+      ]
+    },
+    "bothTracesWereThe": {
+      "$args": ["cl", "cr"],
+      "$value": [
+        {
+          "$template": "${nightEn(cl.day)}: both traces ${LOCS[cr.loc].at} were the attacker’s."
+        },
+        {
+          "$template": "${nightRu(cl.day)}: оба следа ${R(LOCS[cr.loc].at)} оставил нападавший."
+        }
+      ]
+    },
+    "theTraceWasThe": {
+      "$args": ["cl", "cr"],
+      "$value": [
+        {
+          "$template": "${nightEn(cl.day)}: the trace ${LOCS[cr.loc].at} was the attacker’s."
+        },
+        {
+          "$template": "${nightRu(cl.day)}: след ${R(LOCS[cr.loc].at)} оставил нападавший."
+        }
+      ]
+    },
+    "bothTracesAreGenuine": {
+      "$args": ["c2"],
+      "$value": [
+        {
+          "$template": "<p>Both traces are genuine, and there is more: ${clueText(c2)}. All three belong to the same person.</p>"
+        },
+        {
+          "$template": "<p>Оба следа подлинные, и это не всё: ${clueTextRu(c2)}. Все три оставил один и тот же человек.</p>"
+        }
+      ]
+    },
+    "bothTracesAreGenuine2": {
+      "$args": [],
+      "$value": [
+        "<p>Both traces are genuine, and both belong to the same person. There is nothing else to find.</p>",
+        "<p>Оба следа подлинные, и оставил их один и тот же человек. Больше здесь ничего нет.</p>"
+      ]
+    },
+    "theFirstTraceIs": {
+      "$args": ["c2"],
+      "$value": [
+        {
+          "$template": "<p>The first trace is genuine, and there is more: ${clueText(c2)}. Both belong to the same person.</p>"
+        },
+        {
+          "$template": "<p>Первый след подлинный, и это не всё: ${clueTextRu(c2)}. Оба оставил один и тот же человек.</p>"
+        }
+      ]
+    },
+    "theTraceIsGenuine": {
+      "$args": [],
+      "$value": [
+        "<p>The trace is genuine. Whoever left it was careful, and left nothing else: not a thread, not a print, not a match.</p>",
+        "<p>След подлинный. Тот, кто его оставил, был осторожен и больше ничего не оставил: ни нитки, ни отпечатка, ни спички.</p>"
+      ]
+    },
+    "theTraceWasPlanted": {
+      "$args": ["cl", "cr"],
+      "$value": [
+        {
+          "$template": "${nightEn(cl.day)}: the trace ${LOCS[cr.loc].at} was planted, to be found."
+        },
+        {
+          "$template": "${nightRu(cl.day)}: след ${R(LOCS[cr.loc].at)} был подброшен, чтобы его нашли."
+        }
+      ]
+    },
+    "lookAgainBothPlanted": {
+      "$args": ["cl", "more"],
+      "$value": [
+        {
+          "$template": "<p>Look again: ${clueText(cl)}, and beside it ${clueText(more)}. Nobody walked, or stood, or smoked there: both were put there on purpose, side by side, for you to find.</p>"
+        },
+        {
+          "$template": "<p>Присмотритесь ещё раз: ${clueTextRu(cl)}, а рядом — ${clueTextRu(more)}. Там никто не ходил, не стоял и не курил — оба следа положили нарочно, бок о бок, чтобы вы их нашли.</p>"
+        }
+      ]
+    },
+    "lookAgainNobodyWalked": {
+      "$args": ["cl"],
+      "$value": [
+        {
+          "$template": "<p>Look again: ${clueText(cl)}. Nobody walked, or stood, or smoked there: the trace was put there on purpose, for you to find.</p>"
+        },
+        {
+          "$template": "<p>Присмотритесь ещё раз: ${clueTextRu(cl)}. Там никто не ходил, не стоял и не курил — след положили нарочно, чтобы вы его нашли.</p>"
+        }
+      ]
+    },
+    "beneathItHalfScuffed": {
+      "$args": ["under"],
+      "$value": [
+        {
+          "$template": "<p>Beneath it, half scuffed away, is the real one: ${clueText(under)}.</p>"
+        },
+        {
+          "$template": "<p>Под ним, полустёртый, — настоящий: ${clueTextRu(under)}.</p>"
+        }
+      ]
+    },
+    "someoneHadBeenEarlier": {
+      "$args": ["cl", "cr"],
+      "$value": [
+        {
+          "$template": "${nightEn(cl.day)}: someone had been ${LOCS[cr.loc].at} earlier. Neither trace was the attacker’s."
+        },
+        {
+          "$template": "${nightRu(cl.day)}: кто-то побывал ${R(LOCS[cr.loc].at)} раньше. Оба следа оставил не нападавший."
+        }
+      ]
+    },
+    "someoneHadBeenEarlier2": {
+      "$args": ["cl", "cr"],
+      "$value": [
+        {
+          "$template": "${nightEn(cl.day)}: someone had been ${LOCS[cr.loc].at} earlier. That trace was not the attacker’s."
+        },
+        {
+          "$template": "${nightRu(cl.day)}: кто-то побывал ${R(LOCS[cr.loc].at)} раньше. Этот след оставил не нападавший."
+        }
+      ]
+    },
+    "bothAThiefs": {
+      "$args": [],
+      "$value": [
+        "<p>Looking closer, both traces were made later, by someone going from one thing worth taking to the next after the struggle. A thief’s, both of them, not the attacker’s.</p>",
+        "<p>Присмотревшись, вы понимаете: оба следа оставлены позже — кто-то после борьбы переходил от одной ценной вещи к другой. Оба следа воровские, а не нападавшего.</p>"
+      ]
+    },
+    "aThiefHadBeen": {
+      "$args": ["cl", "cr"],
+      "$value": [
+        {
+          "$template": "${nightEn(cl.day)}: a thief had been ${LOCS[cr.loc].at}. That trace was not the attacker’s."
+        },
+        {
+          "$template": "${nightRu(cl.day)}: ${R(LOCS[cr.loc].at)} побывал вор. Этот след оставил не нападавший."
+        }
+      ]
+    }
+  },
+  "whereCraneWasFound": {
+    "$call": "bi",
+    "$args": [" · where Crane was found", " · здесь нашли Крейна"]
+  },
+  "sceneOfLastNightSAttack": {
+    "$call": "bi",
+    "$args": [" · scene of last night’s attack", " · здесь напали этой ночью"]
+  },
+  "whereCraneWasFoundSweptClean": {
+    "$call": "bi",
+    "$args": [" · where Crane was found: swept clean", " · здесь нашли Крейна: всё подметено"]
+  },
+  "sceneOfLastNightSAttack2": {
+    "$call": "bi",
+    "$args": [" · scene of last night’s attack: swept clean", " · здесь напали этой ночью: всё подметено"]
+  },
+  "whereCraneWasFoundNothingTo": {
+    "$call": "bi",
+    "$args": [" · where Crane was found: nothing to examine", " · здесь нашли Крейна: осматривать нечего"]
+  },
+  "sceneOfLastNightSAttack3": {
+    "$call": "bi",
+    "$args": [" · scene of last night’s attack: nothing to examine", " · здесь напали этой ночью: осматривать нечего"]
+  },
+  "nobody": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$js": "n.length?n.join(\", \"):\"Nobody\""
+      },
+      {
+        "$js": "ids.length?ids.map((c=>ru.c(c))).join(\", \"):\"Никого\""
+      }
+    ]
+  },
+  "drinkFromTheBrandyFlask": {
+    "$call": "bi",
+    "$args": ["Drink from the brandy flask", "Глотнуть бренди из фляжки"]
+  },
+  "steadiesYourNerveTakesNoTime": {
+    "$call": "bi",
+    "$args": ["Steadies your nerve · takes no time", "Успокаивает нервы · не отнимает времени"]
+  },
+  "whereWillYouGo": {
+    "$call": "bi",
+    "$args": ["Where will you go?", "Куда теперь?"]
+  },
+  "youDrankTheBrandy": {
+    "$call": "bi",
+    "$args": ["You drank the brandy.", "Вы выпили бренди."]
+  },
+  "examineTheScene": {
+    "$call": "bi",
+    "$args": ["Examine the scene", "Осмотреть место"]
+  },
+  "searchTheArea": {
+    "$call": "bi",
+    "$args": ["Search the area", "Обыскать место"]
+  },
+  "speakWithI": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Speak with ${c.short}"
+      },
+      {
+        "$template": "Поговорить с ${ru.c(c,\"i\")}"
+      }
+    ]
+  },
+  "goSomewhereElse": {
+    "$call": "bi",
+    "$args": ["Go somewhere else", "Пойти в другое место"]
+  },
+  "translateATabletFragment": {
+    "$call": "bi",
+    "$args": ["Translate a tablet fragment", "Перевести обломок таблички"]
+  },
+  "waiting": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${S.fragments} waiting"
+      },
+      {
+        "$template": "Ждут перевода: ${S.fragments}"
+      }
+    ]
+  },
+  "restInYourTent": {
+    "$call": "bi",
+    "$args": ["Rest in your tent", "Отдохнуть в палатке"]
+  },
+  "steadiesYourNerve": {
+    "$call": "bi",
+    "$args": ["Steadies your nerve", "Успокаивает нервы"]
+  },
+  "theCampWillHoldNoMore": {
+    "$call": "bi",
+    "$args": ["The camp will hold no more inquiries.", "Лагерь больше не станет собираться на дознания."]
+  },
+  "conveneAnInquiry": {
+    "$call": "bi",
+    "$args": ["Convene an inquiry", "Созвать дознание"]
+  },
+  "accuseSomeoneBeforeTheWholeCamp": {
+    "$call": "bi",
+    "$args": ["Accuse someone before the whole camp", "Обвинить кого-то перед всем лагерем"]
+  },
+  "settleItYourselfTonight": {
+    "$call": "bi",
+    "$args": ["Settle it yourself, tonight", "Взять всё в свои руки — этой ночью"]
+  },
+  "thereIsOnlyOneWayTo": {
+    "$call": "bi",
+    "$args": ["There is only one way to stop this", "Остановить это можно только одним способом"]
+  },
+  "afterwards": {
+    "$call": "bi",
+    "$args": ["Afterwards", "Потом"]
+  },
+  "nightFalls": {
+    "$call": "bi",
+    "$args": ["Night falls", "Опускается ночь"]
+  },
+  "continue": {
+    "$call": "bi",
+    "$args": ["Continue", "Дальше"]
+  },
+  "gained": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Gained: ${ITEMS[it].name}"
+      },
+      {
+        "$template": "Получено: ${R(ITEMS[it].name)}"
+      }
+    ]
+  },
+  "foundAt": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Found ${theItem(ward)} ${LOCS[l].at}."
+      },
+      {
+        "$template": "${ru.Item(ward)} — ${ru.ig(ward,\"найден\",\"найдена\",\"найдено\",\"найдены\")} ${ru.loc(l,\"at\")}."
+      }
+    ]
+  },
+  "searching": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$js": "\"Searching: \"+LOCS[l].name"
+      },
+      {
+        "$js": "\"Поиски: \"+ru.loc(l)"
+      }
+    ]
+  },
+  "asYouClimbOutYouSee": {
+    "$call": "bi",
+    "$args": ["As you climb out, you see it.", "Выбираясь из ямы, вы видите это."]
+  },
+  "youSeeItBeforeYouUnderstand": {
+    "$call": "bi",
+    "$args": ["You see it before you understand it.", "Вы видите это прежде, чем понимаете."]
+  },
+  "lookFor": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Look for “${SIGN_POOL[si].short}”"
+      },
+      {
+        "$template": "Искать: «${R(SIGN_POOL[si].short)}»"
+      }
+    ]
+  },
+  "aSignYouHaveSeen": {
+    "$call": "bi",
+    "$args": ["A sign you have seen", "Знамение, которое вы видели"]
+  },
+  "lookForA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Look for ${theItem(w)}"
+      },
+      {
+        "$template": "Искать ${ru.item(w,\"a\")}"
+      }
+    ]
+  },
+  "lookFor2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Look for “${ttEn(e)}”"
+      },
+      {
+        "$template": "Искать: «${capS(ttRu(e))}»"
+      }
+    ]
+  },
+  "anOldTitleYouHaveMet": {
+    "$call": "bi",
+    "$args": ["An old title you have met", "Древний титул, который вам уже встречался"]
+  },
+  "translation": {
+    "$call": "bi",
+    "$args": ["Translation", "Перевод"]
+  },
+  "readItAsItComes": {
+    "$call": "bi",
+    "$args": ["Read it as it comes", "Читать подряд"]
+  },
+  "whateverTheScribeChoseToWrite": {
+    "$call": "bi",
+    "$args": ["Whatever the scribe chose to write", "Что писец счёл нужным записать"]
+  },
+  "notNow": {
+    "$call": "bi",
+    "$args": ["Not now", "Не сейчас"]
+  },
+  "youFindWhatYouWereLooking": {
+    "$call": "bi",
+    "$args": ["You find what you were looking for.", "Вы находите то, что искали."]
+  },
+  "theFragmentSaysNothingAboutIt": {
+    "$call": "bi",
+    "$args": ["The fragment says nothing about it.", "Об этом обломок молчит."]
+  },
+  "nothingYouHaveNotReadBefore": {
+    "$call": "bi",
+    "$args": ["Nothing you have not read before.", "Ничего такого, чего вы не читали бы раньше."]
+  },
+  "translation2": {
+    "$call": "bi",
+    "$args": ["Translation", "Перевод"]
+  },
+  "rest": {
+    "$call": "bi",
+    "$args": ["Rest", "Отдых"]
+  },
+  "theScene": {
+    "$call": "bi",
+    "$args": ["The scene", "Место нападения"]
+  },
+  "studycostbadStudyCostPP": {
+    "$template": "<p>${bi(tellOne(bad ? 'studyCostBad' : 'studyCost', bad ? STUDY_COST_BAD : STUDY_COST))}</p>"
+  },
+  "text": "В ночь гибели Крейна",
+  "text2": {
+    "$template": "Ночь ${d}"
+  }
+}

@@ -1,0 +1,803 @@
+{
+  "passages": {
+    "bearsSevenNotches": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "bears seven notches",
+          "see": "seven notches cut along one edge"
+        },
+        {
+          "prep": "с",
+          "ins": "семью зарубками",
+          "see": "семь зарубок по краю"
+        }
+      ]
+    },
+    "isCrackedCleanThrough": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "is cracked clean through",
+          "see": "a hair-crack running clean through"
+        },
+        {
+          "prep": "с",
+          "ins": "трещиной насквозь",
+          "see": "тонкая трещина насквозь"
+        }
+      ]
+    },
+    "smellsOfCedar": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "smells of cedar",
+          "see": "a faint smell of cedar"
+        },
+        {
+          "prep": "с",
+          "ins": "запахом кедра",
+          "see": "слабый запах кедра"
+        }
+      ]
+    },
+    "smellsOfWoodsmoke": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "smells of woodsmoke",
+          "see": "a smell of woodsmoke"
+        },
+        {
+          "prep": "с",
+          "ins": "запахом дыма",
+          "see": "запах дыма"
+        }
+      ]
+    },
+    "smellsOfTheSea": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "smells of the sea",
+          "see": "a smell of the sea, here, three hundred miles from it"
+        },
+        {
+          "prep": "с",
+          "ins": "запахом моря",
+          "see": "запах моря — здесь, за триста миль от него"
+        }
+      ]
+    },
+    "isSmearedWithBitumen": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "is smeared with bitumen",
+          "see": "a smear of old bitumen on one side"
+        },
+        {
+          "prep": "с",
+          "ins": "мазком битума",
+          "see": "мазок старого битума с одной стороны"
+        }
+      ]
+    },
+    "hasRedOchreIn": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "has red ochre in its grooves",
+          "see": "red ochre worked into the grooves"
+        },
+        {
+          "prep": "с",
+          "ins": "охрой в бороздках",
+          "see": "красная охра в бороздках"
+        }
+      ]
+    },
+    "bearsAFleckOf": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "bears a fleck of gold",
+          "see": "a single fleck of gold leaf"
+        },
+        {
+          "prep": "с",
+          "ins": "крупинкой золота",
+          "see": "одна-единственная крупинка сусального золота"
+        }
+      ]
+    },
+    "bearsAStarOn": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "bears a star on its underside",
+          "see": "a star scratched on the underside"
+        },
+        {
+          "prep": "со",
+          "ins": "звездой на изнанке",
+          "see": "звезда, процарапанная на изнанке"
+        }
+      ]
+    },
+    "bearsALineOf": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "bears a line of tiny wedges",
+          "see": "a line of wedges too small to read"
+        },
+        {
+          "prep": "со",
+          "ins": "строкой мелких клиньев",
+          "see": "строка клиньев, слишком мелких, чтобы прочесть"
+        }
+      ]
+    },
+    "staysColdAtNoon": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "stays cold at noon",
+          "see": "a chill that does not leave it, even at noon"
+        },
+        {
+          "prep": "с",
+          "ins": "не уходящим и в полдень холодом",
+          "see": "холод, который не уходит и в полдень"
+        }
+      ]
+    },
+    "weighsMoreThanIt": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "weighs more than it should",
+          "see": "heavier than the look of it"
+        },
+        {
+          "prep": "с",
+          "ins": "весом не по размеру",
+          "see": "тяжелее, чем кажется на вид"
+        }
+      ]
+    },
+    "isTiedWithRed": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "is tied with red thread",
+          "see": "a knot of red thread tied round it"
+        },
+        {
+          "prep": "с",
+          "ins": "узлом красной нити",
+          "see": "узелок красной нити"
+        }
+      ]
+    },
+    "isChippedAtOne": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "is chipped at one edge",
+          "see": "a chip out of one edge"
+        },
+        {
+          "prep": "со",
+          "ins": "сколом на краю",
+          "see": "скол на краю"
+        }
+      ]
+    },
+    "isWornSmoothOn": {
+      "$args": [],
+      "$value": [
+        {
+          "vp": "is worn smooth on one side",
+          "see": "worn smooth on one side, as if by thumbs"
+        },
+        {
+          "prep": "со",
+          "ins": "стёртым до гладкости боком",
+          "see": "один бок стёрт до гладкости, будто пальцами"
+        }
+      ]
+    },
+    "ifOrIsWaking": {
+      "$args": ["si", "r1", "r2"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}: ${refEn(r1)} or ${refEn(r2)} is waking."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то пробуждается ${refRu(r1)} или ${refRu(r2)}."
+        }
+      ]
+    },
+    "ifTheHouseOf": {
+      "$args": ["si", "r1", "r2"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}, the house of ${refEn(r1)} or the house of ${refEn(r2)} stands open."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то отворён дом ${refRu(r1,\"g\")} или дом ${refRu(r2,\"g\")}."
+        }
+      ]
+    },
+    "ifNeitherNorIs": {
+      "$args": ["si", "r1", "r2"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}: neither ${refEn(r1)} nor ${refEn(r2)} is waking."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то ни ${refRu(r1)}, ни ${refRu(r2)} не пробуждаются."
+        }
+      ]
+    },
+    "ifItIsNot": {
+      "$args": ["si", "r1", "r2"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}, it is not ${refEn(r1)} who wakes, and it is not ${refEn(r2)}."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то пробуждается не ${refRu(r1)} и не ${refRu(r2)}."
+        }
+      ]
+    },
+    "ifIsOneOf": {
+      "$args": ["si", "r"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}: ${refEn(r)} is one of the two who wake."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то ${refRu(r)} — одна из двух сил, что пробуждаются."
+        }
+      ]
+    },
+    "ifIsAmongThe": {
+      "$args": ["si", "r"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}, ${refEn(r)} is among the two who stir."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то среди двух пробудившихся сил есть и ${refRu(r)}."
+        }
+      ]
+    },
+    "ifIsNotAmong": {
+      "$args": ["si", "r"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}: ${refEn(r)} is not among those who wake."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то ${refRu(r)} не пробуждается."
+        }
+      ]
+    },
+    "ifWhateverWakesIt": {
+      "$args": ["si", "r"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}, whatever wakes, it is not ${refEn(r)}."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то что бы ни пробудилось — это не ${refRu(r)}."
+        }
+      ]
+    },
+    "isOneOfThe": {
+      "$args": ["e", "g"],
+      "$value": [
+        {
+          "$template": "${capS(ttEn(e))} is one of the names of ${GODS[g].name}."
+        },
+        {
+          "$template": "${capS(ttRu(e))} — одно из имён ${ru.god(g,\"g\")}."
+        }
+      ]
+    },
+    "soTheOldHymns": {
+      "$args": ["e", "g"],
+      "$value": [
+        {
+          "$template": "${capS(ttEn(e))}: so the old hymns call ${GODS[g].name}."
+        },
+        {
+          "$template": "${capS(ttRu(e))} — так древние гимны называют ${ru.god(g,\"a\")}."
+        }
+      ]
+    },
+    "andAreOnePower": {
+      "$args": ["e1", "e2"],
+      "$value": [
+        {
+          "$template": "${capS(ttEn(e1))} and ${ttEn(e2)} are one power under two titles."
+        },
+        {
+          "$template": "${capS(ttRu(e1))} и ${ttRu(e2)} — одна сила под двумя титулами."
+        }
+      ]
+    },
+    "whoeverCallsOnCalls": {
+      "$args": ["e1", "e2"],
+      "$value": [
+        {
+          "$template": "Whoever calls on ${ttEn(e1)} calls also on ${ttEn(e2)}."
+        },
+        {
+          "$template": "Кто взывает к ${ttRu(e1,\"d\")}, взывает и к ${ttRu(e2,\"d\")}."
+        }
+      ]
+    },
+    "doNotMistakeFor": {
+      "$args": ["e1", "e2"],
+      "$value": [
+        {
+          "$template": "Do not mistake ${ttEn(e1)} for ${ttEn(e2)}: they are two, and they hate each other."
+        },
+        {
+          "$template": "Не путай ${ttRu(e1,\"a\")} с ${ttRu(e2,\"i\")}: это две силы, и они ненавидят друг друга."
+        }
+      ]
+    },
+    "bindsOneOfThe": {
+      "$args": ["w", "si"],
+      "$value": [
+        {
+          "$template": "${capS(rdEn(w))} binds one of the two who wake if ${fmlEn(si)}."
+        },
+        {
+          "$template": "${capS(rdRu(w))} связывает одну из двух сил, что пробуждаются, если ${fmlRu(si)}."
+        }
+      ]
+    },
+    "ifOneOfThe": {
+      "$args": ["si", "w"],
+      "$value": [
+        {
+          "$template": "If ${fmlEn(si)}, one of the two who stir fears ${rdEn(w)}."
+        },
+        {
+          "$template": "Если ${fmlRu(si)}, то одна из двух пробудившихся сил боится ${rdRu(w,\"g\")}."
+        }
+      ]
+    },
+    "wasMadeAgainstOr": {
+      "$args": ["w", "pr"],
+      "$value": [
+        {
+          "$template": "${capS(rdEn(w))} was made against ${refEn(pr[0])}, or else against ${refEn(pr[1])}."
+        },
+        {
+          "$template": "${capS(rdRu(w))} сделана против ${refRu(pr[0],\"g\")} — или же против ${refRu(pr[1],\"g\")}."
+        }
+      ]
+    },
+    "wasMadeAgainst": {
+      "$args": ["w", "rf"],
+      "$value": [
+        {
+          "$template": "${capS(rdEn(w))} was made against ${refEn(rf)}."
+        },
+        {
+          "$template": "${capS(rdRu(w))} сделана против ${refRu(rf,\"g\")}."
+        }
+      ]
+    },
+    "cannotPass": {
+      "$args": ["rf", "w"],
+      "$value": [
+        {
+          "$template": "${capS(refEn(rf))} cannot pass ${rdEn(w)}."
+        },
+        {
+          "$template": "${capS(refRu(rf))} не может миновать ${rdRu(w,\"a\")}."
+        }
+      ]
+    },
+    "laughsAt": {
+      "$args": ["rx", "w"],
+      "$value": [
+        {
+          "$template": "${capS(refEn(rx))} laughs at ${rdEn(w)}."
+        },
+        {
+          "$template": "${capS(refRu(rx))} смеётся над ${rdRu(w,\"i\")}."
+        }
+      ]
+    },
+    "hasNoHoldOver": {
+      "$args": ["w", "rx"],
+      "$value": [
+        {
+          "$template": "${capS(rdEn(w))} has no hold over ${refEn(rx)}."
+        },
+        {
+          "$template": "${capS(rdRu(w))} не имеет власти над ${refRu(rx,\"i\")}."
+        }
+      ]
+    },
+    "ofTwoThingsOne": {
+      "$args": ["rf", "pr"],
+      "$value": [
+        {
+          "$template": "Of two things, one binds nothing at all, and the other binds ${refEn(rf)}: ${rdEn(pr[0])}, and ${rdEn(pr[1])}."
+        },
+        {
+          "$template": "Из двух вещей одна не связывает никого, а другая связывает ${refRu(rf,\"a\")}: ${rdRu(pr[0])} — и ${rdRu(pr[1])}."
+        }
+      ]
+    },
+    "noNameWasEver": {
+      "$args": [],
+      "$value": [
+        ["No name was ever written into it, and nothing answers to it.", "В неё не вписано ничьё имя, и ничто ей не отзывается."],
+        [
+          "It was made for some other use, and no power has any part in it.",
+          "Её делали для иной надобности, и никакой силе до неё нет дела."
+        ],
+        ["Whoever made it meant it for luck, not for binding.", "Мастер делал это на удачу, а не для того, чтобы кого-то связать."]
+      ]
+    },
+    "bindsNoPowerAt": {
+      "$args": ["w", "en", "rus"],
+      "$value": [
+        {
+          "$template": "${capS(rdEn(w))} binds no power at all. ${en}"
+        },
+        {
+          "$template": "${capS(rdRu(w))} не связывает никакой силы. ${rus}"
+        }
+      ]
+    },
+    "is": {
+      "$args": ["gl"],
+      "$value": [
+        {
+          "$template": "${gl.by===\"you\"?\"You know\":C(gl.by).short+\" says\"}: “${ttEn(gl.e)}” is ${GODS[gl.g].name}."
+        },
+        {
+          "$template": "${gl.by===\"you\"?\"Вы знаете\":ru.c(gl.by)+\" говорит\"}: «${capS(ttRu(gl.e))}» — это ${ru.god(gl.g)}."
+        }
+      ]
+    },
+    "thereIsNoBinding": {
+      "$args": ["r"],
+      "$value": [
+        {
+          "$template": "There is no binding here. Whatever ${V(r.w,\"it was\",\"they were\")} made for, it was not for that."
+        },
+        "Никакого заклятия здесь нет. Для чего бы это ни делали — только не для этого."
+      ]
+    },
+    "noBindingAtAll": {
+      "$args": ["r"],
+      "$value": [
+        {
+          "$template": "No binding at all. ${V(r.w,\"It is\",\"They are\")} just what ${V(r.w,\"it seems\",\"they seem\")}, nothing more."
+        },
+        "Заклятия нет. Это ровно то, чем кажется, и не более."
+      ]
+    },
+    "thereIsABinding": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "There is a binding here. The title is damaged, see: against ${refEn(a)}, or against ${refEn(b)}. I cannot say which."
+        },
+        {
+          "$template": "Здесь наложено заклятие. Титул повреждён, видите? Против ${refRu(a,\"g\")} — или против ${refRu(b,\"g\")}. Не могу сказать, против кого именно."
+        }
+      ]
+    },
+    "aBindingYesAgainst": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "A binding, yes. Against ${refEn(a)}, or against ${refEn(b)}. The sign is half gone."
+        },
+        {
+          "$template": "Да, заклятие. Против ${refRu(a,\"g\")} — или против ${refRu(b,\"g\")}. Знак наполовину стёрт."
+        }
+      ]
+    },
+    "binds": {
+      "$args": ["r"],
+      "$value": [
+        {
+          "$template": "${C(r.by).short}: ${theItem(r.w)} ${r.none?V(r.w,\"binds\",\"bind\")+\" nothing\":`${V(r.w,\"binds\",\"bind\")} ${refEn(r.refs[0])} or ${refEn(r.refs[1])}`}."
+        },
+        {
+          "$template": "${ru.c(r.by)}: ${ru.item(r.w)} ${r.none?`не ${ru.ig(r.w,\"связывает\",\"связывает\",\"связывает\",\"связывают\")} никого`:`${ru.ig(r.w,\"связывает\",\"связывает\",\"связывает\",\"связывают\")} ${refRu(r.refs[0],\"a\")} или ${refRu(r.refs[1],\"a\")}`}."
+        }
+      ]
+    }
+  },
+  "isNot": {
+    "$call": "oneOf",
+    "$args": [
+      [
+        {
+          "$template": "${capS(ttEn(e1))} is not ${ttEn(e2)}."
+        },
+        {
+          "$template": "${capS(ttRu(e1))} — не ${ttRu(e2)}."
+        }
+      ],
+      {
+        "$js": "TX.powers.doNotMistakeFor(e1,e2)"
+      }
+    ]
+  },
+  "TITLES": {
+    "meslam": {
+      "of": "nergal",
+      "en": "the One Who Came Out of Meslam",
+      "ru": [
+        "Вышедший из Меслама",
+        "Вышедшего из Меслама",
+        "Вышедшему из Меслама",
+        "Вышедшего из Меслама",
+        "Вышедшим из Меслама",
+        "Вышедшем из Меслама"
+      ]
+    },
+    "greatCity": {
+      "of": "nergal",
+      "en": "the Lord of the Great City",
+      "ru": [
+        "Владыка Великого Города",
+        "Владыки Великого Города",
+        "Владыке Великого Города",
+        "Владыку Великого Города",
+        "Владыкой Великого Города",
+        "Владыке Великого Города"
+      ]
+    },
+    "enlilSon": {
+      "of": "nergal",
+      "en": "the Awe-Inspiring Son of Enlil",
+      "ru": [
+        "Грозный Сын Энлиля",
+        "Грозного Сына Энлиля",
+        "Грозному Сыну Энлиля",
+        "Грозного Сына Энлиля",
+        "Грозным Сыном Энлиля",
+        "Грозном Сыне Энлиля"
+      ]
+    },
+    "sunset": {
+      "of": "nergal",
+      "en": "the King of Sunset",
+      "ru": ["Царь Заката", "Царя Заката", "Царю Заката", "Царя Заката", "Царём Заката", "Царе Заката"]
+    },
+    "greatPlace": {
+      "of": "ereshkigal",
+      "en": "the Lady of the Great Place",
+      "ru": [
+        "Владычица Великого Места",
+        "Владычицы Великого Места",
+        "Владычице Великого Места",
+        "Владычицу Великого Места",
+        "Владычицей Великого Места",
+        "Владычице Великого Места"
+      ]
+    },
+    "elderSister": {
+      "of": "ereshkigal",
+      "en": "the Elder Sister",
+      "ru": ["Старшая Сестра", "Старшей Сестры", "Старшей Сестре", "Старшую Сестру", "Старшей Сестрой", "Старшей Сестре"]
+    },
+    "chairBearer": {
+      "en": "the Chair-Bearer of the Netherworld",
+      "ru": [
+        "Носитель Престола Подземного Царства",
+        "Носителя Престола Подземного Царства",
+        "Носителю Престола Подземного Царства",
+        "Носителя Престола Подземного Царства",
+        "Носителем Престола Подземного Царства",
+        "Носителе Престола Подземного Царства"
+      ]
+    },
+    "doorman": {
+      "en": "the Chief Doorman of the Underworld",
+      "ru": [
+        "Главный Привратник Подземного мира",
+        "Главного Привратника Подземного мира",
+        "Главному Привратнику Подземного мира",
+        "Главного Привратника Подземного мира",
+        "Главным Привратником Подземного мира",
+        "Главном Привратнике Подземного мира"
+      ]
+    },
+    "glistening": {
+      "of": "tiamat",
+      "en": "the Glistening One",
+      "ru": ["Сверкающая", "Сверкающей", "Сверкающей", "Сверкающую", "Сверкающей", "Сверкающей"]
+    },
+    "hubur": {
+      "of": "tiamat",
+      "en": "Mother Hubur",
+      "ru": ["Матерь Хубур", "Матери Хубур", "Матери Хубур", "Матерь Хубур", "Матерью Хубур", "Матери Хубур"]
+    },
+    "carnage": {
+      "of": "nergal",
+      "en": "the Lord of Plague and Carnage",
+      "ru": [
+        "Господин Мора и Резни",
+        "Господина Мора и Резни",
+        "Господину Мора и Резни",
+        "Господина Мора и Резни",
+        "Господином Мора и Резни",
+        "Господине Мора и Резни"
+      ]
+    },
+    "bull": {
+      "en": "the Great Bull of Heaven",
+      "ru": [
+        "Великий Бык Небес",
+        "Великого Быка Небес",
+        "Великому Быку Небес",
+        "Великого Быка Небес",
+        "Великим Быком Небес",
+        "Великом Быке Небес"
+      ]
+    },
+    "kindles": {
+      "of": "lamashtu",
+      "en": "She Who Kindles Fire",
+      "ru": ["Разжигающая Огонь", "Разжигающей Огонь", "Разжигающей Огонь", "Разжигающую Огонь", "Разжигающей Огонь", "Разжигающей Огонь"]
+    },
+    "face": {
+      "of": "lamashtu",
+      "en": "the Goddess Whose Face Is Horrible",
+      "ru": [
+        "Богиня Ужасного Лика",
+        "Богини Ужасного Лика",
+        "Богине Ужасного Лика",
+        "Богиню Ужасного Лика",
+        "Богиней Ужасного Лика",
+        "Богине Ужасного Лика"
+      ]
+    },
+    "streets": {
+      "of": "lamashtu",
+      "en": "the Sister of the Gods of the Streets",
+      "ru": ["Сестра Богов Улиц", "Сестры Богов Улиц", "Сестре Богов Улиц", "Сестру Богов Улиц", "Сестрой Богов Улиц", "Сестре Богов Улиц"]
+    },
+    "eradicator": {
+      "en": "the Eradicator",
+      "ru": ["Искоренительница", "Искоренительницы", "Искоренительнице", "Искоренительницу", "Искоренительницей", "Искоренительнице"]
+    },
+    "steppe": {
+      "of": "beletseri",
+      "en": "the Lady of the Steppe",
+      "ru": ["Владычица Степи", "Владычицы Степи", "Владычице Степи", "Владычицу Степи", "Владычицей Степи", "Владычице Степи"]
+    },
+    "sword": {
+      "of": "lamashtu",
+      "en": "the Sword That Strikes the Head",
+      "ru": [
+        "Разящий Голову Меч",
+        "Разящего Голову Меча",
+        "Разящему Голову Мечу",
+        "Разящий Голову Меч",
+        "Разящим Голову Мечом",
+        "Разящем Голову Мече"
+      ]
+    },
+    "underworldEnlil": {
+      "of": "nergal",
+      "en": "the Enlil of the Underworld",
+      "ru": [
+        "Энлиль Подземного мира",
+        "Энлиля Подземного мира",
+        "Энлилю Подземного мира",
+        "Энлиля Подземного мира",
+        "Энлилем Подземного мира",
+        "Энлиле Подземного мира"
+      ]
+    },
+    "storm": {
+      "en": "the Great Storm",
+      "ru": ["Великая Буря", "Великой Бури", "Великой Буре", "Великую Бурю", "Великой Бурей", "Великой Буре"]
+    },
+    "hanbu": {
+      "of": "pazuzu",
+      "en": "the Son of Hanbu",
+      "ru": ["Сын Ханбу", "Сына Ханбу", "Сыну Ханбу", "Сына Ханбу", "Сыном Ханбу", "Сыне Ханбу"]
+    },
+    "breath": {
+      "en": "the One Whose Breath Is Death",
+      "ru": ["Дышащий Смертью", "Дышащего Смертью", "Дышащему Смертью", "Дышащего Смертью", "Дышащим Смертью", "Дышащем Смертью"]
+    },
+    "lurker": {
+      "en": "the Lurker",
+      "ru": ["Подстерегающий", "Подстерегающего", "Подстерегающему", "Подстерегающего", "Подстерегающим", "Подстерегающем"]
+    },
+    "snake": {
+      "en": "the Furious Snake",
+      "ru": ["Яростный Змей", "Яростного Змея", "Яростному Змею", "Яростного Змея", "Яростным Змеем", "Яростном Змее"]
+    },
+    "splendour": {
+      "en": "the Warrior of Splendour",
+      "ru": ["Воитель Сияния", "Воителя Сияния", "Воителю Сияния", "Воителя Сияния", "Воителем Сияния", "Воителе Сияния"]
+    },
+    "terror": {
+      "en": "the Terror of the People",
+      "ru": ["Ужас Людской", "Ужаса Людского", "Ужасу Людскому", "Ужас Людской", "Ужасом Людским", "Ужасе Людском"]
+    },
+    "destiny": {
+      "en": "the Maker of Destiny",
+      "ru": [
+        "Вершительница Судеб",
+        "Вершительницы Судеб",
+        "Вершительнице Судеб",
+        "Вершительницу Судеб",
+        "Вершительницей Судеб",
+        "Вершительнице Судеб"
+      ]
+    },
+    "sea": {
+      "of": "nergal",
+      "en": "the King of the Sea",
+      "ru": ["Царь Моря", "Царя Моря", "Царю Моря", "Царя Моря", "Царём Моря", "Царе Моря"]
+    },
+    "irnina": {
+      "of": "lamashtu",
+      "en": "the Adopted Daughter of Irnina",
+      "ru": [
+        "Приёмная Дочь Ирнины",
+        "Приёмной Дочери Ирнины",
+        "Приёмной Дочери Ирнины",
+        "Приёмную Дочь Ирнины",
+        "Приёмной Дочерью Ирнины",
+        "Приёмной Дочери Ирнины"
+      ]
+    },
+    "hero": {
+      "of": "nergal",
+      "en": "the Great Hero of the Lands",
+      "ru": [
+        "Великий Герой Земель",
+        "Великого Героя Земель",
+        "Великому Герою Земель",
+        "Великого Героя Земель",
+        "Великим Героем Земель",
+        "Великом Герое Земель"
+      ]
+    },
+    "spouse": {
+      "of": "kingu",
+      "en": "the Chosen Spouse",
+      "ru": [
+        "Избранный Супруг",
+        "Избранного Супруга",
+        "Избранному Супругу",
+        "Избранного Супруга",
+        "Избранным Супругом",
+        "Избранном Супруге"
+      ]
+    },
+    "named": {
+      "of": "lamashtu",
+      "en": "the One Named by the Gods",
+      "ru": ["Наречённая Богами", "Наречённой Богами", "Наречённой Богами", "Наречённую Богами", "Наречённой Богами", "Наречённой Богами"]
+    }
+  },
+  "text": ["вещь", "вещи", "вещи", "вещь", "вещью", "вещи"],
+  "text2": " и "
+}

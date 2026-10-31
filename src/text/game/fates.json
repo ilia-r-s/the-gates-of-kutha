@@ -1,0 +1,146 @@
+{
+  "passages": {
+    "theCampSatIn": {
+      "$args": [],
+      "$value": [
+        "The camp sat in judgement on you and let you stay; the inquest in Baghdad blamed the cult, and let it go at that.",
+        "Лагерь судил вас и позволил остаться; следствие в Багдаде списало всё на секту — и на том успокоилось."
+      ]
+    },
+    "theInquestBlamedThe": {
+      "$args": [],
+      "$value": ["The inquest blamed the cult. Not everyone at Kutha did.", "Следствие списало всё на секту. В Куте так думали не все."]
+    },
+    "theInquestBlamedThe2": {
+      "$args": [],
+      "$value": [
+        "The inquest blamed the cult, and nobody ever asked you anything.",
+        "Следствие списало всё на секту, и вас так никто ни о чём и не спросил."
+      ]
+    },
+    "wasFoundDeadIn": {
+      "$args": ["c", "inquest", "g"],
+      "$value": [
+        {
+          "$template": "${c.name} was found dead in ${c.pp} tent on night ${c.takenDay}. ${inquest[0]} ${EP.He(c)} is buried ${g[0]}."
+        },
+        {
+          "$template": "${capS(ru.cf(c,\"a\"))} нашли ${ru.gs(c,\"мёртвым\",\"мёртвой\")} в ${ru.gs(c,\"его\",\"её\")} палатке в ночь ${c.takenDay}. ${inquest[1]} ${ru.gs(c,\"Его\",\"Её\")} хоронят ${g[1]}."
+        }
+      ]
+    },
+    "wasTakenOnNight": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} was taken on night ${c.takenDay}."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"погиб\",\"погибла\")} в ночь ${c.takenDay}."
+        }
+      ]
+    },
+    "wasTakenOnNight2": {
+      "$args": ["c", "g"],
+      "$value": [
+        {
+          "$template": "${c.name} was taken on night ${c.takenDay}. ${EP.He(c)} is buried ${g[0]}."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"погиб\",\"погибла\")} в ночь ${c.takenDay}. ${ru.gs(c,\"Его\",\"Её\")} хоронят ${g[1]}."
+        }
+      ]
+    },
+    "diesWhereFellThe": {
+      "$args": ["n", "he", "N", "c"],
+      "$value": [
+        {
+          "$template": "${n} dies where ${he} fell. The inquest in Baghdad finds that you fired in self-defence, and does not ask what ${he} was wearing."
+        },
+        {
+          "$template": "${N} умирает там, где ${ru.gs(c,\"упал\",\"упала\")}. Следствие в Багдаде признаёт, что вы стреляли, защищая свою жизнь, и не спрашивает, во что ${ru.gs(c,\"он был одет\",\"она была одета\")}."
+        }
+      ]
+    },
+    "bodyIsTheOnly": {
+      "$args": ["n", "c"],
+      "$value": [
+        {
+          "$template": "${n}’s body is the only one they find, and there is not a mark of fire on it."
+        },
+        {
+          "$template": "Тело ${ru.cf(c,\"g\")} — единственное, что удаётся найти, и на нём нет ни единого следа огня."
+        }
+      ]
+    },
+    "isNeverFoundThe": {
+      "$args": ["n", "c"],
+      "$value": [
+        {
+          "$template": "${n} is never found. The fire under E-meslam burns for three days."
+        },
+        {
+          "$template": "${capS(ru.cf(c,\"a\"))} так и не находят. Огонь под Э-месламом горит три дня."
+        }
+      ]
+    },
+    "climbsOutOfThe": {
+      "$args": ["n", "c"],
+      "$value": [
+        {
+          "$template": "${n} climbs out of the mound at noon and walks south into the desert, and nobody thinks to stop ${EP.him(c)}."
+        },
+        {
+          "$template": "В полдень ${ru.cf(c)} выбирается из холма и уходит на юг, в пустыню, — и никому не приходит в голову ${ru.gs(c,\"его\",\"её\")} остановить."
+        }
+      ]
+    },
+    "isFoundBelowAt": {
+      "$args": ["n", "He", "c", "on"],
+      "$value": [
+        {
+          "$template": "${n} is found below at dawn among the cold braziers, speaking a language dead for three thousand years. ${He} never speaks another."
+        },
+        {
+          "$template": "На рассвете ${ru.cf(c,\"a\")} находят внизу, среди остывших жаровен: ${on} говорит на языке, мёртвом уже три тысячи лет. Ни на каком другом ${on} больше не заговорит."
+        }
+      ]
+    },
+    "writesToYouTo": {
+      "$args": ["n", "he", "N", "c"],
+      "$value": [
+        {
+          "$template": "${n} writes to you to say how very sorry ${he} is that it ended as it did. It is a kind letter, and the postmark is Kutha."
+        },
+        {
+          "$template": "${N} пишет вам, как ${ru.gs(c,\"ему\",\"ей\")} жаль, что всё так кончилось. Письмо очень доброе, а на штемпеле — Кута."
+        }
+      ]
+    },
+    "writesToYourSister": {
+      "$args": ["n", "he", "N", "c"],
+      "$value": [
+        {
+          "$template": "${n} writes to your sister to say how very sorry ${he} is. It is a kind letter, and the postmark is Kutha."
+        },
+        {
+          "$template": "${N} пишет вашей сестре, как ${ru.gs(c,\"ему\",\"ей\")} жаль. Письмо очень доброе, а на штемпеле — Кута."
+        }
+      ]
+    },
+    "isNeverChargedWith": {
+      "$args": ["n", "he", "c", "on"],
+      "$value": [
+        {
+          "$template": "${n} is never charged with anything. When the next season opens, ${he} is still at Kutha, waiting."
+        },
+        {
+          "$template": "${capS(ru.cf(c,\"d\"))} так и не предъявляют никаких обвинений. Когда открывается следующий сезон, ${on} всё ещё в Куте — и ждёт."
+        }
+      ]
+    }
+  },
+  "theInquestNamedYou": ["The inquest named you.", "Следствие назвало ваше имя."],
+  "text": "он",
+  "text2": "она"
+}

@@ -1,0 +1,739 @@
+{
+  "passages": {
+    "allButSureIt": {
+      "$args": ["v", "w", "g"],
+      "$value": [
+        {
+          "$template": "${v(\"is\",\"are\")} all but sure it is ${w.short} now"
+        },
+        {
+          "$template": "теперь почти ${g(\"уверен\",\"уверена\",\"уверены\")}, что это ${ru.c(w)}"
+        }
+      ]
+    },
+    "now": {
+      "$args": ["v", "w"],
+      "$value": [
+        {
+          "$template": "${v(\"suspects\",\"suspect\")} ${w.short} now"
+        },
+        {
+          "$template": "теперь ${v(\"подозревает\",\"подозревают\")} ${ru.c(w,\"a\")}"
+        }
+      ]
+    },
+    "toWonderAbout": {
+      "$args": ["v", "w"],
+      "$value": [
+        {
+          "$template": "${v(\"begins\",\"begin\")} to wonder about ${w.short}"
+        },
+        {
+          "$template": "${v(\"начинает\",\"начинают\")} присматриваться к ${ru.c(w,\"d\")}"
+        }
+      ]
+    },
+    "lessSureItIs": {
+      "$args": ["v", "w", "g"],
+      "$value": [
+        {
+          "$template": "${v(\"is\",\"are\")} less sure it is ${w.short} now"
+        },
+        {
+          "$template": "уже не так ${g(\"уверен\",\"уверена\",\"уверены\")}, что это ${ru.c(w)}"
+        }
+      ]
+    },
+    "noLongerInEarnest": {
+      "$args": ["v", "w"],
+      "$value": [
+        {
+          "$template": "no longer ${v(\"suspects\",\"suspect\")} ${w.short} in earnest"
+        },
+        {
+          "$template": "больше не ${v(\"подозревает\",\"подозревают\")} ${ru.c(w,\"a\")} всерьёз"
+        }
+      ]
+    },
+    "noLongerAtAll": {
+      "$args": ["v", "w"],
+      "$value": [
+        {
+          "$template": "no longer ${v(\"suspects\",\"suspect\")} ${w.short} at all"
+        },
+        {
+          "$template": "больше ни в чём не ${v(\"подозревает\",\"подозревают\")} ${ru.c(w,\"a\")}"
+        }
+      ]
+    },
+    "theLessOfNow": {
+      "$args": ["many", "w"],
+      "$value": [
+        {
+          "$template": "${many?\"think\":\"thinks\"} the less of ${w.short} now"
+        },
+        {
+          "$template": "теперь хуже ${many?\"думают\":\"думает\"} ${ru.ob(w)}"
+        }
+      ]
+    },
+    "theBetterOfNow": {
+      "$args": ["many", "w"],
+      "$value": [
+        {
+          "$template": "${many?\"think\":\"thinks\"} the better of ${w.short} now"
+        },
+        {
+          "$template": "теперь лучше ${many?\"думают\":\"думает\"} ${ru.ob(w)}"
+        }
+      ]
+    },
+    "whereWereYouWhom": {
+      "$args": ["c"],
+      "$value": [
+        [
+          "Where were you, whom do you suspect, what did you see. I have work to do.",
+          "Где вы были, кого подозреваете, что видели. У меня, знаете ли, работа."
+        ],
+        [
+          "Am I to be asked where I slept every morning until the lorry comes?",
+          {
+            "$template": "Меня что, так и будут каждое утро спрашивать, где я ${ru.gs(c,\"ночевал\",\"ночевала\")}, пока не придёт грузовик?"
+          }
+        ],
+        ["We are archaeologists here, not prisoners.", "Мы здесь археологи, а не арестанты."]
+      ]
+    },
+    "overBreakfastSaysTo": {
+      "$args": ["c", "line"],
+      "$value": [
+        {
+          "$template": "Over breakfast ${c.short} says, to nobody in particular and to everyone at once: “The Doctor questions this camp like a policeman. ${line[0]}”"
+        },
+        {
+          "$template": "За завтраком ${ru.c(c)} говорит, ни к кому в отдельности и ко всем сразу: «Доктор допрашивает лагерь, как полицейский. ${line[1]}»"
+        }
+      ]
+    },
+    "complainedBeforeEveryoneThat": {
+      "$args": ["b"],
+      "$value": [
+        {
+          "$template": "${b.short} complained before everyone that you question the camp like a policeman"
+        },
+        {
+          "$template": "${ru.c(b)} при всех ${ru.gs(b,\"пожаловался\",\"пожаловалась\")}, что вы допрашиваете лагерь, как полицейский"
+        }
+      ]
+    },
+    "asIsLedAway": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "As ${a.short} is led away, nobody says a word, which is worse."
+        },
+        {
+          "$template": "Когда ${ru.c(a,\"a\")} уводят, никто не произносит ни слова, и это хуже всего."
+        }
+      ]
+    },
+    "youHaveRuinedFor": {
+      "$args": ["a"],
+      "$value": [
+        [
+          {
+            "$template": "“You have ruined ${a.short} for nothing, Doctor.”"
+          },
+          {
+            "$template": "«Вы погубили ${ru.c(a,\"a\")} ни за что, доктор»."
+          }
+        ],
+        ["“Who is next, Doctor? Any of us, it seems.”", "«Кто следующий, доктор? Похоже, любой из нас»."],
+        ["“I hope you sleep well tonight, Doctor.”", "«Надеюсь, вы сегодня хорошо выспитесь, доктор»."],
+        [
+          "“A thief, Doctor. You have caught a thief. Bravo.”",
+          {
+            "$template": "«${ru.gs(a,\"Вора\",\"Воровку\")}, доктор. Вы поймали ${ru.gs(a,\"вора\",\"воровку\")}. Браво»."
+          }
+        ]
+      ]
+    },
+    "asIsLedAway2": {
+      "$args": ["a", "sp", "line"],
+      "$value": [
+        {
+          "$template": "As ${a.short} is led away, ${sp.short} turns on you in front of everyone: ${line[0]}"
+        },
+        {
+          "$template": "Когда ${ru.c(a,\"a\")} уводят, ${ru.c(sp)} при всех набрасывается на вас: ${line[1]}"
+        }
+      ]
+    },
+    "calledYouOutOver": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} called you out over ${a.short}"
+        },
+        {
+          "$template": "${ru.c(b)} ${ru.gs(b,\"упрекнул\",\"упрекнула\")} вас из-за ${ru.c(a,\"g\")}"
+        }
+      ]
+    },
+    "silenceWhenWasSent": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "Silence, when ${a.short} was sent away"
+        },
+        {
+          "$template": "Молчание, когда ${ru.c(a,\"a\")} отослали"
+        }
+      ]
+    },
+    "whenTheLorryHas": {
+      "$args": [],
+      "$value": [
+        "When the lorry has gone, the camp goes back to its supper without a word.",
+        "Когда грузовик уезжает, лагерь молча возвращается к ужину."
+      ]
+    },
+    "youWereRightAbout": {
+      "$args": ["a", "sp"],
+      "$value": [
+        [
+          {
+            "$template": "“You were right about ${a.short}, Doctor. God help us, you were right.”"
+          },
+          {
+            "$template": "«Вы были правы насчёт ${ru.c(a,\"g\")}, доктор. Помоги нам Бог, вы были правы»."
+          }
+        ],
+        [
+          "“Well done, Doctor. I did not think you had it in you.”",
+          {
+            "$template": "«Отлично, доктор. Не ${ru.gs(sp,\"думал\",\"думала\")}, что вы на такое способны»."
+          }
+        ]
+      ]
+    },
+    "whenTheLorryHas2": {
+      "$args": ["sp", "line"],
+      "$value": [
+        {
+          "$template": "When the lorry has gone, ${sp.short} says, for everyone to hear: ${line[0]}"
+        },
+        {
+          "$template": "Когда грузовик уезжает, ${ru.c(sp)} говорит во всеуслышание: ${line[1]}"
+        }
+      ]
+    },
+    "praisedYouForUnmasking": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} praised you for unmasking ${a.short}"
+        },
+        {
+          "$template": "${ru.c(b)} ${ru.gs(b,\"похвалил\",\"похвалила\")} вас за разоблачение ${ru.c(a,\"g\")}"
+        }
+      ]
+    },
+    "theCampMournsAnd": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "The camp mourns ${v.short}, and some of it looks at you."
+        },
+        {
+          "$template": "Лагерь оплакивает ${ru.c(v,\"a\")}, и кое-кто смотрит на вас."
+        }
+      ]
+    },
+    "isDeadAndThe": {
+      "$args": ["v"],
+      "$value": [
+        [
+          {
+            "$template": "“${v.short} is dead, and the Doctor is still asking questions.”"
+          },
+          {
+            "$template": "«${ru.c(v)} ${ru.gs(v,\"мёртв\",\"мертва\")}, а доктор всё задаёт вопросы»."
+          }
+        ],
+        ["“How many more of us, Doctor?”", "«Скольких ещё из нас, доктор?»"]
+      ]
+    },
+    "findWhoeverDidThis": {
+      "$args": [],
+      "$value": [
+        ["“Find whoever did this, Doctor. Whatever it takes.”", "«Найдите того, кто это сделал, доктор. Чего бы это ни стоило»."],
+        ["“Not one more of us, Doctor. Promise me that.”", "«Больше ни одного из нас, доктор. Пообещайте мне»."]
+      ]
+    },
+    "hasNotTouchedBreakfast": {
+      "$args": ["sp", "line"],
+      "$value": [
+        {
+          "$template": "${sp.short} has not touched breakfast. ${line[0]}"
+        },
+        {
+          "$template": "${ru.c(sp)} не ${ru.gs(sp,\"притронулся\",\"притронулась\")} к завтраку. ${line[1]}"
+        }
+      ]
+    },
+    "grievedAloudFor": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} grieved aloud for ${a.short}"
+        },
+        {
+          "$template": "${ru.c(b)} ${ru.gs(b,\"горевал\",\"горевала\")} ${ru.ob(a)} при всех"
+        }
+      ]
+    },
+    "byBreakfastTheWhole": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "By breakfast the whole camp knows that ${a.short} swore to watch your tent, and that something came past all the same."
+        },
+        {
+          "$template": "К завтраку весь лагерь знает, что ${ru.c(a)} ${ru.gs(a,\"клялся\",\"клялась\")} стеречь вашу палатку — и что кто-то всё равно прошёл."
+        }
+      ]
+    },
+    "byBreakfastTheWhole2": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "By breakfast the whole camp knows that ${a.short} swore to watch your tent, and slept."
+        },
+        {
+          "$template": "К завтраку весь лагерь знает, что ${ru.c(a)} ${ru.gs(a,\"клялся\",\"клялась\")} стеречь вашу палатку — и ${ru.gs(a,\"проспал\",\"проспала\")}."
+        }
+      ]
+    },
+    "sleptThroughASworn": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} slept through a sworn watch"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"проспал\",\"проспала\")} обещанный дозор"
+        }
+      ]
+    },
+    "dreamtGuiltyBeforeEveryone": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} dreamt ${a.short} guilty, before everyone"
+        },
+        {
+          "$template": "${ru.c(b,\"d\")} приснилось, что ${ru.c(a)} ${ru.gs(a,\"виновен\",\"виновна\")}, — сказано при всех"
+        }
+      ]
+    },
+    "dreamtCleanBeforeEveryone": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} dreamt ${a.short} clean, before everyone"
+        },
+        {
+          "$template": "${ru.c(b,\"d\")} приснилось, что ${ru.c(a)} ${ru.gs(a,\"невиновен\",\"невиновна\")}, — сказано при всех"
+        }
+      ]
+    },
+    "saysWhatHalfThe": {
+      "$args": ["sp", "d", "a"],
+      "$value": [
+        {
+          "$template": "${sp.short} says what half the camp is thinking. “${d.short} named ${a.short} before all of us. And now ${d.short} is dead.”"
+        },
+        {
+          "$template": "${ru.c(sp)} говорит вслух то, о чём думает пол-лагеря. «${ru.c(d)} при всех ${ru.gs(d,\"назвал\",\"назвала\")} ${ru.c(a,\"a\")}. И вот ${ru.c(d)} ${ru.gs(d,\"мёртв\",\"мертва\")}»."
+        }
+      ]
+    },
+    "saidAloudThatThe": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} said aloud that the dead had named ${a.short}"
+        },
+        {
+          "$template": "${ru.c(b)} вслух ${ru.gs(b,\"напомнил\",\"напомнила\")}, что на ${ru.c(a,\"a\")} указали ещё до этой смерти"
+        }
+      ]
+    },
+    "theCampRememberedThat": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "The camp remembered that the dead had named ${a.short}"
+        },
+        {
+          "$template": "Лагерь вспомнил, что на ${ru.c(a,\"a\")} указали ещё до этой смерти"
+        }
+      ]
+    },
+    "byTentTheCamp": {
+      "$args": ["a", "o"],
+      "$value": [
+        {
+          "$template": "By ${a.short}’s tent the camp finds ${TRAITS[o.cat].vals[C(o.about).traits[o.cat]].clue}, and looks at ${C(o.about).short}."
+        },
+        {
+          "$template": "У палатки ${ru.c(a,\"g\")} лагерь находит ${R(TRAITS[o.cat].vals[C(o.about).traits[o.cat]].clue)} — и смотрит на ${ru.c(C(o.about),\"a\")}."
+        }
+      ]
+    },
+    "aTraceOfFound": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "A trace of ${a.short}’s found by a tent"
+        },
+        {
+          "$template": "У палатки нашли след ${ru.c(a,\"g\")}"
+        }
+      ]
+    },
+    "claimedToHaveSeen": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} claimed to have seen someone off from your tent"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"уверял\",\"уверяла\")}, что ${ru.gs(a,\"спугнул\",\"спугнула\")} кого-то у вашей палатки"
+        }
+      ]
+    },
+    "theCampTakesDeath": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "The camp takes ${a.short}’s death for proof that ${b.short} was right."
+        },
+        {
+          "$template": "Лагерь видит в смерти ${ru.c(a,\"g\")} доказательство того, что ${ru.c(b)} ${ru.gs(b,\"был прав\",\"была права\")}."
+        }
+      ]
+    },
+    "saidItBeforeEveryone": {
+      "$args": ["b", "o", "a", "so"],
+      "$value": [
+        {
+          "$template": "${b.short} said it before everyone on day ${o.day}: ${a.short} was one of them. ${so[0]}"
+        },
+        {
+          "$template": "В день ${o.day} ${ru.c(b)} ${ru.gs(b,\"сказал\",\"сказала\")} это при всех: ${ru.c(a)} — ${ru.gs(a,\"один\",\"одна\")} из них. ${so[1]}"
+        }
+      ]
+    },
+    "saidBeforeEveryoneOn": {
+      "$args": ["b", "o", "a", "so"],
+      "$value": [
+        {
+          "$template": "${b.short} said before everyone on day ${o.day} that ${a.short} was not one of them. ${so[0]}"
+        },
+        {
+          "$template": "В день ${o.day} ${ru.c(b)} при всех ${ru.gs(b,\"сказал\",\"сказала\")}, что ${ru.c(a)} не из них. ${so[1]}"
+        }
+      ]
+    },
+    "theCampTookDeath": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "The camp took ${a.short}’s death to bear ${b.short} out"
+        },
+        {
+          "$template": "Лагерь счёл, что смерть ${ru.c(a,\"g\")} подтвердила правоту ${ru.c(b,\"g\")}"
+        }
+      ]
+    },
+    "wasProvenRightAbout": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} was proven right about ${a.short}"
+        },
+        {
+          "$template": "${ru.c(b)} ${ru.gs(b,\"оказался прав\",\"оказалась права\")} насчёт ${ru.c(a,\"g\")}"
+        }
+      ]
+    },
+    "givesAGratefulLook": {
+      "$args": ["h", "s"],
+      "$value": [
+        {
+          "$template": "${h.short} gives ${s.short} a grateful look"
+        },
+        {
+          "$template": "${ru.c(h)} с благодарностью смотрит на ${ru.c(s,\"a\")}"
+        }
+      ]
+    },
+    "willNotLookAt": {
+      "$args": ["h", "s"],
+      "$value": [
+        {
+          "$template": "${h.short} will not look at ${s.short}"
+        },
+        {
+          "$template": "${ru.c(h)} не смотрит на ${ru.c(s,\"a\")}"
+        }
+      ]
+    },
+    "madeAScandalOf": {
+      "$args": ["b", "a", "r"],
+      "$value": [
+        {
+          "$template": "${b.short} made a scandal of ${a.short}’s night in your tent, to ${C(r.to).short}"
+        },
+        {
+          "$template": "${ru.c(b)} ${ru.gs(b,\"раздул\",\"раздула\")} скандал из ночи ${ru.c(a,\"g\")} в вашей палатке — в разговоре с ${ru.c(r.to,\"i\")}"
+        }
+      ]
+    },
+    "madeAScandalOf2": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} made a scandal of ${a.short}’s night in your tent, before everyone"
+        },
+        {
+          "$template": "${ru.c(b)} при всех ${ru.gs(b,\"раздул\",\"раздула\")} скандал из ночи ${ru.c(a,\"g\")} в вашей палатке"
+        }
+      ]
+    },
+    "spokeKindlyOfNight": {
+      "$args": ["b", "a", "r"],
+      "$value": [
+        {
+          "$template": "${b.short} spoke kindly of ${a.short}’s night in your tent, to ${C(r.to).short}"
+        },
+        {
+          "$template": "${ru.c(b)} по-доброму ${ru.gs(b,\"отозвался\",\"отозвалась\")} о ночи ${ru.c(a,\"g\")} в вашей палатке — в разговоре с ${ru.c(r.to,\"i\")}"
+        }
+      ]
+    },
+    "spokeKindlyOfNight2": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} spoke kindly of ${a.short}’s night in your tent, before everyone"
+        },
+        {
+          "$template": "${ru.c(b)} при всех по-доброму ${ru.gs(b,\"отозвался\",\"отозвалась\")} о ночи ${ru.c(a,\"g\")} в вашей палатке"
+        }
+      ]
+    },
+    "onDayHadSworn": {
+      "$args": ["o", "b", "a"],
+      "$value": [
+        {
+          "$template": "On day ${o.day} ${b.short} had sworn before everyone that ${a.short} was not one of them."
+        },
+        {
+          "$template": "В день ${o.day} ${ru.c(b)} при всех ${ru.gs(b,\"клялся\",\"клялась\")}, что ${ru.c(a)} не из них."
+        }
+      ]
+    },
+    "isDeadAndOn": {
+      "$args": ["a", "o", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} is dead, and on day ${o.day} ${b.short} had called ${EP.him(a)} one of them, before everyone."
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"мёртв\",\"мертва\")}, а ведь в день ${o.day} ${ru.c(b)} при всех ${ru.gs(b,\"назвал\",\"назвала\")} ${ru.gs(a,\"его\",\"её\")} ${ru.gs(a,\"одним\",\"одной\")} из них."
+        }
+      ]
+    },
+    "onDayHadCalled": {
+      "$args": ["o", "b", "a"],
+      "$value": [
+        {
+          "$template": "On day ${o.day} ${b.short} had called ${a.short} one of them, before everyone. ${a.short} was nothing of the kind."
+        },
+        {
+          "$template": "В день ${o.day} ${ru.c(b)} при всех ${ru.gs(b,\"назвал\",\"назвала\")} ${ru.c(a,\"a\")} ${ru.gs(a,\"одним\",\"одной\")} из них. Ничего подобного."
+        }
+      ]
+    },
+    "theCampTookDeath2": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "The camp took ${a.short}’s death to give ${b.short} the lie"
+        },
+        {
+          "$template": "Лагерь счёл, что смерть ${ru.c(a,\"g\")} опровергла слова ${ru.c(b,\"g\")}"
+        }
+      ]
+    },
+    "wasProvenWrongAbout": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} was proven wrong about ${a.short}"
+        },
+        {
+          "$template": "${ru.c(b)} ${ru.gs(b,\"оказался неправ\",\"оказалась неправа\")} насчёт ${ru.c(a,\"g\")}"
+        }
+      ]
+    },
+    "raisedAgainst": {
+      "$args": ["n", "many", "a", "when", "nr", "b", "whenRu"],
+      "$value": [
+        {
+          "$template": "${n} raised ${many?\"their hands\":\"a hand\"} against ${a.short}${when}."
+        },
+        {
+          "$template": "${nr} ${many?\"подняли\":ru.gs(b,\"поднял\",\"подняла\")} руку против ${ru.c(a,\"g\")}${whenRu}."
+        }
+      ]
+    },
+    "theCampTakesDeath2": {
+      "$args": ["a", "they"],
+      "$value": [
+        {
+          "$template": "The camp takes ${a.short}’s death for proof that ${they[0]}."
+        },
+        {
+          "$template": "Лагерь видит в смерти ${ru.c(a,\"g\")} доказательство того, что ${they[1]}."
+        }
+      ]
+    },
+    "willNotLookAt2": {
+      "$args": ["c", "by"],
+      "$value": [
+        {
+          "$template": "${c.short} will not look at ${by.short}"
+        },
+        {
+          "$template": "${ru.c(c)} не смотрит на ${ru.c(by,\"a\")}"
+        }
+      ]
+    }
+  },
+  "nobodyElseTakesItUp": {
+    "$call": "bi",
+    "$args": ["Nobody else takes it up.", "Больше никто ничего не говорит."]
+  },
+  "unmasked": [
+    {
+      "$template": "${a.short} unmasked"
+    },
+    {
+      "$template": "${ru.c(a)}: разоблачение"
+    }
+  ],
+  "theCampMournedA": [
+    {
+      "$template": "The camp mourned ${a.short}"
+    },
+    {
+      "$template": "Лагерь оплакивал ${ru.c(a, 'a')}"
+    }
+  ],
+  "blamedAloudA": [
+    {
+      "$template": "${b.short} blamed ${a.short} aloud"
+    },
+    {
+      "$template": "${ru.c(b)} при всех ${ru.gs(b, 'обвинил', 'обвинила')} ${ru.c(a, 'a')}"
+    }
+  ],
+  "theDiggersSangOfA": [
+    {
+      "$template": "The diggers sang of ${a.short}"
+    },
+    {
+      "$template": "Землекопы пели про ${ru.c(a, 'a')}"
+    }
+  ],
+  "cameCleanBeforeEveryone": [
+    {
+      "$template": "${a.short} came clean before everyone"
+    },
+    {
+      "$template": "${ru.c(a)} ${ru.gs(a, 'признался', 'призналась')} при всех"
+    }
+  ],
+  "wasRight": [
+    {
+      "$template": "${b.short} was right."
+    },
+    {
+      "$template": "И ${ru.c(b)} ${ru.gs(b, 'был прав', 'была права')}."
+    }
+  ],
+  "spokeUpForA": [
+    {
+      "$template": "${n} spoke up for ${a.short}${when}."
+    },
+    {
+      "$template": "${nr} ${many ? 'вступились' : ru.gs(b, 'вступился', 'вступилась')} за ${ru.c(a, 'a')}${whenRu}."
+    }
+  ],
+  "theyWereRight": ["they were right", "они были правы"],
+  "wasRight2": [
+    {
+      "$template": "${b.short} was right"
+    },
+    {
+      "$template": "${ru.c(b)} ${ru.gs(b, 'был прав', 'была права')}"
+    }
+  ],
+  "nowIsDead": [
+    {
+      "$template": "Now ${a.short} is dead."
+    },
+    {
+      "$template": "А теперь ${ru.c(a)} ${ru.gs(a, 'мёртв', 'мертва')}."
+    }
+  ],
+  "wasNoCultist": [
+    {
+      "$template": "${a.short} was no cultist."
+    },
+    {
+      "$template": "А ${ru.c(a)} ${ru.gs(a, 'не был сектантом', 'не была сектанткой')}."
+    }
+  ],
+  "wasInnocent": [
+    {
+      "$template": "${a.short} was innocent."
+    },
+    {
+      "$template": "А ${ru.c(a)} ни в чём не ${ru.gs(a, 'был виноват', 'была виновата')}."
+    }
+  ],
+  "wasOneOfThem": [
+    {
+      "$template": "${a.short} was one of them."
+    },
+    {
+      "$template": "А ${ru.c(a)} ${ru.gs(a, 'был одним', 'была одной')} из них."
+    }
+  ],
+  "text": {
+    "$template": " в день ${o.day}"
+  },
+  "text2": [
+    {
+      "$template": "${capS(they[0])}."
+    },
+    {
+      "$template": "И ${they[1]}."
+    }
+  ]
+}

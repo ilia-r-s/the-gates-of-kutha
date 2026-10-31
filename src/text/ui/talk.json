@@ -1,0 +1,56 @@
+{
+  "passages": {
+    "whichTitleWillYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p class=\"dim\">Which title will you ask ${c.short} about?</p>"
+        },
+        {
+          "$template": "<p class=\"dim\">О каком титуле спросить ${ru.c(c,\"a\")}?</p>"
+        }
+      ]
+    },
+    "beforeYouGoI": {
+      "$args": ["d"],
+      "$value": [
+        {
+          "$js": "\"Before you go. I dreamt of the seven gates. \"+dreamEn(d.t,d.cult,d.veil)"
+        },
+        {
+          "$js": "\"Пока вы не ушли. Мне снились семь врат. \"+dreamRu(d.t,d.cult,d.veil)"
+        }
+      ]
+    },
+    "whatWillYouSet": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p class=\"dim\">What will you set in front of ${c.short}?</p>"
+        },
+        {
+          "$template": "<p class=\"dim\">Что вы положите перед ${ru.c(c,\"i\")}?</p>"
+        }
+      ]
+    }
+  },
+  "aTitleFromTheTablets": {
+    "$call": "bi",
+    "$args": ["A title from the tablets", "Титул из табличек"]
+  },
+  "backToTheConversation": {
+    "$call": "bi",
+    "$args": ["Back to the conversation", "Вернуться к разговору"]
+  },
+  "takeYourLeave": {
+    "$call": "bi",
+    "$args": ["Take your leave", "Откланяться"]
+  },
+  "neverMind": {
+    "$call": "bi",
+    "$args": ["Never mind", "Неважно"]
+  },
+  "youPClassDimP": {
+    "$template": "<p class=\"dim\">${bi('You', 'Вы')}: ${inQuotes(l.text)}</p>"
+  }
+}

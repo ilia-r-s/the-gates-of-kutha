@@ -1,0 +1,140 @@
+{
+  "passages": {
+    "craneMeantMeI": {
+      "$args": ["k", "g"],
+      "$value": [
+        {
+          "$js": "[\"Crane meant me, I think. I dream, Doctor, and what I dream comes to pass.\",\"I did not want to say it in front of the others. I dream. I have always dreamed true.\",\"You are looking at the Dreamer. Since the tablets came up, I have dreamed of those seven gates every night.\"][k]"
+        },
+        {
+          "$js": "[\"Думаю, Крейн имел в виду меня. Мне снятся сны, доктор, и то, что мне снится, сбывается.\",`Я не ${g(\"хотел\",\"хотела\")} говорить при остальных. Мне снятся сны. И они всегда сбывались.`,`${g(\"Сновидец\",\"Сновидица\")} перед вами. С тех пор как подняли таблички, мне каждую ночь снятся эти семь врат.`][k]"
+        }
+      ]
+    },
+    "iSleepVeryLittle": {
+      "$args": ["k"],
+      "$value": [
+        {
+          "$js": "[\"I sleep very little, Doctor. Someone has to sit up with a lamp in this camp, and it has been me.\",\"Crane asked me to keep watch, the week before he died. I have not stopped.\",\"The one who keeps watch? That part is mine, God help me.\"][k]"
+        },
+        {
+          "$js": "[\"Я почти не сплю, доктор. Кто-то должен сидеть ночью с лампой в этом лагере — и сижу я.\",\"За неделю до смерти Крейн попросил меня присматривать за лагерем. С тех пор я не перестаю.\",\"Тот, кто стоит на страже? Это моя доля, помоги мне Господь.\"][k]"
+        }
+      ]
+    },
+    "iWouldRatherNot": {
+      "$args": ["k", "g"],
+      "$value": [
+        {
+          "$js": "[\"I would rather not answer that, Doctor.\",\"Crane wrote a great many things. I will not say which of them were about me.\",\"Ask me something else, Doctor. Please.\"][k]"
+        },
+        {
+          "$js": "[`Я бы ${g(\"предпочёл\",\"предпочла\")} не отвечать на этот вопрос, доктор.`,\"Крейн много чего писал. Что из этого обо мне — я не скажу.\",\"Спросите меня о чём-нибудь другом, доктор. Пожалуйста.\"][k]"
+        }
+      ]
+    },
+    "iAmNotIn": {
+      "$args": ["k", "g"],
+      "$value": [
+        {
+          "$js": "[\"I am not in that diary, Doctor. I do my work, I sleep, and I dream of nothing at all.\",\"Crane wrote a great many things that spring. None of them about me.\",\"Dreams and watchmen. No, Doctor. I am exactly what I seem.\"][k]"
+        },
+        {
+          "$js": "[\"Меня в этом дневнике нет, доктор. Я делаю свою работу, сплю, и мне ничего не снится.\",\"Той весной Крейн много чего писал. Но не обо мне.\",`Сны и дозорные. Нет, доктор. Я ровно ${g(\"тот\",\"та\")}, кем кажусь.`][k]"
+        }
+      ]
+    },
+    "doesNotMakeAnything": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} does not make anything up. ${EP.He(c)} simply will not answer."
+        },
+        {
+          "$template": "${ru.c(c)} ничего не выдумывает — просто не отвечает."
+        }
+      ]
+    },
+    "answersAShadeToo": {
+      "$args": ["c", "k"],
+      "$value": [
+        {
+          "$js": "[`${c.short} answers a shade too quickly.`,`${c.short} looks at the lamp, not at you, while answering.`][k]"
+        },
+        {
+          "$js": "[`${ru.c(c)} отвечает чуть поспешнее, чем следовало бы.`,`Отвечая, ${ru.c(c)} смотрит на лампу, а не на вас.`][k]"
+        }
+      ]
+    },
+    "iDreamtOfThe": {
+      "$args": ["c", "d"],
+      "$value": [
+        {
+          "$template": "“I dreamt of the seven gates,” ${c.p} says. “${dreamEn(d.t,d.cult,d.veil)}”"
+        },
+        {
+          "$template": "«Мне снились семь врат, — говорит ${ru.gs(c,\"он\",\"она\")}. — ${dreamRu(d.t,d.cult,d.veil)}»"
+        }
+      ]
+    },
+    "sworeToKeepWatch": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} swore to keep watch over your tent last night."
+        },
+        {
+          "$template": "${ru.c(c)} ${ru.gs(c,\"клялся\",\"клялась\")} этой ночью стеречь вашу палатку."
+        }
+      ]
+    },
+    "thisMorningWillNot": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "This morning ${c.p} will not meet your eye. “I must have slept,” ${c.p} says."
+        },
+        {
+          "$template": "Утром ${ru.gs(c,\"он\",\"она\")} не смотрит вам в глаза. «Должно быть, я ${ru.gs(c,\"заснул\",\"заснула\")}», — говорит ${ru.gs(c,\"он\",\"она\")}."
+        }
+      ]
+    },
+    "iSatUpTill": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "“I sat up till dawn,” ${c.p} says this morning. “Nothing came past me.” Something did."
+        },
+        {
+          "$template": "«Я до рассвета глаз не ${ru.gs(c,\"сомкнул\",\"сомкнула\")}, — говорит ${ru.gs(c,\"он\",\"она\")} утром. — Мимо меня никто не проходил». Кто-то всё же прошёл."
+        }
+      ]
+    },
+    "thisMorningKeepsOut": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "This morning ${c.p} keeps out of your way, and is off to the trench before breakfast is over."
+        },
+        {
+          "$template": "Утром ${ru.gs(c,\"он\",\"она\")} старательно избегает вас и уходит на раскоп, не дождавшись конца завтрака."
+        }
+      ]
+    }
+  },
+  "someoneStoodInsideTheSeventhUnder": {
+    "$template": "${cult ? 'Someone stood inside the seventh, under the god’s hand.' : 'Someone stood outside them, weeping. Whoever it was is not one of theirs.'} I could not see the face, only ${TRAITS[veil].vals[t.traits[veil]].clue}."
+  },
+  "stoodOutsideThemWeepingWhateverIs": {
+    "$template": "${t.short} stood outside them, weeping. Whatever ${t.p} is, ${t.p} is not one of theirs."
+  },
+  "text": {
+    "$template": "${cult ? 'Кто-то стоял за седьмыми, под рукой бога.' : 'Кто-то стоял снаружи и плакал. Кто бы это ни был — не из них.'} Лица было не разглядеть — только ${R(TRAITS[veil].vals[t.traits[veil]].clue)}."
+  },
+  "text2": {
+    "$template": "${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} за седьмыми, и рука бога лежала у ${ru.gs(t, 'него', 'неё')} на плече."
+  },
+  "text3": {
+    "$template": "${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} снаружи и ${ru.gs(t, 'плакал', 'плакала')}. Кем бы ${ru.gs(t, 'он ни был', 'она ни была')}, ${ru.gs(t, 'он', 'она')} не из них."
+  }
+}

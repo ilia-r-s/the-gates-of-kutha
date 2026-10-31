@@ -1,0 +1,406 @@
+{
+  "passages": {
+    "tellsYouPlainlyWhat": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} tells you plainly what ${c.p} thinks of your trench sections, which is not much."
+        },
+        {
+          "$template": "${ru.c(c)} прямо говорит, что думает о ваших разрезах траншеи, — а думает ${ru.gs(c,\"он\",\"она\")} о них немного."
+        }
+      ]
+    },
+    "answersEveryQuestionStraight": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} answers every question straight, even the ones that cost ${EP.him(c)} something."
+        },
+        {
+          "$template": "${ru.c(c)} отвечает на каждый вопрос прямо — даже на те, что ${ru.gs(c,\"ему\",\"ей\")} чего-то стоят."
+        }
+      ]
+    },
+    "apologisesTwiceForKeeping": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} apologises twice for keeping you waiting, though you were not kept waiting."
+        },
+        {
+          "$template": "${ru.c(c)} дважды извиняется, что ${ru.gs(c,\"заставил\",\"заставила\")} вас ждать, хотя вы и не ждали."
+        }
+      ]
+    },
+    "returnsAPencilBorrowed": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} returns a pencil borrowed from you on the first day, sharpened."
+        },
+        {
+          "$template": "${ru.c(c)} возвращает карандаш, взятый у вас в первый день, — заточенным."
+        }
+      ]
+    },
+    "tellsYouAStory": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} tells you a story about Basra. By the end of it, it happened in Mosul, to somebody else."
+        },
+        {
+          "$template": "${ru.c(c)} рассказывает вам историю про Басру. К концу рассказа всё это случилось уже в Мосуле и не с ${ru.gs(c,\"ним\",\"ней\")}."
+        }
+      ]
+    },
+    "hasNeverBeenTo": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} has never been to Egypt, ${c.p} says, and then describes Shepheard’s Hotel down to the carpets."
+        },
+        {
+          "$template": "${ru.c(c)} уверяет, что никогда не ${ru.gs(c,\"бывал\",\"бывала\")} в Египте, — а потом описывает отель «Шепердс» вплоть до ковров."
+        }
+      ]
+    },
+    "asksYouMoreQuestions": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} asks you more questions than you ask ${EP.him(c)}, and listens very closely to the answers."
+        },
+        {
+          "$template": "${ru.c(c)} задаёт вам больше вопросов, чем вы ${ru.gs(c,\"ему\",\"ей\")}, и очень внимательно слушает ответы."
+        }
+      ]
+    },
+    "agreesWithEverythingYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} agrees with everything you say, a moment before you say it."
+        },
+        {
+          "$template": "${ru.c(c)} соглашается со всем, что вы говорите, — за мгновение до того, как вы это скажете."
+        }
+      ]
+    },
+    "seemsToBeListening": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} seems to be listening to something much farther off than you."
+        },
+        {
+          "$template": "${ru.c(c)} будто прислушивается к чему-то, что гораздо дальше вас."
+        }
+      ]
+    },
+    "answersWhatYouAsk": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} answers what you ask and not a word more, and never asks why you asked."
+        },
+        {
+          "$template": "${ru.c(c)} отвечает ровно на то, о чём вы спросили, — ни словом больше — и никогда не спрашивает зачем."
+        }
+      ]
+    },
+    "startsThreeStoriesAnd": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} starts three stories and finishes none of them."
+        },
+        {
+          "$template": "${ru.c(c)} начинает три истории и не заканчивает ни одной."
+        }
+      ]
+    },
+    "cannotRememberWhetherIt": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} cannot remember whether it was Tuesday or Wednesday, and decides it does not matter."
+        },
+        {
+          "$template": "${ru.c(c)} не может вспомнить, был это вторник или среда, и решает, что это неважно."
+        }
+      ]
+    },
+    "keepsGlancingAtThe": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} keeps glancing at the tent flap while you talk."
+        },
+        {
+          "$template": "Пока вы говорите, ${ru.c(c)} то и дело косится на полог палатки."
+        }
+      ]
+    },
+    "wantsToKnowWhom": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} wants to know whom else you have spoken to today, and in what order."
+        },
+        {
+          "$template": "${ru.c(c)} хочет знать, с кем ещё вы сегодня говорили — и в каком порядке."
+        }
+      ]
+    },
+    "couldNotTellA": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short}? ${EP.He(t)} could not tell a lie to save ${t.pp} life."
+        },
+        {
+          "$template": "${ru.c(t)}? ${ru.gs(t,\"Он\",\"Она\")} и ради спасения жизни не ${ru.gs(t,\"смог\",\"смогла\")} бы солгать."
+        }
+      ]
+    },
+    "askAnythingYouLike": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "Ask ${t.short} anything you like. You will get the answer, whether you wanted it or not."
+        },
+        {
+          "$template": "Спросите ${ru.c(t,\"a\")} о чём угодно — получите ответ, хотите вы того или нет."
+        }
+      ]
+    },
+    "tellsTheTruthThe": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} tells the truth the way other people sneeze: without meaning to, and at the worst moment."
+        },
+        {
+          "$template": "${ru.c(t)} говорит правду так, как другие чихают: невольно и в самый неподходящий момент."
+        }
+      ]
+    },
+    "fretsOverEveryLittle": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} frets over every little thing. Asks forgiveness for the weather."
+        },
+        {
+          "$template": "${ru.c(t)} изводится из-за каждой мелочи. ${ru.gs(t,\"Готов\",\"Готова\")} просить прощения за погоду."
+        }
+      ]
+    },
+    "checksTheFindsRegister": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} checks the finds register three times before bed, and once more in the night."
+        },
+        {
+          "$template": "${ru.c(t)} трижды сверяет журнал находок перед сном — и ещё раз ночью."
+        }
+      ]
+    },
+    "ifAnythingGoesWrong": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "If anything goes wrong at Kutha, ${t.short} will be sure it was ${t.pp} fault."
+        },
+        {
+          "$template": "Что бы ни стряслось в Куте, ${ru.c(t)} будет ${ru.gs(t,\"уверен\",\"уверена\")}, что это ${ru.gs(t,\"его\",\"её\")} вина."
+        }
+      ]
+    },
+    "doNotBelieveHalf": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "Do not believe half of what ${t.short} tells you. ${EP.He(t)} does not believe it either."
+        },
+        {
+          "$template": "Не верьте и половине того, что вам рассказывает ${ru.c(t)}. ${ru.gs(t,\"Он\",\"Она\")} и ${ru.gs(t,\"сам\",\"сама\")} в это не верит."
+        }
+      ]
+    },
+    "hasToldMeThree": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} has told me three different stories about the war. All of them were good."
+        },
+        {
+          "$template": "${ru.c(t)} ${ru.gs(t,\"рассказывал\",\"рассказывала\")} мне о войне три разные истории. И все три — хорошие."
+        }
+      ]
+    },
+    "liesTheWayA": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} lies the way a cat steals: not for need, for practice."
+        },
+        {
+          "$template": "${ru.c(t)} лжёт, как кошка ворует: не от нужды, а для практики."
+        }
+      ]
+    },
+    "alwaysKnowsWhatYou": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} always knows what you want to hear. That is the dangerous kind."
+        },
+        {
+          "$template": "${ru.c(t)} всегда знает, что вы хотите услышать. Таких-то и стоит опасаться."
+        }
+      ]
+    },
+    "neverSaysAWord": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} never says a word that has not been weighed first. You can hear the scales."
+        },
+        {
+          "$template": "${ru.c(t)} не скажет ни слова, не взвесив его. Так и слышно, как скрипят весы."
+        }
+      ]
+    },
+    "isPleasantToEveryone": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} is pleasant to everyone. Ask yourself what it buys ${EP.him(t)}."
+        },
+        {
+          "$template": "${ru.c(t)} со всеми ${ru.gs(t,\"любезен\",\"любезна\")}. Спросите себя, что это ${ru.gs(t,\"ему\",\"ей\")} даёт."
+        }
+      ]
+    },
+    "livesSomewhereElseI": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} lives somewhere else, I think. Only the body comes to dinner."
+        },
+        {
+          "$template": "${ru.c(t)}, по-моему, живёт где-то в другом месте. К ужину приходит только тело."
+        }
+      ]
+    },
+    "couldSitThroughAn": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} could sit through an earthquake and ask afterwards whether anything had happened."
+        },
+        {
+          "$template": "${ru.c(t)} ${ru.gs(t,\"мог\",\"могла\")} бы просидеть землетрясение, а потом спросить, не случилось ли чего."
+        }
+      ]
+    },
+    "talkingToIsLike": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "Talking to ${t.short} is like writing to someone abroad: the answer comes, eventually."
+        },
+        {
+          "$template": "Говорить с ${ru.c(t,\"i\")} — всё равно что писать за границу: ответ приходит, но не сразу."
+        }
+      ]
+    },
+    "wouldLoseHeadIf": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} would lose ${t.pp} head if it were not fixed on, God bless ${EP.him(t)}."
+        },
+        {
+          "$template": "${ru.c(t)} и голову бы где-нибудь ${ru.gs(t,\"забыл\",\"забыла\")}, не будь она пришита, — храни ${ru.gs(t,\"его\",\"её\")} Господь."
+        }
+      ]
+    },
+    "laughsAtEverythingWhich": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} laughs at everything, which is a gift out here, if a tiring one."
+        },
+        {
+          "$template": "${ru.c(t)} смеётся надо всем — здесь это дар, пусть и утомительный."
+        }
+      ]
+    },
+    "hasFallenInLove": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} has fallen in love with Kutha three times this week, and out of it twice."
+        },
+        {
+          "$template": "${ru.c(t)} за эту неделю трижды ${ru.gs(t,\"влюблялся\",\"влюблялась\")} в Куту и дважды ${ru.gs(t,\"остывал\",\"остывала\")}."
+        }
+      ]
+    },
+    "thinksWeAreAll": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} thinks we are all in it together. Probably thinks it of you."
+        },
+        {
+          "$template": "${ru.c(t)} думает, что мы все тут заодно. Наверное, и про вас так думает."
+        }
+      ]
+    },
+    "countsTheSpoonsAfter": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} counts the spoons after every meal. Twice, lately."
+        },
+        {
+          "$template": "${ru.c(t)} после каждой трапезы пересчитывает ложки. В последнее время — дважды."
+        }
+      ]
+    },
+    "sleepsWithAChair": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${t.short} sleeps with a chair against the tent pole. Ask ${EP.him(t)} why, if you like being looked at."
+        },
+        {
+          "$template": "${ru.c(t)} спит, приставив стул к шесту палатки. Спросите ${ru.gs(t,\"его\",\"её\")} почему — если любите, когда на вас так смотрят."
+        }
+      ]
+    }
+  },
+  "TEMPER_NAMES": {
+    "honest": ["honest", "прямодушный", "прямодушная"],
+    "conscientious": ["conscientious", "совестливый", "совестливая"],
+    "liar": ["a liar", "лгун", "лгунья"],
+    "calculating": ["calculating", "расчётливый", "расчётливая"],
+    "detached": ["detached", "отстранённый", "отстранённая"],
+    "lightheaded": ["light-headed", "легкомысленный", "легкомысленная"],
+    "suspicious": ["suspicious", "мнительный", "мнительная"]
+  },
+  "FEEL_NAMES": {
+    "3": ["devoted", "предан", "предана"],
+    "2": ["fond", "расположен", "расположена"],
+    "1": ["friendly", "дружелюбен", "дружелюбна"],
+    "0": ["indifferent", "равнодушен", "равнодушна"],
+    "-1": ["cool", "холоден", "холодна"],
+    "-2": ["hostile", "враждебен", "враждебна"]
+  }
+}

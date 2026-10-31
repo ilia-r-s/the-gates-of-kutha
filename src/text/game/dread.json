@@ -1,0 +1,6 @@
+{
+  "youFindYouAreGrowingUsed": {
+    "$call": "bi",
+    "$args": ["You find you are growing used to it.", "Вы замечаете, что начинаете к этому привыкать."]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "passages": {
+    "holdsYourGazeA": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} holds your gaze a moment longer than ${c.p} needs to."
+        },
+        {
+          "$template": "${ru.c(c)} задерживает на вас взгляд чуть дольше, чем нужно."
+        }
+      ]
+    },
+    "watchesYouGoAnd": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} watches you go, and does not pretend otherwise."
+        },
+        {
+          "$template": "${ru.c(c)} смотрит вам вслед и не делает вид, что смотрит куда-то ещё."
+        }
+      ]
+    },
+    "asYouLeaveStraightens": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "As you leave, ${c.short} straightens your collar, as if it were the most natural thing in the world."
+        },
+        {
+          "$template": "На прощание ${ru.c(c)} поправляет вам воротник — так, будто это самое естественное дело на свете."
+        }
+      ]
+    },
+    "andRatherISuppose": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": " And rather ${t.p===\"she\"?\"lovely\":\"handsome\"}, I suppose."
+        },
+        {
+          "$template": " И, надо признать, ${ru.gs(t,\"весьма хорош собой\",\"весьма хороша собой\")}."
+        }
+      ]
+    },
+    "haveYouSeenHow": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "Have you seen how ${a.short} looks at ${b.short}? Like a cat at a cream jug."
+        },
+        {
+          "$template": "Вы видели, как ${ru.c(a)} смотрит на ${ru.c(b,\"a\")}? Как кошка на сметану."
+        }
+      ]
+    },
+    "foundThreeReasonsTo": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} found three reasons to walk past ${b.short}’s tent yesterday. Three."
+        },
+        {
+          "$template": "Вчера ${ru.c(a)} ${ru.gs(a,\"нашёл\",\"нашла\")} три повода пройти мимо палатки ${ru.c(b,\"g\")}. Три."
+        }
+      ]
+    },
+    "hasASoftSpot": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} has a soft spot for you, Doctor. The whole camp can see it, except you."
+        },
+        {
+          "$template": "${ru.c(a)} к вам ${ru.gs(a,\"неравнодушен\",\"неравнодушна\")}, доктор. Это видит весь лагерь — кроме вас."
+        }
+      ]
+    },
+    "asksAfterYouWhen": {
+      "$args": ["a", "s"],
+      "$value": [
+        {
+          "$template": "${a.short} asks after you when you are not there. I thought you should know."
+        },
+        {
+          "$template": "${ru.c(a)} спрашивает о вас, когда вас нет рядом. Я ${ru.gs(s,\"подумал\",\"подумала\")}, вам стоит это знать."
+        }
+      ]
+    },
+    "hasASoftSpot2": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} has a soft spot for the Doctor. The whole camp can see it, except the Doctor."
+        },
+        {
+          "$template": "${ru.c(a)} к доктору ${ru.gs(a,\"неравнодушен\",\"неравнодушна\")}. Это видят все в лагере, кроме доктора."
+        }
+      ]
+    },
+    "asksAfterTheDoctor": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} asks after the Doctor whenever the Doctor is not about."
+        },
+        {
+          "$template": "${ru.c(a)} всё спрашивает о докторе, стоит доктору отлучиться."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "passages": {
+    "youDreamOfThe": {
+      "$args": [],
+      "$value": [
+        "You dream of the seven gates. You stand outside them, weeping, and cannot remember why.",
+        "Вам снятся семь врат. Вы стоите снаружи и плачете и никак не можете вспомнить, о чём."
+      ]
+    },
+    "youDreamOfThe2": {
+      "$args": [],
+      "$value": [
+        "You dream of the seven gates, and you are standing inside the seventh. A hand rests on your shoulder, heavy and warm, and you are glad of it.",
+        "Вам снятся семь врат, и вы стоите за седьмыми. На плече у вас лежит рука, тяжёлая и тёплая, и вы ей рады."
+      ]
+    },
+    "youDreamOfThe3": {
+      "$args": ["cult", "t"],
+      "$value": [
+        {
+          "$js": "cult?`You dream of the seven gates. ${t.short} stands inside the seventh, and the god’s hand is on ${t.pp} shoulder.`:`You dream of the seven gates. ${t.short} stands outside them, weeping.`"
+        },
+        {
+          "$js": "cult?`Вам снятся семь врат. ${ru.c(t)} стоит за седьмыми, и рука бога лежит у ${ru.gs(t,\"него\",\"неё\")} на плече.`:`Вам снятся семь врат. ${ru.c(t)} стоит снаружи и плачет.`"
+        }
+      ]
+    },
+    "youDreamOfSomething": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "You dream of something standing over ${v.short} in the dark, patient as a heron."
+        },
+        {
+          "$template": "Вам снится, что над ${ru.c(v,\"i\")} в темноте стоит что-то — терпеливое, как цапля."
+        }
+      ]
+    },
+    "youDreamThatYou": {
+      "$args": [],
+      "$value": [
+        "You dream that you are standing outside your own tent in the dark, and something goes in past you without a sound.",
+        "Вам снится, что вы стоите в темноте у собственной палатки, а что-то беззвучно проходит мимо вас внутрь."
+      ]
+    },
+    "youDreamOfThe4": {
+      "$args": [],
+      "$value": [
+        "You dream of the camp asleep, every lamp out, and nothing moving between the tents all night.",
+        "Вам снится спящий лагерь: все лампы погашены, и всю ночь между палатками ничто не шевелится."
+      ]
+    },
+    "andWalkTheEdge": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} and ${b.short} walk the edge of the canal together, deep in talk."
+        },
+        {
+          "$template": "${ru.c(a)} и ${ru.c(b)} идут вдвоём по берегу канала, увлечённые разговором."
+        }
+      ]
+    },
+    "callsAfterAcrossThe": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} calls after ${b.short} across the camp, and ${b.short} walks on faster."
+        },
+        {
+          "$template": "${ru.c(a)} окликает ${ru.c(b,\"a\")} через весь лагерь, а ${ru.c(b)} только прибавляет шагу."
+        }
+      ]
+    },
+    "callsAfterAcrossThe2": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} calls after ${a.short} across the camp, and ${a.short} walks on faster."
+        },
+        {
+          "$template": "${ru.c(b)} окликает ${ru.c(a,\"a\")} через весь лагерь, а ${ru.c(a)} только прибавляет шагу."
+        }
+      ]
+    },
+    "andSitAtOne": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} and ${b.short} sit at one table with their backs to each other."
+        },
+        {
+          "$template": "${ru.c(a)} и ${ru.c(b)} сидят за одним столом, повернувшись друг к другу спиной."
+        }
+      ]
+    },
+    "callsAfterAcrossThe3": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} calls after ${b.short} across the camp, and ${b.short} does not hear."
+        },
+        {
+          "$template": "${ru.c(a)} окликает ${ru.c(b,\"a\")} через весь лагерь, а ${ru.c(b)} не слышит."
+        }
+      ]
+    },
+    "callsAfterAcrossThe4": {
+      "$args": ["b", "a"],
+      "$value": [
+        {
+          "$template": "${b.short} calls after ${a.short} across the camp, and ${a.short} does not hear."
+        },
+        {
+          "$template": "${ru.c(b)} окликает ${ru.c(a,\"a\")} через весь лагерь, а ${ru.c(a)} не слышит."
+        }
+      ]
+    },
+    "stepsOffThePath": {
+      "$args": ["ab", "a", "b"],
+      "$value": [
+        {
+          "$template": "${ab<0?a.short:b.short} steps off the path to let ${ab<0?b.short:a.short} pass, and spits."
+        },
+        {
+          "$template": "${ru.c(ab<0?a:b)} сходит с тропы, пропуская ${ru.c(ab<0?b:a,\"a\")}, и сплёвывает."
+        }
+      ]
+    },
+    "andPassEachOther": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} and ${b.short} pass each other on the path without a glance."
+        },
+        {
+          "$template": "${ru.c(a)} и ${ru.c(b)} проходят друг мимо друга по тропе, не взглянув."
+        }
+      ]
+    },
+    "youDreamOfThe5": {
+      "$args": ["at", "clue"],
+      "$value": [
+        {
+          "$template": "You dream of the night of an attack, ${at.at}: ${clue}, and nobody there."
+        },
+        {
+          "$template": "Вам снится ночь нападения, ${R(at.at)}: ${R(clue)}, и рядом никого."
+        }
+      ]
+    },
+    "youDreamOfAsleep": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "You dream of ${t.short} asleep with ${t.pp} eyes open, and in ${t.pp} eyes the seven gates, very small."
+        },
+        {
+          "$template": "Вам снится, что ${ru.c(t)} спит с открытыми глазами, и в глазах у ${ru.gs(t,\"него\",\"неё\")} — семь врат, совсем крошечных."
+        }
+      ]
+    },
+    "youDreamOfA": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "You dream of a lamp going round and round the tents all night, and ${t.short}’s face above it."
+        },
+        {
+          "$template": "Вам снится лампа, которая всю ночь кружит между палатками, и над ней — лицо ${ru.c(t,\"g\")}."
+        }
+      ]
+    },
+    "youDreamOfHands": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "You dream of ${t.short}’s hands, black with the dust of the store crates, counting something by touch."
+        },
+        {
+          "$template": "Вам снятся руки ${ru.c(t,\"g\")}, чёрные от пыли складских ящиков: они что-то пересчитывают на ощупь."
+        }
+      ]
+    },
+    "youDreamOfLying": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "You dream of ${a.short} lying awake in the dark, listening for ${b.short}."
+        },
+        {
+          "$template": "Вам снится, что ${ru.c(a)} лежит без сна в темноте и прислушивается — не идёт ли ${ru.c(b)}."
+        }
+      ]
+    },
+    "inYourDreamA": {
+      "$args": [],
+      "$value": [
+        "In your dream a tablet lies open on your knees, and you can read every wedge of it: “",
+        "Во сне у вас на коленях лежит открытая табличка, и вы можете прочесть каждый клин: «"
+      ]
+    },
+    "youDreamOfThe6": {
+      "$args": ["tomorrow"],
+      "$value": [
+        {
+          "$template": "You dream of the stair under the ziggurat, and of the door at the bottom of it, and you know, as one knows in dreams, that it will stand open ${tomorrow?\"tomorrow night\":\"on the night the moon is dark\"}, if nothing stops it first."
+        },
+        {
+          "$template": "Вам снится лестница под зиккуратом и дверь у её подножия, и вы знаете — как знают во сне, — что она будет открыта ${tomorrow?\"завтрашней ночью\":\"в ночь новолуния\"}, если ничто не остановит этого раньше."
+        }
+      ]
+    }
+  },
+  "youDreamOfTheCampBy": {
+    "$template": "You dream of the camp by day. ${en}"
+  },
+  "text": {
+    "$template": "Вам снится лагерь днём. ${rus}"
+  }
+}

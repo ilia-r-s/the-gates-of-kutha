@@ -1,0 +1,249 @@
+{
+  "passages": {
+    "atSunriseTheDiggers": {
+      "$args": ["hm"],
+      "$value": [
+        {
+          "$template": "At sunrise the diggers are in the trenches after all, sullen and silent: ${hm?\"Hamid has\":\"the headman has\"} talked them round."
+        },
+        {
+          "$template": "На рассвете землекопы всё-таки выходят в траншеи, хмурые и молчаливые: ${hm?\"Хамиду\":\"старосте\"} удалось их уговорить."
+        }
+      ]
+    },
+    "theDiggersSitBy": {
+      "$args": [],
+      "$value": [
+        "The diggers sit by their tents with their arms folded, and the trenches stand empty all day.",
+        "Землекопы сидят у своих палаток, скрестив руки, и траншеи весь день пустуют."
+      ]
+    },
+    "theShamalBlowsOn": {
+      "$args": [],
+      "$value": [
+        "The shamal blows on. By noon you cannot see the tell from the tents.",
+        "Шамаль не стихает. К полудню из лагеря уже не видно холма."
+      ]
+    },
+    "onlyToday": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "Only ${actionsIn(S.slotsToday)[0]} today"
+        },
+        {
+          "$template": "Сегодня только ${actionsIn(S.slotsToday)[1]}"
+        }
+      ]
+    },
+    "action": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "${[\"no\",\"one\",\"two\",\"three\"][n]} action${n===1?\"\":\"s\"}"
+        },
+        {
+          "$js": "[\"ни одного действия\",\"одно действие\",\"два действия\",\"три действия\"][n]"
+        }
+      ]
+    },
+    "threeTabletFragmentsTo": {
+      "$args": [],
+      "$value": ["Three tablet fragments to translate at camp", "Три обломка табличек — перевести в лагере"]
+    },
+    "twoTabletFragmentsTo": {
+      "$args": [],
+      "$value": ["Two tablet fragments to translate at camp", "Два обломка табличек — перевести в лагере"]
+    },
+    "aTabletFragmentTo": {
+      "$args": [],
+      "$value": ["A tablet fragment to translate at camp", "Обломок таблички — перевести в лагере"]
+    },
+    "byTheTimeThe": {
+      "$args": [],
+      "$value": [
+        "By the time the tents are lashed down, the wind has dropped as suddenly as it rose. The day is yours after all.",
+        "Пока палатки крепят к земле, ветер стихает так же внезапно, как поднялся. День всё-таки ваш."
+      ]
+    },
+    "youTradeAFountain": {
+      "$args": [],
+      "$value": [
+        "You trade a fountain pen for the one thing on his donkey that looks right. By evening the paint is coming off on your fingers.",
+        "Вы выменяли на вечное перо единственную вещь с его ослика, которая выглядела настоящей. К вечеру краска сходит у вас на пальцы."
+      ]
+    },
+    "tradedAFountainPen": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "Traded a fountain pen for ${theItem(it)} with a dealer passing through."
+        },
+        {
+          "$template": "${ru.Item(it)} — ${ru.ig(it,\"выменян\",\"выменяна\",\"выменяно\",\"выменяны\")} на вечное перо у заезжего торговца."
+        }
+      ]
+    },
+    "youTradeAFountain2": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "You trade a fountain pen for ${V(it,\"it\",\"them\")}: ${ITEMS[it].name}"
+        },
+        {
+          "$template": "Вы выменяли ${ru.ig(it,\"его\",\"её\",\"его\",\"их\")} на вечное перо: ${R(ITEMS[it].name)}"
+        }
+      ]
+    },
+    "andYourWatchFor": {
+      "$args": ["more"],
+      "$value": [
+        {
+          "$template": "And your watch for another: ${ITEMS[more].name}"
+        },
+        {
+          "$template": "А на часы — ещё одну вещь: ${R(ITEMS[more].name)}"
+        }
+      ]
+    },
+    "theLineComesThrough": {
+      "$args": [],
+      "$value": [
+        "The line comes through garbled in transmission: half of it is groups of figures, and the rest is the word STOP.",
+        "Строка дошла искажённой: половина её — группы цифр, остальное — слово «ТЧК»."
+      ]
+    },
+    "theTalkIsPleasant": {
+      "$args": [],
+      "$value": ["The talk is pleasant, and goes nowhere in particular.", "Разговор приятный и ни к чему особенному не ведёт."]
+    },
+    "satBesideYouAnd": {
+      "$args": ["ids", "many", "c"],
+      "$value": [
+        {
+          "$template": "${nameList(ids)} sat beside you and talked, and ${many?\"trust\":\"trusts\"} you more now"
+        },
+        {
+          "$template": "${nameListRu(ids)}: долгий разговор за чашкой кофе. Теперь ${many?\"они доверяют\":ru.gs(c[0],\"он доверяет\",\"она доверяет\")} вам больше"
+        }
+      ]
+    },
+    "heFindsNothingWrong": {
+      "$args": [],
+      "$value": [
+        "He finds nothing wrong with you that sleep would not mend, and prescribes it.",
+        "Он не находит у вас ничего такого, чего не вылечил бы сон, — и прописывает сон."
+      ]
+    },
+    "heCleansAndStitches": {
+      "$args": [],
+      "$value": [
+        "He cleans and stitches what needs stitching, and asks no questions. You are the better for it.",
+        "Он промывает и зашивает всё, что нужно зашить, и ни о чём не спрашивает. Вам становится легче."
+      ]
+    },
+    "heChangesYourDressings": {
+      "$args": [],
+      "$value": [
+        "He changes your dressings and says the wounds are healing as well as can be expected. They do not feel it.",
+        "Он меняет вам повязки и говорит, что раны заживают как положено. По ощущениям — нет."
+      ]
+    },
+    "heCountsYourTablet": {
+      "$args": [],
+      "$value": [
+        "He counts your tablet fragments too, writes something in his book, and leaves them where they are.",
+        "Он пересчитывает и ваши обломки табличек, что-то записывает в книжку — и оставляет их на месте."
+      ]
+    },
+    "heTakesTwoTablet": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$js": "n>1?\"He takes two tablet fragments back to Baghdad, “for safekeeping”.\":\"He takes a tablet fragment back to Baghdad, “for safekeeping”.\""
+        },
+        {
+          "$js": "n>1?\"Он увозит в Багдад два обломка табличек — «на хранение».\":\"Он увозит в Багдад обломок таблички — «на хранение».\""
+        }
+      ]
+    },
+    "amongTheBatteriesSomeone": {
+      "$args": [],
+      "$value": ["Among the batteries, someone has packed an electric torch.", "Вместе с батарейками кто-то положил электрический фонарик."]
+    },
+    "andUnderTheParaffin": {
+      "$args": [],
+      "$value": ["And under the paraffin, a flask of brandy with no name on it.", "А под керосином — фляжка бренди без имени владельца."]
+    },
+    "whenHeHasGone": {
+      "$args": [],
+      "$value": [
+        "When he has gone, you find an old bowl buried face down beside your tent pole.",
+        "Когда он уходит, вы находите у шеста своей палатки старую чашу, зарытую вверх дном."
+      ]
+    },
+    "andTheyDoNot": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} and ${b.short}. They do not speak to each other for the rest of the day."
+        },
+        {
+          "$template": "${ru.c(a)} и ${ru.c(b)}. До конца дня они не говорят друг с другом ни слова."
+        }
+      ]
+    },
+    "byEveningEachOf": {
+      "$args": [],
+      "$value": [
+        "By evening each of them has something to say about where the other goes after dark.",
+        "К вечеру у каждого из них находится что сказать о том, куда другой ходит по ночам."
+      ]
+    },
+    "andSitTogetherAt": {
+      "$args": ["a", "b"],
+      "$value": [
+        {
+          "$template": "${a.short} and ${b.short} sit together at the feast, and laugh at the same things."
+        },
+        {
+          "$template": "${ru.c(a)} и ${ru.c(b)} сидят на пиру рядом и смеются над одним и тем же."
+        }
+      ]
+    },
+    "satBesideYouAt": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "${x.short} sat beside you at the feast, and trusts you more now"
+        },
+        {
+          "$template": "${ru.c(x)} ${ru.gs(x,\"сидел\",\"сидела\")} рядом с вами на пиру и теперь доверяет вам больше"
+        }
+      ]
+    },
+    "theTabletCrumblesTo": {
+      "$args": [],
+      "$value": ["The tablet crumbles to dust as the pickmen lift it.", "Едва землекопы поднимают табличку, она рассыпается в прах."]
+    },
+    "theVerseAboutIs": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "The verse about ${x.short} is not kind."
+        },
+        {
+          "$template": "Куплет про ${ru.c(x,\"a\")} — недобрый."
+        }
+      ]
+    }
+  },
+  "noneOfItIsWrittenOn": {
+    "$call": "bi",
+    "$args": ["None of it is written on.", "Ни на одном нет надписей."]
+  },
+  "itBlowsOverByNoon": {
+    "$call": "bi",
+    "$args": ["It blows over by noon.", "К полудню всё утихает."]
+  }
+}

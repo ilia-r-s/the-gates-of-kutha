@@ -1,0 +1,374 @@
+{
+  "passages": {
+    "theTrusteesSentYou": {
+      "$args": [],
+      "$value": [
+        [
+          "The Trustees sent you to dig, not to judge. But the camp will not act, the police in Hillah would not believe a word of it, and every night the circle at the foot of the ziggurat burns a little blacker. There is only one way to stop this.",
+          "Попечители прислали вас копать, а не судить. Но лагерь бездействует, полиция в Хилле не поверит ни единому слову, а круг у подножия зиккурата с каждой ночью чернеет всё сильнее. Остановить это можно только одним способом."
+        ],
+        [
+          "You have read enough of the tablets to know how this ends if nobody ends it first. No inquiry will do it in time. There is only one way to stop this, and nobody else is going to do it.",
+          "Вы прочли довольно табличек, чтобы знать, чем всё кончится, если никто не положит этому конец раньше. Никакое дознание не успеет. Остановить это можно только одним способом — и никто, кроме вас, этого не сделает."
+        ],
+        [
+          "Crane is dead. The night keeps its count. Somewhere in this camp someone sleeps soundly who should not be sleeping at all. There is only one way to stop this.",
+          "Крейн мёртв. Ночь ведёт свой счёт. Где-то в этом лагере крепко спит тот, кому вообще не следовало бы спать. Остановить это можно только одним способом."
+        ]
+      ]
+    },
+    "onceThisSeasonAnd": {
+      "$args": [],
+      "$value": [
+        "Once this season, and only tonight. Whatever you do in the dark, nobody will tell you whether you were right.",
+        "Один раз за сезон — и только этой ночью. Что бы вы ни сделали в темноте, никто не скажет вам, правы ли вы были."
+      ]
+    },
+    "oneMoreThingWhatever": {
+      "$args": [],
+      "$value": [
+        "One more thing. Whatever is found by the tent in the morning, the camp will read, the way you read the scenes yourself.",
+        "И ещё одно. Что бы утром ни нашли у палатки, лагерь станет это читать — так же, как вы сами читаете места нападений."
+      ]
+    },
+    "youResolvedToGo": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "You resolved to go to ${t.name}’s tent in the night."
+        },
+        {
+          "$template": "Вы решили ночью пойти к палатке ${ru.cf(t,\"g\")}."
+        }
+      ]
+    },
+    "youEatWithThe": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>You eat with the others and say very little. Afterwards you sit in your tent with the lamp out and listen to the camp go to sleep, one voice at a time.</p>"
+        },
+        {
+          "$template": "<p>Вы ужинаете со всеми и почти не говорите. Потом сидите у себя в палатке, погасив лампу, и слушаете, как лагерь засыпает — голос за голосом.</p>"
+        }
+      ]
+    },
+    "inTheSmallHours": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>In the small hours you reach ${t.short}’s tent. It is empty, the cot cold. Wherever ${t.short} is at this hour, ${t.p} is not asleep.</p>"
+        },
+        {
+          "$template": "<p>Под утро вы добираетесь до палатки ${ru.c(t,\"g\")}. Она пуста, койка холодна. Где бы ${ru.c(t)} ни ${ru.gs(t,\"был\",\"была\")} в этот час, ${ru.gs(t,\"он\",\"она\")} не спит.</p>"
+        }
+      ]
+    },
+    "youAreAStep": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>You are a step from ${t.short}’s tent when a lamp comes up out of the dark and someone shouts. You run, and do not stop until you are inside your own tent with the flap tied.</p>"
+        },
+        {
+          "$template": "<p>Вы в шаге от палатки ${ru.c(t,\"g\")}, когда из темноты поднимается лампа и кто-то кричит. Вы бежите и останавливаетесь, только завязав за собой полог собственной палатки.</p>"
+        }
+      ]
+    },
+    "oneShotDogsAll": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>One shot. Dogs all over the camp, lamps coming on, and you are back inside your own tent before the first of them reaches ${t.short}’s.</p>"
+        },
+        {
+          "$template": "<p>Один выстрел. Собаки по всему лагерю, загорающиеся лампы — а вы уже у себя в палатке прежде, чем первый из них добегает до палатки ${ru.c(t,\"g\")}.</p>"
+        }
+      ]
+    },
+    "doesNotWakeIt": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>${t.short} does not wake. It is quicker than you thought, and much quieter, and afterwards you cannot make your hands stop.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(t)} не просыпается. Всё выходит быстрее, чем вы думали, и куда тише, — а потом вы никак не можете унять дрожь в руках.</p>"
+        }
+      ]
+    },
+    "atFirstLightThey": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">At first light they find ${t.short} dead in ${t.pp} cot, shot through the heart. Half the camp heard the shot; nobody saw who fired it.</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">На рассвете ${ru.c(t,\"a\")} находят ${ru.gs(t,\"мёртвым\",\"мёртвой\")} на койке, с пулей в сердце. Выстрел слышала половина лагеря; кто стрелял, не видел никто.</p>"
+        }
+      ]
+    },
+    "atFirstLightIs": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">At first light ${t.short} is found dead in ${t.pp} cot, the blanket pulled up as if against the cold. It was a knife, and not the power’s way at all.</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">На рассвете ${ru.c(t,\"a\")} находят ${ru.gs(t,\"мёртвым\",\"мёртвой\")} на койке, одеяло подтянуто, будто от холода. Это был нож — и совсем не почерк той силы.</p>"
+        }
+      ]
+    },
+    "wakesAsYouRaise": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>${t.short} wakes as you raise the revolver and seizes it by the barrel, and the shot goes into the tent pole. You wrench free and are out and away in the dark before the lamps come on, and you do not know whether ${t.p} saw your face.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(t)} просыпается, когда вы поднимаете револьвер, и хватается за ствол — пуля уходит в шест палатки. Вы вырываетесь и исчезаете в темноте прежде, чем загораются лампы, — и не знаете, ${ru.gs(t,\"видел\",\"видела\")} ли ${ru.gs(t,\"он\",\"она\")} ваше лицо.</p>"
+        }
+      ]
+    },
+    "wakesAsYouReach": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>${t.short} wakes as you reach the cot, and fights like an animal. You get away in the dark with the knife still in your hand, and you do not know whether ${t.p} saw your face.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(t)} просыпается, едва вы подходите к койке, и дерётся как зверь. Вы уходите в темноту с ножом в руке — и не знаете, ${ru.gs(t,\"видел\",\"видела\")} ли ${ru.gs(t,\"он\",\"она\")} ваше лицо.</p>"
+        }
+      ]
+    },
+    "comesToBreakfastWith": {
+      "$args": ["t", "d"],
+      "$value": [
+        {
+          "$template": "<p>${t.short} comes to breakfast with ${d.means===\"revolver\"?\"a powder burn across one palm\":\"a cut across one hand\"}, and tells anyone who will listen that someone came into ${t.pp} tent in the night ${d.means===\"revolver\"?\"and fired at \"+EP.him(t)+\" in the dark\":\"with a knife\"}.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(t)} приходит к завтраку ${d.means===\"revolver\"?\"с пороховым ожогом на ладони\":\"с порезанной рукой\"} и рассказывает всем, кто готов слушать, что ночью кто-то забрался к ${ru.gs(t,\"нему\",\"ней\")} в палатку ${d.means===\"revolver\"?`и выстрелил в ${ru.gs(t,\"него\",\"неё\")} в темноте`:\"с ножом\"}.</p>"
+        }
+      ]
+    },
+    "onTheWayBack": {
+      "$args": [],
+      "$value": [
+        "<p>On the way back you pass someone between the tents. Neither of you says a word.</p>",
+        "<p>На обратном пути вы проходите мимо кого-то между палатками. Ни один из вас не произносит ни слова.</p>"
+      ]
+    },
+    "youLeaveByThe": {
+      "$args": ["clue", "o"],
+      "$value": [
+        {
+          "$template": "<p>You leave ${clue} by the tent flap, as ${o.short} would, for the first who comes to find.</p>"
+        },
+        {
+          "$template": "<p>У полога палатки вы оставляете ${R(clue)} — так, как сделал${ru.gs(o,\"\",\"а\")} бы ${ru.c(o)}: пусть первый, кто придёт, найдёт.</p>"
+        }
+      ]
+    },
+    "whenYouGetBack": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "<p>When you get back, ${w.short} is sitting by your tent with a lamp. “Someone came for you,” ${w.p} says, and looks at your empty cot, and then at you. “They went away again.”</p>"
+        },
+        {
+          "$template": "<p>Когда вы возвращаетесь, у вашей палатки с лампой сидит ${ru.c(w)}. «За вами приходили, — говорит ${ru.gs(w,\"он\",\"она\")} и смотрит на вашу пустую койку, а потом на вас. — Они ушли».</p>"
+        }
+      ]
+    },
+    "whenYouGetBack2": {
+      "$args": [],
+      "$value": [
+        "<p>When you get back, the ground outside your tent is scuffed, and a lamp is going away between the tents.</p>",
+        "<p>Когда вы возвращаетесь, земля у вашей палатки истоптана, а между палатками удаляется лампа.</p>"
+      ]
+    },
+    "whenYouGetBack3": {
+      "$args": [],
+      "$value": [
+        "<p>When you get back, your tent has been slashed open from top to bottom and your cot torn apart. Whoever came for you tonight found nobody in it.</p>",
+        "<p>Когда вы возвращаетесь, ваша палатка распорота сверху донизу, а койка разломана. Тот, кто приходил за вами этой ночью, никого в ней не застал.</p>"
+      ]
+    },
+    "beforeBreakfastStandsUp": {
+      "$args": ["knower", "surely"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">Before breakfast ${knower.short} stands up in the mess tent and says it in front of everyone: “It was the Doctor. ${surely?\"I saw your face.\":\"I saw you, between the tents, in the small hours.\"}”</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">Перед завтраком ${ru.c(knower)} встаёт в столовой палатке и говорит это при всех: «Это были вы, доктор. ${surely?\"Я видел\"+ru.gs(knower,\"\",\"а\")+\" ваше лицо.\":\"Я видел\"+ru.gs(knower,\"\",\"а\")+\" вас между палатками под утро.\"}»</p>"
+        }
+      ]
+    },
+    "watchesYouOverBreakfast": {
+      "$args": ["knower", "asked"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">${knower.short} watches you over breakfast and says nothing. Later you hear ${knower.p} asked ${asked[0]} whether the Doctor sleeps well these nights.</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">${ru.c(knower)} весь завтрак смотрит на вас и молчит. Позже вы узнаёте, что ${ru.gs(knower,\"он спрашивал\",\"она спрашивала\")} ${asked[1]}, хорошо ли доктор спит в последние ночи.</p>"
+        }
+      ]
+    },
+    "someoneFoundAHorn": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">Someone found a horn button by ${t.short}’s tent. By noon the whole camp has looked at your jacket.</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">У палатки ${ru.c(t,\"g\")} кто-то нашёл роговую пуговицу. К полудню весь лагерь уже посмотрел на вашу куртку.</p>"
+        }
+      ]
+    },
+    "theWholeCampKnows": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">The whole camp knows your tent was empty last night when they came for you. Nobody asks where you were. Everyone wonders.</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">Весь лагерь знает, что прошлой ночью, когда за вами пришли, ваша палатка была пуста. Никто не спрашивает, где вы были. Все гадают.</p>"
+        }
+      ]
+    },
+    "looksForALong": {
+      "$args": ["sp", "t"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">${sp.short} looks for a long time at what was left by ${t.short}’s tent, and says it was put there for someone to find.</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">${ru.c(sp)} долго разглядывает то, что нашли у палатки ${ru.c(t,\"g\")}, и говорит, что это подбросили, чтобы кто-нибудь нашёл.</p>"
+        }
+      ]
+    },
+    "thereIsNobodyLeft": {
+      "$args": [],
+      "$value": [
+        "There is nobody left at the dig to sit in judgement on you, and it falls to the police corporal from Hillah to decide. He takes your word for it.",
+        "Судить вас на раскопе уже некому, и решать приходится капралу из Хиллы. Он верит вам на слово."
+      ]
+    },
+    "theCampSitsIn": {
+      "$args": ["out"],
+      "$value": [
+        {
+          "$js": "\"The camp sits in judgement on you in the mess tent. \"+[out.expel.length?`${nameList(out.expel)} would put you on the lorry to Hillah.`:\"Nobody would put you on the lorry.\",out.keep.length?`${nameList(out.keep)} ${out.keep.length>1?\"speak\":\"speaks\"} for you.`:\"\",out.silent.length?`${nameList(out.silent)} ${out.silent.length>1?\"say\":\"says\"} nothing.`:\"\"].filter(Boolean).join(\" \")"
+        },
+        {
+          "$js": "\"Лагерь собирается в столовой палатке, чтобы решить вашу судьбу. \"+[out.expel.length?`Отправить вас грузовиком в Хиллу: ${nameListRu(out.expel)}.`:\"Отправлять вас в Хиллу не хочет никто.\",out.keep.length?`За вас: ${nameListRu(out.keep)}.`:\"\",out.silent.length?`${out.silent.length>1?\"Молчат\":\"Молчит\"}: ${nameListRu(out.silent)}.`:\"\"].filter(Boolean).join(\" \")"
+        }
+      ]
+    },
+    "itIsDecidedAt": {
+      "$args": [],
+      "$value": ["It is decided: at noon you will be on the lorry to Hillah.", "Решено: в полдень вы уедете грузовиком в Хиллу."]
+    },
+    "theCampWillNot": {
+      "$args": [],
+      "$value": ["The camp will not send you away. Not today.", "Лагерь не станет вас отсылать. Не сегодня."]
+    }
+  },
+  "onlyOneWay": {
+    "$call": "bi",
+    "$args": ["Only one way", "Единственный способ"]
+  },
+  "goToSTentTonightG": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Go to ${c.name}’s tent tonight"
+      },
+      {
+        "$template": "Ночью пойти к палатке ${ru.cf(c,\"g\")}"
+      }
+    ]
+  },
+  "thinkBetterOfIt": {
+    "$call": "bi",
+    "$args": ["Think better of it", "Передумать"]
+  },
+  "yourRevolver": {
+    "$call": "bi",
+    "$args": ["Your revolver", "Ваш револьвер"]
+  },
+  "sureAndLoud": {
+    "$call": "bi",
+    "$args": ["Sure, and loud", "Наверняка — но громко"]
+  },
+  "aKnifeFromTheCookHouse": {
+    "$call": "bi",
+    "$args": ["A knife from the cook-house", "Нож с кухни"]
+  },
+  "quietIfYourHandIsSteady": {
+    "$call": "bi",
+    "$args": ["Quiet, if your hand is steady", "Тихо — если рука не дрогнет"]
+  },
+  "thinkBetterOfIt2": {
+    "$call": "bi",
+    "$args": ["Think better of it", "Передумать"]
+  },
+  "onlyOneWay2": {
+    "$call": "bi",
+    "$args": ["Only one way", "Единственный способ"]
+  },
+  "thenWithWhat": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${t.name}, then. With what?"
+      },
+      {
+        "$template": "Значит, ${ru.cf(t)}. Чем?"
+      }
+    ]
+  },
+  "onlyOneWay3": {
+    "$call": "bi",
+    "$args": ["Only one way", "Единственный способ"]
+  },
+  "leaveSomethingOfSG": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Leave something of ${p.o.short}’s"
+      },
+      {
+        "$template": "Оставить что-нибудь от ${ru.c(p.o,\"g\")}"
+      }
+    ]
+  },
+  "leaveNothingOfAnyoneS": {
+    "$call": "bi",
+    "$args": ["Leave nothing of anyone’s", "Ничего чужого не оставлять"]
+  },
+  "thinkBetterOfIt3": {
+    "$call": "bi",
+    "$args": ["Think better of it", "Передумать"]
+  },
+  "waitingForTheDark": {
+    "$call": "bi",
+    "$args": ["Waiting for the dark", "В ожидании темноты"]
+  },
+  "youKilledInTheNightA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You killed ${t.name} in the night."
+      },
+      {
+        "$template": "Ночью вы убили ${ru.cf(t,\"a\")}."
+      }
+    ]
+  },
+  "text": "Хамида",
+  "theCook": ["the cook", "повара"]
+}

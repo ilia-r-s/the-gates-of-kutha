@@ -1,0 +1,381 @@
+{
+  "passages": {
+    "nightDawnOfDay": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "Night ${S.day-1} · Dawn of day ${S.day}"
+        },
+        {
+          "$template": "Ночь ${S.day-1} · Рассвет дня ${S.day}"
+        }
+      ]
+    },
+    "nothingComesInThe": {
+      "$args": [],
+      "$value": [
+        "<p>Nothing comes in the night. At first light the camp counts itself twice over, and everyone is there. Nobody believes it.</p>",
+        "<p>Ночью ничего не происходит. На рассвете лагерь дважды пересчитывает себя — все на месте. И никто в это не верит.</p>"
+      ]
+    },
+    "inTheSmallHours": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>In the small hours you hear a scuffle outside your tent and a curse. By the time you get the flap open there is nobody there: only a lamp going away between the tents.</p>"
+        },
+        {
+          "$template": "<p>Под утро у палатки слышны возня и чья-то ругань. Когда вы откидываете полог, снаружи уже никого нет — только лампа удаляется между палатками.</p>"
+        }
+      ]
+    },
+    "inTheSmallHours2": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "<p>In the small hours you hear a scuffle outside your tent and a curse. When you get the flap open, ${w.short} is standing there with a lamp. “Someone came for you,” ${w.p} says. “They will not come again tonight.”</p>"
+        },
+        {
+          "$template": "<p>Под утро у палатки слышны возня и чья-то ругань. Когда вы откидываете полог, снаружи с лампой в руке стоит ${ru.c(w)}. «За вами приходили, — говорит ${ru.gs(w,\"он\",\"она\")}. — Сегодня больше не придут».</p>"
+        }
+      ]
+    },
+    "inTheNightThe": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>In the night the incantation bowl under your bed cracks clean in two. Whatever came for you is trapped in the pieces, or was.</p>"
+        },
+        {
+          "$template": "<p>Ночью заклинательная чаша под вашей кроватью раскалывается ровно надвое. То, что приходило за вами, теперь заперто в осколках — или было заперто.</p>"
+        }
+      ]
+    },
+    "inTheMorningThe": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>In the morning the incantation bowl under your bed is full to the brim with black water, and whole. You did not hear anything come, or go.</p>"
+        },
+        {
+          "$template": "<p>Утром заклинательная чаша под вашей кроватью полна до краёв чёрной водой — и цела. Вы не слышали, чтобы кто-то приходил или уходил.</p>"
+        }
+      ]
+    },
+    "inTheNightThe2": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>In the night the incantation bowl under your bed cracks clean in two, and whatever came for you is not in the pieces.</p>"
+        },
+        {
+          "$template": "<p>Ночью заклинательная чаша под вашей кроватью раскалывается надвое — но того, что приходило за вами, в осколках нет.</p>"
+        }
+      ]
+    },
+    "theIncantationBowlUnder": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>The incantation bowl under your bed does not so much as ring.</p>"
+        },
+        {
+          "$template": "<p>Заклинательная чаша под вашей кроватью даже не звякает.</p>"
+        }
+      ]
+    },
+    "somethingSlidesUnderThe": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>Something slides under the tent wall in the dark. You fire twice. In the morning there is no blood.</p>"
+        },
+        {
+          "$template": "<p>В темноте под стенку палатки что-то проскальзывает. Вы стреляете дважды. Наутро крови нет.</p>"
+        }
+      ]
+    },
+    "youWakeInThe": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "<p>You wake in the dark, sure that someone is standing over your bed. You strike a match. Nobody: only the tent flap, stirring, and the pariah dogs barking away down the lines. You do not sleep again.</p>"
+        },
+        {
+          "$template": "<p>Вы просыпаетесь в темноте с уверенностью, что кто-то стоит над вашей кроватью. Чиркаете спичкой. Никого — только колышется полог да где-то в конце лагеря заходятся лаем бродячие собаки. Больше вы не спите.</p>"
+        }
+      ]
+    },
+    "someoneCameForIn": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "<p>Someone came for ${v.short} in the night, but a watcher in the dark drove them off.</p>"
+        },
+        {
+          "$template": "<p>Ночью кто-то приходил за ${ru.c(v,\"i\")}, но незримый страж прогнал незваных гостей.</p>"
+        }
+      ]
+    },
+    "someoneCameForIn2": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "<p>Someone came for ${v.short} in the night. The pariah dogs set up a howl, ${v.short} shouted, and by the time anyone came running there was nobody to be seen.</p>"
+        },
+        {
+          "$template": "<p>Ночью кто-то приходил за ${ru.c(v,\"i\")}. Бродячие собаки подняли вой, ${ru.c(v)} ${ru.gs(v,\"закричал\",\"закричала\")} — и когда люди сбежались, вокруг уже никого не было.</p>"
+        }
+      ]
+    },
+    "sceneSwept": {
+      "$args": ["atEn", "atRu"],
+      "$value": [
+        {
+          "$template": "<p>At the scene, ${atEn}, there is nothing to find. Someone has swept the ground with a palm frond, carefully, all the way back to the path.</p>"
+        },
+        {
+          "$template": "<p>На месте нападения, ${atRu}, искать нечего. Кто-то тщательно подмёл землю пальмовой ветвью — до самой тропы.</p>"
+        }
+      ]
+    },
+    "sceneEmpty": {
+      "$args": ["atEn", "atRu"],
+      "$value": [
+        {
+          "$template": "<p>At the scene, ${atEn}, there is nothing to find.</p>"
+        },
+        {
+          "$template": "<p>На месте нападения, ${atRu}, искать нечего.</p>"
+        }
+      ]
+    },
+    "atTheSceneYou": {
+      "$args": ["atEn", "clue", "more", "atRu"],
+      "$value": [
+        {
+          "$template": "<p>At the scene, ${atEn}, you find ${clueText(clue)}${more?`, and beside it ${clueText(more)}`:\"\"}.</p>"
+        },
+        {
+          "$template": "<p>На месте нападения, ${atRu}, вы находите ${clueTextRu(clue)}${more?`, а рядом — ${clueTextRu(more)}`:\"\"}.</p>"
+        }
+      ]
+    },
+    "theDiggersBroughtIn": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "The diggers brought in ${theItem(w)} from ${LOCS[S.wardAt[w]].ref}."
+        },
+        {
+          "$template": "Землекопы принесли ${ru.item(w,\"a\")} ${ru.loc(S.wardAt[w],\"from\")}."
+        }
+      ]
+    },
+    "bringsYouTheFinds": {
+      "$args": ["who", "w", "fm"],
+      "$value": [
+        {
+          "$template": "<p>${who} brings you the finds tray from yesterday’s spoil. Among the sherds, cleaned and labelled: ${theItem(w)}, from ${LOCS[S.wardAt[w]].ref}.</p>"
+        },
+        {
+          "$template": "<p>${isFree(fm)?\"Хамид\":\"Один из землекопов\"} приносит вам лоток с находками из вчерашнего отвала. Среди черепков, отмытых и подписанных, — ${ru.item(w)}, ${ru.loc(S.wardAt[w],\"from\")}.</p>"
+        }
+      ]
+    },
+    "atBreakfastTellsAnyone": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "<p>At breakfast ${a.short} tells anyone who will listen that ${a.p} sat up by your tent half the night. “Somewhere after two, someone came along the lines without a lamp. When I stood up, they went away.”</p>"
+        },
+        {
+          "$template": "<p>За завтраком ${ru.c(a)} рассказывает всем, кто готов слушать, что полночи ${ru.gs(a,\"просидел\",\"просидела\")} у вашей палатки. «Где-то после двух кто-то шёл вдоль палаток без лампы. Когда я ${ru.gs(a,\"встал\",\"встала\")}, он ушёл».</p>"
+        }
+      ]
+    },
+    "findsYouBeforeBreakfast": {
+      "$args": ["c", "en", "rus"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} finds you before breakfast, hollow-eyed. ${en}</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} находит вас ещё до завтрака — с запавшими, бессонными глазами. ${rus}</p>"
+        }
+      ]
+    },
+    "thenSpeaksUp": {
+      "$args": ["c", "en", "rus"],
+      "$value": [
+        {
+          "$template": "<p>Then ${c.short} speaks up. ${en}</p>"
+        },
+        {
+          "$template": "<p>Следом слово берёт ${ru.c(c)}. ${rus}</p>"
+        }
+      ]
+    },
+    "atBreakfastSpeaksUp": {
+      "$args": ["c", "en", "rus"],
+      "$value": [
+        {
+          "$template": "<p>At breakfast, ${c.short} speaks up. ${en}</p>"
+        },
+        {
+          "$template": "<p>За завтраком слово берёт ${ru.c(c)}. ${rus}</p>"
+        }
+      ]
+    },
+    "shakesHeadThenWe": {
+      "$args": ["a", "d"],
+      "$value": [
+        {
+          "$template": "<p>${a.short} shakes ${a.pp} head. “Then we did not dream the same dream. I dreamt of the seven gates too: ${dreamEn(d.t,false)}”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(a)} качает головой. «Значит, нам снились разные сны. Мне тоже снились семь врат: ${dreamRu(d.t,false)}»</p>"
+        }
+      ]
+    },
+    "isOnFeetBefore": {
+      "$args": ["a", "c", "d"],
+      "$value": [
+        {
+          "$template": "<p>${a.short} is on ${a.pp} feet before ${c.short} has finished. “I dreamt of the seven gates too. ${dreamEn(d.t,d.cult)}”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(a)} вскакивает, не дав ${ru.c(c,\"d\")} договорить. «Мне тоже снились семь врат. ${dreamRu(d.t,d.cult)}»</p>"
+        }
+      ]
+    },
+    "isOnFeetThat": {
+      "$args": ["t", "c"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">${t.short} is on ${t.pp} feet. “That is a lie, and ${c.short} knows it.”</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">${ru.c(t)} вскакивает. «Это ложь, и ${ru.c(c)} это знает».</p>"
+        }
+      ]
+    },
+    "doesNotLookUp": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">${t.short} does not look up from ${t.pp} plate. “Dream what you like. I know where I was.”</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">${ru.c(t)} не поднимает глаз от тарелки. «Пусть снится что угодно. Я знаю, где ${ru.gs(t,\"был\",\"была\")}».</p>"
+        }
+      ]
+    },
+    "thatIsNotTrue": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"notice\">“That is not true,” ${t.short} says quietly. “I swear it is not.”</p>"
+        },
+        {
+          "$template": "<p class=\"notice\">«Это неправда, — тихо говорит ${ru.c(t)}. — Клянусь, неправда».</p>"
+        }
+      ]
+    }
+  },
+  "nightBeforeDawn": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Night ${n} · Before dawn"
+      },
+      {
+        "$template": "Ночь ${n} · До рассвета"
+      }
+    ]
+  },
+  "nightDawnOfDay": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Night ${n} · Dawn of day ${n+1}"
+      },
+      {
+        "$template": "Ночь ${n} · Рассвет дня ${n+1}"
+      }
+    ]
+  },
+  "theGateIsOpening": {
+    "$call": "bi",
+    "$args": ["The gate is opening", "Врата отворяются"]
+  },
+  "nightAndMorning": {
+    "$call": "bi",
+    "$args": ["Night, and morning", "Ночь и утро"]
+  },
+  "goToTheZiggurat": {
+    "$call": "bi",
+    "$args": ["Go to the ziggurat", "Идти к зиккурату"]
+  },
+  "beginDay": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Begin day ${n+1}"
+      },
+      {
+        "$template": "Начать день ${n+1}"
+      }
+    ]
+  },
+  "inTheNight": {
+    "$call": "bi",
+    "$args": ["In the night", "Ночью"]
+  },
+  "nightBeforeDawn2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Night ${S.day} · Before dawn"
+      },
+      {
+        "$template": "Ночь ${S.day} · До рассвета"
+      }
+    ]
+  },
+  "atFirstLight": {
+    "$call": "bi",
+    "$args": ["At first light", "На рассвете"]
+  },
+  "atBreakfast": {
+    "$call": "bi",
+    "$args": ["At breakfast", "За завтраком"]
+  },
+  "nightAndMorning2": {
+    "$call": "bi",
+    "$args": ["Night, and morning", "Ночь и утро"]
+  },
+  "theDaySNews": {
+    "$call": "bi",
+    "$args": ["The day’s news", "Новости дня"]
+  },
+  "beforeDawn": {
+    "$call": "bi",
+    "$args": ["Before dawn", "До рассвета"]
+  },
+  "youWereAttackedInTheNight": {
+    "$call": "bi",
+    "$args": ["You were attacked in the night.", "Ночью на вас напали."]
+  },
+  "wasTakenInTheNightA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${v.name} was taken in the night."
+      },
+      {
+        "$template": "Ночь забрала ${ru.cf(v,\"a\")}."
+      }
+    ]
+  }
+}

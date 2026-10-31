@@ -1,0 +1,907 @@
+{
+  "END_IDS": [
+    "unopened",
+    "sealed",
+    "banished",
+    "emptied",
+    "shot",
+    "burned",
+    "scarred",
+    "fallen-night",
+    "fallen-below",
+    "bethlem",
+    "canal",
+    "counting",
+    "doom-fire",
+    "doom-dust",
+    "doom-sea",
+    "doom-teeth",
+    "doom-plague",
+    "doom-madness",
+    "truck"
+  ],
+  "END_OLD": {
+    "unopened": "exposed",
+    "sealed": "triumph",
+    "scarred": "pyrrhic",
+    "fallen-below": "death",
+    "bethlem": "madness",
+    "doom-fire": "doom"
+  },
+  "END_TITLES": {
+    "banished": ["The Last Word", "Последнее слово"],
+    "emptied": ["The Empty Sanctum", "Пустое святилище"],
+    "shot": ["One Shot in the Dark", "Выстрел во тьме"],
+    "burned": ["Fire on the Mound", "Огонь над холмом"],
+    "fallen-night": ["Taken in the Night", "Ночь забрала и вас"],
+    "canal": ["Clay and Reed", "Глина и тростник"],
+    "counting": ["Two Hundred and Nine Steps", "Двести девять ступеней"],
+    "doom-dust": ["The Grey Country", "Серая страна"],
+    "doom-sea": ["The Salt Deep Rises", "Солёная бездна поднимается"],
+    "doom-teeth": ["The Cradle Rocks", "Колыбель качается"],
+    "doom-plague": ["None to Bury Them", "Хоронить некому"],
+    "doom-madness": ["The Sleepwalkers", "Лунатики"],
+    "truck": ["The Lorry to Hillah", "Грузовик до Хиллы"]
+  },
+  "END_CALM": {
+    "fire": [
+      "By noon the bricks of Trench B are as cold as any brick in March.",
+      "К полудню кирпичи в траншее Б холодны, как и положено кирпичу в марте."
+    ],
+    "dust": [
+      "By morning the owls have left Trench B, and the dust on the tents is only dust.",
+      "К утру совы покидают траншею Б, и пыль на палатках — просто пыль."
+    ],
+    "sea": [
+      "By noon the canal runs sweet again. The fishermen in the village do not ask why, and you do not tell them.",
+      "К полудню вода в канале снова пресная. Деревенские рыбаки не спрашивают почему, а вы не рассказываете."
+    ],
+    "teeth": [
+      "That morning, in the village, a woman gives birth to a loud, red, entirely ordinary child.",
+      "Тем же утром в деревне женщина рожает громкого, красного, совершенно обыкновенного младенца."
+    ],
+    "plague": [
+      "By evening the flies have gone from the camp, and in the village the sick are sitting up and asking for bread.",
+      "К вечеру мухи покидают лагерь, а в деревне больные садятся в постели и просят хлеба."
+    ],
+    "madness": [
+      "That night the whole camp sleeps without dreaming, and in the morning everyone answers to their own name.",
+      "Той ночью весь лагерь спит без снов, а утром каждый откликается на своё имя."
+    ]
+  },
+  "END_TRACE": {
+    "fire": [
+      "the canvas burned through in a dozen places, as if someone had pressed hot coins to it",
+      "холст прожжён в десятке мест, будто к нему прикладывали раскалённые монеты"
+    ],
+    "dust": ["an owl on the ridge-pole, and grey dust on the pillow", "на коньке палатки сидит сова, и подушка седая от пыли"],
+    "sea": ["a pool of seawater beside it", "рядом с ней стоит лужа морской воды"],
+    "teeth": ["around the cot, the prints of something like a lioness", "вокруг койки — следы, похожие на львиные"],
+    "plague": [
+      "the pillow black with flies, and a sweet smell inside, like a sickroom’s",
+      "подушка черна от мух, и внутри стоит сладкий запах, как в комнате больного"
+    ],
+    "madness": [
+      "your shaving mirror turned to the wall, and your name written across the canvas again and again, backwards, in your own hand",
+      "ваше зеркальце для бритья повёрнуто к стене, и по всему холсту снова и снова, задом наперёд, вашей же рукой написано ваше имя"
+    ]
+  },
+  "PERIL_KILLED": {
+    "shoring": ["the shoring in Trench B, which gave way as you climbed down", "крепление в траншее Б, подавшееся, когда вы спускались"],
+    "pickman": ["a pickman’s swing in the narrow cut", "удар кирки землекопа в узкой траншее"],
+    "brick": [
+      "a course of brick on the flank of the ziggurat, which turned under your foot",
+      "ряд кирпича на склоне зиккурата, повернувшийся у вас под ногой"
+    ],
+    "grave": ["a Parthian grave, and whatever bit you in it", "парфянская могила — и то, что укусило вас в ней"],
+    "snake": ["a water snake in the reeds by the canal", "водяная змея в тростнике у канала"],
+    "dog": ["a pariah dog behind a mud wall in the village", "бродячий пёс из-за глинобитной стены в деревне"],
+    "shelf": ["a shelf of boxed tablets in the store", "полка с ящиками табличек в хранилище"],
+    "pole": ["a tent pole the wind brought down on you", "палаточный шест, который ветер обрушил на вас"],
+    "primus": ["the cook’s primus, which flared as you passed", "примус повара, вспыхнувший, когда вы проходили мимо"]
+  },
+  "HEARSAY": {
+    "attack": {
+      "$args": [],
+      "$value": [
+        [
+          "The pickmen say something came to your tent that last night, and that you were awake when it came.",
+          "Землекопы говорят, что в ту последнюю ночь к вашей палатке что-то приходило — и что вы не спали, когда оно пришло."
+        ],
+        [
+          "The cook says your lamp burned all that last night, and that something had been scratching at the canvas of your tent.",
+          "Повар говорит, что в ту последнюю ночь ваша лампа горела до утра, а по брезенту вашей палатки что-то скреблось."
+        ]
+      ]
+    },
+    "screamed": {
+      "$js": "b=>{const h=C(b.id)\n;return[[`The pickmen say something came to your tent that night, and it was ${h.short}’s screaming that drove it off.`,`Землекопы говорят, что в ту ночь к вашей палатке что-то приходило — и прогнал его крик ${ru.c(h,\"g\")}.`],[`${h.short} will not talk about that night. The pickmen say she screamed until the whole camp was awake.`,`${ru.c(h)} не хочет говорить о той ночи. Землекопы говорят, что она кричала, пока не проснулся весь лагерь.`]]}"
+    },
+    "herDeath": {
+      "$js": "b=>{const h=C(b.id);return[[`The cook says ${h.short} died in your tent that night.`,`Повар говорит, что в ту ночь ${ru.c(h)} умерла в вашей палатке.`],[`Nobody says aloud where ${h.short} died that night, but everyone knows it was in your tent.`,`Вслух никто не говорит, где в ту ночь умерла ${ru.c(h)}, но все знают, что в вашей палатке.`]]}"
+    },
+    "death": {
+      "$js": "b=>{const v=C(b.id),hm=C(\"hamid\"),by=isFree(hm)&&hm.id!==v.id?[\"Hamid\",\"Хамид\"]:[\"The cook\",\"Повар\"]\n;return[[`${by[0]} says you were not the same after they found ${v.short}.`,`${by[1]} говорит, что, когда нашли ${ru.c(v,\"a\")}, в вас что-то надломилось.`],[`The pickmen say you sat by ${v.short} until they came to bury ${EP.him(v)}, and did not say a word.`,`Землекопы говорят, что вы сидели возле ${ru.c(v,\"g\")}, пока ${ru.gs(v,\"его\",\"её\")} не пришли хоронить, и не проронили ни слова.`]]}"
+    },
+    "found": {
+      "$js": "b=>{const v=C(b.id);return[[`The pickmen say it was you who found ${v.short}, and that something in you gave way.`,`Землекопы говорят, что ${ru.c(v,\"a\")} нашли вы — и что в вас тогда что-то надломилось.`],[`The waterboy says you came back that morning white as chalk, and would not say what you had found.`,`Мальчик-водонос говорит, что в то утро вы вернулись белее мела и не хотели говорить, что нашли.`]]}"
+    },
+    "horror": {
+      "$js": "b=>{const t=[[\"that morning\",\"в то утро\"],[\"that afternoon\",\"в тот день\"],[\"that evening\",\"в тот вечер\"]][Math.min(2,b.slot||0)],at={\ntrench:[`The diggers say you went down into Trench B alone ${t[0]}, and came up without a word.`,`Землекопы говорят, что ${t[1]} вы в одиночку спустились в траншею Б и поднялись оттуда, не сказав ни слова.`],ziggurat:[`The diggers say you went up E-meslam alone ${t[0]}, and came down without a word.`,`Землекопы говорят, что ${t[1]} вы в одиночку поднялись на Э-меслам и спустились, не сказав ни слова.`],cemetery:[`The diggers say you went out among the Parthian graves alone ${t[0]}, and came back without a word.`,`Землекопы говорят, что ${t[1]} вы в одиночку ушли к парфянским могилам и вернулись, не сказав ни слова.`],canal:[`The fishermen say they saw you on the canal bank ${t[0]}, standing very still, looking into the water.`,`Рыбаки говорят, что ${t[1]} видели вас на берегу канала: вы стояли не шевелясь и смотрели в воду.`],\nvillage:[`In the village they say you came through ${t[0]} and stopped at every door, and would not say what you were looking for.`,`В деревне говорят, что ${t[1]} вы прошли по ней, останавливаясь у каждой двери, и не сказали, что ищете.`],store:[`The diggers say you shut yourself in the store with the tablets ${t[0]}, and would not come out when they called.`,`Землекопы говорят, что ${t[1]} вы заперлись в хранилище с табличками и не вышли, когда вас звали.`],camp:[`The cook says you sat in your tent all ${t[0]} with the flap tied shut, talking; nobody had gone in.`,`Повар говорит, что ${t[1]} вы просидели в палатке с завязанным пологом и с кем-то разговаривали, хотя внутрь никто не входил.`],night:[\"The pickmen say a light burned in your tent all that last night, and that you were talking to someone; there was nobody with you.\",\"Землекопы говорят, что в ту последнюю ночь в вашей палатке до утра горел свет и вы с кем-то разговаривали, а с вами никого не было.\"]}\n;return[at[b.at]||at.camp]}"
+    },
+    "blade": {
+      "$js": "b=>{const h=C(b.id);return[[`The cook says ${h.short} came to your tent that night with a blade, and was on the lorry to Hillah by first light.`,`Повар говорит, что в ту ночь ${ru.c(h)} пришла к вам в палатку с клинком — и к рассвету уже сидела в грузовике до Хиллы.`],[`They say ${h.short} was taken away under guard at first light, and that it was you she had come for in the night.`,`Говорят, на рассвете ${ru.c(h,\"a\")} увезли под конвоем — и что ночью она приходила за вами.`]]}"
+    },
+    "telegram": {
+      "$args": [],
+      "$value": [
+        [
+          "There had been a telegram that morning. Nobody saw what was in it; you burned it.",
+          "В то утро пришла телеграмма. Что в ней было, никто не видел: вы её сожгли."
+        ],
+        [
+          "The cook remembers a telegram that morning, and that you read it twice and put it in the stove.",
+          "Повар помнит, что в то утро пришла телеграмма и что вы прочли её дважды и сунули в печку."
+        ]
+      ]
+    },
+    "wrong": {
+      "$js": "b=>{const c=C(b.id)\n;return[[`Some say it began the day the lorry took ${c.short} to Hillah for something ${c.p} had not done.`,`Кое-кто говорит, что всё началось в тот день, когда грузовик увёз ${ru.c(c,\"a\")} в Хиллу за то, чего ${ru.gs(c,\"он\",\"она\")} не ${ru.gs(c,\"делал\",\"делала\")}.`],[`The diggers say you watched the Hillah road for a long time after ${c.short} was taken away.`,`Землекопы говорят, что после того, как увезли ${ru.c(c,\"a\")}, вы долго смотрели на дорогу в Хиллу.`]]}"
+    },
+    "refused": {
+      "$args": [],
+      "$value": [
+        [
+          "Some say it began the evening the camp would not hear you out.",
+          "Кое-кто говорит, что всё началось в тот вечер, когда лагерь не захотел вас выслушать."
+        ],
+        [
+          "The diggers say that after the camp turned you down you sat alone by the spoil heaps until dark.",
+          "Землекопы говорят, что после того, как лагерь вам отказал, вы до темноты просидели в одиночестве у отвалов."
+        ]
+      ]
+    },
+    "peril": {
+      "$args": ["b"],
+      "$value": [
+        [
+          {
+            "$template": "Some put it down to the heat, which had been at you all ${[\"morning\",\"afternoon\",\"day\"][Math.min(2,b.slot||0)]}."
+          },
+          {
+            "$template": "Кое-кто винит во всём жару, донимавшую вас ${[\"всё утро\",\"весь день\",\"весь день\"][Math.min(2,b.slot||0)]}."
+          }
+        ],
+        [
+          "The diggers say the tell had been at you all day, and you would not rest.",
+          "Землекопы говорят, что холм весь день не давал вам покоя, а отдыхать вы не желали."
+        ]
+      ]
+    },
+    "spite": {
+      "$args": ["b"],
+      "$value": {
+        "$js": "[{lamp:[\"Someone had been at your lamp, they say, and you spent that night in the dark.\",\"Говорят, кто-то испортил вашу лампу, и ту ночь вы провели в темноте.\"],water:[\"Someone had been at your water, they say, and after that you would drink nothing anyone gave you.\",\"Говорят, кто-то подмешал что-то в вашу воду, и после этого вы не пили ничего, что вам давали.\"],scorpion:[\"Someone had put a scorpion in your boot, they say, and after that you slept sitting up.\",\"Говорят, кто-то подложил вам в сапог скорпиона, и после этого вы спали сидя.\"]}[b.kind]].filter(Boolean)"
+      }
+    },
+    "deed": {
+      "$args": ["b"],
+      "$value": [
+        {
+          "$js": "b.how===\"done\"?[\"Some say you came back from the tents that night with blood on your sleeve, and would not say whose.\",\"Кое-кто говорит, что в ту ночь вы вернулись от палаток с кровью на рукаве и не сказали, чья она.\"]:[\"Some say you were out among the tents that night, and came back shaking.\",\"Кое-кто говорит, что в ту ночь вы бродили между палатками и вернулись, дрожа всем телом.\"]"
+        }
+      ]
+    }
+  },
+  "itWasTheLastOfThem": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "It was ${c.name}, the last of them, who came to your tent with a blade."
+      },
+      {
+        "$template": "Последней из них была ${ru.cf(c)} — та, что пришла к вам в палатку с клинком."
+      }
+    ]
+  },
+  "itWasTheLastOfThem2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "It was ${c.name}, the last of them, whom the camp put on the lorry to Hillah."
+      },
+      {
+        "$template": "${ru.gs(c,\"Последним\",\"Последней\")} из них ${ru.gs(c,\"был\",\"была\")} ${ru.cf(c)} — ${ru.gs(c,\"его\",\"её\")} лагерь и посадил в грузовик до Хиллы."
+      }
+    ]
+  },
+  "youRaiseAboveYourHeadAnd": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You raise ${theItem(it)} above your head, and the old binding remembers what it was made for."
+      },
+      {
+        "$template": "Вы поднимаете над головой ${ru.item(it,\"a\")}, и древнее заклятие вспоминает, ради чего его сотворили."
+      }
+    ]
+  },
+  "itWasTheyWereYouRaise": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You raise ${theItem(it)} above your head. ${V(it,\"It was\",\"They were\")} never made for what is here, and for a long moment nothing happens. Then the chant falters all the same, as if whatever was rising had simply lost interest in you."
+      },
+      {
+        "$template": "Вы поднимаете над головой ${ru.item(it,\"a\")}. Против того, что обитает здесь, такие вещи никогда не делали, и долгое мгновение ничего не происходит. А потом пение всё же сбивается — будто то, что поднималось, просто потеряло к вам интерес."
+      }
+    ]
+  },
+  "somethingVastSettlesBackIntoThe": {
+    "$call": "bi",
+    "$args": [
+      "Something vast settles back into the dark like a sleeper rolling over, and the stair falls in behind you as you climb.",
+      "Нечто огромное оседает обратно во тьму, как спящий, перевернувшийся на другой бок, и лестница обрушивается у вас за спиной, пока вы поднимаетесь."
+    ]
+  },
+  "youSpeakTheCounterRiteAgainst": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You speak the counter-rite against ${GODS[a.g].name}, and it is the wrong name; you know it by the second line. You go on anyway. The chant falters, though nothing you say should have made it falter, and the last word is yours."
+      },
+      {
+        "$template": "Вы читаете контробряд против ${ru.god(a.g,\"g\")} — и это не то имя; вы понимаете это уже на второй строке. Но продолжаете. Пение сбивается, хотя ничто из сказанного вами не должно было его сбить, и последнее слово остаётся за вами."
+      }
+    ]
+  },
+  "somethingBelowLetsGoOfThe": {
+    "$call": "bi",
+    "$args": [
+      "Something below lets go of the world, slowly, like a hand unclenching. You never find out why, and you never stop asking.",
+      "Нечто внизу отпускает мир — медленно, как разжимается кулак. Почему, вы так и не узнаёте — и так и не перестаёте спрашивать."
+    ]
+  },
+  "youSpeakTheCounterRiteAs": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You speak the counter-rite as the tablets taught you, every line in its place, and call ${GODS[S.patron].name} by the name the scribes used only when they were afraid. The chant falters. One by one the celebrants’ voices crack, and the last word is yours."
+      },
+      {
+        "$template": "Вы читаете контробряд так, как научили таблички, — строку за строкой, ничего не упуская, — и зовёте ${ru.god(S.patron,\"a\")} тем именем, которым писцы ${ru.gf(S.patron)?\"её\":\"его\"} называли, лишь когда им было страшно. Пение сбивается. Голоса служителей ломаются один за другим, и последнее слово остаётся за вами."
+      }
+    ]
+  },
+  "somethingBelowLetsGoOfThe2": {
+    "$call": "bi",
+    "$args": [
+      "Something below lets go of the world, slowly, like a hand unclenching. You climb out at dawn with the words still on your tongue, and for the rest of your life you never say them again, not even to yourself.",
+      "Нечто внизу отпускает мир — медленно, как разжимается кулак. На рассвете вы выбираетесь наверх, и слова всё ещё лежат у вас на языке. До конца жизни вы больше ни разу их не произнесёте — даже про себя."
+    ]
+  },
+  "theLastVoiceItHadIs": {
+    "$call": "bi",
+    "$args": [
+      "the last voice it had is lying bound at the fourth gate, still murmuring a verse it will never reach.",
+      "а последний голос, что у него был, лежит связанным у четвёртых врат и всё бормочет стих, до которого ему уже не дойти."
+    ]
+  },
+  "theLastVoiceItHadIs2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "the last voice it had is standing beside you at the edge of the light, and will not go to it."
+      },
+      {
+        "$template": "а последний голос, что у него был, стоит рядом с вами на границе света и не идёт к нему."
+      }
+    ]
+  },
+  "theLastVoiceItHadWas": {
+    "$call": "bi",
+    "$args": [
+      "the last voice it had was left behind on the stair, and has not come down.",
+      "а последний голос, что у него был, остался позади на лестнице и так и не спустился."
+    ]
+  },
+  "theLastVoiceItHadWas2": {
+    "$call": "bi",
+    "$args": [
+      "the last voice it had was silenced in the night, and by your own hand.",
+      "а последний голос, что у него был, умолк в ночи — и от вашей руки."
+    ]
+  },
+  "theLastOfItsVoicesIs": {
+    "$call": "bi",
+    "$args": [
+      "the last of its voices is on the road to Hillah under guard. It came this far on its own, and there is nobody to finish it.",
+      "а последний из его голосов едет под конвоем по дороге в Хиллу. Обряд зашёл так далеко сам по себе — и завершить его некому."
+    ]
+  },
+  "theSeventhGateOpensOnAn": {
+    "$call": "bi",
+    "$args": [
+      "The seventh gate opens on an empty hall. The braziers burn for no one. A rite needs a voice to finish it, and ",
+      "Седьмые врата открываются в пустой зал. Жаровни горят ни для кого. Обряду нужен голос, чтобы завершиться, "
+    ]
+  },
+  "youPutTheBraziersOutOne": {
+    "$call": "bi",
+    "$args": [
+      "You put the braziers out one by one and wait in the dark until the brick goes quiet. When you climb out, the stars are paling, and the camp dogs have gone back to barking at ordinary things.",
+      "Вы гасите жаровни одну за другой и ждёте в темноте, пока кирпич не затихнет. Когда вы выбираетесь наверх, звёзды уже бледнеют, а лагерные собаки снова лают на обычные вещи."
+    ]
+  },
+  "theShotIsVeryLoudIn": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "The shot is very loud in the old dark. ${c.short} folds over the brazier, and the chanting stops in the middle of a word. A rite is a sentence, and no one else down here knows how it ends."
+      },
+      {
+        "$template": "Выстрел оглушительно гремит в древней тьме. ${ru.c(c)} складывается пополам над жаровней, и пение обрывается на полуслове. Обряд — это фраза, и никто больше здесь, внизу, не знает, чем она кончается."
+      }
+    ]
+  },
+  "youClimbOutWithTheRevolver": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You climb out with the revolver still in your hand and one round fewer in it. There will be an inquest in Baghdad, and you will tell it the truth, or as much of the truth as a court can hear: that ${c.name} came at you in the dark, and you fired."
+      },
+      {
+        "$template": "Вы выбираетесь наверх с револьвером в руке — в барабане на один патрон меньше. В Багдаде будет следствие, и вы расскажете правду — ту её часть, которую способен выслушать суд: ${ru.cf(c)} ${ru.gs(c,\"бросился\",\"бросилась\")} на вас в темноте, и вы выстрелили."
+      }
+    ]
+  },
+  "youKickTheBraziersOverInto": {
+    "$call": "bi",
+    "$args": [
+      "You kick the braziers over into the bitumen. The fire runs up the walls as if it had only been waiting for leave, and the chant turns to screaming, and then to nothing.",
+      "Вы опрокидываете жаровни в битум. Огонь взбегает по стенам, будто только и ждал позволения, и пение переходит в крик, а потом — в ничто."
+    ]
+  },
+  "fromTheCampTheyWatchE": {
+    "$call": "bi",
+    "$args": [
+      "From the camp they watch E-meslam burn until noon. The bitumen in its old brick smoulders for three days, as it must have the night the old city fell. You came out of it. Nobody can say how, and you will not.",
+      "Из лагеря видно, как Э-меслам горит до полудня. Битум в его древней кладке тлеет ещё три дня — так же, должно быть, как в ту ночь, когда пал древний город. Вы оттуда вышли. Как — не может сказать никто, а вы не скажете."
+    ]
+  },
+  "cracksCrackInYourHandAs": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${capS(theItem(a.it))} ${V(a.it,\"cracks\",\"crack\")} in your hand as the binding takes hold."
+      },
+      {
+        "$template": "${ru.Item(a.it)} ${ru.ig(a.it,\"трескается\",\"трескается\",\"трескается\",\"трескаются\")} у вас в руке — но заклятие успевает схватиться."
+      }
+    ]
+  },
+  "cracksCrackBindsBindInYour": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${capS(theItem(a.it))} ${V(a.it,\"cracks\",\"crack\")} in your hand and ${V(a.it,\"binds\",\"bind\")} nothing; but the chant falters all the same."
+      },
+      {
+        "$template": "${ru.Item(a.it)} ${ru.ig(a.it,\"трескается\",\"трескается\",\"трескается\",\"трескаются\")} у вас в руке и ничего не ${ru.ig(a.it,\"сковывает\",\"сковывает\",\"сковывает\",\"сковывают\")} — но пение всё равно сбивается."
+      }
+    ]
+  },
+  "youHaveNothingLeftToRaise": {
+    "$call": "bi",
+    "$args": [
+      "You have nothing left to raise and nothing left to say. You stand in the light and watch, and on the very last line the voice leading the chant cracks, and does not mend.",
+      "Вам больше нечего поднять и нечего сказать. Вы стоите в круге света и смотрите — и на самой последней строке голос, ведущий пение, срывается и уже не возвращается."
+    ]
+  },
+  "yourVoiceGivesOutOnThe": {
+    "$call": "bi",
+    "$args": [
+      "Your voice gives out on the last line, and the name you spoke was the wrong one; but the last line is spoken, and the chant falters all the same.",
+      "На последней строке голос вам изменяет, и имя вы назвали не то; но последняя строка произнесена, и пение всё равно сбивается."
+    ]
+  },
+  "yourVoiceGivesOutOnThe2": {
+    "$call": "bi",
+    "$args": [
+      "Your voice gives out on the last line, but the last line is spoken.",
+      "На последней строке голос вам изменяет, но последняя строка произнесена."
+    ]
+  },
+  "youClimbOutWithIntoA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You climb out with ${listNames(with_.map((x=>C(x).short)))} into a grey dawn. You write the season’s report yourself and leave out everything that was true."
+      },
+      {
+        "$template": "Вместе с ${ru.list(with_.map((x=>ru.c(x,\"i\"))))} вы выбираетесь наверх, в серый рассвет. Отчёт за сезон вы пишете сами и опускаете в нём всё, что было правдой."
+      }
+    ]
+  },
+  "cameToYourTentOnThat": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${h.name} came to your tent on that last evening, afraid, she said, that you might not see the light of day. She was one of them. In the small hours she did the cult’s work herself, quietly, and at breakfast she was the first to weep."
+      },
+      {
+        "$template": "${capS(ru.cf(h))} пришла к вам в палатку в тот последний вечер — боялась, по её словам, что вы не увидите рассвета. Она была одной из них. Под утро она сама, тихо, сделала то, что было поручено сектой, а за завтраком первой заплакала."
+      }
+    ]
+  },
+  "cameToYourTentOnThat2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${h.name} came to your tent on that last evening, and she was one of them. You caught her wrist in time, but not her blade. By the time the lorry takes her away at first light, ${who[0]} is sitting by your cot, and then there is no need to sit there any longer."
+      },
+      {
+        "$template": "${capS(ru.cf(h))} пришла к вам в палатку в тот последний вечер — и она была одной из них. Её запястье вы перехватили вовремя, но не её клинок. К тому времени, как на рассвете её увозит грузовик, у вашей койки уже сидит ${who[1]} — и потом сидеть там больше незачем."
+      }
+    ]
+  },
+  "itTakesTheyTakeOnlyYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${came[0]} ${none?\"It takes\":\"They take\"} only you. ${h.short} lives to tell it, and for a long time does not tell it to anyone."
+      },
+      {
+        "$template": "${came[1]} Забирают только вас. ${ru.c(h)} остаётся жива, чтобы рассказать об этом, — и ещё очень долго никому не рассказывает."
+      }
+    ]
+  },
+  "inTheMorningFindsYourTent": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${came[0]} In the morning ${who[0]} finds your tent torn open and the two of you on the cot, and ${tr[0]}."
+      },
+      {
+        "$template": "${came[1]} Утром ${who[1]} находит вашу палатку распоротой, вас обоих — на койке, а ${tr[1]}."
+      }
+    ]
+  },
+  "cameToYourTentOnThat3": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${h.name} came to your tent on that last evening, and stayed. ${came[0]}, and she screamed, and whatever it was fled; but it had reached you first. The wound goes bad, as wounds do out here, and before noon ${who[0]} is sitting by your cot, and then there is no need to sit there any longer."
+      },
+      {
+        "$template": "${capS(ru.cf(h))} пришла к вам в палатку в тот последний вечер и осталась. ${came[1]}; она закричала, и то, что пришло, бежало, — но до вас оно добраться успело. Рана воспаляется, как это здесь бывает, и ещё до полудня у вашей койки сидит ${who[1]} — и потом сидеть там больше незачем."
+      }
+    ]
+  },
+  "youWentToSTentIn": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You went to ${t.name}’s tent in the small hours, and ${t.short} woke, and fought. The cut does not look like much by lamplight. By morning it has gone bad, as wounds do out here, and before noon ${who[0]} is sitting by your cot, and then there is no need to sit there any longer."
+      },
+      {
+        "$template": "Под утро вы пошли к палатке ${ru.cf(t,\"g\")}, а ${ru.c(t)} ${ru.gs(t,\"проснулся\",\"проснулась\")} и ${ru.gs(t,\"дрался\",\"дралась\")}. При свете лампы порез кажется пустяком. К утру рана воспаляется, как это здесь бывает, а до полудня у вашей койки уже сидит ${who[1]} — и потом сидеть там больше незачем."
+      }
+    ]
+  },
+  "inTheEndItIsNot": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "In the end it is not the cult that kills you, but the dig${danger?\": \"+danger[0]:\"\"}. The wound goes bad, as wounds do out here; by midnight you are burning, and before dawn ${who[0]} is sitting by your cot, and then there is no need to sit there any longer."
+      },
+      {
+        "$template": "В конце концов вас убивает не секта, а сами раскопки${danger?\": \"+danger[1]:\"\"}. Рана воспаляется, как это здесь бывает; к полуночи вы горите в жару, а перед рассветом у вашей койки сидит ${who[1]} — и потом сидеть там больше незачем."
+      }
+    ]
+  },
+  "andTheCultHasOnlyTo": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "In the end it is not the cult that kills you. Someone in the camp who could not stand you does you one harm too many in the night${none?\"\":\", and the cult has only to wait\"}. In the morning ${who[0]} finds you, and the camp agrees that nobody saw anything."
+      },
+      {
+        "$template": "В конце концов вас убивает не секта. Кто-то в лагере, кто вас не выносил, причиняет вам ночью ещё один, последний вред${none?\"\":\", и секте остаётся только ждать\"}. Утром вас находит ${who[1]}, и лагерь сходится на том, что никто ничего не видел."
+      }
+    ]
+  },
+  "nobodyOfTheCultIsLeft": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Nobody of the cult is left at large, and still something comes for you in the night, and this time nothing stands between you and it. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}."
+      },
+      {
+        "$template": "Из секты на свободе не осталось никого — и всё же ночью за вами приходят, и на этот раз между вами и тем, что пришло, никого нет. Утром ${who[1]} находит вашу палатку распоротой, койку — пустой, а ${tr[1]}."
+      }
+    ]
+  },
+  "theyComeForYouInThe": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "They come for you in the night, and this time nothing stands between you and them. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}."
+      },
+      {
+        "$template": "Они приходят за вами ночью, и на этот раз между вами и ними никого нет. Утром ${who[1]} находит вашу палатку распоротой, койку — пустой, а ${tr[1]}."
+      }
+    ]
+  },
+  "itIsTheTabletsThatDo": {
+    "$call": "bi",
+    "$args": [
+      "It is the tablets that do it in the end. One evening the wedges stop turning into words and start turning into you, and by dawn you have filled the margins of Crane’s diary with lines nobody taught you.",
+      "В конце концов вас доконали таблички. Однажды вечером клинья перестают складываться в слова и начинают складываться в вас, и к рассвету поля дневника Крейна исписаны строками, которым вас никто не учил."
+    ]
+  },
+  "atTheDigTheyTellIt": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "At the dig they tell it otherwise. ${said[0]}"
+      },
+      {
+        "$template": "На раскопе рассказывают иначе. ${said[1]}"
+      }
+    ]
+  },
+  "youHaveWrittenAHundredYards": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "You have written a hundred yards of the bank, and the water has not touched a line. You do not know any of the people who lead you away, though they all seem to know you. ${said[0]?said[0]+\" \":\"\"}In Baghdad they call it sunstroke."
+      },
+      {
+        "$template": "Вы исписали берег на сотню ярдов, и вода не тронула ни строки. Вы не узнаёте никого из тех, кто уводит вас прочь, хотя вас, похоже, знают все. ${said[1]?said[1]+\" \":\"\"}В Багдаде это называют солнечным ударом."
+      }
+    ]
+  },
+  "somewhereBelowBetweenOneGateAnd": {
+    "$call": "bi",
+    "$args": [
+      "Somewhere below, between one gate and the next, you start counting the steps, and you cannot stop. Two hundred and nine down. Two hundred and nine up. Two hundred and nine down.",
+      "Где-то внизу, между одними вратами и другими, вы начинаете считать ступени — и уже не можете остановиться. Двести девять вниз. Двести девять вверх. Двести девять вниз."
+    ]
+  },
+  "thePickmenFindYouAtNoon": {
+    "$call": "bi",
+    "$args": [
+      "The pickmen find you at noon, sitting on the lowest step with your lamp long out, counting. You thank them very politely and ask them not to interrupt; you are nearly at the end. In the hospital at Hillah you are still counting, and the number has grown.",
+      "Землекопы находят вас в полдень: вы сидите на нижней ступени, лампа давно погасла, и вы считаете. Вы очень вежливо благодарите их и просите не перебивать — вы почти дошли до конца. В больнице в Хилле вы всё ещё считаете, и число стало больше."
+    ]
+  },
+  "theCampPutsYouOnThe": {
+    "$call": "bi",
+    "$args": [
+      "The camp puts you on the lorry to Hillah at noon, under the eye of a police corporal who will not look at you, with your notebooks in a sack at your feet. Nobody waves.",
+      "В полдень лагерь сажает вас в грузовик до Хиллы под присмотром полицейского капрала, который старается на вас не смотреть; записные книжки лежат в мешке у ваших ног. Никто не машет вам вслед."
+    ]
+  },
+  "inBaghdadTheyTryYouFor": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "In Baghdad they try you for the murder of ${t.name}. The court hears a great deal about cults and seven gates, believes none of it, and finds against you, with a recommendation to mercy on account of the heat. Nobody ever searches ${t.short}’s kit."
+      },
+      {
+        "$template": "В Багдаде вас судят за убийство ${ru.cf(t,\"g\")}. Суд долго слушает про культы и семь врат, не верит ни слову и выносит вам обвинительный приговор, рекомендуя снисхождение по причине жары. Вещи ${ru.cf(t,\"g\")} так никто и не обыскивает."
+      }
+    ]
+  },
+  "inBaghdadTheyTryYouFor2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "In Baghdad they try you for the murder of ${t.name}, and they are right to. You say very little in your own defence. There is not much to say."
+      },
+      {
+        "$template": "В Багдаде вас судят за убийство ${ru.cf(t,\"g\")} — и судят по праву. В свою защиту вы говорите очень мало. Сказать почти нечего."
+      }
+    ]
+  },
+  "forWhatYouTriedToDo": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "For what you tried to do to ${t.name}, the Trustees dismiss you by telegram, and the police in Baghdad are content to see you onto a ship."
+      },
+      {
+        "$template": "За то, что вы пытались сделать с ${ru.cf(t,\"i\")}, Попечители увольняют вас телеграммой, а багдадская полиция довольствуется тем, что провожает вас на пароход."
+      }
+    ]
+  },
+  "behindYouTheCampGoesOn": {
+    "$call": "bi",
+    "$args": [
+      "Behind you the camp goes on without you for the one night that is left, and that night the moon is dark.",
+      "Лагерь живёт без вас ту единственную ночь, что ещё осталась, — ночь новолуния."
+    ]
+  },
+  "behindYouTheCampGoesOn2": {
+    "$call": "bi",
+    "$args": [
+      "Behind you the camp goes on without you for the nights that are left. On the last of them the moon is dark.",
+      "Лагерь живёт без вас те ночи, что ещё остались. В последнюю из них наступает новолуние."
+    ]
+  },
+  "behindYouOnTheNightThe": {
+    "$call": "bi",
+    "$args": [
+      "Behind you, on the night the moon is dark, nothing at all happens at Kutha. Nobody ever tells you why.",
+      "А в Куте, в ночь новолуния, не происходит ровным счётом ничего. Почему — вам так никто и не объяснит."
+    ]
+  },
+  "nobodyOfTheCultWasLeft": {
+    "$call": "bi",
+    "$args": [
+      "Nobody of the cult was left to finish the rite, and it finished itself. It had come too far to need a voice.",
+      "Из секты не осталось никого, кто довершил бы обряд, — и он довершил себя сам. Он зашёл слишком далеко, чтобы нуждаться в голосе."
+    ]
+  },
+  "theRiteNeverNeededTheDark": {
+    "$call": "bi",
+    "$args": [
+      "The rite never needed the dark of the moon. It needed only to be left alone long enough, and it was.",
+      "Обряду вовсе не было нужно новолуние. Ему нужно было лишь, чтобы его достаточно долго не трогали, — и его не тронули."
+    ]
+  },
+  "sevenStarsComeDownToMeet": {
+    "$call": "bi",
+    "$args": [
+      "Seven stars come down to meet it, low enough to set the palms alight, and the plain bakes like a kiln.",
+      "Семь звёзд спускаются ему навстречу — так низко, что вспыхивают пальмы, — и равнина обжигается, как печь."
+    ]
+  },
+  "theRiteCompletesTheDustComes": {
+    "$call": "bi",
+    "$args": [
+      "The rite completes. The dust comes up the stair first, then the owls, then the dead of every grave between Kutha and Babylon, walking north with their mouths full of clay.",
+      "Обряд свершается. Первой по лестнице поднимается пыль, за ней — совы, а за ними — мертвецы из всех могил между Кутой и Вавилоном; они идут на север, и рты у них набиты глиной."
+    ]
+  },
+  "byMorningEveryDoorBetweenThe": {
+    "$call": "bi",
+    "$args": [
+      "By morning every door between the two rivers stands open. The aircraft sent out from Hinaidi report the villages empty and the roads full of grey walkers who do not look up at the engines.",
+      "К утру все двери между двумя реками стоят настежь. Самолёты, высланные из Хинайди, докладывают: деревни пусты, а дороги полны серых путников, которые даже не поднимают голов на гул моторов."
+    ]
+  },
+  "theRiteCompletesTheBlackWater": {
+    "$call": "bi",
+    "$args": [
+      "The rite completes. The black water comes up the stair a step at a time, patient as a tide, and then it is not a stair any more.",
+      "Обряд свершается. Чёрная вода поднимается по лестнице ступень за ступенью, терпеливо, как прилив, — и вот это уже не лестница."
+    ]
+  },
+  "byTheNextNewMoonThe": {
+    "$call": "bi",
+    "$args": [
+      "By the next new moon the Euphrates runs salt as far as Hillah. Pilots out of Hinaidi report a lake where Kutha stood, the top of E-meslam standing out of it like an island, and something very large turning slowly beneath.",
+      "К следующему новолунию Евфрат солонеет до самой Хиллы. Лётчики из Хинайди докладывают об озере на месте Куты: вершина Э-меслама торчит из воды, как остров, а под ней медленно поворачивается что-то очень большое."
+    ]
+  },
+  "theRiteCompletesTheClayOn": {
+    "$call": "bi",
+    "$args": [
+      "The rite completes. The clay on the fifty-nine sealed jars cracks all together, and the flies pour out of them and go up the stair like smoke up a chimney.",
+      "Обряд свершается. Глина на пятидесяти девяти запечатанных кувшинах трескается разом, и мухи валят из них и уходят вверх по лестнице, как дым в трубу."
+    ]
+  },
+  "byTheNextNewMoonThere": {
+    "$call": "bi",
+    "$args": [
+      "By the next new moon there is sickness in every village between the two rivers, sixty kinds of it, and the doctors can put a name to none of them. The medical officer from Hinaidi drives out with a lorry-load of carbolic and does not come back. The men sent after him find the lanes empty, the dead laid out in rows before the doors, and none to bury them.",
+      "К следующему новолунию по всем деревням между двумя реками гуляет мор — шестьдесят хворей, и ни одной из них врачи не могут назвать. Военный врач из Хинайди выезжает туда с грузовиком карболки и не возвращается. Посланные за ним находят улицы пустыми, мёртвых — уложенными рядами у дверей, а хоронить их некому."
+    ]
+  },
+  "theRiteCompletesInTheBronze": {
+    "$call": "bi",
+    "$args": [
+      "The rite completes. In the bronze walls your reflections stop laughing, all at once; then they step out of the mirrors and go up the stair without you, and not one of them looks back.",
+      "Обряд свершается. В бронзовых стенах ваши отражения разом перестают смеяться, а потом выходят из зеркал и уходят вверх по лестнице без вас, и ни одно не оглядывается."
+    ]
+  },
+  "forADayAndANight": {
+    "$call": "bi",
+    "$args": [
+      "For a day and a night nobody in the camp can remember their own name. By the new moon every clock between the two rivers has stopped at twenty past three, and the last pilot to come back from over Baghdad reports the streets full of people in their nightclothes, standing quite still with their eyes open, smiling at something only they can see.",
+      "Целые сутки никто в лагере не может вспомнить собственного имени. К новолунию все часы между двумя реками стоят на двадцати минутах четвёртого, а последний лётчик, вернувшийся из полёта над Багдадом, докладывает: улицы полны людей в ночных рубашках — они стоят не шелохнувшись, с открытыми глазами и улыбаются чему-то, что видно только им."
+    ]
+  },
+  "theRiteCompletesTheEmptyCradle": {
+    "$call": "bi",
+    "$args": [
+      "The rite completes. The empty cradle stops rocking, because it is not empty any more.",
+      "Обряд свершается. Пустая колыбель перестаёт качаться — потому что она больше не пуста."
+    ]
+  },
+  "thatSpringNoChildIsBorn": {
+    "$call": "bi",
+    "$args": [
+      "That spring no child is born alive in the villages along the canal. The midwives hang bronze heads over every door and leave combs and spindles on the thresholds, and in the mornings the combs are gone. The Health Service in Baghdad calls it an epidemic and sends quinine.",
+      "Той весной в деревнях вдоль канала не рождается ни одного живого ребёнка. Повитухи вешают над каждой дверью бронзовые головы и оставляют на порогах гребни и веретёна, а по утрам гребней уже нет. Санитарная служба в Багдаде объявляет эпидемию и присылает хинин."
+    ]
+  },
+  "sKnifeDoesItsWorkSlowly": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${t.short}’s knife does its work slowly. You sit down on the threshold of the fourth gate to rest a moment, and the eyes in the walls watch you do it."
+      },
+      {
+        "$template": "Нож ${ru.c(t,\"g\")} делает своё дело не спеша. Вы присаживаетесь на порог четвёртых врат — передохнуть минутку, — и глаза в стенах смотрят, как вы садитесь."
+      }
+    ]
+  },
+  "theStepThatWasNotThere": {
+    "$call": "bi",
+    "$args": [
+      "The step that was not there is the last thing you are sure of. After that there is only the stair, going on down without you.",
+      "Ступень, которой не оказалось на месте, — последнее, в чём вы уверены. Дальше — только лестница, уходящая вниз уже без вас."
+    ]
+  },
+  "whatTookHoldOfYouIn": {
+    "$call": "bi",
+    "$args": [
+      "What took hold of you in the dark does not let go. You feel it draw you, quite gently, towards a door you had not seen.",
+      "То, что схватило вас в темноте, не отпускает. Вы чувствуете, как оно — почти бережно — тянет вас к двери, которой вы прежде не замечали."
+    ]
+  },
+  "theBiteFromTheWallWill": {
+    "$call": "bi",
+    "$args": [
+      "The bite from the wall will not stop bleeding. You go on a little way, and then sit down, and hear the gnawing come along the wall towards you, unhurried.",
+      "Укус из стены никак не перестаёт кровоточить. Вы проходите ещё немного, потом садитесь — и слышите, как вдоль стены к вам, не торопясь, подбирается грызущий звук."
+    ]
+  },
+  "byTheNextGateTheSores": {
+    "$call": "bi",
+    "$args": [
+      "By the next gate the sores have spread from your hands to your face, and by the one after, to your throat. You lie down in the passage, and something from behind the sheets comes to sit with you.",
+      "К следующим вратам язвы с ваших рук перебираются на лицо, а к тем, что за ними, — в горло. Вы ложитесь в проходе, и что-то из-за простынь приходит посидеть рядом с вами."
+    ]
+  },
+  "afterTheWallTheTurnsDo": {
+    "$call": "bi",
+    "$args": [
+      "After the wall, the turns do not end. You walk on with one hand on the brick, for hours or for years, and somewhere along the way you forget that you were ever looking for the way out.",
+      "После той стены повороты не кончаются. Вы идёте дальше, ведя рукой по кирпичу, — часы или годы, — и где-то по дороге забываете, что когда-то искали выход."
+    ]
+  },
+  "theBurnDoesNotStopAt": {
+    "$call": "bi",
+    "$args": [
+      "The burn does not stop at the skin. It goes on down into you, step by step, the way the stair went down into the tell, and at the bottom of it there is no more of you.",
+      "Ожог не останавливается на коже. Он уходит вглубь вас, ступень за ступенью, как лестница уходила в глубь холма, — и на дне его вас уже нет."
+    ]
+  },
+  "theStoneWingDoesNotLift": {
+    "$call": "bi",
+    "$args": [
+      "The stone wing does not lift again. Under it the dark is very close and very heavy, and after a while it is all there is.",
+      "Каменное крыло больше не поднимается. Под ним тьма совсем близко и очень тяжела — и вскоре, кроме неё, ничего не остаётся."
+    ]
+  },
+  "theRiteClosesOverWhatYou": {
+    "$call": "bi",
+    "$args": [
+      "The rite closes over what you did, and over you. The last thing you see is the celebrants stepping aside to make room for you in the circle.",
+      "Обряд смыкается над тем, что вы сделали, — и над вами. Последнее, что вы видите: служители расступаются, освобождая вам место в круге."
+    ]
+  },
+  "somewhereBetweenTheGatesYourLamp": {
+    "$call": "bi",
+    "$args": [
+      "Somewhere between the gates your lamp goes out. You do not feel the brick close over you; you feel only that the dark has become very patient.",
+      "Где-то между вратами гаснет ваша лампа. Вы не чувствуете, как над вами смыкается кирпич, — чувствуете лишь, что тьма стала очень терпеливой."
+    ]
+  },
+  "END_STYLE": {
+    "avenger": {
+      "name": ["The Avenger", "Возмездие"],
+      "win": [
+        "In the end you did what no inquiry would: you went out in the dark and settled it yourself. It worked, or something did. You will spend the rest of your life not quite sure which, and not quite sure it was you who went.",
+        "В конце концов вы сделали то, на что не решилось бы ни одно дознание: вышли в темноту и решили всё сами. Это сработало — или сработало что-то другое. Всю оставшуюся жизнь вы так и не будете до конца уверены, что именно, — и что в ту ночь к палатке шли именно вы."
+      ],
+      "lose": [
+        "You took it into your own hands at Kutha, and found out how little a pair of hands can hold.",
+        "В Куте вы взяли всё в свои руки — и узнали, как мало способна удержать пара рук."
+      ]
+    },
+    "inquisitor": {
+      "name": ["The Inquisitor", "Допрос с пристрастием"],
+      "win": [
+        "You did it the hard way: questions that left marks, accusations made out loud, never once looking away. It worked. Nobody who was at Kutha will ever be quite comfortable in a room with you again, and you find you can live with that.",
+        "Вы шли напролом: вопросы, после которых оставались синяки, обвинения вслух, ни разу не отведённый взгляд. И это сработало. Никому из тех, кто был в Куте, уже не будет по-настоящему уютно в одной комнате с вами, — и вы обнаруживаете, что с этим можно жить."
+      ],
+      "lose": [
+        "You pushed at every door in Kutha, and in the end one of them pushed back.",
+        "В Куте вы толкали каждую дверь — и в конце концов одна из них толкнула в ответ."
+      ]
+    },
+    "quiet": {
+      "name": ["The Quiet Guest", "Не повышая голоса"],
+      "win": [
+        "You never raised your voice at Kutha. You kept your lamp low, your counsel to yourself and your hand off the table, and when the time came you were the last thing the rite was watching for.",
+        "В Куте вы ни разу не повысили голоса. Вы не поднимали лампу, держали мысли при себе и не открывали карт — и когда настал час, обряд меньше всего ждал удара именно от вас."
+      ],
+      "lose": [
+        "You waited for certainty at Kutha. It does not come to people who wait for it.",
+        "В Куте вы ждали уверенности. Она не приходит к тем, кто её ждёт."
+      ]
+    },
+    "scholar": {
+      "name": ["The Scholar", "Над табличками"],
+      "win": [
+        "You beat it with grammar. Long nights over the tablets, the lamp turned low, the sign list propped against the inkpot: in the end you knew its name and its nature better than the people who served it.",
+        "Вы одолели его грамматикой. Долгие ночи над табличками, привёрнутая лампа, список знаков, прислонённый к чернильнице, — в конце концов вы знали его имя и природу лучше тех, кто ему служил."
+      ],
+      "lose": [
+        "You read more of the old words than anyone alive. Some of them, it turns out, were reading you.",
+        "Вы прочли больше древних слов, чем кто-либо из живущих. Некоторые из них, как выяснилось, читали вас."
+      ]
+    },
+    "sleuth": {
+      "name": ["The Detective", "Дедуктивный метод"],
+      "win": [
+        "You solved Kutha the way one solves a murder at a country house: footprints, cigarette ends, who was where at midnight and who says so. Scotland Yard would have been proud of you. Scotland Yard would not have believed a word of the rest.",
+        "Вы раскрыли Куту так, как раскрывают убийство в загородной усадьбе: отпечатки подошв, окурки, кто где был в полночь и кто это подтвердит. Скотленд-Ярд гордился бы вами. Правда, всему остальному Скотленд-Ярд не поверил бы ни на слово."
+      ],
+      "lose": [
+        "You read every footprint on the tell. The thing beneath it does not leave footprints.",
+        "Вы прочли каждый след на холме. А то, что под ним, следов не оставляет."
+      ]
+    },
+    "delver": {
+      "name": ["The Digger", "С лопатой в руках"],
+      "win": [
+        "You trusted the earth more than the people standing on it, and the earth repaid you. Half the season’s finds register is in your hand, and the most important find of all is not in it.",
+        "Земле вы доверяли больше, чем людям, что по ней ходят, — и земля отплатила вам. Половина описи находок за сезон написана вашей рукой, а самой важной находки в ней нет вовсе."
+      ],
+      "lose": [
+        "You dug where Crane told you not to, and then deeper. The tell gave you everything you asked for.",
+        "Вы копали там, где Крейн велел не копать, — а потом ещё глубже. Телль дал вам всё, о чём вы просили."
+      ]
+    },
+    "confidant": {
+      "name": ["The Confidant", "Разговоры по душам"],
+      "win": [
+        "You won Kutha one conversation at a time: cups of coffee, confidences given and returned, the long talks after supper. When it mattered, the people you had trusted stood with you, and the ones you should not have trusted had long since given themselves away.",
+        "Вы выиграли Куту разговор за разговором: чашки кофе, доверие за доверие, долгие беседы после ужина. Когда пришёл час, те, кому вы поверили, встали рядом с вами, а те, кому верить не следовало, давно уже себя выдали."
+      ],
+      "lose": [
+        "You trusted the people of Kutha, and most of them deserved it. Most was not enough.",
+        "Вы доверились людям Куты, и большинство из них этого заслуживало. Большинства оказалось мало."
+      ]
+    },
+    "director": {
+      "name": ["The Field Director", "Во главе раскопа"],
+      "win": [
+        "You ran Kutha the way Crane ought to have: a little of everything, nothing to excess, and an eye on all of it. Nobody will ever write a book about how you did it, which is exactly how you wanted it.",
+        "Вы вели Куту так, как следовало бы вести её Крейну: всего понемногу, ничего сверх меры — и за всем зоркий глаз. Никто никогда не напишет книгу о том, как вам это удалось, — ровно так, как вы и хотели."
+      ],
+      "lose": [
+        "You did a little of everything at Kutha, and none of it was quite enough.",
+        "В Куте вы делали всего понемногу — и ничего из этого не хватило."
+      ]
+    }
+  },
+  "text": "Хамид",
+  "oneOfThePickmen": ["one of the pickmen", "один из землекопов"],
+  "nobodyOfTheCultIsLeft2": [
+    "Nobody of the cult is left at large, and still something comes for you in the night, and finds two of you in the tent.",
+    "Из секты на свободе не осталось никого — и всё же ночью за вами приходят и находят в палатке двоих."
+  ],
+  "theyComeForYouInThe2": [
+    "They come for you in the night, and find two of you in the tent.",
+    "Они приходят за вами ночью и находят в палатке двоих."
+  ],
+  "somethingCameForYouInThe": ["Something came for you in the night", "Ночью за вами что-то пришло"],
+  "theyCameForYouInThe": ["They came for you in the night", "Ночью за вами пришли"]
+}

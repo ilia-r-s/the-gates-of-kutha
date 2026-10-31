@@ -1,0 +1,45 @@
+{
+  "text": " и ",
+  "text2": "об ",
+  "text3": "о ",
+  "text4": "Марлоу",
+  "text5": "Марлоу",
+  "text6": "Марлоу",
+  "NUM_EN": ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"],
+  "NUM_RU": ["ноль", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять"],
+  "text7": "один",
+  "text8": "одна",
+  "text9": "одно",
+  "text10": "две",
+  "text11": "два",
+  "TIMES_EN": [
+    "once",
+    "twice",
+    "three times",
+    "four times",
+    "five times",
+    "six times",
+    "seven times",
+    "eight times",
+    "nine times",
+    "ten times"
+  ],
+  "TIMES_RU": [
+    "один раз",
+    "два раза",
+    "три раза",
+    "четыре раза",
+    "пять раз",
+    "шесть раз",
+    "семь раз",
+    "восемь раз",
+    "девять раз",
+    "десять раз"
+  ],
+  "text12": "раз",
+  "text13": "раза",
+  "text14": "раз",
+  "text15": {
+    "$template": "День ${S.day} из ${RULES.start.days} · ${RU_SLOT[S.slot]}"
+  }
+}

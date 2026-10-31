@@ -1,0 +1,13 @@
+# laid out by hand as tables, with aligned comments
+src/rules.js
+# page fragments (the build wraps the style sheet and the markup), and the built pages
+src/page/
+*.html
+# the documents, written by hand
+*.md
+# recordings
+test/golden/
+node_modules/
+.local/
+# the GitHub Pages site, when put together by hand
+_site/

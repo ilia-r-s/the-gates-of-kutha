@@ -1,0 +1,1926 @@
+{
+  "passages": {
+    "theBreadTastesOf": {
+      "$args": [],
+      "$value": [
+        "The bread tastes of ash, and the water of nothing at all. For a moment you know the power below the way its servants know it.",
+        "Хлеб отдаёт золой, а вода ничем. На миг вы знаете силу внизу так, как знают её слуги."
+      ]
+    },
+    "theBreadTastesOf2": {
+      "$args": [],
+      "$value": [
+        "The bread tastes of ash, and the water of nothing at all. For a moment you almost know something, and then it is gone.",
+        "Хлеб отдаёт золой, а вода ничем. На миг вы почти что-то понимаете — и всё ускользает."
+      ]
+    },
+    "youAnswerTheVoice": {
+      "$args": [],
+      "$value": [
+        "You answer. The voice tells you something, quickly, as if afraid of being overheard:",
+        "Вы отвечаете. Голос торопливо, будто боясь, что подслушают, говорит вам:"
+      ]
+    },
+    "youAnswerTheVoice2": {
+      "$args": [],
+      "$value": [
+        "You answer. The voice only says your name again, more sadly.",
+        "Вы отвечаете. Голос лишь снова, печальнее, произносит ваше имя."
+      ]
+    },
+    "aGarmentOfSoiled": {
+      "$args": [],
+      "$value": ["a garment of soiled linen, black with flies", "одеяние из грязного полотна, чёрного от мух"]
+    },
+    "atTheGateSomeone": {
+      "$args": ["n", "g"],
+      "$value": [
+        {
+          "$template": "At the ${n.en} gate someone is sitting in the niche beside the door, wrapped to the eyes in ${g[0]}. It does not move. It asks, in a voice like a page turning: “Who are you, who come down?”"
+        },
+        {
+          "$template": "У ${n.g} врат в нише у двери сидит нечто, по самые глаза закутанное в ${g[1]}. Оно не шевелится. Голосом, похожим на шорох переворачиваемой страницы, оно спрашивает: «Кто ты, что спускаешься ко мне?»"
+        }
+      ]
+    },
+    "itRepeatsYourName": {
+      "$args": [],
+      "$value": [
+        "It repeats your name slowly, as if writing it down. The door opens. Somewhere below, you are expected now.",
+        "Оно медленно повторяет ваше имя, будто записывает. Дверь открывается. Где-то внизу вас теперь ждут."
+      ]
+    },
+    "youGaveTheGatekeeper": {
+      "$args": [],
+      "$value": ["you gave the gatekeeper your own name, and were remembered", "вы назвали привратнику своё имя, и вас запомнили"]
+    },
+    "itRepeatsYourName2": {
+      "$args": [],
+      "$value": [
+        "It repeats your name in your mother’s voice, and laughs, and the door opens.",
+        "Оно повторяет ваше имя голосом вашей матери, смеётся — и дверь открывается."
+      ]
+    },
+    "youGaveTheGatekeeper2": {
+      "$args": [],
+      "$value": ["you gave the gatekeeper your own name, and it laughed", "вы назвали привратнику своё имя, и тот рассмеялся"]
+    },
+    "itSaysNothingAnd": {
+      "$args": [],
+      "$value": [
+        "It says nothing, and the door opens, and you do not like how easily.",
+        "Оно молчит, и дверь открывается, — и вам не нравится, как легко."
+      ]
+    },
+    "youGaveTheGatekeeper3": {
+      "$args": [],
+      "$value": ["you gave the gatekeeper Crane’s name, and were let by", "вы назвали привратнику имя Крейна, и вас пропустили"]
+    },
+    "craneItSaysCrane": {
+      "$args": [],
+      "$value": [
+        "“Crane,” it says. “Crane came down already. Crane is still here.” The door opens.",
+        "«Крейн, — говорит оно. — Крейн уже спускался. Крейн всё ещё здесь». Дверь открывается."
+      ]
+    },
+    "youGaveTheGatekeeper4": {
+      "$args": [],
+      "$value": [
+        "you gave the gatekeeper Crane’s name, and learned he was still below",
+        "вы назвали привратнику имя Крейна и узнали, что Крейн всё ещё внизу"
+      ]
+    },
+    "youWalkPastIt": {
+      "$args": [],
+      "$value": [
+        "You walk past it, and it lets you, and you feel it turn its head to watch you go.",
+        "Вы проходите мимо, и оно пропускает вас, — и вы чувствуете, как оно поворачивает голову вам вслед."
+      ]
+    },
+    "youPushedPastThe": {
+      "$args": [],
+      "$value": ["you pushed past the gatekeeper without a word", "вы молча прошли мимо привратника"]
+    },
+    "itsHandComesOut": {
+      "$args": [],
+      "$value": [
+        "Its hand comes out of its wrappings and closes on your arm, and lets go only when you have bled.",
+        "Из-под покрова высовывается рука, смыкается на вашей руке и отпускает, лишь когда у вас выступает кровь."
+      ]
+    },
+    "youTriedToPush": {
+      "$args": [],
+      "$value": ["you tried to push past the gatekeeper, and bled for it", "вы попытались пройти мимо привратника и поплатились кровью"]
+    },
+    "beyondTheGateThe": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Beyond the ${n.en} gate the passage is lined with seated figures of baked clay, the judges of the dead, hands folded, eyes painted black. As your lamp passes each of them, it turns its head."
+        },
+        {
+          "$template": "За ${n.i} вратами вдоль прохода сидят фигуры из обожжённой глины — судьи мёртвых, со сложенными руками и чёрными нарисованными глазами. Когда свет вашей лампы проходит мимо, каждая поворачивает голову."
+        }
+      ]
+    },
+    "bowToEachOf": {
+      "$args": [],
+      "$value": ["Bow to each of them, as the old priests did", "Поклониться каждому, как кланялись древние жрецы"]
+    },
+    "youBowSevenTimes": {
+      "$args": [],
+      "$value": [
+        "You bow seven times. By the last, the heads have stopped turning. You have been weighed, and let pass.",
+        "Вы кланяетесь семь раз. К последнему поклону головы перестают поворачиваться. Вас взвесили — и пропустили."
+      ]
+    },
+    "youBowedToThe": {
+      "$args": [],
+      "$value": ["you bowed to the judges of the dead, and were let pass", "вы поклонились судьям мёртвых, и вас пропустили"]
+    },
+    "youBowAndThe": {
+      "$args": [],
+      "$value": [
+        "You bow, and the last of them bows back, and that is worse than anything.",
+        "Вы кланяетесь, и последний из них кланяется вам в ответ, — и это хуже всего."
+      ]
+    },
+    "youBowedToThe2": {
+      "$args": [],
+      "$value": [
+        "you bowed to the judges of the dead, and the last of them bowed back",
+        "вы поклонились судьям мёртвых, и последний поклонился вам в ответ"
+      ]
+    },
+    "youCountTheBricks": {
+      "$args": [],
+      "$value": [
+        "You count the bricks of the floor instead, and when you look up, the judges are behind you.",
+        "Вместо этого вы считаете кирпичи пола, а когда поднимаете глаза, судьи уже позади."
+      ]
+    },
+    "youPassedTheJudges": {
+      "$args": [],
+      "$value": ["you passed the judges of the dead without looking up", "вы прошли мимо судей мёртвых, не поднимая глаз"]
+    },
+    "oneOfThemSpeaks": {
+      "$args": [],
+      "$value": [
+        "One of them speaks a single word as you pass. You do not know the word. You will hear it for the rest of your life.",
+        "Когда вы проходите, один из них произносит единственное слово. Вы не знаете этого слова. Вы будете слышать его до конца жизни."
+      ]
+    },
+    "oneOfTheJudges": {
+      "$args": [],
+      "$value": [
+        "one of the judges of the dead spoke a word to you as you passed",
+        "один из судей мёртвых сказал вам слово, когда вы проходили"
+      ]
+    },
+    "youLookEachOf": {
+      "$args": [],
+      "$value": [
+        "You look each of them in the eye. One by one the painted eyes look away first.",
+        "Вы смотрите в глаза каждому. Один за другим нарисованные глаза отводят взгляд первыми."
+      ]
+    },
+    "youMetTheGaze": {
+      "$args": [],
+      "$value": [
+        "you met the gaze of the judges of the dead, and they looked away",
+        "вы выдержали взгляд судей мёртвых, и они отвели глаза"
+      ]
+    },
+    "theSeventhDoesNot": {
+      "$args": [],
+      "$value": [
+        "The seventh does not look away. It goes on looking at you after you have passed, through the back of your head.",
+        "Седьмой не отводит глаз. Он смотрит на вас и после того, как вы прошли, — сквозь затылок."
+      ]
+    },
+    "oneOfTheJudges2": {
+      "$args": [],
+      "$value": ["one of the judges of the dead stared you down", "один из судей мёртвых пересмотрел вас"]
+    },
+    "inASideChamber": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "In a side chamber past the ${n.en} gate a table has been laid, as if for a guest who is expected: a loaf, a jar of water, a cup of beer, all fresh. In the old story, a wise man was offered the bread and water of the dead, and would not touch them."
+        },
+        {
+          "$template": "В боковом покое за ${n.i} вратами накрыт стол — будто для гостя, которого ждут: хлеб, кувшин воды, чаша пива, всё свежее. В древнем сказании мудрецу поднесли хлеб и воду смерти, и он к ним не притронулся."
+        }
+      ]
+    },
+    "youAteTheBread": {
+      "$args": [],
+      "$value": ["you ate the bread of the dead, and it let you be", "вы отведали хлеба мёртвых, и оно вас не тронуло"]
+    },
+    "pourTheWaterOut": {
+      "$args": [],
+      "$value": ["Pour the water out on the floor, as an offering", "Вылить воду на пол — как возлияние"]
+    },
+    "theFloorDrinksIt": {
+      "$args": [],
+      "$value": [
+        "The floor drinks it as you watch. Something below has noticed your manners.",
+        "Пол впитывает воду у вас на глазах. Что-то внизу оценило ваши манеры."
+      ]
+    },
+    "youPouredOutThe": {
+      "$args": [],
+      "$value": [
+        "you poured out the water of the dead as an offering, and it was taken",
+        "вы совершили возлияние водой мёртвых, и его приняли"
+      ]
+    },
+    "theWaterRunsAway": {
+      "$args": [],
+      "$value": [
+        "The water runs away down a crack in the floor, towards the sound of chanting, and the chanting rises to meet it.",
+        "Вода убегает в трещину в полу — туда, откуда доносится пение, и пение поднимается ей навстречу."
+      ]
+    },
+    "youPouredOutThe2": {
+      "$args": [],
+      "$value": [
+        "you poured out the water of the dead, and the chanting rose to meet it",
+        "вы совершили возлияние водой мёртвых, и пение поднялось ей навстречу"
+      ]
+    },
+    "youLeaveTheTable": {
+      "$args": [],
+      "$value": [
+        "You leave the table as you found it. Behind you a chair scrapes back, as if someone had been waiting to sit down. You walk on steadier for having refused.",
+        "Вы оставляете стол таким, каким его нашли. За спиной скрипит отодвинутый стул — будто кто-то ждал, чтобы сесть. Отказавшись, вы идёте дальше твёрже."
+      ]
+    },
+    "youLeftTheTable": {
+      "$args": [],
+      "$value": ["you left the table of the dead untouched", "вы не притронулись к столу мёртвых"]
+    },
+    "youLeaveTheTable2": {
+      "$args": [],
+      "$value": [
+        "You leave the table as you found it. Behind you a chair scrapes back, and someone sits down to eat what you would not, and laughs with its mouth full.",
+        "Вы оставляете стол таким, каким его нашли. За спиной скрипит отодвинутый стул: кто-то садится есть то, чего не стали вы, и смеётся с набитым ртом."
+      ]
+    },
+    "youLeftTheTable2": {
+      "$args": [],
+      "$value": [
+        "you left the table of the dead untouched, and someone else sat down to it",
+        "вы не притронулись к столу мёртвых, и за него сел кто-то другой"
+      ]
+    },
+    "pastTheGateThe": {
+      "$args": ["n", "d"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the passage fills with voices coming up from below. You know one of them. It is ${d.en}, and it is calling you by name."
+        },
+        {
+          "$template": "За ${n.i} вратами проход наполняется голосами, что поднимаются снизу. Один из них вам знаком: это ${d.ru}, и он зовёт вас по имени."
+        }
+      ]
+    },
+    "youAnsweredTheVoices": {
+      "$args": [],
+      "$value": ["you answered the voices of the dead, and they let you go", "вы ответили голосам мёртвых, и они вас отпустили"]
+    },
+    "youHumAMusic": {
+      "$args": [],
+      "$value": [
+        "You hum a music-hall song with your hands over your ears until the voices are behind you.",
+        "Зажав уши, вы напеваете куплет из мюзик-холла, пока голоса не остаются позади."
+      ]
+    },
+    "youWalkedPastThe": {
+      "$args": [],
+      "$value": ["you walked past the voices of the dead with your ears stopped", "вы прошли мимо голосов мёртвых, заткнув уши"]
+    },
+    "youHearItAnyway": {
+      "$args": [],
+      "$value": [
+        "You hear it anyway, through your hands: the voice tells you how it died.",
+        "Вы всё равно слышите — сквозь ладони: голос рассказывает вам, как он умер."
+      ]
+    },
+    "theVoicesOfThe": {
+      "$args": [],
+      "$value": ["the voices of the dead got through to you", "голоса мёртвых до вас всё-таки добрались"]
+    },
+    "isSteadierThanYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} is steadier than you are, unless ${c.p} stops to answer them"
+        },
+        {
+          "$template": "${ru.c(c)} держится твёрже вас — если только не остановится им ответить"
+        }
+      ]
+    },
+    "takesYourArmAnd": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} takes your arm and talks loudly about the price of paraffin until the voices are gone."
+        },
+        {
+          "$template": "${ru.c(c)} берёт вас под руку и громко рассуждает о ценах на керосин, пока голоса не стихают."
+        }
+      ]
+    },
+    "talkedYouPastThe": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} talked you past the voices of the dead"
+        },
+        {
+          "$template": "${ru.cf(c)} ${ru.gs(c,\"увёл\",\"увела\")} вас мимо голосов мёртвых"
+        }
+      ]
+    },
+    "stopsToAnswerThem": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} stops to answer them, and will not come on. You go on without ${EP.him(c)}."
+        },
+        {
+          "$template": "${ru.c(c)} останавливается, чтобы ответить им, и дальше не идёт. Вы идёте без ${ru.gs(c,\"него\",\"неё\")}."
+        }
+      ]
+    },
+    "stoppedToAnswerThe": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} stopped to answer the voices of the dead, and stayed"
+        },
+        {
+          "$template": "${ru.cf(c)} ${ru.gs(c,\"остановился\",\"остановилась\")} ответить голосам мёртвых и там и ${ru.gs(c,\"остался\",\"осталась\")}"
+        }
+      ]
+    },
+    "pastTheGateThe2": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the passage glows like the mouth of a kiln, and the air coming out of it is too hot to breathe."
+        },
+        {
+          "$template": "За ${n.i} вратами проход светится, как жерло обжиговой печи, и воздух оттуда слишком горяч, чтобы дышать."
+        }
+      ]
+    },
+    "pastTheGateGrey": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate grey dust lies knee-deep in the passage, soft as flour, and something under it moves when your lamp moves."
+        },
+        {
+          "$template": "За ${n.i} вратами проход по колено засыпан серой пылью, мягкой, как мука, и что-то под ней шевелится, когда шевелится ваша лампа."
+        }
+      ]
+    },
+    "pastTheGateBlack": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate black water fills the passage to the waist, salt and cold, and it is moving, though there is no current."
+        },
+        {
+          "$template": "За ${n.i} вратами проход по пояс залит чёрной водой — солёной, холодной, — и она движется, хотя течения нет."
+        }
+      ]
+    },
+    "pastTheGateThe3": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the walls of the passage are gnawed deep by many teeth, and the marks are fresh."
+        },
+        {
+          "$template": "За ${n.i} вратами стены прохода глубоко изгрызены множеством зубов, и следы свежие."
+        }
+      ]
+    },
+    "pastTheGateThe4": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the passage is hung with grey sheets, one behind another, like the curtains round a sickbed, and the air between them is sweet and loud with flies."
+        },
+        {
+          "$template": "За ${n.i} вратами проход завешен серыми простынями, одна за другой, как занавеси вокруг постели больного, и воздух между ними сладок и гудит от мух."
+        }
+      ]
+    },
+    "pastTheGateThe5": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the passage turns back on itself, again and again, and every turn is the same turn, with the same scratch on the same brick."
+        },
+        {
+          "$template": "За ${n.i} вратами проход то и дело поворачивает назад, и каждый поворот — тот же самый, с той же царапиной на том же кирпиче."
+        }
+      ]
+    },
+    "theHeatTakesThe": {
+      "$args": [],
+      "$value": ["The heat takes the skin off your hands.", "Жар сдирает кожу с ваших ладоней."]
+    },
+    "somethingUnderTheDust": {
+      "$args": [],
+      "$value": ["Something under the dust takes hold of your ankle and pulls.", "Что-то под пылью хватает вас за лодыжку и тянет."]
+    },
+    "somethingInTheWater": {
+      "$args": [],
+      "$value": [
+        "Something in the water wraps itself about your leg and pulls you under, and then lets you go.",
+        "Что-то в воде обвивает вашу ногу, утягивает вас под воду — и отпускает."
+      ]
+    },
+    "somethingInTheWall": {
+      "$args": [],
+      "$value": ["Something in the wall bites, once, as you pass.", "Что-то в стене кусает — один раз, когда вы проходите мимо."]
+    },
+    "somethingBehindTheSheets": {
+      "$args": [],
+      "$value": [
+        "Something behind the sheets coughs in your face, and by the time you are through, your hands are covered in sores.",
+        "Что-то за простынями кашляет вам в лицо, и, пока вы пробираетесь насквозь, руки у вас покрываются язвами."
+      ]
+    },
+    "atTheHundredthTurn": {
+      "$args": [],
+      "$value": [
+        "At the hundredth turn you walk into the wall, hard, and for a while you cannot remember which way you were going, or why.",
+        "На сотом повороте вы с размаху налетаете на стену и какое-то время не можете вспомнить, куда шли и зачем."
+      ]
+    },
+    "youGoThroughWith": {
+      "$args": [],
+      "$value": [
+        "You go through with your head down and come out the other side whole.",
+        "Вы проходите, опустив голову, и выходите с той стороны без единой царапины."
+      ]
+    },
+    "youWentStraightThrough": {
+      "$args": [],
+      "$value": ["you went straight through the power’s own passage", "вы прошли напролом сквозь проход, сотворённый самой силой"]
+    },
+    "thePowerOwnPassage": {
+      "$args": [],
+      "$value": ["the power’s own passage hurt you as you went through", "проход, сотворённый самой силой, ранил вас"]
+    },
+    "youFindAnotherWay": {
+      "$args": [],
+      "$value": [
+        "You find another way, through a crawl so narrow you have to leave your breath behind. It takes an hour. Below, the chanting has grown louder.",
+        "Вы находите другой путь — лаз такой узкий, что дыхание приходится оставить позади. На это уходит час. Пение внизу стало громче."
+      ]
+    },
+    "youFindAnotherWay2": {
+      "$args": [],
+      "$value": [
+        "You find another way, through a crawl so narrow you have to leave your breath behind. It takes an hour, and yet below the chanting is no louder than it was.",
+        "Вы находите другой путь — лаз такой узкий, что дыхание приходится оставить позади. На это уходит час, и всё же пение внизу не стало громче."
+      ]
+    },
+    "youWentTheLong": {
+      "$args": [],
+      "$value": ["you went the long way round, and the rite gained on you", "вы пошли в обход, и обряд выиграл время"]
+    },
+    "youWentTheLong2": {
+      "$args": [],
+      "$value": ["you went the long way round, and the rite did not gain on you", "вы пошли в обход, и обряд не выиграл ни минуты"]
+    },
+    "halfwayAlongTheCrawl": {
+      "$args": [],
+      "$value": [
+        "Halfway along, the crawl tightens on you like a fist, and lets you go only when you have stopped struggling.",
+        "На полпути лаз сжимается вокруг вас, как кулак, и отпускает, только когда вы перестаёте биться."
+      ]
+    },
+    "youWentTheLong3": {
+      "$args": [],
+      "$value": ["you went the long way round, and the crawl closed on you", "вы пошли в обход, и лаз сомкнулся вокруг вас"]
+    },
+    "electricLightWhereNone": {
+      "$args": [],
+      "$value": [
+        "Electric light, where none has ever been; the torch may not last",
+        "Электрический свет — там, где его никогда не бывало; но фонарик может и не выдержать"
+      ]
+    },
+    "theElectricLightGoes": {
+      "$args": [],
+      "$value": [
+        "The electric light goes into the passage like a knife, and whatever was there draws back from it.",
+        "Электрический свет входит в проход, как нож, и то, что там было, отступает перед ним."
+      ]
+    },
+    "youLitThePower": {
+      "$args": [],
+      "$value": [
+        "you lit the power’s own passage with an electric torch, and it drew back",
+        "вы осветили электрическим фонариком проход, сотворённый самой силой, и оно отступило"
+      ]
+    },
+    "theTorchFlickersAnd": {
+      "$args": [],
+      "$value": [
+        "The torch flickers, and dies, and does not come back. You go through in the dark.",
+        "Фонарик мигает, гаснет и больше не загорается. Вы проходите в темноте."
+      ]
+    },
+    "yourTorchDiedIn": {
+      "$args": [],
+      "$value": ["your torch died in the power’s own passage", "ваш фонарик погас в проходе, сотворённом самой силой"]
+    },
+    "pastTheGateA": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate a lean black dog lies across the way, its chin on its paws, watching you. It does not get up."
+        },
+        {
+          "$template": "За ${n.i} вратами поперёк прохода лежит поджарый чёрный пёс, положив морду на лапы, и смотрит на вас. Он не встаёт."
+        }
+      ]
+    },
+    "itTakesTheBread": {
+      "$args": [],
+      "$value": [
+        "It takes the bread from your hand, gently, and moves aside, and does not watch you go.",
+        "Он осторожно берёт хлеб с вашей ладони, отходит в сторону и не смотрит вам вслед."
+      ]
+    },
+    "youFedTheBlack": {
+      "$args": [],
+      "$value": ["you fed the black dog below, and it let you by", "вы накормили чёрного пса внизу, и он вас пропустил"]
+    },
+    "itDoesNotLook": {
+      "$args": [],
+      "$value": [
+        "It does not look at the bread. It looks at your hand, and then it takes the hand instead.",
+        "На хлеб он не смотрит. Он смотрит на вашу руку — и хватает вместо хлеба её."
+      ]
+    },
+    "theBlackDogBelow": {
+      "$args": [],
+      "$value": ["the black dog below took your hand instead of the bread", "чёрный пёс внизу схватил вас за руку вместо хлеба"]
+    },
+    "atTheOldWords": {
+      "$args": [],
+      "$value": [
+        "At the old words its ears go back, and it lays its head down again, and lets you step over it.",
+        "Услышав старые слова, он прижимает уши, снова кладёт голову на лапы и даёт вам перешагнуть через себя."
+      ]
+    },
+    "youSpokeTheOld": {
+      "$args": [],
+      "$value": [
+        "you spoke the old words to the black dog below, and it let you by",
+        "вы сказали чёрному псу внизу старые слова, и он вас пропустил"
+      ]
+    },
+    "itHearsYouOut": {
+      "$args": [],
+      "$value": [
+        "It hears you out, and then it answers, in words, and you will not repeat them.",
+        "Он выслушивает вас до конца, а потом отвечает — словами, и повторять их вы не станете."
+      ]
+    },
+    "theBlackDogBelow2": {
+      "$args": [],
+      "$value": ["the black dog below answered you in words", "чёрный пёс внизу ответил вам словами"]
+    },
+    "youStepOverIt": {
+      "$args": [],
+      "$value": [
+        "You step over it. It does not stir, but you feel its eyes between your shoulders for a long time.",
+        "Вы перешагиваете через него. Он не шевелится, но вы ещё долго чувствуете его взгляд между лопаток."
+      ]
+    },
+    "itWaitsUntilYou": {
+      "$args": [],
+      "$value": ["It waits until you are over it. Then it bites.", "Он ждёт, пока вы перешагнёте. Потом кусает."]
+    },
+    "theBlackDogBelow3": {
+      "$args": [],
+      "$value": ["the black dog below bit you as you stepped over it", "чёрный пёс внизу укусил вас, когда вы через него перешагивали"]
+    },
+    "yellowAndFliesCrawl": {
+      "$args": [],
+      "$value": ["yellow, and flies crawl about in it unharmed", "жёлтым, и в нём невредимыми ползают мухи"]
+    },
+    "pastTheGateA2": {
+      "$args": ["n", "f"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate a brazier burns in a niche before a statue whose face has been chiselled away. The flame is ${f[0]}. Beside it stands a jar of oil."
+        },
+        {
+          "$template": "За ${n.i} вратами в нише перед статуей со стёсанным лицом горит жаровня. Пламя горит ${f[1]}. Рядом стоит кувшин с маслом."
+        }
+      ]
+    },
+    "theFlameLeansTowards": {
+      "$args": [],
+      "$value": [
+        "The flame leans towards you, as if in thanks, and the statue lets you by.",
+        "Пламя клонится к вам, будто в благодарность, и статуя пропускает вас."
+      ]
+    },
+    "youFedTheBrazier": {
+      "$args": [],
+      "$value": ["you fed the brazier below, and were let by", "вы подлили масла в жаровню внизу, и вас пропустили"]
+    },
+    "theFlameLeapsUp": {
+      "$args": [],
+      "$value": [
+        "The flame leaps up the length of your arm before you can step back.",
+        "Пламя взбегает по вашей руке прежде, чем вы успеваете отступить."
+      ]
+    },
+    "putItOutWith": {
+      "$args": [],
+      "$value": ["Put it out with the water in your flask", "Залить его водой из фляги"]
+    },
+    "theFlameGoesOut": {
+      "$args": [],
+      "$value": [
+        "The flame goes out with a sound like a held breath let go, and the statue’s shadow goes out with it.",
+        "Пламя гаснет со звуком отпущенного вдоха, и вместе с ним гаснет тень статуи."
+      ]
+    },
+    "youPutOutThe": {
+      "$args": [],
+      "$value": ["you put out the brazier below, and its shadow with it", "вы погасили жаровню внизу, а с ней и её тень"]
+    },
+    "theWaterTurnsTo": {
+      "$args": [],
+      "$value": ["The water turns to steam and comes back at your face.", "Вода обращается паром и бьёт вам в лицо."]
+    },
+    "youTriedToPut": {
+      "$args": [],
+      "$value": ["you tried to put out the brazier below, and it scalded you", "вы пытались погасить жаровню внизу и обварились"]
+    },
+    "theCoalSitsIn": {
+      "$args": [],
+      "$value": [
+        "The coal sits in your palm without burning, a small red eye, and by its light the next passage is only a passage.",
+        "Уголь лежит у вас на ладони и не жжёт — маленький красный глаз, и в его свете следующий проход оказывается просто проходом."
+      ]
+    },
+    "youTookACoal": {
+      "$args": [],
+      "$value": ["you took a coal from the brazier below to light your way", "вы взяли уголь из жаровни внизу, чтобы освещать путь"]
+    },
+    "theCoalBurnsThrough": {
+      "$args": [],
+      "$value": ["The coal burns through your glove, and through your hand.", "Уголь прожигает перчатку — и ладонь."]
+    },
+    "aCoalFromThe": {
+      "$args": [],
+      "$value": ["a coal from the brazier below burned through your hand", "уголь из жаровни внизу прожёг вам ладонь"]
+    },
+    "inANichePast": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "In a niche past the ${n.en} gate a cradle of woven reed rocks by itself, slowly. Something in it is breathing."
+        },
+        {
+          "$template": "В нише за ${n.i} вратами сама собой медленно качается колыбель из плетёного тростника. В ней что-то дышит."
+        }
+      ]
+    },
+    "underYourHandThe": {
+      "$args": [],
+      "$value": [
+        "Under your hand the breathing slows, and deepens, into sleep.",
+        "Под вашей рукой дыхание замедляется, становится глубже — и переходит в сон."
+      ]
+    },
+    "youRockedTheCradle": {
+      "$args": [],
+      "$value": ["you rocked the cradle below until what was in it slept", "вы качали колыбель внизу, пока то, что в ней, не уснуло"]
+    },
+    "theBreathingStopsThen": {
+      "$args": [],
+      "$value": [
+        "The breathing stops. Then something in the cradle begins to hum with you.",
+        "Дыхание обрывается. Потом что-то в колыбели начинает напевать вместе с вами."
+      ]
+    },
+    "somethingInTheCradle": {
+      "$args": [],
+      "$value": ["something in the cradle below hummed with you", "что-то в колыбели внизу напевало вместе с вами"]
+    },
+    "aGiftAsThe": {
+      "$args": [],
+      "$value": ["A gift, as the old women did: a comb, a spindle, a button", "Дар, как оставляли старухи: гребень, веретено, пуговицу"]
+    },
+    "youLayAButton": {
+      "$args": [],
+      "$value": [
+        "You lay a button from your coat in the cradle. It stops rocking, and you are let go, the way one lets go of something paid for.",
+        "Вы кладёте в колыбель пуговицу с пальто. Колыбель перестаёт качаться, и вас отпускают — так отпускают то, за что заплачено."
+      ]
+    },
+    "youLeftAGift": {
+      "$args": [],
+      "$value": ["you left a gift in the cradle below, and were let go", "вы оставили дар в колыбели внизу, и вас отпустили"]
+    },
+    "youLayAButton2": {
+      "$args": [],
+      "$value": [
+        "You lay a button from your coat in the cradle. In the morning, if there is a morning, you will find it sewn back on, and you will not sleep for a week.",
+        "Вы кладёте в колыбель пуговицу с пальто. Утром — если утро наступит — вы найдёте её пришитой обратно и неделю не сможете спать."
+      ]
+    },
+    "youLeftAGift2": {
+      "$args": [],
+      "$value": ["you left a gift in the cradle below, and it was given back", "вы оставили дар в колыбели внизу, и его вернули"]
+    },
+    "thereIsNothingIn": {
+      "$args": [],
+      "$value": [
+        "There is nothing in the cradle but a fold of linen, warm, and a smell of milk. Pinned to the linen is a scrap of clay:",
+        "В колыбели только сложенная пелёнка, тёплая, и запах молока. К пелёнке приколот обломок глины:"
+      ]
+    },
+    "thereIsNothingIn2": {
+      "$args": [],
+      "$value": [
+        "There is nothing in the cradle but a fold of linen, warm, and a smell of milk.",
+        "В колыбели только сложенная пелёнка, тёплая, и запах молока."
+      ]
+    },
+    "somethingInTheCradle2": {
+      "$args": [],
+      "$value": [
+        "Something in the cradle has teeth, and it was waiting for a face.",
+        "У того, что в колыбели, есть зубы, и оно ждало лица."
+      ]
+    },
+    "somethingInTheCradle3": {
+      "$args": [],
+      "$value": ["something in the cradle below bit you when you looked in", "что-то в колыбели внизу укусило вас, когда вы заглянули"]
+    },
+    "pastTheGateA3": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate, a side chamber is full of bones, laid out in rows: the cult’s offerings of other seasons. On top of the nearest heap lies a canvas satchel with the initials A. C."
+        },
+        {
+          "$template": "За ${n.i} вратами боковой покой полон костей, разложенных рядами: подношения секты в иные сезоны. На ближайшей груде лежит брезентовая сумка с вытисненными на ней инициалами О. К."
+        }
+      ]
+    },
+    "insideCraneNotebookHis": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "Inside: Crane’s notebook, his spare spectacles, and ${theItem(w)}, wrapped in a handkerchief."
+        },
+        {
+          "$template": "Внутри: записная книжка Крейна, его запасные очки и ${ru.item(w)}, завёрнут${ru.ig(w,\"ый\",\"ая\",\"ое\",\"ые\")} в носовой платок."
+        }
+      ]
+    },
+    "youFoundInCrane": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "you found ${theItem(w)} in Crane’s satchel, among the bones"
+        },
+        {
+          "$template": "среди костей, в сумке Крейна, вы нашли ${ru.item(w,\"a\")}"
+        }
+      ]
+    },
+    "insideCraneNotebookThe": {
+      "$args": [],
+      "$value": [
+        "Inside: Crane’s notebook. The last page is a line from the tablets, copied in a hand that shook:",
+        "Внутри: записная книжка Крейна. На последней странице — строка с табличек, переписанная дрожащей рукой:"
+      ]
+    },
+    "insideCraneNotebookEvery": {
+      "$args": [],
+      "$value": ["Inside: Crane’s notebook, every page of it blank.", "Внутри: записная книжка Крейна, и все страницы в ней пусты."]
+    },
+    "youOpenedCraneSatchel": {
+      "$args": [],
+      "$value": ["you opened Crane’s satchel among the bones", "среди костей вы открыли сумку Крейна"]
+    },
+    "youLeaveThemAs": {
+      "$args": [],
+      "$value": [
+        "You leave them as they lie. As you go, you have the feeling of being thanked.",
+        "Вы оставляете их лежать как есть. Уходя, вы чувствуете, будто вас поблагодарили."
+      ]
+    },
+    "youLeftTheCult": {
+      "$args": [],
+      "$value": [
+        "you left the cult’s dead in peace, and were thanked for it",
+        "вы оставили мёртвых секты в покое, и вас за это поблагодарили"
+      ]
+    },
+    "youGoOnThe": {
+      "$args": [],
+      "$value": ["You go on. The bones do not care either way.", "Вы идёте дальше. Костям всё равно."]
+    },
+    "pastTheGateThe6": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the passage opens on a pool of still black water. In it you can see yourself, standing a step behind where you stand."
+        },
+        {
+          "$template": "За ${n.i} вратами проход выводит к пруду со стоячей чёрной водой. В ней вы видите себя — на шаг позади того места, где стоите."
+        }
+      ]
+    },
+    "yourReflectionLooksBack": {
+      "$args": [],
+      "$value": [
+        "Your reflection looks back at you, waiting for a name you never gave; then it shrugs, and is only a reflection.",
+        "Ваше отражение смотрит на вас и ждёт имени, которого вы так и не назвали; потом пожимает плечами — и становится просто отражением."
+      ]
+    },
+    "yourReflectionInThe": {
+      "$args": [],
+      "$value": [
+        "your reflection in the black pool waited for a name you never gave, and let it go",
+        "ваше отражение в чёрном пруду ждало имени, которого вы так и не назвали, и не стало настаивать"
+      ]
+    },
+    "yourReflectionLooksBack2": {
+      "$args": [],
+      "$value": [
+        "Your reflection looks back at you, waiting for a name you never gave.",
+        "Ваше отражение смотрит на вас и ждёт имени, которого вы так и не назвали."
+      ]
+    },
+    "yourReflectionInThe2": {
+      "$args": [],
+      "$value": [
+        "your reflection in the black pool waited for a name you never gave",
+        "ваше отражение в чёрном пруду ждало имени, которого вы так и не назвали"
+      ]
+    },
+    "yourReflectionReachesUp": {
+      "$args": [],
+      "$value": [
+        "Your reflection reaches up out of the water and takes hold of your wrist.",
+        "Ваше отражение тянется из воды и хватает вас за запястье."
+      ]
+    },
+    "yourReflectionInThe3": {
+      "$args": [],
+      "$value": ["your reflection in the black pool took hold of you", "ваше отражение в чёрном пруду схватило вас"]
+    },
+    "yourReflectionNodsSlowly": {
+      "$args": [],
+      "$value": [
+        "Your reflection nods, slowly, as if you had said the right name.",
+        "Ваше отражение медленно кивает — будто вы назвали верное имя."
+      ]
+    },
+    "yourReflectionShakesIts": {
+      "$args": [],
+      "$value": [
+        "Your reflection shakes its head, slowly, as if you had said the wrong name.",
+        "Ваше отражение медленно качает головой — будто вы назвали не то имя."
+      ]
+    },
+    "yourReflectionInThe4": {
+      "$args": [],
+      "$value": [
+        "your reflection in the black pool nodded at the name you had given",
+        "ваше отражение в чёрном пруду кивнуло названному вами имени"
+      ]
+    },
+    "yourReflectionInThe5": {
+      "$args": [],
+      "$value": [
+        "your reflection in the black pool shook its head at the name you had given",
+        "ваше отражение в чёрном пруду покачало головой, услышав названное вами имя"
+      ]
+    },
+    "theReflectionBreaksInto": {
+      "$args": [],
+      "$value": [
+        "The reflection breaks into rings, and the rings go out, and there is nobody in the water any more.",
+        "Отражение разбивается на круги, круги расходятся — и в воде больше никого нет."
+      ]
+    },
+    "youBrokeYourReflection": {
+      "$args": [],
+      "$value": ["you broke your reflection in the black pool, and it was gone", "вы разбили своё отражение в чёрном пруду, и оно исчезло"]
+    },
+    "theReflectionBreaksInto2": {
+      "$args": [],
+      "$value": [
+        "The reflection breaks into rings, and every ring has your face in it.",
+        "Отражение разбивается на круги, и в каждом круге — ваше лицо."
+      ]
+    },
+    "youBrokeYourReflection2": {
+      "$args": [],
+      "$value": ["you broke your reflection in the black pool", "вы разбили своё отражение в чёрном пруду"]
+    },
+    "walkRoundItWith": {
+      "$args": [],
+      "$value": ["Walk round it with your eyes on the wall", "Обойти его, глядя в стену"]
+    },
+    "youDoNotLook": {
+      "$args": [],
+      "$value": [
+        "You do not look. For the rest of the way down you do not look at anything that shines.",
+        "Вы не смотрите. До самого низа вы не смотрите ни на что блестящее."
+      ]
+    },
+    "youWalkedRoundThe": {
+      "$args": [],
+      "$value": ["you walked round the black pool without looking", "вы обошли чёрный пруд, не глядя в него"]
+    },
+    "youDoNotLook2": {
+      "$args": [],
+      "$value": [
+        "You do not look, but halfway round you hear it step out of the water behind you, and follow.",
+        "Вы не смотрите, но на полпути слышите, как оно выходит из воды у вас за спиной — и идёт следом."
+      ]
+    },
+    "yourReflectionFollowedYou": {
+      "$args": [],
+      "$value": ["your reflection followed you out of the black pool", "ваше отражение вышло за вами из чёрного пруда"]
+    },
+    "pastTheGateStops": {
+      "$args": ["n", "c"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate ${c.short} stops dead and will not go on. “I can’t,” ${c.p} says. “I can hear it, Doctor. It knows my name.” ${c.short} is shaking."
+        },
+        {
+          "$template": "За ${n.i} вратами ${ru.c(c)} замирает на месте и не может идти дальше. «Не могу, — ${ru.gs(c,\"говорит он\",\"говорит она\")}. — Я слышу его, доктор. Оно знает моё имя». ${ru.c(c)} дрожит."
+        }
+      ]
+    },
+    "youTalkDownStep": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "You talk ${c.short} down, step by step, and give away more of your own nerve than you can spare. ${c.short} comes on."
+        },
+        {
+          "$template": "Шаг за шагом вы успокаиваете ${ru.c(c,\"a\")} и отдаёте больше собственного мужества, чем можете себе позволить. ${ru.c(c)} идёт дальше."
+        }
+      ]
+    },
+    "youSteadiedWhenFaltered": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "you steadied ${c.name} when ${c.p} faltered"
+        },
+        {
+          "$template": "вы успокоили ${ru.cf(c,\"a\")}, когда ${ru.gs(c,\"он дрогнул\",\"она дрогнула\")}"
+        }
+      ]
+    },
+    "youTalkToFor": {
+      "$args": ["c", "him"],
+      "$value": [
+        {
+          "$template": "You talk to ${c.short} for a long time, and give away more of your own nerve than you can spare. It is no use. ${c.short} sits down against the wall with ${c.pp} eyes shut, and you go on ${withYou().length>0?\"without \"+him:\"alone\"}."
+        },
+        {
+          "$template": "Вы долго говорите с ${ru.c(c,\"i\")} и отдаёте больше собственного мужества, чем можете себе позволить. Без толку: ${ru.c(c)} садится у стены, закрыв глаза, и дальше вы идёте ${withYou().length>0?\"без \"+ru.gs(c,\"него\",\"неё\"):\"одни\"}."
+        }
+      ]
+    },
+    "youTriedToSteady": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "you tried to steady ${c.name} when ${c.p} faltered, and could not"
+        },
+        {
+          "$template": "вы пытались успокоить ${ru.cf(c,\"a\")}, когда ${ru.gs(c,\"он дрогнул\",\"она дрогнула\")}, — и не смогли"
+        }
+      ]
+    },
+    "willBeSafeAnd": {
+      "$args": ["c", "him"],
+      "$value": [
+        {
+          "$template": "${EP.He(c)} will be safe, and you will go on without ${him}"
+        },
+        {
+          "$template": "${ru.gs(c,\"Он\",\"Она\")} будет в безопасности, а вы пойдёте дальше без ${ru.gs(c,\"него\",\"неё\")}"
+        }
+      ]
+    },
+    "willBeSafeAnd2": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${EP.He(c)} will be safe, and you will be alone"
+        },
+        {
+          "$template": "${ru.gs(c,\"Он\",\"Она\")} будет в безопасности, а вы — одни"
+        }
+      ]
+    },
+    "shakesHeadNoIs": {
+      "$args": ["c", "alone"],
+      "$value": [
+        {
+          "$template": "${c.short} shakes ${c.pp} head. “${alone?\"And leave you down here alone\":\"And go back up without you\"}? No.” ${capS(c.p)} is still shaking, but ${c.p} comes on."
+        },
+        {
+          "$template": "${ru.c(c)} качает головой. «${alone?\"И оставить вас здесь одних\":\"И вернуться наверх без вас\"}? Нет». ${ru.gs(c,\"Его\",\"Её\")} всё ещё трясёт, но ${ru.gs(c,\"он идёт\",\"она идёт\")} дальше."
+        }
+      ]
+    },
+    "youSentBackUp": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "you sent ${c.name} back up when ${c.p} faltered, and ${c.p} would not go"
+        },
+        {
+          "$template": "вы отправили ${ru.cf(c,\"a\")} наверх, когда ${ru.gs(c,\"он дрогнул\",\"она дрогнула\")}, но ${ru.gs(c,\"он не ушёл\",\"она не ушла\")}"
+        }
+      ]
+    },
+    "goesBackUpTowards": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} goes back up towards the light, and you listen to ${c.pp} footsteps for a long time."
+        },
+        {
+          "$template": "${ru.c(c)} уходит наверх, к свету, и вы долго слушаете ${ru.gs(c,\"его\",\"её\")} шаги."
+        }
+      ]
+    },
+    "youSentBackUp2": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "you sent ${c.name} back up when ${c.p} faltered"
+        },
+        {
+          "$template": "вы отправили ${ru.cf(c,\"a\")} наверх, когда ${ru.gs(c,\"он дрогнул\",\"она дрогнула\")}"
+        }
+      ]
+    },
+    "goOnAndLet": {
+      "$args": ["him", "c"],
+      "$value": [
+        {
+          "$template": "Go on, and let ${him} follow if ${c.p} can"
+        },
+        "Идти дальше: пусть идёт следом, если сможет"
+      ]
+    },
+    "afterAWhileYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "After a while you hear ${c.pp} footsteps behind you again."
+        },
+        {
+          "$template": "Через некоторое время вы снова слышите за спиной ${ru.gs(c,\"его\",\"её\")} шаги."
+        }
+      ]
+    },
+    "falteredAndFollowedYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} faltered, and followed you after all"
+        },
+        {
+          "$template": "${ru.cf(c)} ${ru.gs(c,\"дрогнул\",\"дрогнула\")}, но всё же ${ru.gs(c,\"пошёл\",\"пошла\")} за вами"
+        }
+      ]
+    },
+    "falteredAndDidNot": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} faltered, and did not follow you"
+        },
+        {
+          "$template": "${ru.cf(c)} ${ru.gs(c,\"дрогнул\",\"дрогнула\")} и не ${ru.gs(c,\"пошёл\",\"пошла\")} за вами"
+        }
+      ]
+    },
+    "pastTheGateA4": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate a winged bull with a man’s face fills the passage, cut from a single block, its beard curled in rows. Its eyes follow your lamp, and they are not stone."
+        },
+        {
+          "$template": "За ${n.i} вратами проход загораживает крылатый бык с человеческим лицом, высеченный из цельной глыбы, с бородой, завитой рядами. Его глаза следят за вашей лампой, и они не каменные."
+        }
+      ]
+    },
+    "belowTheWingedBull": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "Below, the winged bull lowered its eyes before ${theItem(w)}."
+        },
+        {
+          "$template": "Внизу крылатый бык опустил глаза перед ${ru.item(w,\"i\")}."
+        }
+      ]
+    },
+    "youHoldUpAnd": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "You hold up ${theItem(w)}, and the bull lowers its eyes, as before an old enemy of its master, and lets you by."
+        },
+        {
+          "$template": "Вы поднимаете ${ru.item(w,\"a\")}, и бык опускает глаза — как перед давним врагом своего господина — и пропускает вас."
+        }
+      ]
+    },
+    "oneByOneYou": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "One by one you hold them up. At ${theItem(w)} the bull lowers its eyes, as before an old enemy of its master, and lets you by."
+        },
+        {
+          "$template": "Вы поднимаете их один за другим. Перед ${ru.item(w,\"i\")} бык опускает глаза — как перед давним врагом своего господина — и пропускает вас."
+        }
+      ]
+    },
+    "theWingedBullLowered": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "the winged bull lowered its eyes before ${theItem(w)}"
+        },
+        {
+          "$template": "крылатый бык опустил глаза перед ${ru.item(w,\"i\")}"
+        }
+      ]
+    },
+    "theWingedBullLowered2": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "the winged bull lowered its eyes before ${theItem(w)}, which was not the ward"
+        },
+        {
+          "$template": "крылатый бык опустил глаза перед ${ru.item(w,\"i\")} — хотя оберегом было не это"
+        }
+      ]
+    },
+    "belowTheWingedBull2": {
+      "$args": ["one"],
+      "$value": [
+        {
+          "$template": "Below, the winged bull did not lower its eyes before ${theItem(one)}."
+        },
+        {
+          "$template": "Внизу крылатый бык не опустил глаз перед ${ru.item(one,\"i\")}."
+        }
+      ]
+    },
+    "belowTheWingedBull3": {
+      "$args": [],
+      "$value": [
+        "Below, the winged bull lowered its eyes before none of the charms you carried.",
+        "Внизу крылатый бык не опустил глаз ни перед одним из ваших амулетов."
+      ]
+    },
+    "youHoldUpThe": {
+      "$args": ["one"],
+      "$value": [
+        {
+          "$template": "You hold up ${theItem(one)}. The bull does not lower its eyes, and you squeeze past under its wing."
+        },
+        {
+          "$template": "Вы поднимаете ${ru.item(one,\"a\")}. Бык не опускает глаз, и вы протискиваетесь под его крылом."
+        }
+      ]
+    },
+    "oneByOneYou2": {
+      "$args": [],
+      "$value": [
+        "One by one you hold them up. The bull lowers its eyes before none of them, and you squeeze past under its wing.",
+        "Вы поднимаете их один за другим. Бык не опускает глаз ни перед одним, и вы протискиваетесь под его крылом."
+      ]
+    },
+    "theWingShiftsAs": {
+      "$args": [],
+      "$value": ["The wing shifts as you pass, and the stone is very heavy.", "Когда вы проходите, крыло сдвигается, а камень очень тяжёл."]
+    },
+    "theWingedBullDid": {
+      "$args": ["one"],
+      "$value": [
+        {
+          "$template": "the winged bull did not lower its eyes before ${theItem(one)}"
+        },
+        {
+          "$template": "крылатый бык не опустил глаз перед ${ru.item(one,\"i\")}"
+        }
+      ]
+    },
+    "theWingedBullLowered3": {
+      "$args": [],
+      "$value": [
+        "the winged bull lowered its eyes before none of your charms",
+        "крылатый бык не опустил глаз ни перед одним из ваших амулетов"
+      ]
+    },
+    "youSqueezePastThe": {
+      "$args": [],
+      "$value": [
+        "You squeeze past. The stone feathers are soft as real ones.",
+        "Вы протискиваетесь мимо. Каменные перья мягкие, как настоящие."
+      ]
+    },
+    "theWingComesDown": {
+      "$args": [],
+      "$value": [
+        "The wing comes down. It is only stone, and it is very heavy.",
+        "Крыло опускается. Это всего лишь камень, и он очень тяжёлый."
+      ]
+    },
+    "theWingedBullWing": {
+      "$args": [],
+      "$value": ["the winged bull’s wing came down on you", "крыло крылатого быка обрушилось на вас"]
+    },
+    "pastTheGateIn": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate, in a niche, a tablet lies half written, a reed stylus beside it, and the clay is still wet."
+        },
+        {
+          "$template": "За ${n.i} вратами в нише лежит недописанная табличка, рядом тростниковая палочка для письма, и глина ещё влажная."
+        }
+      ]
+    },
+    "itIsALine": {
+      "$args": [],
+      "$value": [
+        "It is a line you know from other clay, written fresh:",
+        "Это строка, знакомая вам по другим табличкам, только написанная заново:"
+      ]
+    },
+    "itIsYourOwn": {
+      "$args": [],
+      "$value": ["It is your own name, in cuneiform, and today’s date.", "Это ваше имя, клинописью, и сегодняшнее число."]
+    },
+    "youReadTheScribe": {
+      "$args": [],
+      "$value": ["you read the scribe’s unfinished tablet", "вы прочли недописанную табличку писца"]
+    },
+    "youReadTheScribe2": {
+      "$args": [],
+      "$value": ["you read the scribe’s unfinished tablet, and it read you", "вы прочли недописанную табличку писца, и она прочла вас"]
+    },
+    "yourHandWritesThe": {
+      "$args": [],
+      "$value": [
+        "Your hand writes the last signs before you can stop it. The writing is good. Something below is pleased.",
+        "Рука дописывает последние знаки прежде, чем вы успеваете её остановить. Написано хорошо. Что-то внизу одобряет."
+      ]
+    },
+    "youFinishedTheScribe": {
+      "$args": [],
+      "$value": ["you finished the scribe’s line, and something below was pleased", "вы дописали строку писца, и что-то внизу это одобрило"]
+    },
+    "yourHandWritesYour": {
+      "$args": [],
+      "$value": [
+        "Your hand writes your own name, and the date, and you cannot make it stop.",
+        "Рука пишет ваше имя, и число, и вы не можете её остановить."
+      ]
+    },
+    "yourHandFinishedThe": {
+      "$args": [],
+      "$value": ["your hand finished the scribe’s line with your own name", "ваша рука дописала строку писца вашим собственным именем"]
+    },
+    "theTabletBreaksLike": {
+      "$args": [],
+      "$value": [
+        "The tablet breaks like any clay. Far below, the chanting falters, and takes a while to find its place again.",
+        "Табличка бьётся, как любая глина. Далеко внизу пение сбивается и не сразу находит прежний лад."
+      ]
+    },
+    "youSmashedTheScribe": {
+      "$args": [],
+      "$value": ["you smashed the scribe’s tablet, and the chanting below faltered", "вы разбили табличку писца, и пение внизу сбилось"]
+    },
+    "theTabletBreaksLike2": {
+      "$args": [],
+      "$value": [
+        "The tablet breaks like any clay. Nothing else happens, which is somehow worse; and then, behind you, the scratch of a stylus begins again.",
+        "Табличка бьётся, как любая глина. Больше ничего не происходит — и от этого почему-то хуже; а потом за спиной снова начинает скрести палочка писца."
+      ]
+    },
+    "youSmashedTheScribe2": {
+      "$args": [],
+      "$value": ["you smashed the scribe’s tablet, and it was begun again", "вы разбили табличку писца, и её начали заново"]
+    },
+    "pastTheGateSeven": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate seven figures stand in a ring across the passage, their backs to you, their heads bowed. The only way on is through them."
+        },
+        {
+          "$template": "За ${n.i} вратами поперёк прохода кольцом стоят семь фигур, спиной к вам, склонив головы. Дальше пути нет — только сквозь них."
+        }
+      ]
+    },
+    "atSevenTheRing": {
+      "$args": [],
+      "$value": [
+        "At “seven” the ring opens, as if you had said a password.",
+        "На слове «семь» кольцо размыкается, словно вы назвали пароль."
+      ]
+    },
+    "youCountedTheSeven": {
+      "$args": [],
+      "$value": ["you counted the Seven aloud, and the ring opened", "вы пересчитали Семерых вслух, и кольцо разомкнулось"]
+    },
+    "youCountSevenThen": {
+      "$args": [],
+      "$value": [
+        "You count seven. Then a voice behind you says “eight”.",
+        "Вы насчитываете семь. Потом голос у вас за спиной говорит: «восемь»."
+      ]
+    },
+    "youCountedTheSeven2": {
+      "$args": [],
+      "$value": ["you counted the Seven aloud, and there were eight", "вы пересчитали Семерых вслух, и их оказалось восемь"]
+    },
+    "youEdgeRoundWith": {
+      "$args": [],
+      "$value": [
+        "You edge round with your back to the wall. None of them turns.",
+        "Вы пробираетесь вдоль стены, прижавшись к ней спиной. Ни одна фигура не оборачивается."
+      ]
+    },
+    "youEdgedRoundThe": {
+      "$args": [],
+      "$value": ["you edged round the Seven along the wall", "вы обошли Семерых вдоль стены"]
+    },
+    "asYouPassThe": {
+      "$args": [],
+      "$value": [
+        "As you pass the last of them, it turns its head all the way round to look at you.",
+        "Когда вы проходите мимо последней, она поворачивает голову к вам — до конца, кругом."
+      ]
+    },
+    "oneOfTheSeven": {
+      "$args": [],
+      "$value": ["one of the Seven turned its head to watch you pass", "одна из Семерых повернула голову вам вслед"]
+    },
+    "youWalkThroughThe": {
+      "$args": [],
+      "$value": [
+        "You walk through the ring. They are only figures, after all.",
+        "Вы проходите сквозь кольцо. Это и правда всего лишь фигуры."
+      ]
+    },
+    "youWalkedStraightThrough": {
+      "$args": [],
+      "$value": ["you walked straight through the ring of the Seven", "вы прошли прямо сквозь кольцо Семерых"]
+    },
+    "sevenHandsCloseOn": {
+      "$args": [],
+      "$value": [
+        "Seven hands close on you at once, and let go one by one.",
+        "Семь рук разом смыкаются на вас — и отпускают одна за другой."
+      ]
+    },
+    "theSevenTookHold": {
+      "$args": [],
+      "$value": ["the Seven took hold of you as you walked through them", "Семеро схватили вас, когда вы проходили сквозь их кольцо"]
+    },
+    "pastTheGateThe7": {
+      "$args": ["n"],
+      "$value": [
+        {
+          "$template": "Past the ${n.en} gate the floor is white with salt, and a channel of black water runs across it, too wide to step and too dark to see the bottom."
+        },
+        {
+          "$template": "За ${n.i} вратами пол бел от соли, и поперёк него бежит канал чёрной воды — слишком широкий, чтобы перешагнуть, и слишком тёмный, чтобы разглядеть дно."
+        }
+      ]
+    },
+    "theWaterIsOnly": {
+      "$args": [],
+      "$value": ["The water is only to your knees, and only cold.", "Вода вам только по колено — и всего лишь холодная."]
+    },
+    "halfwayAcrossTheBottom": {
+      "$args": [],
+      "$value": ["Halfway across the bottom is not there any more.", "На полпути дна под ногами больше нет."]
+    },
+    "theChannelOfBlack": {
+      "$args": [],
+      "$value": ["the channel of black water took you under", "канал чёрной воды утянул вас на дно"]
+    },
+    "aLittleOfYour": {
+      "$args": [],
+      "$value": ["A little of your water, to the water below", "Немного вашей воды — воде внизу"]
+    },
+    "theChannelStillsAnd": {
+      "$args": [],
+      "$value": [
+        "The channel stills, and narrows, and you step across it dry-shod.",
+        "Канал успокаивается, сужается, и вы переступаете его, не замочив ног."
+      ]
+    },
+    "youPouredALibation": {
+      "$args": [],
+      "$value": [
+        "you poured a libation into the channel of black water, and it let you over",
+        "вы совершили возлияние в канал чёрной воды, и он вас пропустил"
+      ]
+    },
+    "theChannelDrinksYour": {
+      "$args": [],
+      "$value": [
+        "The channel drinks your water and rises, and you cross it to the waist.",
+        "Канал выпивает вашу воду и поднимается, и вы переходите его по пояс."
+      ]
+    },
+    "theChannelOfBlack2": {
+      "$args": [],
+      "$value": ["the channel of black water drank your libation and rose", "канал чёрной воды выпил ваше возлияние и поднялся"]
+    },
+    "youLandOnThe": {
+      "$args": [],
+      "$value": [
+        "You land on the far side on your hands and knees, and the salt bites your palms.",
+        "Вы приземляетесь на той стороне на четвереньки, и соль кусает ладони."
+      ]
+    },
+    "itIsWiderThan": {
+      "$args": [],
+      "$value": ["It is wider than it looks. It is much wider than it looks.", "Он шире, чем кажется. Гораздо шире, чем кажется."]
+    },
+    "youFellShortOf": {
+      "$args": [],
+      "$value": ["you fell short of the channel of black water", "вы не допрыгнули через канал чёрной воды"]
+    }
+  },
+  "giveYourOwnName": {
+    "$call": "bi",
+    "$args": ["Give your own name", "Назвать своё имя"]
+  },
+  "itWillKnowYouAfter": {
+    "$call": "bi",
+    "$args": ["It will know you, after", "После этого оно будет вас знать"]
+  },
+  "giveCraneSName": {
+    "$call": "bi",
+    "$args": ["Give Crane’s name", "Назвать имя Крейна"]
+  },
+  "aLieToADoorkeeper": {
+    "$call": "bi",
+    "$args": ["A lie, to a doorkeeper", "Солгать привратнику"]
+  },
+  "sayNothingAndPushPast": {
+    "$call": "bi",
+    "$args": ["Say nothing, and push past", "Промолчать и пройти мимо"]
+  },
+  "itMayNotLetYou": {
+    "$call": "bi",
+    "$args": ["It may not let you", "Оно может и не пустить"]
+  },
+  "slowAndHumbling": {
+    "$call": "bi",
+    "$args": ["Slow, and humbling", "Медленно и смиренно"]
+  },
+  "walkPastWithYourEyesOn": {
+    "$call": "bi",
+    "$args": ["Walk past with your eyes on the floor", "Пройти мимо, не поднимая глаз"]
+  },
+  "quickIfTheyAllowIt": {
+    "$call": "bi",
+    "$args": ["Quick, if they allow it", "Быстро — если они позволят"]
+  },
+  "meetEachPaintedGazeInTurn": {
+    "$call": "bi",
+    "$args": ["Meet each painted gaze in turn", "Выдержать взгляд каждого"]
+  },
+  "letThemSeeWhomTheyJudge": {
+    "$call": "bi",
+    "$args": ["Let them see whom they judge", "Пусть видят, кого судят"]
+  },
+  "eatAndDrink": {
+    "$call": "bi",
+    "$args": ["Eat and drink", "Есть и пить"]
+  },
+  "toKnowWhatTheDeadKnow": {
+    "$call": "bi",
+    "$args": ["To know what the dead know", "Чтобы знать то, что знают мёртвые"]
+  },
+  "goodMannersBelow": {
+    "$call": "bi",
+    "$args": ["Good manners, below", "Хорошие манеры — внизу"]
+  },
+  "touchNothing": {
+    "$call": "bi",
+    "$args": ["Touch nothing", "Ни к чему не прикасаться"]
+  },
+  "asTheWiseManDid": {
+    "$call": "bi",
+    "$args": ["As the wise man did", "Как поступил мудрец"]
+  },
+  "answer": {
+    "$call": "bi",
+    "$args": ["Answer", "Ответить"]
+  },
+  "theDeadDoNotLie": {
+    "$call": "bi",
+    "$args": ["The dead do not lie", "Мёртвые не лгут"]
+  },
+  "stopYourEarsAndWalkOn": {
+    "$call": "bi",
+    "$args": ["Stop your ears and walk on", "Заткнуть уши и идти дальше"]
+  },
+  "doNotListen": {
+    "$call": "bi",
+    "$args": ["Do not listen", "Не слушать"]
+  },
+  "letTalkYouPastThem": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Let ${c.short} talk you past them"
+      },
+      {
+        "$template": "Пусть ${ru.c(c)} уведёт вас мимо них"
+      }
+    ]
+  },
+  "goStraightThrough": {
+    "$call": "bi",
+    "$args": ["Go straight through", "Идти напролом"]
+  },
+  "quickAndItMayHurt": {
+    "$call": "bi",
+    "$args": ["Quick, and it may hurt", "Быстро — и может быть больно"]
+  },
+  "lookForAnotherWayRound": {
+    "$call": "bi",
+    "$args": ["Look for another way round", "Искать обходной путь"]
+  },
+  "slowerTheRiteWillNotWait": {
+    "$call": "bi",
+    "$args": ["Slower; the rite will not wait", "Дольше, а обряд ждать не станет"]
+  },
+  "theRiteDrawsMuchNearer": {
+    "$call": "bi",
+    "$args": ["The rite draws much nearer", "Обряд стремительно приближается"]
+  },
+  "theRiteDrawsNearer": {
+    "$call": "bi",
+    "$args": ["The rite draws nearer", "Обряд всё ближе"]
+  },
+  "lightTheWayWithTheTorch": {
+    "$call": "bi",
+    "$args": ["Light the way with the torch", "Осветить путь фонариком"]
+  },
+  "offerItTheBreadInYour": {
+    "$call": "bi",
+    "$args": ["Offer it the bread in your pocket", "Предложить ему хлеб из кармана"]
+  },
+  "everyDogHasItsPrice": {
+    "$call": "bi",
+    "$args": ["Every dog has its price", "У всякого пса своя цена"]
+  },
+  "speakToItAsToA": {
+    "$call": "bi",
+    "$args": ["Speak to it, as to a dog at a gate", "Заговорить с ним, как с привратным псом"]
+  },
+  "theOldWordsForAWatchdog": {
+    "$call": "bi",
+    "$args": ["The old words for a watchdog", "Старые слова для сторожевого пса"]
+  },
+  "stepOverIt": {
+    "$call": "bi",
+    "$args": ["Step over it", "Перешагнуть через него"]
+  },
+  "withoutASound": {
+    "$call": "bi",
+    "$args": ["Without a sound", "Беззвучно"]
+  },
+  "feedTheFlameFromTheJar": {
+    "$call": "bi",
+    "$args": ["Feed the flame from the jar", "Подлить в огонь масла из кувшина"]
+  },
+  "anOfferingAsThePriestsMade": {
+    "$call": "bi",
+    "$args": ["An offering, as the priests made", "Приношение, как у жрецов"]
+  },
+  "darknessIsSaferPerhaps": {
+    "$call": "bi",
+    "$args": ["Darkness is safer, perhaps", "Темнота, пожалуй, безопаснее"]
+  },
+  "takeACoalToLightYour": {
+    "$call": "bi",
+    "$args": ["Take a coal to light your way", "Взять уголь, чтобы освещать путь"]
+  },
+  "fireFromBelowToSeeBelow": {
+    "$call": "bi",
+    "$args": ["Fire from below, to see below by", "Огонь снизу — чтобы видеть внизу"]
+  },
+  "rockItAndHum": {
+    "$call": "bi",
+    "$args": ["Rock it, and hum", "Покачать её и напеть"]
+  },
+  "whateverItIsLetItSleep": {
+    "$call": "bi",
+    "$args": ["Whatever it is, let it sleep", "Что бы это ни было — пусть спит"]
+  },
+  "leaveSomethingOfYoursInIt": {
+    "$call": "bi",
+    "$args": ["Leave something of yours in it", "Оставить в ней что-нибудь своё"]
+  },
+  "lookInside": {
+    "$call": "bi",
+    "$args": ["Look inside", "Заглянуть внутрь"]
+  },
+  "youHaveToKnow": {
+    "$call": "bi",
+    "$args": ["You have to know", "Вам нужно знать"]
+  },
+  "openTheSatchel": {
+    "$call": "bi",
+    "$args": ["Open the satchel", "Открыть сумку"]
+  },
+  "craneSByTheInitials": {
+    "$call": "bi",
+    "$args": ["Crane’s, by the initials", "Судя по инициалам, Крейна"]
+  },
+  "leaveTheDeadInPeace": {
+    "$call": "bi",
+    "$args": ["Leave the dead in peace", "Оставить мёртвых в покое"]
+  },
+  "theyHaveBeenDisturbedEnough": {
+    "$call": "bi",
+    "$args": ["They have been disturbed enough", "Их и так потревожили довольно"]
+  },
+  "lookCloser": {
+    "$call": "bi",
+    "$args": ["Look closer", "Всмотреться"]
+  },
+  "itMayKnowSomething": {
+    "$call": "bi",
+    "$args": ["It may know something", "Может, оно что-то знает"]
+  },
+  "breakTheSurfaceWithYourBoot": {
+    "$call": "bi",
+    "$args": ["Break the surface with your boot", "Разбить гладь сапогом"]
+  },
+  "whateverItIs": {
+    "$call": "bi",
+    "$args": ["Whatever it is", "Что бы это ни было"]
+  },
+  "doNotLook": {
+    "$call": "bi",
+    "$args": ["Do not look", "Не смотреть"]
+  },
+  "steady": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Steady ${him}"
+      },
+      {
+        "$js": "ru.gs(c,\"Успокоить его\",\"Успокоить её\")"
+      }
+    ]
+  },
+  "itWillCostYou": {
+    "$call": "bi",
+    "$args": ["It will cost you", "Это вам дорого обойдётся"]
+  },
+  "sendBackUp": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Send ${him} back up"
+      },
+      {
+        "$js": "ru.gs(c,\"Отправить его наверх\",\"Отправить её наверх\")"
+      }
+    ]
+  },
+  "mayNot": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${EP.He(c)} may not"
+      },
+      {
+        "$template": "${ru.gs(c,\"Он\",\"Она\")} может и не пойти"
+      }
+    ]
+  },
+  "holdUpTheCharmYouCarry": {
+    "$call": "bi",
+    "$args": ["Hold up the charm you carry", "Показать ему амулет, что при вас"]
+  },
+  "holdUpTheCharmsYouCarry": {
+    "$call": "bi",
+    "$args": ["Hold up the charms you carry", "Показать ему амулеты, что при вас"]
+  },
+  "theOldGuardiansKnowTheirOwn": {
+    "$call": "bi",
+    "$args": ["The old guardians know their own", "Древние стражи узнают своё"]
+  },
+  "squeezePastUnderItsWing": {
+    "$call": "bi",
+    "$args": ["Squeeze past under its wing", "Протиснуться под его крылом"]
+  },
+  "quickly": {
+    "$call": "bi",
+    "$args": ["Quickly", "Быстро"]
+  },
+  "readWhatIsWritten": {
+    "$call": "bi",
+    "$args": ["Read what is written", "Прочесть написанное"]
+  },
+  "itCostsWhatReadingCosts": {
+    "$call": "bi",
+    "$args": ["It costs what reading costs", "Обойдётся, как всякое чтение"]
+  },
+  "finishTheLine": {
+    "$call": "bi",
+    "$args": ["Finish the line", "Дописать строку"]
+  },
+  "letYourHandDecide": {
+    "$call": "bi",
+    "$args": ["Let your hand decide", "Пусть решит рука"]
+  },
+  "smashIt": {
+    "$call": "bi",
+    "$args": ["Smash it", "Разбить её"]
+  },
+  "someThingsShouldNotBeFinished": {
+    "$call": "bi",
+    "$args": ["Some things should not be finished", "Иное лучше не дописывать"]
+  },
+  "countThemAloudOneToSeven": {
+    "$call": "bi",
+    "$args": ["Count them aloud, one to seven", "Пересчитать их вслух, от одного до семи"]
+  },
+  "asTheOldHymnsCountThe": {
+    "$call": "bi",
+    "$args": ["As the old hymns count the Seven", "Как считают Семерых древние гимны"]
+  },
+  "edgeRoundThemAlongTheWall": {
+    "$call": "bi",
+    "$args": ["Edge round them, along the wall", "Обойти их вдоль стены"]
+  },
+  "slowlyAndTouchingNobody": {
+    "$call": "bi",
+    "$args": ["Slowly, and touching nobody", "Медленно, никого не задев"]
+  },
+  "walkStraightThroughTheRing": {
+    "$call": "bi",
+    "$args": ["Walk straight through the ring", "Пройти прямо сквозь кольцо"]
+  },
+  "theyAreOnlyFigures": {
+    "$call": "bi",
+    "$args": ["They are only figures", "Это всего лишь фигуры"]
+  },
+  "wadeAcross": {
+    "$call": "bi",
+    "$args": ["Wade across", "Перейти вброд"]
+  },
+  "quicklyBeforeYouThinkAboutIt": {
+    "$call": "bi",
+    "$args": ["Quickly, before you think about it", "Быстро, пока не успели подумать"]
+  },
+  "pourALibationIntoItFirst": {
+    "$call": "bi",
+    "$args": ["Pour a libation into it first", "Сначала совершить возлияние"]
+  },
+  "takeARunAndLeapIt": {
+    "$call": "bi",
+    "$args": ["Take a run, and leap it", "Разбежаться и перепрыгнуть"]
+  },
+  "itIsNotSoVeryWide": {
+    "$call": "bi",
+    "$args": ["It is not so very wide", "Не так уж он и широк"]
+  },
+  "theGate": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "The ${n.en} gate"
+      },
+      {
+        "$template": "${n.n} врата"
+      }
+    ]
+  },
+  "GATE_N": {
+    "2": {
+      "en": "second",
+      "n": "Вторые",
+      "g": "вторых",
+      "i": "вторыми"
+    },
+    "3": {
+      "en": "third",
+      "n": "Третьи",
+      "g": "третьих",
+      "i": "третьими"
+    },
+    "5": {
+      "en": "fifth",
+      "n": "Пятые",
+      "g": "пятых",
+      "i": "пятыми"
+    },
+    "6": {
+      "en": "sixth",
+      "n": "Шестые",
+      "g": "шестых",
+      "i": "шестыми"
+    }
+  },
+  "text": "голос Крейна",
+  "aGarmentOfAshStillWarm": ["a garment of ash, still warm", "одеяние из пепла, ещё тёплого"],
+  "aGarmentOfDust": ["a garment of dust", "одеяние из пыли"],
+  "aGarmentOfWetBlackWeed": ["a garment of wet black weed", "одеяние из мокрых чёрных водорослей"],
+  "aGarmentOfMattedHair": ["a garment of matted hair", "одеяние из свалявшихся волос"],
+  "aGarmentOfBrokenLookingGlass": ["a garment of broken looking-glass", "одеяние из осколков зеркала"],
+  "youAteTheBreadOfThe": [
+    {
+      "$js": "eaten()"
+    },
+    ["you ate the bread of the dead", "вы отведали хлеба мёртвых"]
+  ],
+  "youAnsweredTheVoicesOfThe": [
+    {
+      "$js": "answered()"
+    },
+    ["you answered the voices of the dead", "вы ответили голосам мёртвых"]
+  ],
+  "youSteppedOverTheBlackDog": ["you stepped over the black dog below", "вы перешагнули через чёрного пса внизу"],
+  "text2": "белым",
+  "greyAndGivesNoWarmth": ["grey, and gives no warmth", "серым и не греет"],
+  "greenLikeALampUnderWater": ["green, like a lamp under water", "зелёным, как лампа под водой"],
+  "redAndSpitsLikeFat": ["red, and spits like fat", "красным и плюётся, как жир"],
+  "violetAndBurnsDownward": ["violet, and burns downward", "лиловым и тянется вниз"],
+  "theBrazierBelowLeaptUpYour": [
+    {
+      "$js": "hline(...TX.below.theFlameLeapsUp())"
+    },
+    ["the brazier below leapt up your arm", "пламя жаровни внизу взбежало по вашей руке"],
+    "fire"
+  ],
+  "youLookedIntoTheCradleBelow": ["you looked into the cradle below", "вы заглянули в колыбель внизу"],
+  "youLeftTheCultSDead": ["you left the cult’s dead in peace", "вы оставили мёртвых секты в покое"],
+  "andLied": [", and lied", " — и солгало"],
+  "thoughYouCarriedTheWard": [
+    {
+      "$template": ", though you carried the ward"
+    },
+    " — хотя оберег был при вас"
+  ],
+  "youSqueezedPastTheWingedBull": ["you squeezed past the winged bull", "вы протиснулись мимо крылатого быка"],
+  "youWadedTheChannelOfBlack": ["you waded the channel of black water", "вы перешли вброд канал чёрной воды"],
+  "youLeaptTheChannelOfBlack": ["you leapt the channel of black water", "вы перепрыгнули канал чёрной воды"],
+  "g": {
+    "$template": "голос ${ru.c(t, 'g')}"
+  },
+  "text3": {
+    "$template": "${ru.c(c)} не идёт за вами."
+  }
+}

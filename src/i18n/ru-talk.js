@@ -1,0 +1,18 @@
+// i18n/ru-talk.js: recovered build 28.5.1. See tools/show.js for individual declarations.
+zipRU(
+  {
+    GREET: GREET,
+    GREET_WARM: GREET_WARM,
+    GREET_COLD: GREET_COLD,
+    GREET_FLIRT: GREET_FLIRT,
+    SMALLTALK: SMALLTALK,
+    REACT_SAY: REACT_SAY,
+    REACT_NOTE: REACT_NOTE,
+    REACT_WORDS_SAY: REACT_WORDS_SAY,
+    REACT_WORDS_NOTE: REACT_WORDS_NOTE,
+    CONFIDE_SAY: CONFIDE_SAY,
+    TRACK_NAMES: TRACK_NAMES,
+    MAPLBL: MAPLBL
+  },
+  __text('tables')
+);

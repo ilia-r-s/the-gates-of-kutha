@@ -1,0 +1,516 @@
+{
+  "passages": {
+    "iHaveWorkTo": {
+      "$args": ["k"],
+      "$value": [
+        {
+          "$js": "[\"I have work to do, Doctor.\",\"Ask someone who likes talking.\"][k]"
+        },
+        {
+          "$js": "[\"У меня работа, доктор.\",\"Спросите кого-нибудь, кто любит поговорить.\"][k]"
+        }
+      ]
+    },
+    "talkingWithSteadiesYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Talking with ${c.short} steadies you a little."
+        },
+        {
+          "$template": "Разговор с ${ru.c(c,\"i\")} немного успокаивает вас."
+        }
+      ]
+    },
+    "listenToThisOne": {
+      "$args": ["k", "c"],
+      "$value": [
+        {
+          "$js": "[\"Listen to this one. It came out of Trench B yesterday:\",\"I copied this line this morning. It is very strange:\",\"Here, you will like this. A late copy, but clear:\"][k]"
+        },
+        {
+          "$js": "[\"Послушайте вот это. Вчера из траншеи Б:\",`Сегодня утром ${ru.gs(c,\"переписал\",\"переписала\")} эту строку. Очень странная:`,\"Вот, вам понравится. Поздний список, но чёткий:\"][k]"
+        }
+      ]
+    },
+    "askWhereTheyWere": {
+      "$args": [],
+      "$value": ["Ask where they were the night Crane died", "Спросить про ночь, когда погиб Крейн"]
+    },
+    "accountAndAnythingSaw": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${capS(c.pp)} account, and anything ${c.p} saw"
+        },
+        {
+          "$js": "ru.gs(c,\"Где был, с кем, что заметил\",\"Где была, с кем, что заметила\")"
+        }
+      ]
+    },
+    "answersAndYouHave": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} answers, and you have the feeling ${c.p} saw more than ${c.p} says."
+        },
+        {
+          "$template": "${ru.c(c)} отвечает, но вам кажется, что ${ru.gs(c,\"он видел\",\"она видела\")} больше, чем говорит."
+        }
+      ]
+    },
+    "aScholarCanRead": {
+      "$args": [],
+      "$value": ["A scholar can read what a charm was made against", "Учёный прочтёт, против кого сделан амулет"]
+    },
+    "andIAmNot": {
+      "$args": ["c"],
+      "$value": [
+        "And I am not here to read your trinkets for you, Doctor.",
+        {
+          "$template": "И читать ваши безделушки я не ${ru.gs(c,\"нанимался\",\"нанималась\")}, доктор."
+        }
+      ]
+    },
+    "youSetOnThe": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "You set ${t.name} on the table between you."
+        },
+        {
+          "$template": "Вы кладёте на стол ${showRu(t,\"a\")}."
+        }
+      ]
+    },
+    "trustBothWaysRisky": {
+      "$args": [],
+      "$value": ["Trust, both ways. Risky if you are wrong", "Доверие за доверие. Опасно, если вы ошиблись"]
+    },
+    "iWouldBeCareful": {
+      "$args": ["k"],
+      "$value": [
+        {
+          "$js": "[\"I would be careful whom you tell that to, Doctor.\",\"That is a great deal to put on a stranger, Doctor.\"][k]"
+        },
+        {
+          "$js": "[\"Будьте осторожнее с тем, кому вы это рассказываете, доктор.\",\"Слишком многое вы взваливаете на чужого человека, доктор.\"][k]"
+        }
+      ]
+    },
+    "leaveYourLampBurning": {
+      "$args": [],
+      "$value": [
+        " Leave your lamp burning tonight. I will be watching your tent.",
+        " Не гасите сегодня лампу. Я присмотрю за вашей палаткой."
+      ]
+    },
+    "iWatchTheWhole": {
+      "$args": [],
+      "$value": [
+        " I watch the whole camp at night, Doctor, not one tent.",
+        " Ночью я присматриваю за всем лагерем, доктор, а не за одной палаткой."
+      ]
+    },
+    "iShouldTellYou": {
+      "$args": [],
+      "$value": [
+        " I should tell you: I dream, and I have always dreamed true. If I see anything, you will hear it first.",
+        " Скажу вам одно: мне снятся сны, и они всегда сбываются. Если я что-то увижу, вы узнаете об этом раньше всех."
+      ]
+    },
+    "hasTheGraceTo": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} has the grace to look ashamed."
+        },
+        {
+          "$template": "${ru.c(c,\"d\")} хватает совести смутиться."
+        }
+      ]
+    },
+    "iHaveAnsweredEnough": {
+      "$args": [],
+      "$value": ["I have answered enough of your questions, Doctor.", "Я уже достаточно отвечал{a} на ваши вопросы, доктор."]
+    },
+    "askSomeoneElseFor": {
+      "$args": [],
+      "$value": [
+        "Ask someone else for once. I was where I always am.",
+        "Спросите для разнообразия кого-нибудь другого. Я был{a} там же, где и всегда."
+      ]
+    },
+    "fineAFewTablets": {
+      "$args": ["c"],
+      "$value": [
+        "Fine. A few tablets went to Baghdad. Business. Not this. I swear it.",
+        {
+          "$template": "Ладно. Несколько табличек ушли в Багдад. Дело есть дело. Но к этому я ${ru.gs(c,\"непричастен\",\"непричастна\")}, клянусь."
+        }
+      ]
+    },
+    "iWasNotWhere": {
+      "$args": ["c"],
+      "$value": [
+        "I was not where I said I was that night. But it is not what you—",
+        {
+          "$template": "Я ${ru.gs(c,\"был\",\"была\")} той ночью не там, где ${ru.gs(c,\"сказал\",\"сказала\")}. Но это совсем не то, что вы —"
+        }
+      ]
+    },
+    "nobodyWasMeantTo": {
+      "$args": [],
+      "$value": [
+        "Nobody was meant to see us— I mean, nobody saw anything.",
+        "Нас никто не должен был видеть — то есть никто ничего не видел."
+      ]
+    },
+    "ifTheOthersFound": {
+      "$args": [],
+      "$value": ["If the others found out what I— No. Leave it, Doctor.", "Если бы остальные узнали, что я — Нет. Оставьте, доктор."]
+    },
+    "youHaveNoIdea": {
+      "$args": [],
+      "$value": [
+        "You have no idea what I have had to keep from all of them—",
+        "Вы понятия не имеете, что мне приходится от всех скрывать —"
+      ]
+    },
+    "stopsMidSentenceAnd": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} stops mid-sentence and looks at you very steadily."
+        },
+        {
+          "$template": "${ru.c(c)} обрывает фразу на полуслове и смотрит на вас очень пристально."
+        }
+      ]
+    },
+    "answersSmoothlyAndYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} answers smoothly, and you notice the answer is about somebody else."
+        },
+        {
+          "$template": "${ru.c(c)} отвечает гладко — и вы замечаете, что ответ касается кого-то другого."
+        }
+      ]
+    },
+    "iLikedCraneRemember": {
+      "$args": [],
+      "$value": [
+        "I liked Crane. Remember that before you ask me again.",
+        "Мне нравился Крейн. Вспомните об этом, прежде чем спрашивать снова."
+      ]
+    },
+    "askMeAgainIn": {
+      "$args": [],
+      "$value": [
+        "Ask me again in that tone, Doctor, and you can dig your own trench.",
+        "Спросите ещё раз таким тоном, доктор, — и будете копать свою траншею сами."
+      ]
+    },
+    "thereWasNoTrust": {
+      "$args": [],
+      "$value": ["There was no trust left between you to lose.", "Терять между вами уже нечего."]
+    },
+    "somehowItDoesNot": {
+      "$args": [],
+      "$value": [
+        "Somehow it does not seem to have cost you anything between you. This time.",
+        "Как ни странно, на ваших отношениях это, кажется, не сказалось. На этот раз."
+      ]
+    },
+    "suspicionsOrDreams": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${capS(c.pp)} suspicions, or ${c.pp} dreams"
+        },
+        "Подозрения — или сны"
+      ]
+    },
+    "ifThereWereI": {
+      "$args": ["c"],
+      "$value": [
+        "If there were, I would not tell you, Doctor.",
+        {
+          "$template": "Будь здесь такой человек — вам бы я не ${ru.gs(c,\"сказал\",\"сказала\")}, доктор."
+        }
+      ]
+    },
+    "iDreamtOfThe": {
+      "$args": ["d"],
+      "$value": [
+        {
+          "$js": "\"I dreamt of the seven gates. \"+dreamEn(d.t,d.cult,d.veil)"
+        },
+        {
+          "$js": "\"Мне снились семь врат. \"+dreamRu(d.t,d.cult,d.veil)"
+        }
+      ]
+    },
+    "youWantToKnow": {
+      "$args": [],
+      "$value": ["You want to know whom I distrust? Very well. ", "Хотите знать, кому я не доверяю? Хорошо. "]
+    },
+    "iWillNotPut": {
+      "$args": [],
+      "$value": [
+        "I will not put a name to it without proof, Doctor. I am sorry.",
+        "Без доказательств я никого не назову, доктор. Простите."
+      ]
+    },
+    "iDoNotWatch": {
+      "$args": [],
+      "$value": ["I do not watch other people. I find them tiring.", "Я не слежу за другими людьми. Они меня утомляют."]
+    },
+    "knowsTheNamesBehind": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${EP.He(c)} knows the names behind the titles. Unless ${c.p} lies"
+        },
+        {
+          "$template": "${ru.gs(c,\"Он\",\"Она\")} знает, чьи это титулы. Если не лжёт"
+        }
+      ]
+    },
+    "whatDoesMeanThe": {
+      "$args": ["e"],
+      "$value": [
+        {
+          "$template": "What does ‘${ttEn(e)}’ mean? The title keeps turning up in the tablets."
+        },
+        {
+          "$template": "Что значит „${ttRu(e)}“? Этот титул всё время попадается в табличках."
+        }
+      ]
+    },
+    "lookItUpYourself": {
+      "$args": [],
+      "$value": ["Look it up yourself, Doctor. I am not your dictionary.", "Посмотрите сами, доктор. Я вам не словарь."]
+    },
+    "betweenTheTwoOf": {
+      "$args": [],
+      "$value": ["Between the two of you, trust is too thin for favours.", "Между вами слишком мало доверия для одолжений."]
+    },
+    "itIsNotA": {
+      "$args": [],
+      "$value": ["It is not a good day to ask favours of anyone.", "Сегодня не тот день, чтобы просить кого-то об одолжении."]
+    },
+    "thatIsTheKutha": {
+      "$args": ["Title", "G", "TitleRu", "Gr"],
+      "$value": [
+        {
+          "$template": "‘${Title}’? That is ${G}. The Kutha hymns use the title constantly; one grows tired of it."
+        },
+        {
+          "$template": "„${TitleRu}“? Это ${Gr()}. В кутских гимнах этот титул встречается постоянно, от него даже устаёшь."
+        }
+      ]
+    },
+    "obviouslyIsTheCommonest": {
+      "$args": ["G", "Title", "Gr", "TitleRu"],
+      "$value": [
+        {
+          "$template": "${G}. Obviously. ‘${Title}’ is the commonest title for ${G} in the late texts."
+        },
+        {
+          "$template": "${Gr()}. Разумеется. „${TitleRu}“ — самый частый титул ${Gr(\"g\")} в поздних текстах."
+        }
+      ]
+    },
+    "myGrandmotherStillSaid": {
+      "$args": ["Title", "G", "TitleRu", "Gr"],
+      "$value": [
+        {
+          "$template": "My grandmother still said it. ‘${Title}’ is ${G}. We say it quietly, and never near water."
+        },
+        {
+          "$template": "Моя бабушка ещё так говорила. „${TitleRu}“ — это ${Gr()}. Мы произносим это тихо и никогда — у воды."
+        }
+      ]
+    },
+    "youCopyItInto": {
+      "$args": [],
+      "$value": ["You copy it into your notebook, under Omens.", "Вы записываете это в книжку, во вкладку «Знамения»."]
+    },
+    "aDreamerAWatcher": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "A Dreamer, a Watcher, a thief: which is ${c.p}?"
+        },
+        "Сновидец, страж, вор: кто из них этот человек?"
+      ]
+    }
+  },
+  "anOldCharmFromTheTell": {
+    "$call": "bi",
+    "$args": ["An old charm from the tell", "Древний амулет с холма"]
+  },
+  "aramaicFarYoungerThanTheRest": {
+    "$call": "bi",
+    "$args": ["Aramaic, far younger than the rest", "Арамейская, куда моложе прочих находок"]
+  },
+  "clayNoOneHasReadYet": {
+    "$call": "bi",
+    "$args": ["Clay no one has read yet", "Глина, которую ещё никто не прочёл"]
+  },
+  "fromYourNotebook": {
+    "$call": "bi",
+    "$args": ["From your notebook", "Из вашей записной книжки"]
+  },
+  "betweenOurselves": {
+    "$call": "bi",
+    "$args": ["Between ourselves: ", "Между нами: "]
+  },
+  "makeConversation": {
+    "$call": "bi",
+    "$args": ["Make conversation", "Завести разговор"]
+  },
+  "workHabits": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${capS(c.pp)} work, ${c.pp} habits"
+      },
+      "О работе, о привычках"
+    ]
+  },
+  "askWhereTheyWereLastNight": {
+    "$call": "bi",
+    "$args": ["Ask where they were last night", "Спросить про прошлую ночь"]
+  },
+  "showDA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Show ${c.short} ${th[0].name}"
+      },
+      {
+        "$template": "Показать ${ru.c(c,\"d\")} ${showRu(th[0],\"a\")}"
+      }
+    ]
+  },
+  "showSomethingD": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Show ${c.short} something"
+      },
+      {
+        "$template": "Показать ${ru.c(c,\"d\")} что-нибудь"
+      }
+    ]
+  },
+  "watchHowTakesIt": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Watch how ${c.p} takes it"
+      },
+      {
+        "$template": "Посмотреть, как ${ru.gs(c,\"он\",\"она\")} это примет"
+      }
+    ]
+  },
+  "themItTheyIt": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$js": "fmt(tn,{...P(c),it:many?\"them\":\"it\",they:many?\"they\":\"it\"})"
+      },
+      {
+        "$js": "fmtR(R(tn),{n:c})"
+      }
+    ]
+  },
+  "confideYourSuspicions": {
+    "$call": "bi",
+    "$args": ["Confide your suspicions", "Поделиться подозрениями"]
+  },
+  "press": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Press ${EP.him(c)}"
+      },
+      {
+        "$js": "ru.gs(c,\"Надавить на него\",\"Надавить на неё\")"
+      }
+    ]
+  },
+  "shakeSomethingLooseCostsTrust": {
+    "$call": "bi",
+    "$args": ["Shake something loose · costs trust", "Вдруг что-то всплывёт · подорвёт доверие"]
+  },
+  "askWhomTheyDistrust": {
+    "$call": "bi",
+    "$args": ["Ask whom they distrust", "Спросить, кому здесь нельзя верить"]
+  },
+  "thereIsNobodyLeftToDistrust": {
+    "$call": "bi",
+    "$args": ["There is nobody left to distrust.", "Не доверять больше некому."]
+  },
+  "askWhatAnOldTitleMeans": {
+    "$call": "bi",
+    "$args": ["Ask what an old title means", "Спросить, что значит древний титул"]
+  },
+  "askAboutCraneSDiary": {
+    "$call": "bi",
+    "$args": ["Ask about Crane’s diary", "Спросить о дневнике Крейна"]
+  },
+  "text": ["непереведённый обломок таблички", "непереведённый обломок таблички"],
+  "text2": ["строка, переписанная с табличек", "строку, переписанную с табличек"],
+  "againNoNotTodayDoctor": [
+    {
+      "$args": [],
+      "$value": {
+        "$js": "TX.dialog.iHaveAnsweredEnough()"
+      }
+    },
+    {
+      "$args": [],
+      "$value": {
+        "$js": "TX.dialog.askSomeoneElseFor()"
+      }
+    },
+    {
+      "$args": [],
+      "$value": ["Again? No. Not today, Doctor.", "Опять? Нет. Не сегодня, доктор."]
+    }
+  ],
+  "text3": "а",
+  "howDareYouIHaveTold": [
+    {
+      "$args": [],
+      "$value": ["How dare you.", "Да как вы смеете."]
+    },
+    {
+      "$args": [],
+      "$value": {
+        "$js": "TX.dialog.iLikedCraneRemember()"
+      }
+    },
+    {
+      "$args": ["c"],
+      "$value": [
+        "I have told you what I know, Doctor.",
+        {
+          "$template": "Я ${ru.gs(c, 'рассказал', 'рассказала')} вам всё, что знаю, доктор."
+        }
+      ]
+    },
+    {
+      "$args": [],
+      "$value": {
+        "$js": "TX.dialog.askMeAgainIn()"
+      }
+    }
+  ]
+}

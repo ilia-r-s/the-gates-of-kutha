@@ -1,0 +1,206 @@
+{
+  "passages": {
+    "youCallTheWhole": {
+      "$args": [],
+      "$value": [
+        "You call the whole camp into the mess tent. Lamps, cigarette smoke, the wireless hissing in the corner. Everyone knows why they are here.",
+        "Вы собираете весь лагерь в столовой палатке. Лампы, табачный дым, шипение радиоприёмника в углу. Все знают, зачем их позвали."
+      ]
+    },
+    "nobodyIsSentAway": {
+      "$args": [],
+      "$value": [
+        "Nobody is sent away on your word alone: the camp must back you, and a thin case, or a doctor it has stopped trusting, it may well refuse. A correct accusation exposes a cultist and sets the rite back. A wrong one sends an innocent away, costs you nerve and lets the rite gain ground. A refused one costs you nerve too, and whoever you accused in vain will not forget it; if they are of the cult, the cult may learn that you are close. Every innocent sent away, and every inquiry the camp refuses, angers it, and for an evening or two after it wants more before it backs you; anger it enough, and it may hold no more. One inquiry per evening.",
+        "Никого не отошлют по одному вашему слову: лагерь должен вас поддержать, а слабым уликам и доктору, которому перестали доверять, он может и отказать. Верное обвинение разоблачает сектанта и отбрасывает обряд назад. Неверное изгоняет невиновного, стоит вам нервов и даёт обряду набрать силу. Отвергнутое тоже стоит нервов, и тот, кого вы обвинили понапрасну, этого не забудет; а если это сектант, секта может понять, что вы близко. Каждый изгнанный невиновный и каждое дознание, которое лагерь отверг, его злят, и вечер-другой после этого ему нужно больше, чтобы вас поддержать; разозлите его довольно — и дознаний может больше не быть. Одно дознание за вечер."
+      ]
+    },
+    "underQuestioningBreaksIn": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>Under questioning, ${c.short} breaks. In ${c.pp} kit you find a cylinder seal cut with seven gates, still sticky with bitumen. ${c.short} is taken to Hillah under guard, laughing all the way to the lorry.</p>"
+        },
+        {
+          "$template": "<p>Под градом вопросов ${ru.c(c)} не выдерживает. В ${ru.gs(c,\"его\",\"её\")} вещах находится цилиндрическая печать с вырезанными на ней семью вратами, ещё липкая от битума. ${ru.c(c,\"a\")} под конвоем увозят в Хиллу, и всю дорогу до грузовика слышен смех.</p>"
+        }
+      ]
+    },
+    "beforeTheLorryPulls": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>Before the lorry pulls away, ${c.short} shouts a line of the old liturgy at you across the yard:</p>"
+        },
+        {
+          "$template": "<p>Когда грузовик уже трогается, ${ru.c(c)} выкрикивает вам через двор строку древней литургии:</p>"
+        }
+      ]
+    },
+    "theWholeCampComes": {
+      "$args": [],
+      "$value": [
+        "The whole camp comes out into the yard to watch the lorry go.",
+        "Весь лагерь выходит во двор посмотреть, как уходит грузовик."
+      ]
+    },
+    "theLorryIsNot": {
+      "$args": [],
+      "$value": [
+        "The lorry is not out of sight when the ground under the camp gives a long shudder, like a sleeper turning over. At the foot of E-meslam the scorched circle splits open. The rite has come too far to die with its priests.",
+        "Грузовик ещё не скрылся из виду, когда земля под лагерем долго содрогается — как спящий, что переворачивается на другой бок. У подножия Э-меслама выжженный круг раскалывается. Обряд зашёл слишком далеко, чтобы умереть вместе со своими жрецами."
+      ]
+    },
+    "byEveningTheScorched": {
+      "$args": [],
+      "$value": [
+        "By evening the scorched circle at the foot of E-meslam has begun to cool.",
+        "К вечеру выжженный круг у подножия Э-меслама начинает остывать."
+      ]
+    },
+    "byNoonTheScorched": {
+      "$args": [],
+      "$value": [
+        "By noon the scorched circle at the foot of E-meslam has begun to cool.",
+        "К полудню выжженный круг у подножия Э-меслама начинает остывать."
+      ]
+    },
+    "stoodWithYouAnd": {
+      "$args": ["ids", "many"],
+      "$value": [
+        {
+          "$template": "${nameList(ids)} stood with you, and ${many?\"trust\":\"trusts\"} you more now"
+        },
+        {
+          "$template": "${nameListRu(ids)}: ${many?\"были\":ru.gs(C(ids[0]),\"был\",\"была\")} на вашей стороне и теперь ${many?\"доверяют\":\"доверяет\"} вам больше"
+        }
+      ]
+    },
+    "isNoCultistOnly": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} is no cultist, only a thief. Under ${c.pp} bedroll are six tablets bound for the Baghdad market. ${c.short} is sent away. Somewhere on the mound, someone is pleased.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} — ${ru.gs(c,\"не сектант, а всего лишь вор\",\"не сектантка, а всего лишь воровка\")}. Под ${ru.gs(c,\"его\",\"её\")} походной постелью шесть табличек, приготовленных для багдадского рынка. ${ru.c(c,\"a\")} отсылают прочь. Где-то на холме кто-то доволен.</p>"
+        }
+      ]
+    },
+    "answersEveryQuestionAnd": {
+      "$args": ["c", "watched"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} answers every question, and every answer is true. By the time you understand that, it is too late. ${c.short} leaves the dig in disgrace${watched?\", and fewer people will meet your eye\":\"\"}.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} отвечает на каждый вопрос, и каждый ответ правдив. Когда вы это понимаете, уже слишком поздно. ${ru.c(c)} с позором покидает раскопки${watched?\", а вам теперь всё реже смотрят в глаза\":\"\"}.</p>"
+        }
+      ]
+    },
+    "wasSentAwayAfter": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} was sent away after your inquiry."
+        },
+        {
+          "$template": "${capS(ru.cf(c))}: ${ru.gs(c,\"отослан\",\"отослана\")} после вашего дознания."
+        }
+      ]
+    },
+    "beforeTheLorryPulls2": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Before the lorry pulls away, ${c.short} turns to you. “"
+        },
+        {
+          "$template": "Перед тем как грузовик трогается, ${ru.c(c)} оборачивается к вам. «"
+        }
+      ]
+    },
+    "youWantAMurderer": {
+      "$args": [],
+      "$value": ["You want a murderer, Doctor? Then listen. ", "Вам нужен убийца, доктор? Тогда слушайте. "]
+    }
+  },
+  "youMarkedThemASuspect": {
+    "$call": "bi",
+    "$args": ["You marked them a suspect", "У вас на подозрении"]
+  },
+  "youMarkedThemAnAlly": {
+    "$call": "bi",
+    "$args": [
+      "You marked them an ally",
+      {
+        "$js": "ru.gs(c,\"Вы считаете его союзником\",\"Вы считаете её союзницей\")"
+      }
+    ]
+  },
+  "accuseA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Accuse ${c.name}"
+      },
+      {
+        "$template": "Обвинить ${ru.cf(c,\"a\")}"
+      }
+    ]
+  },
+  "thinkBetterOfIt": {
+    "$call": "bi",
+    "$args": ["Think better of it", "Передумать"]
+  },
+  "anInquiry": {
+    "$call": "bi",
+    "$args": ["An inquiry", "Дознание"]
+  },
+  "theInquiry": {
+    "$call": "bi",
+    "$args": ["The inquiry", "Дознание"]
+  },
+  "theInquiry2": {
+    "$call": "bi",
+    "$args": ["The inquiry", "Дознание"]
+  },
+  "wasExposedAsACultist": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${c.name} was exposed as a cultist."
+      },
+      {
+        "$template": "${capS(ru.cf(c))}: ${ru.gs(c,\"разоблачён как сектант\",\"разоблачена как сектантка\")}."
+      }
+    ]
+  },
+  "dayTheInquiry": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Day ${S.day} · The inquiry"
+      },
+      {
+        "$template": "День ${S.day} · Дознание"
+      }
+    ]
+  },
+  "theGateIsOpening": {
+    "$call": "bi",
+    "$args": ["The gate is opening", "Врата отворяются"]
+  },
+  "goToTheZiggurat": {
+    "$call": "bi",
+    "$args": ["Go to the ziggurat", "Идти к зиккурату"]
+  },
+  "theLastOfThem": {
+    "$call": "bi",
+    "$args": [
+      "The last of them",
+      {
+        "$js": "ru.gs(c,\"Последний из них\",\"Последняя из них\")"
+      }
+    ]
+  }
+}

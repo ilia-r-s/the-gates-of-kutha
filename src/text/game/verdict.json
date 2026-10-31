@@ -1,0 +1,211 @@
+{
+  "passages": {
+    "theCampPatienceIs": {
+      "$args": [],
+      "$value": [
+        "The camp’s patience is wearing thin. Send the wrong person away now, or ask too much of them, and there may be no more inquiries.",
+        "Терпение лагеря на исходе. Отошлите сейчас не того или потребуйте от них слишком многого — и дознаний может больше не быть."
+      ]
+    },
+    "theCampIsRestless": {
+      "$args": [],
+      "$value": [
+        "The camp is restless. They came, but not all of them meet your eye.",
+        "Лагерь неспокоен. Пришли все, но в глаза вам смотрят не все."
+      ]
+    },
+    "theyComeSlowlyAnd": {
+      "$args": [],
+      "$value": [
+        "They come slowly, and someone at the back says what the rest are thinking: another one, so soon?",
+        "Собираются нехотя, и кто-то сзади говорит вслух то, что думают остальные: опять, так скоро?"
+      ]
+    },
+    "youLayOutYour": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "You lay out your case. There is nobody left at the dig to raise a hand, and it falls to the police corporal from Hillah to decide.${v.passed?\" He takes your word for it.\":\"\"}"
+        },
+        {
+          "$template": "Вы излагаете всё, что у вас есть. Поднять руку на раскопе уже некому, и решать приходится капралу из Хиллы.${v.passed?\" Он верит вам на слово.\":\"\"}"
+        }
+      ]
+    },
+    "youLayOutYour2": {
+      "$args": ["en", "rus"],
+      "$value": [
+        {
+          "$js": "\"You lay out your case, and the camp gives its answer. \"+en.filter(Boolean).join(\" \")"
+        },
+        {
+          "$js": "\"Вы излагаете всё, что у вас есть, и лагерь даёт ответ. \"+rus.filter(Boolean).join(\" \")"
+        }
+      ]
+    },
+    "atLastBreaksThe": {
+      "$args": ["sp"],
+      "$value": [
+        {
+          "$template": "At last ${sp.short} breaks the silence:"
+        },
+        {
+          "$template": "Наконец ${ru.c(sp)} нарушает молчание:"
+        }
+      ]
+    },
+    "youSentAwayOn": {
+      "$args": ["w"],
+      "$value": [
+        {
+          "$template": "“You sent ${w.short} away on less. Not again, Doctor.”"
+        },
+        {
+          "$template": "«${capS(ru.c(w,\"a\"))} вы отослали и с меньшим. Больше — нет, доктор»."
+        }
+      ]
+    },
+    "youHaveNothingOn": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "“You have nothing on ${x.short}, Doctor. Nothing any of us can see.”"
+        },
+        {
+          "$template": "«У вас ничего нет против ${ru.c(x,\"g\")}, доктор. Ничего, что видели бы мы»."
+        }
+      ]
+    },
+    "notOnThatDoctor": {
+      "$args": [],
+      "$value": ["“Not on that, Doctor. Not on what you have shown us.”", "«Не на этом основании, доктор. Не с тем, что вы нам показали»."]
+    },
+    "weHaveBuriedEnough": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "“We have buried enough this week without burying ${x.short}’s good name as well.”"
+        },
+        {
+          "$template": "«Мы и так довольно хоронили на этой неделе, чтобы хоронить ещё и доброе имя ${ru.c(x,\"g\")}»."
+        }
+      ]
+    },
+    "heWillNotTake": {
+      "$args": [],
+      "$value": ["He will not take anyone away on your word alone.", "Никого не станет он увозить с одних ваших слов."]
+    },
+    "staysAtTheDig": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "${x.short} stays at the dig, and seems, strangely, to bear you no grudge for it."
+        },
+        {
+          "$template": "${ru.c(x)} остаётся в лагере — и, как ни странно, будто бы не держит на вас зла."
+        }
+      ]
+    },
+    "staysAtTheDig2": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "${x.short} stays at the dig. It will be some time before ${x.p} can forgive you this."
+        },
+        {
+          "$template": "${ru.c(x)} остаётся в лагере. Пройдёт немало времени, прежде чем ${ru.gs(x,\"он\",\"она\")} сможет вам это простить."
+        }
+      ]
+    },
+    "staysAtTheDig3": {
+      "$args": ["x"],
+      "$value": [
+        {
+          "$template": "${x.short} stays at the dig, and will not forgive you this."
+        },
+        {
+          "$template": "${ru.c(x)} остаётся в лагере — и этого вам не простит."
+        }
+      ]
+    },
+    "atBreakfastToYour": {
+      "$args": ["hm"],
+      "$value": [
+        {
+          "$template": "At breakfast ${hm?\"Hamid comes\":\"the oldest of the pickmen comes\"} to your tent, cap in hand. The men have talked again in the night: if you have something to put before them, they will hear it."
+        },
+        {
+          "$template": "За завтраком к вашей палатке приходит ${hm?\"Хамид\":\"самый старый из землекопов\"}, комкая в руках шапку. Ночью люди снова всё обсудили: если вам есть что им сказать, они выслушают."
+        }
+      ]
+    },
+    "tomorrowTheySayThe": {
+      "$args": [],
+      "$value": [" Tomorrow, they say, the diggers will not dig.", " А завтра, говорят они, землекопы не выйдут на работу."]
+    },
+    "thatNightComesTo": {
+      "$args": ["sp", "strike"],
+      "$value": [
+        {
+          "$template": "That night ${sp.short} comes to your tent, and the others behind ${EP.him(sp)}. They have talked it over: there will be no more inquiries.${strike[0]}"
+        },
+        {
+          "$template": "Ночью к вашей палатке приходит ${ru.c(sp)}, а за ${ru.gs(sp,\"ним\",\"ней\")} — остальные. Они всё обсудили: больше никаких дознаний.${strike[1]}"
+        }
+      ]
+    },
+    "thatNightTheDiggers": {
+      "$args": ["last"],
+      "$value": [
+        {
+          "$template": "That night the diggers send word to your tent: there will be no more inquiries${last?\"\":\", and tomorrow they will not dig\"}."
+        },
+        {
+          "$template": "Ночью землекопы передают вам: больше никаких дознаний${last?\"\":\", а завтра они не выйдут на работу\"}."
+        }
+      ]
+    },
+    "noMoreInquiries": {
+      "$args": ["last"],
+      "$value": [
+        {
+          "$template": "No more inquiries${last?\"\":\" · the diggers mean to strike tomorrow\"}"
+        },
+        {
+          "$template": "Больше никаких дознаний${last?\"\":\" · завтра землекопы грозят не выйти на работу\"}"
+        }
+      ]
+    }
+  },
+  "theCampWillNotDoIt": {
+    "$call": "bi",
+    "$args": ["The camp will not do it.", "Лагерь на это не пойдёт."]
+  },
+  "text": [
+    {
+      "$js": "v.back.length ? `На вашей стороне: ${nr(v.back)}.` : 'На вашу сторону не встаёт никто.'"
+    },
+    {
+      "$js": "v.against.length ? `Против: ${nr(v.against)}.` : ''"
+    },
+    {
+      "$js": "v.silent.length ? `${v.silent.length > 1 ? 'Молчат' : 'Молчит'}: ${nr(v.silent)}.` : ''"
+    }
+  ],
+  "saysItForAllOfThem": [
+    {
+      "$template": "${sp.short} says it for all of them:"
+    },
+    {
+      "$template": "${ru.c(sp)} говорит за всех:"
+    }
+  ],
+  "saysItPlainly": [
+    {
+      "$template": "${sp.short} says it plainly:"
+    },
+    {
+      "$template": "${ru.c(sp)} говорит прямо:"
+    }
+  ]
+}

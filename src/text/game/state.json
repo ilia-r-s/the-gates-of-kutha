@@ -1,0 +1,29 @@
+{
+  "dayOf": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Day ${S.day} of ${RULES.start.days} · ${SLOT_NAMES[S.slot]}"
+      },
+      {
+        "$js": "ru.dayStamp()"
+      }
+    ]
+  },
+  "yourNerveSteadiesAGreatDeal": {
+    "$call": "bi",
+    "$args": ["Your nerve steadies a great deal", "Нервы заметно успокаиваются"]
+  },
+  "yourNerveSteadies": {
+    "$call": "bi",
+    "$args": ["Your nerve steadies", "Нервы успокаиваются"]
+  },
+  "yourNerveSteadiesALittle": {
+    "$call": "bi",
+    "$args": ["Your nerve steadies a little", "Нервы немного успокаиваются"]
+  },
+  "text": "Нервы сильно сдают",
+  "text2": "Нервы сдают",
+  "text3": "Вы тяжело ранены",
+  "text4": "Вы ранены"
+}

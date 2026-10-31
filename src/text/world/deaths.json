@@ -1,0 +1,26 @@
+{
+  "passages": {
+    "craneWasFound": {
+      "$args": ["st"],
+      "$value": [
+        {
+          "$template": "Crane was found ${LOCS.ziggurat.at}, ${st[0]}."
+        },
+        {
+          "$template": "Крейна нашли ${R(LOCS.ziggurat.at)}: ${st[1]}."
+        }
+      ]
+    }
+  },
+  "text": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${en}, ${st[0]}.${sg?\" \"+sg[0]:\"\"}"
+      },
+      {
+        "$template": "${rus}: ${st[1]}.${sg?\" \"+sg[1]:\"\"}"
+      }
+    ]
+  }
+}

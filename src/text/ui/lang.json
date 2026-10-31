@@ -1,0 +1,24 @@
+{
+  "CHROME": [
+    ["#nowPlaying", "title", "Now playing", "Сейчас играет"],
+    ["#meters", "aria-label", "Your condition", "Ваше состояние"],
+    [
+      "#map",
+      "aria-label",
+      "Site plan of Tell Ibrahim showing the seven places you can visit",
+      "План Телль-Ибрагима: семь мест, где можно побывать"
+    ],
+    [
+      ".plan figcaption",
+      "twin",
+      "Tell Ibrahim, ancient Kutha · site plan, spring 1926 · initials show who is where",
+      "Телль-Ибрагим, древняя Кута · план раскопа, весна 1926 · инициалы показывают, кто где"
+    ],
+    [".casebook", "aria-label", "Casebook", "Журнал"]
+  ],
+  "text": "Врата Куты",
+  "text2": "Читать по-русски",
+  "text3": "Марлоу",
+  "text4": "Марлоу",
+  "text5": "Русский"
+}

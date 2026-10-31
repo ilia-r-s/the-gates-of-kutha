@@ -1,0 +1,286 @@
+{
+  "passages": {
+    "speaksOfTheNight": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} speaks of the night Crane died as if ${c.p} had been there to see it, then stops, and begins again more carefully."
+        },
+        {
+          "$template": "${ru.c(c)} говорит о ночи, когда погиб Крейн, так, будто ${ru.gs(c,\"видел\",\"видела\")} всё своими глазами, — потом осекается и начинает снова, осторожнее."
+        }
+      ]
+    },
+    "asksWhetherYouHeard": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} asks whether you heard anything crack in the night. You have told no one about the bowl."
+        },
+        {
+          "$template": "${ru.c(c)} спрашивает, не слышали ли вы ночью, как что-то треснуло. О чаше вы не говорили никому."
+        }
+      ]
+    },
+    "asksWhetherYouFound": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} asks whether you found the water under your bed black this morning. You have told no one about the bowl."
+        },
+        {
+          "$template": "${ru.c(c)} спрашивает, не почернела ли к утру вода у вас под кроватью. О чаше вы не говорили никому."
+        }
+      ]
+    },
+    "speaksOfTheNight2": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} speaks of the night at your tent as if ${c.p} had been there to see it, then stops, and begins again more carefully."
+        },
+        {
+          "$template": "${ru.c(c)} говорит о той ночи у вашей палатки так, будто ${ru.gs(c,\"видел\",\"видела\")} всё своими глазами, — потом осекается и начинает снова, осторожнее."
+        }
+      ]
+    },
+    "asksWhetherYouSlept": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} asks whether you slept well, and glances at the place in the tent wall where they came in. You have shown that place to no one."
+        },
+        {
+          "$template": "${ru.c(c)} спрашивает, хорошо ли вы спали, и бросает взгляд на то место в стенке палатки, где они вошли. Это место вы не показывали никому."
+        }
+      ]
+    },
+    "saysItMustHave": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} says it must have happened before three, when the jackals stopped. Nobody has said when it happened."
+        },
+        {
+          "$template": "${ru.c(c)} говорит, что это, должно быть, случилось до трёх, когда смолкли шакалы. Никто не говорил, когда это случилось."
+        }
+      ]
+    },
+    "wondersAloudWhyAnyone": {
+      "$args": ["c", "v"],
+      "$value": [
+        {
+          "$template": "${c.short} wonders aloud why anyone would carry ${v.short} so far from the tents. Nobody has said that ${v.short} was carried."
+        },
+        {
+          "$template": "${ru.c(c)} вслух удивляется, зачем было нести ${ru.c(v,\"a\")} так далеко от палаток. Никто не говорил, что ${ru.c(v,\"a\")} несли."
+        }
+      ]
+    },
+    "saysItWasThe": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} says it was the dogs at the village end that started it, and then stops. Nobody has said which dogs."
+        },
+        {
+          "$template": "${ru.c(c)} говорит, что первыми залаяли собаки со стороны деревни, — и осекается. Никто не говорил, какие собаки."
+        }
+      ]
+    },
+    "asksWhetherAnyoneHas": {
+      "$args": ["c", "v"],
+      "$value": [
+        {
+          "$template": "${c.short} asks whether anyone has seen to the loose pegs at the back of ${v.short}’s tent, and then looks as if ${c.p} wishes ${c.p} had not asked. Nobody has said how anyone got in."
+        },
+        {
+          "$template": "${ru.c(c)} спрашивает, поправил ли кто-нибудь расшатанные колышки у задней стенки палатки ${ru.c(v,\"g\")}, — и тут же жалеет, что ${ru.gs(c,\"спросил\",\"спросила\")}. Никто не говорил, как туда проникли."
+        }
+      ]
+    },
+    "saysWhoeverDroveThem": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} says whoever drove them off last night carried a lamp shuttered under a coat, and then stops. Nobody has said what the watcher carried."
+        },
+        {
+          "$template": "${ru.c(c)} говорит, что у того, кто прогнал их прошлой ночью, лампа была прикрыта полой, — и осекается. Никто не говорил, что было у незримого стража."
+        }
+      ]
+    },
+    "asksWhoItWas": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} asks who it was that drove them off last night, and then looks as if ${c.p} wishes ${c.p} had not asked."
+        },
+        {
+          "$template": "${ru.c(c)} спрашивает, кто же прогнал их прошлой ночью, — и тут же жалеет, что ${ru.gs(c,\"спросил\",\"спросила\")}."
+        }
+      ]
+    },
+    "isAlreadyLacingUp": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} is already lacing up ${c.pp} boots. “You are not going down there alone, Doctor.”"
+        },
+        {
+          "$template": "${ru.c(c)} уже зашнуровывает ботинки. «Я не пущу вас туда в одиночку, доктор»."
+        }
+      ]
+    },
+    "hasALampLit": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} has a lamp lit before you can ask. “I’m coming. Don’t argue.”"
+        },
+        {
+          "$template": "${ru.c(c)} зажигает лампу прежде, чем вы успеваете попросить. «Я иду с вами. И не спорьте»."
+        }
+      ]
+    },
+    "stepsForwardTwoLamps": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} steps forward. “Two lamps are better than one, Doctor. Let me come.”"
+        },
+        {
+          "$template": "${ru.c(c)} выходит вперёд. «Две лампы лучше одной, доктор. Возьмите меня»."
+        }
+      ]
+    },
+    "willNotComeNot": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} will not come. “Not with you, Doctor. Not down there.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} отказывается идти. «Только не с вами, доктор. Не туда».</p>"
+        }
+      ]
+    },
+    "willNotComeNot2": {
+      "$args": ["c", "w"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} will not come. “Not with ${w.foe.short} at my back, Doctor.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} отказывается идти. «Только не с ${ru.c(w.foe,\"i\")} за спиной, доктор».</p>"
+        }
+      ]
+    },
+    "looksAtTheStair": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} looks at the stair and goes grey. “I’m sorry, Doctor. Not down there. Not for anything.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} смотрит на лестницу и сереет лицом. «Простите, доктор. Только не туда. Ни за что на свете».</p>"
+        }
+      ]
+    },
+    "willNotComeI": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} will not come. “I can’t. God forgive me, I can’t.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} отказывается идти. «Не могу. Прости меня, Господи, — не могу».</p>"
+        }
+      ]
+    },
+    "looksAtYouA": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} looks at you a long moment. “I don’t like you, Doctor. But I’ll not let you go down there alone.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} долго смотрит на вас. «Вы мне не нравитесь, доктор. Но в одиночку я вас туда не отпущу».</p>"
+        }
+      ]
+    },
+    "looksAtAndSets": {
+      "$args": ["c", "w"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} looks at ${w.foe.short} and sets ${c.pp} jaw. “Very well. But I walk behind ${EP.him(w.foe)}, not in front.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} смотрит на ${ru.c(w.foe,\"a\")} и стискивает зубы. «Хорошо. Но я пойду позади ${ru.gs(w.foe,\"него\",\"неё\")}, а не впереди».</p>"
+        }
+      ]
+    },
+    "stopsAtTheEdge": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>${t.short} stops at the edge of the light, and looks at the circle a long time, and then at you. ${capS(t.p)} does not go to them.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(t)} останавливается на границе света и долго смотрит на круг, а потом на вас — и не идёт к ним.</p>"
+        }
+      ]
+    },
+    "behindYouTheSeventh": {
+      "$args": [],
+      "$value": [
+        "<p class=\"horror\">Behind you the seventh gate swings shut. Nobody is holding it.</p>",
+        "<p class=\"horror\">Позади вас захлопываются седьмые врата. Никто их не держит.</p>"
+      ]
+    },
+    "walksPastYouInto": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">${t.short} walks past you into the light and takes the place at the head of the circle, and the chanting rises to meet ${EP.him(t)}. The rite could not be finished without its hierophant. You brought ${EP.him(t)} down yourself.</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">${ru.c(t)} проходит мимо вас в круг света и встаёт во главе круга, и пение поднимается ${ru.gs(t,\"ему\",\"ей\")} навстречу. Без своего иерофанта обряд не мог завершиться. Вы сами ${ru.gs(t,\"привели его\",\"привели её\")} сюда.</p>"
+        }
+      ]
+    },
+    "walksPastYouInto2": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">${t.short} walks past you into the light and takes a place in the circle. “I did say I would come down with you, Doctor.”</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">${ru.c(t)} проходит мимо вас в круг света и занимает место в круге. «Я ведь ${ru.gs(t,\"обещал\",\"обещала\")} спуститься с вами, доктор».</p>"
+        }
+      ]
+    },
+    "walksPastYouInto3": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">${t.short} walks past you into the light and takes a place in the circle. “You did ask me to come down with you, Doctor.”</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">${ru.c(t)} проходит мимо вас в круг света и занимает место в круге. «Вы ведь сами позвали меня с собой, доктор».</p>"
+        }
+      ]
+    },
+    "youReachForAnd": {
+      "$args": ["burnt", "thief"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">You reach for ${theItem(burnt)}, and your hand closes on nothing. Across the circle ${thief.short} holds ${V(burnt,\"it\",\"them\")} up for you to see, and lets ${V(burnt,\"it\",\"them\")} fall into the brazier.</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">Вы тянетесь за ${ru.item(burnt,\"i\")} — и рука сжимает пустоту. Через круг ${ru.c(thief)} поднимает ${ru.ig(burnt,\"его\",\"её\",\"его\",\"их\")}, чтобы вы видели, и роняет в жаровню.</p>"
+        }
+      ]
+    }
+  }
+}

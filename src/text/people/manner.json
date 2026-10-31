@@ -1,0 +1,59 @@
+{
+  "passages": {
+    "walksYouAsFar": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} walks you as far as the light railway, talking about nothing in particular."
+        },
+        {
+          "$template": "${ru.c(c)} провожает вас до узкоколейки, болтая о пустяках."
+        }
+      ]
+    },
+    "pressesATwistOf": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} presses a twist of dates into your hand for the road."
+        },
+        {
+          "$template": "${ru.c(c)} суёт вам в руку кулёк фиников — на дорогу."
+        }
+      ]
+    },
+    "liftsAHandAs": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} lifts a hand as you go, and keeps it raised a moment longer than ${c.p} needs to."
+        },
+        {
+          "$template": "${ru.c(c)} поднимает руку вам вслед и не опускает её чуть дольше, чем нужно."
+        }
+      ]
+    },
+    "hasTurnedBackTo": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.short} has turned back to ${c.pp} work before you are out of earshot."
+        },
+        {
+          "$template": "${ru.c(c)} возвращается к работе, не дожидаясь, пока вы отойдёте."
+        }
+      ]
+    }
+  },
+  "doesNotWatchYouGo": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${c.short} does not watch you go."
+      },
+      {
+        "$template": "${ru.c(c)} не смотрит вам вслед."
+      }
+    ]
+  }
+}

@@ -1,0 +1,766 @@
+{
+  "passages": {
+    "cult": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${C(t.from).short} ${t.verdict===\"cult\"?\"dreamt guilty:\":\"dreamt clean:\"} <b>${C(t.about).short}</b>"
+        },
+        {
+          "$template": "${ru.c(t.from,\"d\")} приснилось, что ${t.verdict===\"cult\"?ru.gs(t.about,\"виновен\",\"виновна\"):ru.gs(t.about,\"невиновен\",\"невиновна\")} <b>${ru.c(t.about)}</b>"
+        }
+      ]
+    },
+    "veiled": {
+      "$js": "t=>{const[v,cat]=t.verdict.split(\":\"),clue=TRAITS[cat].vals[C(t.about).traits[cat]].clue\n;return[`${C(t.from).short} ${v===\"cult\"?\"dreamt someone guilty\":\"dreamt someone clean\"}, the face unseen: <b>${clue}</b>`,`${ru.c(t.from,\"d\")} приснилось, что кто-то ${v===\"cult\"?\"виновен\":\"невиновен\"}; лица не разглядеть: <b>${R(clue)}</b>`]}"
+    },
+    "distrusts": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "${C(t.from).short} distrusts <b>${C(t.about).short}</b>"
+        },
+        {
+          "$template": "${ru.c(t.from)} не доверяет <b>${ru.c(t.about,\"d\")}</b>"
+        }
+      ]
+    },
+    "flinchedAtSomethingFrom": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} flinched at something from the tell"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"вздрогнул\",\"вздрогнула\")} при виде находки"
+        }
+      ]
+    },
+    "weighedAFindLike": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} weighed a find like a dealer"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"приценивался\",\"приценивалась\")} к находке, как торговец"
+        }
+      ]
+    },
+    "flinchedAtALine": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} flinched at a line from the tablets"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"вздрогнул\",\"вздрогнула\")} от строки с табличек"
+        }
+      ]
+    },
+    "askedWhatTheTablet": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} asked what the tablet would fetch"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"спросил\",\"спросила\")}, сколько дадут за табличку"
+        }
+      ]
+    },
+    "readALineFrom": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} read a line from the tablets calmly"
+        },
+        {
+          "$template": "${ru.c(a)} спокойно ${ru.gs(a,\"прочёл\",\"прочла\")} строку с табличек"
+        }
+      ]
+    },
+    "letSomethingSlipWhen": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} let something slip when pressed"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"проговорился\",\"проговорилась\")}, когда на ${ru.gs(a,\"него\",\"неё\")} надавили"
+        }
+      ]
+    },
+    "knewSomethingOfA": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} knew something of a night that nobody had told"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"знал\",\"знала\")} о ночи то, чего никто не рассказывал"
+        }
+      ]
+    },
+    "wasAtYourTent": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} was at your tent in the night, meaning you harm"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"побывал\",\"побывала\")} ночью у вашей палатки, желая вам зла"
+        }
+      ]
+    },
+    "sworeToWatchYour": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "${a.short} swore to watch your tent, and slept"
+        },
+        {
+          "$template": "${ru.c(a)} ${ru.gs(a,\"клялся\",\"клялась\")} стеречь вашу палатку — и ${ru.gs(a,\"проспал\",\"проспала\")}"
+        }
+      ]
+    },
+    "saysAndAreThick": {
+      "$args": ["f", "a", "b", "t"],
+      "$value": [
+        {
+          "$template": "${f} says ${a} and ${C(b).short} are thick as thieves"
+        },
+        {
+          "$template": "${ru.c(t.from)}: ${ru.c(t.about)} и ${ru.c(b)} — не разлей вода"
+        }
+      ]
+    },
+    "saysCannotBear": {
+      "$args": ["f", "a", "b", "t"],
+      "$value": [
+        {
+          "$template": "${f} says ${a} cannot bear ${C(b).short}"
+        },
+        {
+          "$template": "${ru.c(t.from)}: ${ru.c(t.about)} терпеть не может ${ru.c(b,\"a\")}"
+        }
+      ]
+    },
+    "saysSellsTabletsOn": {
+      "$args": ["f", "a", "t"],
+      "$value": [
+        {
+          "$template": "${f} says ${a} sells tablets on the side"
+        },
+        {
+          "$template": "${ru.c(t.from)}: ${ru.c(t.about)} приторговывает табличками"
+        }
+      ]
+    },
+    "saysIsFondOf": {
+      "$args": ["f", "t", "a"],
+      "$value": [
+        {
+          "$template": "${f} says ${C(t.from).p} is fond of ${a}"
+        },
+        {
+          "$template": "${ru.c(t.from)}: ${ru.gs(t.from,\"привязан\",\"привязана\")} к ${ru.c(t.about,\"d\")}"
+        }
+      ]
+    },
+    "saysCannotStand": {
+      "$args": ["f", "t", "a"],
+      "$value": [
+        {
+          "$template": "${f} says ${C(t.from).p} cannot stand ${a}"
+        },
+        {
+          "$template": "${ru.c(t.from)}: терпеть не может ${ru.c(t.about,\"a\")}"
+        }
+      ]
+    },
+    "speaksOfWithA": {
+      "$args": ["f", "a", "t"],
+      "$value": [
+        {
+          "$template": "${f} speaks of ${a} with a certain warmth"
+        },
+        {
+          "$template": "${ru.c(t.from)} говорит ${ru.ob(t.about)} с особой теплотой"
+        }
+      ]
+    },
+    "saysIsSweetOn": {
+      "$args": ["f", "a", "t"],
+      "$value": [
+        {
+          "$template": "${f} says ${a} is sweet on ${C(t.verdict).short}"
+        },
+        {
+          "$template": "${ru.c(t.from)}: ${ru.c(t.about)} ${ru.gs(t.about,\"неравнодушен\",\"неравнодушна\")} к ${ru.c(t.verdict,\"d\")}"
+        }
+      ]
+    },
+    "gossipsAboutHerNight": {
+      "$args": ["f", "fr"],
+      "$value": [
+        {
+          "$template": "${f} gossips about her night in your tent"
+        },
+        {
+          "$template": "${ru.c(fr)} сплетничает о её ночи в вашей палатке"
+        }
+      ]
+    },
+    "isKindAboutHer": {
+      "$args": ["f", "fr"],
+      "$value": [
+        {
+          "$template": "${f} is kind about her night in your tent"
+        },
+        {
+          "$template": "${ru.c(fr)} по-доброму говорит о её ночи в вашей палатке"
+        }
+      ]
+    },
+    "madeAScandalOf": {
+      "$args": ["f", "a", "t"],
+      "$value": [
+        {
+          "$template": "${f} made a scandal of ${a}’s night in your tent"
+        },
+        {
+          "$template": "${ru.c(t.from)} ${ru.gs(t.from,\"раздул\",\"раздула\")} скандал из ночи, которую ${ru.c(t.about)} провела в вашей палатке"
+        }
+      ]
+    },
+    "spokeKindlyOfNight": {
+      "$args": ["f", "a", "t"],
+      "$value": [
+        {
+          "$template": "${f} spoke kindly of ${a}’s night in your tent"
+        },
+        {
+          "$template": "${ru.c(t.from)} по-доброму ${ru.gs(t.from,\"отозвался\",\"отозвалась\")} о ночи, которую ${ru.c(t.about)} провела в вашей палатке"
+        }
+      ]
+    },
+    "andQuarrelledAtBreakfast": {
+      "$args": ["a", "t"],
+      "$value": [
+        {
+          "$template": "${a} and ${C(t.verdict).short} quarrelled at breakfast"
+        },
+        {
+          "$template": "${ru.c(t.about)} и ${ru.c(t.verdict)} поссорились за завтраком"
+        }
+      ]
+    },
+    "satWithAtThe": {
+      "$args": ["t", "a"],
+      "$value": [
+        {
+          "$template": "Sat with ${C(t.verdict).short} at the feast"
+        },
+        {
+          "$template": "${ru.gs(a,\"Сидел\",\"Сидела\")} рядом с ${ru.c(t.verdict,\"i\")} на пиру"
+        }
+      ]
+    },
+    "andSatTogetherAt": {
+      "$args": ["a", "t"],
+      "$value": [
+        {
+          "$template": "${a} and ${C(t.verdict).short} sat together at the feast"
+        },
+        {
+          "$template": "${ru.c(t.about)} и ${ru.c(t.verdict)} сидели рядом на пиру"
+        }
+      ]
+    },
+    "isAllButSure": {
+      "$args": ["f", "t", "a", "fr"],
+      "$value": [
+        {
+          "$template": "${f} is all but sure ${C(t.from).p} saw ${EP.him(a)} near the scene"
+        },
+        {
+          "$template": "${ru.c(fr)} почти ${ru.gs(fr,\"уверен\",\"уверена\")}, что ${ru.gs(fr,\"видел\",\"видела\")} ${ru.gs(a,\"его\",\"её\")} у места нападения"
+        }
+      ]
+    },
+    "thinksSawNearThe": {
+      "$args": ["f", "t", "a", "fr"],
+      "$value": [
+        {
+          "$template": "${f} thinks ${C(t.from).p} saw ${EP.him(a)} near the scene"
+        },
+        {
+          "$template": "${ru.c(fr)} думает, что ${ru.gs(fr,\"видел\",\"видела\")} ${ru.gs(a,\"его\",\"её\")} у места нападения"
+        }
+      ]
+    }
+  },
+  "dreamtGuiltyD": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} dreamt ${EP.him(a)} guilty"
+      },
+      {
+        "$template": "${ru.c(fr,\"d\")} приснилось: ${ru.gs(a,\"виновен\",\"виновна\")}"
+      }
+    ]
+  },
+  "dreamtCleanD": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} dreamt ${EP.him(a)} clean"
+      },
+      {
+        "$template": "${ru.c(fr,\"d\")} приснилось: ${ru.gs(a,\"невиновен\",\"невиновна\")}"
+      }
+    ]
+  },
+  "distrusts": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} distrusts ${EP.him(a)}"
+      },
+      {
+        "$template": "${ru.c(fr)} ${ru.gs(a,\"ему\",\"ей\")} не доверяет"
+      }
+    ]
+  },
+  "flinchedAtRelics": {
+    "$call": "bi",
+    "$args": [
+      "Flinched at relics",
+      {
+        "$js": "ru.gs(a,\"Вздрогнул при виде находки\",\"Вздрогнула при виде находки\")"
+      }
+    ]
+  },
+  "eyedRelicsLikeADealer": {
+    "$call": "bi",
+    "$args": [
+      "Eyed relics like a dealer",
+      {
+        "$js": "ru.gs(a,\"Приценивался к находке\",\"Приценивалась к находке\")"
+      }
+    ]
+  },
+  "calmAtRelics": {
+    "$call": "bi",
+    "$args": ["Calm at relics", "Находки не тревожат"]
+  },
+  "tookAFindCalmly": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${a.short} took a find calmly"
+      },
+      {
+        "$template": "${ru.c(a)} спокойно ${ru.gs(a,\"отнёсся\",\"отнеслась\")} к находке"
+      }
+    ]
+  },
+  "flinchedAtTheTabletsWords": {
+    "$call": "bi",
+    "$args": [
+      "Flinched at the tablets’ words",
+      {
+        "$js": "ru.gs(a,\"Вздрогнул от слов с табличек\",\"Вздрогнула от слов с табличек\")"
+      }
+    ]
+  },
+  "askedWhatTheTabletWouldFetch": {
+    "$call": "bi",
+    "$args": [
+      "Asked what the tablet would fetch",
+      {
+        "$js": "ru.gs(a,\"Спросил, сколько дадут за табличку\",\"Спросила, сколько дадут за табличку\")"
+      }
+    ]
+  },
+  "calmAtTheTabletsWords": {
+    "$call": "bi",
+    "$args": ["Calm at the tablets’ words", "Слова с табличек не тревожат"]
+  },
+  "letSomethingSlip": {
+    "$call": "bi",
+    "$args": [
+      "Let something slip",
+      {
+        "$js": "ru.gs(a,\"Проговорился\",\"Проговорилась\")"
+      }
+    ]
+  },
+  "knewWhatOnlyTheAttackerCould": {
+    "$call": "bi",
+    "$args": [
+      "Knew what only the attacker could",
+      {
+        "$js": "ru.gs(a,\"Знал то, что знал лишь нападавший\",\"Знала то, что знал лишь нападавший\")"
+      }
+    ]
+  },
+  "aChillWhenSpoke": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "A chill when ${a.p} spoke"
+      },
+      "Холодок при разговоре"
+    ]
+  },
+  "aChillAsSpoke": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "A chill as ${a.short} spoke"
+      },
+      {
+        "$template": "Холодок, пока говорил${ru.gs(a,\"\",\"а\")} ${ru.c(a)}"
+      }
+    ]
+  },
+  "caughtAtYourTentMeaningYou": {
+    "$call": "bi",
+    "$args": [
+      "Caught at your tent, meaning you harm",
+      {
+        "$js": "ru.gs(a,\"Пойман у вашей палатки: хотел вам навредить\",\"Поймана у вашей палатки: хотела вам навредить\")"
+      }
+    ]
+  },
+  "admittedSmuggling": {
+    "$call": "bi",
+    "$args": [
+      "Admitted smuggling",
+      {
+        "$js": "ru.gs(a,\"Признался в контрабанде\",\"Призналась в контрабанде\")"
+      }
+    ]
+  },
+  "claimsToDreamTrue": {
+    "$call": "bi",
+    "$args": ["Claims to dream true", "Говорит, что видит вещие сны"]
+  },
+  "claimsToKeepWatch": {
+    "$call": "bi",
+    "$args": ["Claims to keep watch", "Говорит, что стоит на страже"]
+  },
+  "willNotSay": {
+    "$call": "bi",
+    "$args": [
+      "Will not say",
+      {
+        "$js": "ru.gs(a,\"Уклонился от ответа\",\"Уклонилась от ответа\")"
+      }
+    ]
+  },
+  "claimsNoPart": {
+    "$call": "bi",
+    "$args": [
+      "Claims no part",
+      {
+        "$js": "ru.gs(a,\"Говорит, что дневник не о нём\",\"Говорит, что дневник не о ней\")"
+      }
+    ]
+  },
+  "tookBackAClaim": {
+    "$call": "bi",
+    "$args": [
+      "Took back a claim",
+      {
+        "$js": "ru.gs(a,\"Взял свои слова назад\",\"Взяла свои слова назад\")"
+      }
+    ]
+  },
+  "cameClean": {
+    "$call": "bi",
+    "$args": [
+      "Came clean",
+      {
+        "$js": "ru.gs(a,\"Признался сам\",\"Призналась сама\")"
+      }
+    ]
+  },
+  "answeredTooQuickly": {
+    "$call": "bi",
+    "$args": [
+      "Answered too quickly",
+      {
+        "$js": "ru.gs(a,\"Ответил слишком поспешно\",\"Ответила слишком поспешно\")"
+      }
+    ]
+  },
+  "answeredTooQuickly2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${a.short} answered too quickly"
+      },
+      {
+        "$template": "${ru.c(a)} ${ru.gs(a,\"ответил\",\"ответила\")} слишком поспешно"
+      }
+    ]
+  },
+  "sleptThroughASwornWatch": {
+    "$call": "bi",
+    "$args": [
+      "Slept through a sworn watch",
+      {
+        "$js": "ru.gs(a,\"Проспал обещанный дозор\",\"Проспала обещанный дозор\")"
+      }
+    ]
+  },
+  "seems": {
+    "$call": "bi",
+    "$args": ["Seems: ", "С виду: "]
+  },
+  "seems2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${a.short} seems: "
+      },
+      {
+        "$template": "${ru.c(a)}, с виду: "
+      }
+    ]
+  },
+  "saysIs": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} says ${a} is ${TEMPER_NAMES[t.verdict][0]}"
+      },
+      {
+        "$template": "${ru.c(t.from)}: ${ru.c(t.about)} — ${TEMPER_NAMES[t.verdict][ru.f(t.about)?2:1]}"
+      }
+    ]
+  },
+  "closeToI": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: close to ${C(b).short}"
+      },
+      {
+        "$template": "${ru.c(fr)}: дружит с ${ru.c(b,\"i\")}"
+      }
+    ]
+  },
+  "cannotBearA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: cannot bear ${C(b).short}"
+      },
+      {
+        "$template": "${ru.c(fr)}: не выносит ${ru.c(b,\"a\")}"
+      }
+    ]
+  },
+  "sellsTabletsOnTheSide": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: sells tablets on the side"
+      },
+      {
+        "$template": "${ru.c(fr)}: приторговывает табличками"
+      }
+    ]
+  },
+  "fondOf": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: fond of ${EP.him(a)}"
+      },
+      {
+        "$template": "${ru.c(fr)}: ${ru.gs(fr,\"привязан\",\"привязана\")} к ${ru.gs(a,\"нему\",\"ней\")}"
+      }
+    ]
+  },
+  "cannotStand": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: cannot stand ${EP.him(a)}"
+      },
+      {
+        "$template": "${ru.c(fr)}: ${ru.gs(a,\"его\",\"её\")} не выносит"
+      }
+    ]
+  },
+  "ratherTakenWith": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: rather taken with ${EP.him(a)}"
+      },
+      {
+        "$template": "${ru.c(fr)}: ${ru.gs(fr,\"увлечён\",\"увлечена\")} ${ru.gs(a,\"им\",\"ею\")}"
+      }
+    ]
+  },
+  "sweetOnYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: sweet on you"
+      },
+      {
+        "$template": "${ru.c(fr)}: ${ru.gs(a,\"неравнодушен\",\"неравнодушна\")} к вам"
+      }
+    ]
+  },
+  "sweetOnD": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: sweet on ${C(t.verdict).short}"
+      },
+      {
+        "$template": "${ru.c(fr)}: ${ru.gs(a,\"неравнодушен\",\"неравнодушна\")} к ${ru.c(t.verdict,\"d\")}"
+      }
+    ]
+  },
+  "saysIsSweetOnYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} says ${a} is sweet on you"
+      },
+      {
+        "$template": "${ru.c(t.from)}: ${ru.c(t.about)} ${ru.gs(t.about,\"неравнодушен\",\"неравнодушна\")} к вам"
+      }
+    ]
+  },
+  "hintsAtNights": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} hints at ${a.pp} nights"
+      },
+      {
+        "$template": "${ru.c(fr)} намекает на ${ru.gs(a,\"его\",\"её\")} ночные прогулки"
+      }
+    ]
+  },
+  "hintsThatIsOutAtNight": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} hints that ${a} is out at night"
+      },
+      {
+        "$template": "${ru.c(t.from)} намекает, что ${ru.c(t.about)} бродит по ночам"
+      }
+    ]
+  },
+  "onYourSide": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: on your side"
+      },
+      {
+        "$template": "${ru.c(fr)}: на вашей стороне"
+      }
+    ]
+  },
+  "againstYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f}: against you"
+      },
+      {
+        "$template": "${ru.c(fr)}: ${ru.gs(a,\"настроен\",\"настроена\")} против вас"
+      }
+    ]
+  },
+  "saysSpeaksWellOfYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} says ${a} speaks well of you"
+      },
+      {
+        "$template": "${ru.c(t.from)}: ${ru.c(t.about)} хорошо о вас отзывается"
+      }
+    ]
+  },
+  "saysDoesNotTrustYou": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} says ${a} does not trust you"
+      },
+      {
+        "$template": "${ru.c(t.from)}: ${ru.c(t.about)} вам не доверяет"
+      }
+    ]
+  },
+  "quarrelledWithI": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Quarrelled with ${C(t.verdict).short}"
+      },
+      {
+        "$template": "${ru.gs(a,\"Поссорился\",\"Поссорилась\")} с ${ru.c(t.verdict,\"i\")}"
+      }
+    ]
+  },
+  "sawNearTheScene": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${f} saw ${EP.him(a)} near the scene"
+      },
+      {
+        "$template": "${ru.c(fr)} ${ru.gs(fr,\"видел\",\"видела\")} ${ru.gs(a,\"его\",\"её\")} у места нападения"
+      }
+    ]
+  },
+  "genuine": {
+    "$call": "bi",
+    "$args": ["Genuine", "Подлинный"]
+  },
+  "aThiefS": {
+    "$call": "bi",
+    "$args": ["A thief’s", "Воровской"]
+  },
+  "aThiefSTrace": {
+    "$call": "bi",
+    "$args": [" (a thief’s trace)", " (след вора)"]
+  },
+  "leftEarlier": {
+    "$call": "bi",
+    "$args": ["Left earlier", "Оставлен раньше"]
+  },
+  "leftThereEarlier": {
+    "$call": "bi",
+    "$args": [" (left there earlier)", " (оставлен там раньше)"]
+  },
+  "planted": {
+    "$call": "bi",
+    "$args": ["Planted", "Подброшен"]
+  },
+  "aPlantedTrace": {
+    "$call": "bi",
+    "$args": [" (a planted trace)", " (подброшенный след)"]
+  },
+  "unverified": {
+    "$call": "bi",
+    "$args": ["Unverified", "Не проверен"]
+  }
+}

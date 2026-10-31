@@ -1,0 +1,26 @@
+{
+  "passages": {
+    "theSeasonWasFrom": {
+      "$args": ["n", "log"],
+      "$value": [
+        {
+          "$template": "The season was ${n(log[0].mood)[0]} from first to last."
+        },
+        {
+          "$template": "Сезон был ${n(log[0].mood)[1]} от начала до конца."
+        }
+      ]
+    },
+    "theSeasonWasAt": {
+      "$args": ["n", "log", "rest"],
+      "$value": [
+        {
+          "$template": "The season was ${n(log[0].mood)[0]} at first; ${rest.map(((x,i)=>`${i?\"\":\"it turned \"}${n(x.mood)[0]} on day ${x.day}`)).join(\", then \")}."
+        },
+        {
+          "$template": "Поначалу сезон был ${n(log[0].mood)[1]}; ${rest.map(((x,i)=>`в день ${x.day} ${i?\"— \":\"он стал \"}${n(x.mood)[1]}`)).join(\", потом \")}."
+        }
+      ]
+    }
+  }
+}

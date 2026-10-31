@@ -1,0 +1,59 @@
+{
+  "passages": {
+    "goneFromYourKit": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "${capS(theItem(it))} ${V(it,\"is\",\"are\")} gone from your kit in the night. Nobody saw anything."
+        },
+        {
+          "$template": "${ru.Item(it)} ${ru.ig(it,\"пропал\",\"пропала\",\"пропало\",\"пропали\")} из вашего снаряжения за ночь. Никто ничего не видел."
+        }
+      ]
+    },
+    "wasAtYourTent": {
+      "$args": ["seen"],
+      "$value": [
+        {
+          "$template": "${seen.name} was at your tent in the night, meaning you harm."
+        },
+        {
+          "$template": "${capS(ru.cf(seen))} ${ru.gs(seen,\"побывал\",\"побывала\")} ночью у вашей палатки, желая вам зла."
+        }
+      ]
+    },
+    "youWakeAsSomeone": {
+      "$args": ["seen"],
+      "$value": [
+        {
+          "$template": "You wake as someone backs out of your tent, and in the grey light you know them: ${seen.short}. ${EP.He(seen)} does not look back."
+        },
+        {
+          "$template": "Вы просыпаетесь, когда кто-то пятится из вашей палатки, и в сером свете узнаёте: ${ru.c(seen)}. ${ru.gs(seen,\"Он\",\"Она\")} не оглядывается."
+        }
+      ]
+    },
+    "byYourTentPole": {
+      "$args": ["cl"],
+      "$value": [
+        {
+          "$template": "<p>By your tent pole you find ${clueText(cl)}.</p>"
+        },
+        {
+          "$template": "<p>У шеста вашей палатки вы находите ${clueTextRu(cl)}.</p>"
+        }
+      ]
+    }
+  },
+  "lost": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Lost: ${ITEMS[it].name}"
+      },
+      {
+        "$template": "Потеряно: ${R(ITEMS[it].name)}"
+      }
+    ]
+  }
+}

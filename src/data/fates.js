@@ -1,0 +1,23 @@
+// data/fates.js: recovered build 28.5.1. See tools/show.js for individual declarations.
+const END_GRAVE = __text('END_GRAVE');
+const END_LIFE = __text('END_LIFE');
+const FATE = __text('FATE');
+const FATE_FRIEND = __text('FATE_FRIEND');
+const FATE_ENEMY = __text('FATE_ENEMY');
+const FATE_SOFT = __text('FATE_SOFT');
+const FATE_LOVE = __text('FATE_LOVE');
+const FATE_PAIR = __text('FATE_PAIR');
+const FATE_MOURN = __text('FATE_MOURN');
+const FATE_GONE = __text('FATE_GONE');
+const FATE_YOU = __text('FATE_YOU');
+const onNight = __text('onNight');
+const FATE_CODA = __text('FATE_CODA');
+const FATE_YOU_CODA = __text('FATE_YOU_CODA');
+const PERIL_SAID = __text('PERIL_SAID');
+const FATE_YOU_LAST = __text('FATE_YOU_LAST');
+const FATE_AFTER = __text('FATE_AFTER');
+const dEN = c => ({ n: c.name, He: EP.He(c), he: c.p, him: EP.him(c), his: c.pp, His: capS(c.pp) });
+const dRU = __text('dRU');
+const dl = f => c => f(dEN(c), dRU(c));
+const DOOM_FATE = __text('DOOM_FATE');
+const DOOM_CULT_NONE = __text('DOOM_CULT_NONE');

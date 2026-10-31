@@ -1,0 +1,95 @@
+{
+  "passages": {
+    "steady": {
+      "$args": [],
+      "$value": [
+        ["steady", "крепкие"],
+        ["uneasy", "натянуты"],
+        ["frayed", "расшатаны"],
+        ["shaking", "сдают"],
+        ["near breaking", "на пределе"],
+        ["breaking", "вот-вот лопнут"]
+      ]
+    },
+    "faint": {
+      "$args": [],
+      "$value": [
+        ["faint", "едва начат"],
+        ["stirring", "пробуждается"],
+        ["growing", "набирает силу"],
+        ["strong", "в силе"],
+        ["close", "близок к концу"],
+        ["at the threshold", "на пороге"],
+        ["complete", "завершён"],
+        ["stopped", "остановлен"]
+      ]
+    },
+    "theRiteWhenIt": {
+      "$args": [],
+      "$value": ["The rite: when it is complete, the gate opens", "Обряд: когда он завершится, врата откроются"]
+    }
+  },
+  "nerveLoseAllOfItAnd": {
+    "$call": "bi",
+    "$args": ["Nerve: lose all of it and you go mad", "Нервы: растеряете их совсем — сойдёте с ума"]
+  },
+  "woundsTooManyAndYouDie": {
+    "$call": "bi",
+    "$args": ["Wounds: too many, and you die", "Раны: слишком много — и вы умрёте"]
+  },
+  "m": {
+    "$call": "bi",
+    "$args": ["100 m", "100 м"]
+  },
+  "goTo": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Go to ${L.ref}"
+      },
+      {
+        "$template": "Идти: ${ru.loc(l)}"
+      }
+    ]
+  },
+  "searched": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": " · searched ${enTimes(n)}"
+      },
+      {
+        "$template": " · обыскано ${ruTimes(n)}"
+      }
+    ]
+  },
+  "MAPLBL": {
+    "camp": "Camp",
+    "trench": "Trench B",
+    "ziggurat": "E-meslam",
+    "store": "Magazine",
+    "village": "Village",
+    "canal": "Canal",
+    "cemetery": "Graves"
+  },
+  "METER_SAY": {
+    "nerve": {
+      "$js": "TX.scene.steady()"
+    },
+    "wounds": [
+      ["none", "нет"],
+      ["slight", "лёгкие"],
+      ["serious", "серьёзные"],
+      ["grave", "тяжёлые"]
+    ],
+    "rite": {
+      "$js": "TX.scene.faint()"
+    }
+  },
+  "text": "Нервы",
+  "text2": "Раны",
+  "text3": "Обряд",
+  "nGTransformTranslatePathClass": {
+    "$template": "<g transform=\"translate(372 44)\"><path class=\"north\" d=\"M0 -18 L6 6 L0 1 L-6 6 Z\"/><text class=\"gridlbl\" x=\"0\" y=\"20\" text-anchor=\"middle\">${bi('N', 'С')}</text></g>"
+  }
+}

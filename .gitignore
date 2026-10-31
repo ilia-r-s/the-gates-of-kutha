@@ -1,0 +1,12 @@
+# dependencies (npm install)
+node_modules/
+# project-local Node, npm cache, browser tooling and profiling output
+.local/
+# macOS metadata
+.DS_Store
+# the only build output (node build.js)
+The Gates of Kutha.html
+# screenshots the visual tests take
+test/shots/
+# the packaged GitHub Pages site
+_site/

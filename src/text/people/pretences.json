@@ -1,0 +1,326 @@
+{
+  "passages": {
+    "iShouldTellYou": {
+      "$args": ["g"],
+      "$value": [
+        "I should tell you myself, before someone else does. I have been moving crates at night: a few tablets for the Baghdad market. That is all it was.",
+        {
+          "$template": "Лучше уж я сам${g(\"\",\"а\")} скажу, пока не сказал кто-нибудь другой. По ночам я ${g(\"перетаскивал\",\"перетаскивала\")} ящики: несколько табличек для багдадского рынка. Только и всего."
+        }
+      ]
+    },
+    "enoughYesIDream": {
+      "$args": ["g"],
+      "$value": [
+        "Enough. Yes, I dream. I kept it to myself because people here who dream do not last.",
+        {
+          "$template": "Довольно. Да, мне снятся сны. Я ${g(\"молчал\",\"молчала\")}, потому что здесь те, кто видит сны, долго не живут."
+        }
+      ]
+    },
+    "doctorAWordWhen": {
+      "$args": ["g"],
+      "$value": [
+        "Doctor, a word. When you asked about Crane’s diary, I lied to you. I am the one who dreams. I was afraid: people here who dream do not last.",
+        {
+          "$template": "Доктор, на пару слов. Когда вы спрашивали о дневнике Крейна, я вам ${g(\"солгал\",\"солгала\")}. Сны вижу я. Мне было страшно: здесь те, кто видит сны, долго не живут."
+        }
+      ]
+    },
+    "doctorAWordWhen2": {
+      "$args": ["g"],
+      "$value": [
+        "Doctor, a word. When you asked about Crane’s diary, I would not answer. I am the one who dreams. I was afraid: people here who dream do not last.",
+        {
+          "$template": "Доктор, на пару слов. Когда вы спрашивали о дневнике Крейна, я не ${g(\"стал\",\"стала\")} отвечать. Сны вижу я. Мне было страшно: здесь те, кто видит сны, долго не живут."
+        }
+      ]
+    },
+    "doctorAWordThere": {
+      "$args": ["g"],
+      "$value": [
+        "Doctor, a word. There is something I have told no one. I am the one who dreams. I was afraid: people here who dream do not last.",
+        {
+          "$template": "Доктор, на пару слов. Я никому этого не ${g(\"говорил\",\"говорила\")}. Сны вижу я. Мне было страшно: здесь те, кто видит сны, долго не живут."
+        }
+      ]
+    },
+    "iAmTheOne": {
+      "$args": [],
+      "$value": [
+        "I am the one who dreams. I am done hiding it; hiding has kept no one safe.",
+        "Сны вижу я. Хватит прятаться — это никого не уберегло."
+      ]
+    },
+    "veryWellIKeep": {
+      "$args": ["g"],
+      "$value": [
+        "Very well. I keep watch. I said otherwise because a watcher everyone knows about is no use to anyone.",
+        {
+          "$template": "Хорошо. Я стою на страже. Я ${g(\"говорил\",\"говорила\")} иначе, потому что от стража, о котором все знают, никакого толку."
+        }
+      ]
+    },
+    "veryWellIKeep2": {
+      "$args": ["g"],
+      "$value": [
+        "Very well. I keep watch. I kept it quiet because a watcher everyone knows about is no use to anyone.",
+        {
+          "$template": "Хорошо. Я стою на страже. Я об этом ${g(\"молчал\",\"молчала\")}, потому что от стража, о котором все знают, никакого толку."
+        }
+      ]
+    },
+    "whatIToldYou": {
+      "$args": ["yours", "g"],
+      "$value": [
+        {
+          "$template": "What I told you before was not the truth. I sit up every night with a lamp, walking between the tents.${yours[0]}"
+        },
+        {
+          "$template": "То, что я вам ${g(\"говорил\",\"говорила\")} раньше, — неправда. Я каждую ночь сижу с лампой, хожу между палатками.${yours[1]}"
+        }
+      ]
+    },
+    "iWouldNotAnswer": {
+      "$args": ["yours", "g"],
+      "$value": [
+        {
+          "$template": "I would not answer you before. I sit up every night with a lamp, walking between the tents.${yours[0]}"
+        },
+        {
+          "$template": "Раньше я не ${g(\"стал\",\"стала\")} вам отвечать. Я каждую ночь сижу с лампой, хожу между палатками.${yours[1]}"
+        }
+      ]
+    },
+    "youShouldKnowI": {
+      "$args": ["yours"],
+      "$value": [
+        {
+          "$template": "You should know: I sit up every night with a lamp, walking between the tents.${yours[0]}"
+        },
+        {
+          "$template": "Вам стоит знать: я каждую ночь сижу с лампой, хожу между палатками.${yours[1]}"
+        }
+      ]
+    },
+    "iHaveBeenKeeping": {
+      "$args": ["g"],
+      "$value": [
+        "I have been keeping watch all along. You may as well know it.",
+        {
+          "$template": "Я всё это время ${g(\"стоял\",\"стояла\")} на страже. Пора вам это знать."
+        }
+      ]
+    },
+    "tookBackTheDream": {
+      "$args": ["N", "Nr", "adm", "g"],
+      "$value": [
+        {
+          "$template": "${N} took back the claim to dream true, and admitted to keeping watch."
+        },
+        {
+          "$template": "${Nr} ${g(\"отказался\",\"отказалась\")} от слов о вещих снах и ${adm}, что стоит на страже."
+        }
+      ]
+    },
+    "veryWellINever": {
+      "$args": ["g"],
+      "$value": [
+        "Very well. I never dreamed. I keep the watch, and a watcher everyone knows about is no use to anyone.",
+        {
+          "$template": "Хорошо. Никаких снов я не ${g(\"видел\",\"видела\")}. Я стою на страже, а от стража, о котором все знают, никакого толку."
+        }
+      ]
+    },
+    "iNeverDreamedI": {
+      "$args": ["yours", "g"],
+      "$value": [
+        {
+          "$template": "I never dreamed. I said I did so that someone would listen. I keep the watch: I sit up every night with a lamp, walking between the tents.${yours[0]}"
+        },
+        {
+          "$template": "Никаких снов я не ${g(\"видел\",\"видела\")}. Я так ${g(\"говорил\",\"говорила\")}, чтобы меня хоть кто-нибудь слушал. Я стою на страже: каждую ночь сижу с лампой, хожу между палатками.${yours[1]}"
+        }
+      ]
+    },
+    "iNeverDreamedAll": {
+      "$args": ["g"],
+      "$value": [
+        "I never dreamed. I keep the watch, and I have kept it all along. You may as well know it.",
+        {
+          "$template": "Никаких снов я не ${g(\"видел\",\"видела\")}. Я стою на страже и ${g(\"стоял\",\"стояла\")} всё это время. Пора вам это знать."
+        }
+      ]
+    },
+    "admittedTheNightWatch": {
+      "$args": ["N", "Nr", "adm"],
+      "$value": [
+        {
+          "$template": "${N} admitted the night watch was a cover for smuggling."
+        },
+        {
+          "$template": "${Nr} ${adm}, что ночной дозор прикрывал контрабанду."
+        }
+      ]
+    },
+    "andTheNightWatch": {
+      "$args": ["g"],
+      "$value": [
+        "And the night watch was a story. I was moving crates.",
+        {
+          "$template": "А ночной дозор — это сказка. Я ${g(\"перетаскивал\",\"перетаскивала\")} ящики."
+        }
+      ]
+    },
+    "theNightWatchWas": {
+      "$args": ["g"],
+      "$value": [
+        "The night watch was a story. I was moving crates: a few tablets for the Baghdad market. Better you hear it from me.",
+        {
+          "$template": "Ночной дозор — это сказка. Я ${g(\"перетаскивал\",\"перетаскивала\")} ящики: несколько табличек для багдадского рынка. Лучше уж вы услышите это от меня."
+        }
+      ]
+    },
+    "allRightIDon": {
+      "$args": [],
+      "$value": [
+        "All right! I don’t dream. I wanted someone in this camp to listen to me for once.",
+        "Ладно! Никаких снов я не вижу. Мне просто хотелось, чтобы в этом лагере хоть раз кто-нибудь меня выслушал."
+      ]
+    },
+    "fineIDonT": {
+      "$args": [],
+      "$value": [
+        "Fine. I don’t keep watch. I sleep like everyone else. I wanted you to think well of me.",
+        "Хорошо. Никакого дозора я не несу. Сплю, как все. Мне хотелось, чтобы вы были обо мне лучшего мнения."
+      ]
+    },
+    "iHaveToSay": {
+      "$args": ["g"],
+      "$value": [
+        "I have to say something. I don’t dream, not true dreams. I said I did because nobody here ever listens to me.",
+        {
+          "$template": "Мне нужно кое-что сказать. Никаких вещих снов я не вижу. Я так ${g(\"говорил\",\"говорила\")}, потому что меня здесь никто никогда не слушает."
+        }
+      ]
+    },
+    "aboutMyDreamsI": {
+      "$args": ["g"],
+      "$value": [
+        "About my dreams. I may have been dreaming my own fears. Forget what I said.",
+        {
+          "$template": "Насчёт моих снов. Возможно, мне снились мои собственные страхи. Забудьте, что я ${g(\"говорил\",\"говорила\")}."
+        }
+      ]
+    },
+    "iNeverKeptWatch": {
+      "$args": ["g"],
+      "$value": [
+        "I never kept watch. I said I did so you would think well of me. I am ashamed of it.",
+        {
+          "$template": "Никакого дозора я не ${g(\"нёс\",\"несла\")}. Я так ${g(\"говорил\",\"говорила\")}, чтобы обо мне думали лучше. Мне стыдно."
+        }
+      ]
+    },
+    "iSaidIKeep": {
+      "$args": ["g"],
+      "$value": [
+        "I said I keep watch. I sat up one night with a lamp, that is all. I should not have made more of it.",
+        {
+          "$template": "Я ${g(\"говорил\",\"говорила\")}, что стою на страже. Я ${g(\"просидел\",\"просидела\")} с лампой одну ночь, только и всего. Не стоило раздувать из этого больше."
+        }
+      ]
+    },
+    "tookBackTheClaim": {
+      "$args": ["c", "g"],
+      "$value": [
+        {
+          "$template": "${c.name} took back the claim to dream true."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${g(\"отказался\",\"отказалась\")} от слов о вещих снах."
+        }
+      ]
+    },
+    "tookBackTheClaim2": {
+      "$args": ["c", "g"],
+      "$value": [
+        {
+          "$template": "${c.name} took back the claim to keep watch."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${g(\"отказался\",\"отказалась\")} от слов о ночном дозоре."
+        }
+      ]
+    },
+    "beforeBreakfastTakesYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Before breakfast, ${c.short} takes you aside. “"
+        },
+        {
+          "$template": "Ещё до завтрака ${ru.c(c)} отводит вас в сторону. «"
+        }
+      ]
+    },
+    "beforeBreakfastIsOver": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Before breakfast is over, ${c.short} stands up. “"
+        },
+        {
+          "$template": "Завтрак ещё не закончен, когда ${ru.c(c)} встаёт. «"
+        }
+      ]
+    },
+    "beforeYouCanLay": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Before you can lay out your case, ${c.short} stands up. “"
+        },
+        {
+          "$template": "Не успеваете вы изложить своё дело, как ${ru.c(c)} встаёт. «"
+        }
+      ]
+    }
+  },
+  "admittedToSmuggling": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${N} admitted to smuggling."
+      },
+      {
+        "$template": "${Nr} ${adm} в контрабанде."
+      }
+    ]
+  },
+  "admittedToBeingTheDreamer": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${N} admitted to being the Dreamer."
+      },
+      {
+        "$template": "${Nr} ${adm}, что ${g(\"он — сновидец\",\"она — сновидица\")}."
+      }
+    ]
+  },
+  "admittedToKeepingWatch": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${N} admitted to keeping watch."
+      },
+      {
+        "$template": "${Nr} ${adm}, что стоит на страже."
+      }
+    ]
+  },
+  "text": "признался",
+  "text2": "призналась",
+  "tonightIWillKeepItBy": [" Tonight I will keep it by your tent.", " Этой ночью я посижу с ней у вашей палатки."]
+}

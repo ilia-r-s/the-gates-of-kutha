@@ -1,0 +1,161 @@
+{
+  "passages": {
+    "atBreakfastTheQuarrel": {
+      "$args": ["s", "t"],
+      "$value": [
+        {
+          "$template": "At breakfast the quarrel between ${s.short} and ${t.short} flares up again. ${s.short} says, loudly enough for everyone:"
+        },
+        {
+          "$template": "За завтраком ссора между ${ru.c(s,\"i\")} и ${ru.c(t,\"i\")} вспыхивает снова. ${ru.c(s)} говорит так, чтобы слышали все:"
+        }
+      ]
+    },
+    "overBreakfastSaysLoudly": {
+      "$args": ["s"],
+      "$value": [
+        {
+          "$template": "Over breakfast, ${s.short} says, loudly enough for everyone:"
+        },
+        {
+          "$template": "За завтраком ${ru.c(s)} говорит так, чтобы слышали все:"
+        }
+      ]
+    },
+    "iSawGoOut": {
+      "$args": ["t", "s"],
+      "$value": [
+        {
+          "$template": "“I saw ${t.short} go out after dark. Ask ${EP.him(t)} why.”"
+        },
+        {
+          "$template": "«Я ${ru.gs(s,\"видел\",\"видела\")}, как ${ru.c(t)} ${ru.gs(t,\"уходил\",\"уходила\")} куда-то затемно. Спросите ${ru.gs(t,\"его\",\"её\")} зачем»."
+        }
+      ]
+    },
+    "iWillSayIt": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "“I will say it if no one else will. I do not trust ${t.short}.”"
+        },
+        {
+          "$template": "«Скажу, раз больше никто не решается: я не доверяю ${ru.c(t,\"d\")}»."
+        }
+      ]
+    },
+    "beforeBreakfastTakesYou": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "Before breakfast, ${c.short} takes you aside. “I did not want to say it in front of the others."
+        },
+        {
+          "$template": "Ещё до завтрака ${ru.c(c)} отводит вас в сторону. «Не ${ru.gs(c,\"хотел\",\"хотела\")} говорить при остальных."
+        }
+      ]
+    },
+    "youLessNow": {
+      "$args": ["down"],
+      "$value": [
+        {
+          "$template": "${nameList(down)} ${down.length>1?\"trust\":\"trusts\"} you less now"
+        },
+        {
+          "$template": "${nameListRu(down)} теперь ${down.length>1?\"доверяют\":\"доверяет\"} вам меньше"
+        }
+      ]
+    },
+    "youMoreNow": {
+      "$args": ["up"],
+      "$value": [
+        {
+          "$template": "${nameList(up)} ${up.length>1?\"trust\":\"trusts\"} you more now"
+        },
+        {
+          "$template": "${nameListRu(up)} теперь ${up.length>1?\"доверяют\":\"доверяет\"} вам больше"
+        }
+      ]
+    },
+    "ifYouWantSomeone": {
+      "$args": ["t", "k"],
+      "$value": [
+        {
+          "$js": "[`If you want someone who wanders at night, Doctor, ask ${t.short} what is in those crates by the magazine.`,`${t.short} is out every night, and it is not to pray. Look under ${t.pp} bedroll.`][k]"
+        },
+        {
+          "$js": "[`Если вам нужен тот, кто бродит по ночам, доктор, спросите ${ru.c(t,\"a\")}, что лежит в ящиках у хранилища.`,`${ru.c(t)} каждую ночь куда-то ходит — и не молиться. Загляните под ${ru.gs(t,\"его\",\"её\")} походную постель.`][k]"
+        }
+      ]
+    },
+    "youSitWithA": {
+      "$args": ["c", "v"],
+      "$value": [
+        {
+          "$template": "You sit with ${c.short} a while and talk about ${v.short}. ${EP.He(c)} will not forget it."
+        },
+        {
+          "$template": "Вы долго сидите рядом с ${ru.c(c,\"i\")} и говорите ${ru.ob(v)}. ${ru.gs(c,\"Он\",\"Она\")} этого не забудет."
+        }
+      ]
+    },
+    "theDoctorWillHave": {
+      "$args": [],
+      "$value": [
+        "The Doctor will have us all in irons before the week is out. Who is next, I wonder?",
+        "Доктор до конца недели закуёт нас всех в кандалы. Интересно, кто следующий?"
+      ]
+    },
+    "theDoctorTellsEverything": {
+      "$args": [],
+      "$value": [
+        "The Doctor tells everything to everyone. Mind what you say to our new friend.",
+        "Доктор всё всем пересказывает. Осторожнее с тем, что говорите нашему новому другу."
+      ]
+    },
+    "iHaveHeardThe": {
+      "$args": ["s"],
+      "$value": [
+        "I have heard the Doctor reading those curses aloud at night, in the old tongue. Over and over.",
+        {
+          "$template": "Я ${ru.gs(s,\"слышал\",\"слышала\")}, как доктор по ночам читает эти проклятия вслух, на древнем языке. Снова и снова."
+        }
+      ]
+    },
+    "diggingForCraneAre": {
+      "$args": [],
+      "$value": [
+        "Digging for Crane, are we? The Doctor digs for gold, mark my words.",
+        "Ищем Крейна, как же. Доктор копает ради золота, попомните моё слово."
+      ]
+    },
+    "didYouKnowWas": {
+      "$args": ["f"],
+      "$value": [
+        {
+          "$template": "Did you know ${f.short} was out by the trench the other night? The Doctor’s own friend. Where does ${f.p} go after dark, I wonder?"
+        },
+        {
+          "$template": "Вы знали, что ${ru.c(f)} на днях ночью ${ru.gs(f,\"ходил\",\"ходила\")} к траншее? ${ru.gs(f,\"Друг\",\"Подруга\")} самого доктора. Интересно, куда ${ru.gs(f,\"он\",\"она\")} ходит по ночам?"
+        }
+      ]
+    },
+    "overBreakfastYouCatch": {
+      "$args": ["s", "line"],
+      "$value": [
+        {
+          "$template": "Over breakfast you catch ${s.short} saying: “${line[0]}”"
+        },
+        {
+          "$template": "За завтраком вы слышите, как ${ru.c(s)} говорит: «${line[1]}»"
+        }
+      ]
+    },
+    "overBreakfastDreamsFrom": {
+      "$args": ["s", "d", "k"],
+      "$value": {
+        "$js": "[[`Over breakfast ${s.short} says, not quite under ${s.pp} breath, that ${d.short}’s dreams come out of a bottle.`,`За завтраком ${ru.c(s)} вполголоса, но так, чтобы все слышали, замечает, что сны ${ru.c(d,\"g\")} берутся из бутылки.`],[`Over breakfast ${s.short} remarks that ${d.short} dreams whatever an old grudge would have ${EP.him(d)} dream.`,`За завтраком ${ru.c(s)} замечает, что ${ru.c(d)} видит во сне ровно то, что ${ru.gs(d,\"ему\",\"ей\")} подсказывает старая обида.`],[`Over breakfast ${s.short} says that ${d.short}’s dreams are the heat talking, and nothing more.`,`За завтраком ${ru.c(s)} говорит, что сны ${ru.c(d,\"g\")} — это говорит жара, и ничего больше.`]][k]"
+      }
+    }
+  }
+}

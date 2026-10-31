@@ -1,0 +1,706 @@
+{
+  "passages": {
+    "aStairGoesDown": {
+      "$args": [],
+      "$value": [
+        "A stair goes down out of the split circle, breathing hot air that smells of old brick. Below, something is still chanting, though nobody is left to chant.",
+        "Из расколотого круга вниз уходит лестница, и снизу тянет горячим воздухом, пахнущим старым кирпичом. Внизу всё ещё что-то поёт, хотя петь уже некому."
+      ]
+    },
+    "theRiteHasOutpaced": {
+      "$args": [],
+      "$value": [
+        "The rite has outpaced you. Before dawn the scorched circle at the foot of E-meslam splits open, and a stair breathes up hot air that smells of old brick.",
+        "Обряд опередил вас. Перед рассветом выжженный круг у подножия Э-меслама раскалывается, и снизу, по ступеням, поднимается горячий воздух, пахнущий старым кирпичом."
+      ]
+    },
+    "theFifthNightIs": {
+      "$args": [],
+      "$value": [
+        "The fifth night is the dark of the moon. The camp is silent. A lamp is moving on the ziggurat, then it is gone, into the mound.",
+        "Пятая ночь — новолуние. Лагерь безмолвен. По зиккурату движется огонёк лампы — и исчезает, уходя в холм."
+      ]
+    },
+    "beforeYouGoDown": {
+      "$args": [],
+      "$value": [
+        "Before you go down, you must decide what you are facing. Name the power behind the cult, and the old words and wards may answer you.",
+        "Прежде чем спуститься, решите, с чем вы имеете дело. Назовите силу, что стоит за сектой, — и древние слова и обереги, быть может, отзовутся."
+      ]
+    },
+    "nightTheDarkOf": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "Night ${RULES.start.days} · The dark of the moon"
+        },
+        {
+          "$template": "Ночь ${RULES.start.days} · Новолуние"
+        }
+      ]
+    },
+    "isLacingUpBoots": {
+      "$args": ["f"],
+      "$value": [
+        {
+          "$template": "${C(f.comp[0]).short} is lacing up ${C(f.comp[0]).pp} boots and checking a lamp. Do you want anyone else?"
+        },
+        {
+          "$template": "${ru.c(f.comp[0])} зашнуровывает ботинки и проверяет лампу. Взять ещё кого-нибудь?"
+        }
+      ]
+    },
+    "youCanTakeUp": {
+      "$args": [],
+      "$value": [
+        "You can take up to two people down. Loyal company makes every step safer. A cultist at your back will betray you, sooner or later. Not everyone will follow you.",
+        "С собой можно взять не больше двоих. С верными спутниками каждый шаг безопаснее. Сектант за спиной рано или поздно вас предаст. И не каждый согласится пойти за вами."
+      ]
+    },
+    "theStairAtYour": {
+      "$args": ["comp"],
+      "$value": [
+        {
+          "$template": "<p>${comp.length>1?\"Their lamps light\":\"A second lamp lights\"} the stair at your back, and your hands are steadier.</p>"
+        },
+        {
+          "$template": "<p>${comp.length>1?\"Их лампы освещают\":\"Вторая лампа освещает\"} лестницу у вас за спиной, и руки уже не так дрожат.</p>"
+        }
+      ]
+    },
+    "crossTheDarkTell": {
+      "$args": ["comp", "compRu"],
+      "$value": [
+        {
+          "$template": "<p>${comp.length?\"With \"+listNames(comp)+\" behind you, you\":\"Alone, you\"} cross the dark tell to the ziggurat.</p>"
+        },
+        {
+          "$template": "<p>${comp.length?`Вы пересекаете тёмный холм и идёте к зиккурату; следом ${compRu.length>1?\"идут\":\"идёт\"} ${ru.list(compRu)}.`:\"В одиночку вы пересекаете тёмный холм и идёте к зиккурату.\"}</p>"
+        }
+      ]
+    },
+    "stepByStepCount": {
+      "$args": [],
+      "$value": [
+        "Step by step, count by count. Two hundred and nine steps. You do not let yourself wonder who cut them.",
+        "Ступень за ступенью, счёт за счётом. Двести девять ступеней. Вы запрещаете себе думать о том, кто их вырубил."
+      ]
+    },
+    "halfwayDownTheSteps": {
+      "$args": [],
+      "$value": [
+        "Halfway down, the steps begin to feel soft, like the treads are breathing.",
+        "На полпути ступени становятся мягкими, будто дышат."
+      ]
+    },
+    "youTakeTheStair": {
+      "$args": [],
+      "$value": [
+        "You take the stair at a run and reach the bottom with your heart hammering, but whole.",
+        "Вы сбегаете по лестнице и добираетесь до низа — сердце колотится, но вы целы."
+      ]
+    },
+    "aStepIsNot": {
+      "$args": [],
+      "$value": ["A step is not there. You fall a long way in the dark.", "Ступени на месте не оказывается. Вы долго падаете в темноту."]
+    },
+    "youTurnInTime": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>You turn in time to see the knife. Flint, old, black with bitumen. You and ${t.short} go down together on the brick, and only you get up. ${t.short} will be tied here until morning, if there is a morning.</p>"
+        },
+        {
+          "$template": "<p>Вы оборачиваетесь как раз вовремя, чтобы увидеть нож. Кремнёвый, древний, чёрный от битума. Вы с ${ru.c(t,\"i\")} вместе падаете на кирпич, но поднимаетесь только вы. ${ru.c(t)} останется здесь, связанн${ru.gs(t,\"ый\",\"ая\")}, до утра — если утро наступит.</p>"
+        }
+      ]
+    },
+    "youHearTheStep": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">You hear the step a moment too late, and turn as the knife comes: it opens your coat and goes no further. ${t.short} is past you before you can catch ${EP.him(t)}, murmuring the old words, and runs ahead into the dark, towards the chanting.</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">Вы слышите шаг на миг позже, чем нужно, и оборачиваетесь, когда нож уже летит: он распарывает вам куртку — и только. ${ru.c(t)} проскальзывает мимо прежде, чем вы успеваете ${ru.gs(t,\"его\",\"её\")} схватить, и, бормоча древние слова, убегает вперёд, во тьму, туда, откуда доносится пение.</p>"
+        }
+      ]
+    },
+    "theKnifeTakesYou": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p class=\"horror\">The knife takes you under the ribs. ${t.short} steps past you, murmuring the old words, and runs ahead into the dark, towards the chanting.</p>"
+        },
+        {
+          "$template": "<p class=\"horror\">Нож входит вам под рёбра. ${ru.c(t)} переступает через вас, бормоча древние слова, и убегает вперёд, во тьму, туда, откуда доносится пение.</p>"
+        }
+      ]
+    },
+    "behindYouHasGone": {
+      "$args": ["t"],
+      "$value": [
+        {
+          "$template": "<p>Behind you, ${t.short} has gone very quiet.</p>"
+        },
+        {
+          "$template": "<p>За вашей спиной ${ru.c(t)} совсем ${ru.gs(t,\"затих\",\"затихла\")}.</p>"
+        }
+      ]
+    },
+    "letThemThinkYou": {
+      "$args": [],
+      "$value": [
+        "Let them think you have not noticed, and hear it coming",
+        "Сделать вид, что ничего не заметили, — и услышать, когда начнётся"
+      ]
+    },
+    "walksAtYourShoulder": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} walks at your shoulder, calm as a churchwarden, and holds the lamp higher when the eyes begin to move.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} идёт рядом с вами, ${ru.gs(c,\"спокойный\",\"спокойная\")}, как церковный староста, и поднимает лампу повыше, когда глаза начинают двигаться.</p>"
+        }
+      ]
+    },
+    "walksAtYourShoulder2": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} walks at your shoulder, pale, and keeps the lamp low, as if the eyes might not notice it.</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} идёт рядом с вами, ${ru.gs(c,\"бледный\",\"бледная\")}, и держит лампу пониже, словно глаза могут её не заметить.</p>"
+        }
+      ]
+    },
+    "youStareBackAt": {
+      "$args": [],
+      "$value": [
+        "You stare back at a thousand dead eyes and walk on. They are only shell. They are only lapis.",
+        "Вы смотрите в ответ тысяче мёртвых глаз и идёте дальше. Это всего лишь раковина. Это всего лишь лазурит."
+      ]
+    },
+    "trustYourHandsSomething": {
+      "$args": [],
+      "$value": ["Trust your hands; something may take one", "Довериться рукам; за руку может кто-то схватить"]
+    },
+    "youWalkWithOne": {
+      "$args": [],
+      "$value": [
+        "You walk with one hand on the wall, in perfect dark, until the wall ends.",
+        "В кромешной тьме вы идёте, ведя рукой по стене, пока стена не кончается."
+      ]
+    },
+    "inTheDarkSomething": {
+      "$args": [],
+      "$value": [
+        "In the dark, something with too many fingers takes your wrist and pulls.",
+        "В темноте что-то, у чего слишком много пальцев, хватает вас за запястье и тянет."
+      ]
+    },
+    "youSetDownOn": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "You set ${V(it,\"it\",\"them\")} down on the threshold. The gate does not open. After a while you pick ${V(it,\"it\",\"them\")} up again: it wants something else."
+        },
+        "Вы кладёте это на порог. Врата не открываются. Через какое-то время вы забираете вещь обратно: вратам нужно что-то другое."
+      ]
+    },
+    "youSetDownOn2": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "You set ${V(it,\"it\",\"them\")} down on the threshold. The gate opens."
+        },
+        "Вы кладёте это на порог. Врата открываются."
+      ]
+    },
+    "staysBehindAndHelp": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${EP.He(c)} stays behind, and ${c.pp} help with ${EP.him(c)}"
+        },
+        {
+          "$js": "ru.gs(c,\"Он останется здесь, а с ним и его помощь\",\"Она останется здесь, а с ней и её помощь\")"
+        }
+      ]
+    },
+    "setsBackAgainstThe": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} sets ${c.pp} back against the gate. You are hardly through when it swings shut on its own, and ${c.short} is through with you, white to the lips. “It let go of me,” ${c.p} says. “It did not want me.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} подпирает створку спиной. Едва вы проходите, как врата сами захлопываются — и ${ru.c(c)}, ${ru.gs(c,\"белый\",\"белая\")} как полотно, оказывается рядом с вами. «Оно меня отпустило, — говорит ${ru.gs(c,\"он\",\"она\")}. — Я ему не был${ru.gs(c,\"\",\"а\")} ${ru.gs(c,\"нужен\",\"нужна\")}».</p>"
+        }
+      ]
+    },
+    "nodsAndSetsBack": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "<p>${c.short} nods and sets ${c.pp} back against the gate. “Go,” ${c.p} says. “I will keep it open.”</p>"
+        },
+        {
+          "$template": "<p>${ru.c(c)} кивает и подпирает створку спиной. «Идите, — говорит ${ru.gs(c,\"он\",\"она\")}. — Я удержу».</p>"
+        }
+      ]
+    },
+    "youGiveItA": {
+      "$args": [],
+      "$value": [
+        "You give it a memory: your mother’s voice. It takes it gently, and you cannot remember what you gave.",
+        "Вы отдаёте ему воспоминание — голос вашей матери. Оно берёт его бережно, и вы уже не можете вспомнить, что отдали."
+      ]
+    },
+    "thenItTakesAnother": {
+      "$args": [],
+      "$value": [
+        "Then it takes another, without asking, and you do not know which.",
+        "Потом берёт ещё одно — не спрашивая, и вы не знаете какое."
+      ]
+    },
+    "aroundItRobedIn": {
+      "$args": ["waiting", "smiles", "hier", "again"],
+      "$value": [
+        {
+          "$template": "<p>${waiting.length>1?\"Around it, robed in the old way, stand \"+listNames(waiting.map((c=>c.name))):\"Beside it, robed in the old way, stands \"+waiting[0].name}.${smiles?` ${hier.short} turns from the rite and smiles at you as if you were expected.`:again?\" The chant has not faltered.\":\"\"}</p>"
+        },
+        {
+          "$template": "<p>${waiting.length>1?\"Вокруг, в древних облачениях, стоят \"+ru.list(waiting.map((c=>ru.cf(c)))):\"Рядом, в древнем облачении, стоит \"+ru.cf(waiting[0])}.${smiles?` ${ru.c(hier)} отворачивается от обряда и улыбается вам так, словно вас здесь ждали.`:again?\" Пение не сбилось ни на миг.\":\"\"}</p>"
+        }
+      ]
+    },
+    "theRiteGoesOn": {
+      "$args": [],
+      "$value": ["The rite goes on. You have time for one more act.", "Обряд продолжается. Вы успеете сделать ещё что-то одно."]
+    },
+    "ifWardAndIs": {
+      "$args": ["it", "f"],
+      "$value": [
+        {
+          "$template": "If ${V(it,\"it is\",\"they are\")} ${GODS[f.named].name}’s ward, and ${GODS[f.named].name} is here"
+        },
+        {
+          "$template": "Если это оберег против ${ru.god(f.named,\"g\")} и здесь именно ${ru.gf(f.named)?\"она\":\"он\"}"
+        }
+      ]
+    },
+    "ifTheWardAgainst": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "If ${V(it,\"it is\",\"they are\")} the ward against what is here"
+        },
+        "Если это оберег против того, что здесь"
+      ]
+    },
+    "speakTheCounterRite": {
+      "$args": ["f"],
+      "$value": [
+        {
+          "$template": "Speak the counter-rite against ${GODS[f.named].name}"
+        },
+        {
+          "$template": "Прочесть контробряд против ${ru.god(f.named,\"g\")}"
+        }
+      ]
+    },
+    "aLastResortMiss": {
+      "$args": ["many", "hier"],
+      "$value": [
+        {
+          "$template": "A last resort: miss, and ${many?\"they are\":`${hier.p} is`} on you"
+        },
+        {
+          "$template": "Крайнее средство: промахнётесь — и ${many?\"они бросятся\":ru.gs(hier,\"он бросится\",\"она бросится\")} на вас"
+        }
+      ]
+    },
+    "overturnTheBraziersInto": {
+      "$args": [],
+      "$value": ["Overturn the braziers into the bitumen", "Опрокинуть жаровни в битум"]
+    },
+    "aLastResortThe": {
+      "$args": [],
+      "$value": ["A last resort: the fire may spare the rite, and not you", "Крайнее средство: огонь может пощадить обряд — но не вас"]
+    },
+    "youHoldUpTo": {
+      "$args": ["act"],
+      "$value": [
+        {
+          "$template": "You hold ${theItem(act.it)} up to the circle, and nothing answers. Whatever you called on is not listening, or is not the one here."
+        },
+        {
+          "$template": "Вы поднимаете ${ru.item(act.it,\"a\")} перед кругом — и ничто не отзывается. То, к чему вы взывали, не слушает — или здесь не оно."
+        }
+      ]
+    },
+    "theWordsFallDead": {
+      "$args": [],
+      "$value": [
+        "The words fall dead as you speak them. Whatever you called on is not listening, or is not the one here.",
+        "Слова падают замертво, едва вы их произносите. То, к чему вы взывали, не слушает — или здесь не оно."
+      ]
+    },
+    "theShotGoesWide": {
+      "$args": ["t", "many"],
+      "$value": [
+        {
+          "$template": "The shot goes wide, or does not matter: ${t.short} does not even stumble, and ${many?\"the robed figures are\":`${t.p} is`} on you before you can fire again. When ${many?\"they let\":`${t.p} lets`} you go, the revolver is gone."
+        },
+        {
+          "$template": "Пуля уходит мимо — или это ничего не меняет: ${ru.c(t)} даже не ${ru.gs(t,\"пошатнулся\",\"пошатнулась\")}, а ${many?\"фигуры в облачениях набрасываются\":`${ru.gs(t,\"он набрасывается\",\"она набрасывается\")}`} на вас прежде, чем вы успеваете выстрелить снова. Когда вас отпускают, револьвера уже нет."
+        }
+      ]
+    },
+    "theBitumenCatchesAnd": {
+      "$args": [],
+      "$value": [
+        "The bitumen catches, and the fire runs along it, and goes out as if a hand had closed on it. Your sleeve is still burning.",
+        "Битум занимается, огонь бежит по нему — и гаснет, будто его сжала чья-то рука. А ваш рукав всё ещё горит."
+      ]
+    },
+    "thereIsNoTime": {
+      "$args": [],
+      "$value": [
+        "There is no time left for another. The chant has come to its last line.",
+        "Времени на новую попытку уже нет. Пение подошло к последней строке."
+      ]
+    }
+  },
+  "theDescent": {
+    "$call": "bi",
+    "$args": ["The descent", "Спуск"]
+  },
+  "nightTheGateOpens": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Night ${S.day} · The gate opens"
+      },
+      {
+        "$template": "Ночь ${S.day} · Врата отворяются"
+      }
+    ]
+  },
+  "dayTheGateOpens": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Day ${S.day} · The gate opens"
+      },
+      {
+        "$template": "День ${S.day} · Врата отворяются"
+      }
+    ]
+  },
+  "nightTheGateOpens2": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Night ${S.day} · The gate opens"
+      },
+      {
+        "$template": "Ночь ${S.day} · Врата отворяются"
+      }
+    ]
+  },
+  "name": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Name ${GODS[g].name}"
+      },
+      {
+        "$template": "Назвать имя: ${ru.god(g)}"
+      }
+    ]
+  },
+  "nameNoPower": {
+    "$call": "bi",
+    "$args": ["Name no power", "Не называть никого"]
+  },
+  "goDownBlind": {
+    "$call": "bi",
+    "$args": ["Go down blind", "Спуститься вслепую"]
+  },
+  "whoComesWithYou": {
+    "$call": "bi",
+    "$args": ["Who comes with you?", "Кто пойдёт с вами?"]
+  },
+  "goDown": {
+    "$call": "bi",
+    "$args": ["Go down", "Спускаться"]
+  },
+  "takeA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Take ${c.name}"
+      },
+      {
+        "$template": "Взять с собой ${ru.cf(c,\"a\")}"
+      }
+    ]
+  },
+  "offersToCome": {
+    "$call": "bi",
+    "$args": ["Offers to come · ", "Вызывается идти · "]
+  },
+  "unmarked": {
+    "$call": "bi",
+    "$args": ["Unmarked", "Без отметки"]
+  },
+  "noOneElse": {
+    "$call": "bi",
+    "$args": ["No one else", "Больше никого"]
+  },
+  "goDownAlone": {
+    "$call": "bi",
+    "$args": ["Go down alone", "Спуститься в одиночку"]
+  },
+  "oneMore": {
+    "$call": "bi",
+    "$args": ["One more?", "Кто-нибудь ещё?"]
+  },
+  "whoComesWithYou2": {
+    "$call": "bi",
+    "$args": ["Who comes with you?", "Кто пойдёт с вами?"]
+  },
+  "below": {
+    "$call": "bi",
+    "$args": ["Below", "Внизу"]
+  },
+  "goOn": {
+    "$call": "bi",
+    "$args": ["Go on", "Дальше"]
+  },
+  "theFirstGate": {
+    "$call": "bi",
+    "$args": ["The first gate", "Первые врата"]
+  },
+  "goDownSlowlyFeelingForEach": {
+    "$call": "bi",
+    "$args": ["Go down slowly, feeling for each step", "Спускаться медленно, нащупывая каждую ступень"]
+  },
+  "carefulABadStepCostsNerve": {
+    "$call": "bi",
+    "$args": ["Careful; a bad step costs nerve", "Осторожно; оступитесь — пострадают нервы"]
+  },
+  "hurryDownBeforeYourNerveFails": {
+    "$call": "bi",
+    "$args": ["Hurry down before your nerve fails", "Сбежать вниз, пока не сдали нервы"]
+  },
+  "quickABadStepAndYou": {
+    "$call": "bi",
+    "$args": ["Quick; a bad step, and you fall", "Быстро; оступитесь — упадёте"]
+  },
+  "theFourthGate": {
+    "$call": "bi",
+    "$args": ["The fourth gate", "Четвёртые врата"]
+  },
+  "turnAndFaceD": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Turn and face ${t.short}"
+      },
+      {
+        "$template": "Обернуться к ${ru.c(t,\"d\")}"
+      }
+    ]
+  },
+  "nowBeforeItIsTooLate": {
+    "$call": "bi",
+    "$args": ["Now, before it is too late", "Сейчас, пока не поздно"]
+  },
+  "keepWalkingAndListen": {
+    "$call": "bi",
+    "$args": ["Keep walking and listen", "Идти дальше и прислушиваться"]
+  },
+  "theFourthGate2": {
+    "$call": "bi",
+    "$args": ["The fourth gate", "Четвёртые врата"]
+  },
+  "meetTheEyesAndWalkOn": {
+    "$call": "bi",
+    "$args": ["Meet the eyes and walk on", "Выдержать их взгляд и идти дальше"]
+  },
+  "holdYourNerveOrLoseIt": {
+    "$call": "bi",
+    "$args": ["Hold your nerve, or lose it", "Удержать самообладание — или потерять"]
+  },
+  "coverYourLightAndWalkBlind": {
+    "$call": "bi",
+    "$args": ["Cover your light and walk blind", "Прикрыть свет и идти вслепую"]
+  },
+  "leaveA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Leave ${theItem(it)}"
+      },
+      {
+        "$template": "Оставить ${ru.item(it,\"a\")}"
+      }
+    ]
+  },
+  "anOldCharmYouMightNeed": {
+    "$call": "bi",
+    "$args": ["An old charm. You might need it below", "Древний амулет. Внизу может пригодиться"]
+  },
+  "askToHoldTheGateA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Ask ${c.short} to hold the gate"
+      },
+      {
+        "$template": "Попросить ${ru.c(c,\"a\")} удержать врата"
+      }
+    ]
+  },
+  "leavePartOfYourself": {
+    "$call": "bi",
+    "$args": ["Leave part of yourself", "Оставить часть себя"]
+  },
+  "aMemoryAndMuchOfYour": {
+    "$call": "bi",
+    "$args": ["A memory, and much of your nerve", "Воспоминание — и немалая доля ваших нервов"]
+  },
+  "theSeventhGate": {
+    "$call": "bi",
+    "$args": ["The seventh gate", "Седьмые врата"]
+  },
+  "theSanctum": {
+    "$call": "bi",
+    "$args": ["The sanctum", "Святилище"]
+  },
+  "raiseA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Raise ${theItem(it)}"
+      },
+      {
+        "$template": "Поднять ${ru.item(it,\"a\")}"
+      }
+    ]
+  },
+  "ifYouNamedTheRightPower": {
+    "$call": "bi",
+    "$args": ["If you named the right power", "Если вы назвали верную силу"]
+  },
+  "shootA": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Shoot ${hier.short}"
+      },
+      {
+        "$template": "Выстрелить в ${ru.c(hier,\"a\")}"
+      }
+    ]
+  },
+  "thereIsNothingLeftToTry": {
+    "$call": "bi",
+    "$args": ["There is nothing left to try", "Больше нечего пробовать"]
+  },
+  "standAndWatch": {
+    "$call": "bi",
+    "$args": ["Stand and watch", "Стоять и смотреть"]
+  },
+  "itFails": {
+    "$call": "bi",
+    "$args": ["It fails", "Не вышло"]
+  },
+  "oneMoreAct": {
+    "$call": "bi",
+    "$args": ["One more act", "Ещё одна попытка"]
+  },
+  "killedByYouNight": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Killed by you, night ${c.takenDay}"
+      },
+      {
+        "$template": "${ru.gs(c,\"Убит\",\"Убита\")} вами в ночь ${c.takenDay}"
+      }
+    ]
+  },
+  "takenNight": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Taken, night ${c.takenDay}"
+      },
+      {
+        "$template": "${ru.gs(c,\"Погиб\",\"Погибла\")} в ночь ${c.takenDay}"
+      }
+    ]
+  },
+  "exposed": {
+    "$call": "bi",
+    "$args": [
+      "Exposed",
+      {
+        "$js": "ru.gs(c,\"Разоблачён\",\"Разоблачена\")"
+      }
+    ]
+  },
+  "sentAway": {
+    "$call": "bi",
+    "$args": [
+      "Sent away",
+      {
+        "$js": "ru.gs(c,\"Отослан\",\"Отослана\")"
+      }
+    ]
+  },
+  "shotBelow": {
+    "$call": "bi",
+    "$args": [
+      "Shot below",
+      {
+        "$js": "ru.gs(c,\"Застрелен внизу\",\"Застрелена внизу\")"
+      }
+    ]
+  },
+  "betrayedYou": {
+    "$call": "bi",
+    "$args": [
+      "Betrayed you",
+      {
+        "$js": "ru.gs(c,\"Предал вас\",\"Предала вас\")"
+      }
+    ]
+  },
+  "neverUnmasked": {
+    "$call": "bi",
+    "$args": [
+      "Never unmasked",
+      {
+        "$js": "ru.gs(c,\"Не разоблачён\",\"Не разоблачена\")"
+      }
+    ]
+  },
+  "survived": {
+    "$call": "bi",
+    "$args": [
+      "Survived",
+      {
+        "$js": "ru.gs(c,\"Выжил\",\"Выжила\")"
+      }
+    ]
+  },
+  "oneOfTheEyesBlinks": ["One of the eyes blinks.", "Один из глаз моргает."]
+}

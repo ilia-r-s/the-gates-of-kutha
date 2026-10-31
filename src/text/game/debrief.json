@@ -1,0 +1,2524 @@
+{
+  "passages": {
+    "theRiteHadCome": {
+      "$args": [],
+      "$value": [
+        "The rite had come too far to die with its priests: the gate opened of itself as the last of them was taken away.",
+        "Обряд зашёл слишком далеко, чтобы умереть вместе со своими жрецами: врата открылись сами, едва увезли последнего из них."
+      ]
+    },
+    "theRiteOutranYou": {
+      "$args": [],
+      "$value": [
+        {
+          "$template": "The rite outran you: the gate opened on night ${S.day}, before the dark of the moon."
+        },
+        {
+          "$template": "Обряд вас опередил: врата открылись в ночь ${S.day}, ещё до новолуния."
+        }
+      ]
+    },
+    "youWentDownWithout": {
+      "$args": [],
+      "$value": ["You went down without naming any power.", "Вы спустились вниз, так и не назвав ни одной силы."]
+    },
+    "youNamedBeforeYou": {
+      "$args": ["G"],
+      "$value": [
+        {
+          "$template": "You named ${G} before you went down, and you were right."
+        },
+        {
+          "$template": "Перед спуском вы назвали ${ru.god(S.patron,\"a\")} — и не ошиблись."
+        }
+      ]
+    },
+    "youNamedItWas": {
+      "$args": ["f", "G", "fem"],
+      "$value": [
+        {
+          "$template": "You named ${GODS[f.named].name}. It was ${G}."
+        },
+        {
+          "$template": "Вы назвали ${ru.god(f.named,\"a\")}. А ${fem?\"это была\":\"это был\"} ${ru.god(S.patron)}."
+        }
+      ]
+    },
+    "atTheFourthGate": {
+      "$args": ["c", "h"],
+      "$value": [
+        {
+          "$template": "At the fourth gate you turned in time, and took ${c.name} down.${h[0]}"
+        },
+        {
+          "$template": "У четвёртых врат вы обернулись вовремя и скрутили ${ru.cf(c,\"a\")}.${h[1]}"
+        }
+      ]
+    },
+    "putAKnifeIn": {
+      "$args": ["c", "h"],
+      "$value": [
+        {
+          "$template": "${c.name} put a knife in you at the fourth gate.${h[0]}"
+        },
+        {
+          "$template": "У четвёртых врат ${ru.cf(c)} ${ru.gs(c,\"всадил\",\"всадила\")} в вас нож.${h[1]}"
+        }
+      ]
+    },
+    "walkedDownBesideYou": {
+      "$args": ["c", "h"],
+      "$value": [
+        {
+          "$template": "${c.name} walked down beside you all the way, and at the end took a place in the cult’s circle.${h[0]}"
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"шёл\",\"шла\")} рядом с вами всю дорогу вниз, а в конце ${ru.gs(c,\"занял\",\"заняла\")} место в круге секты.${h[1]}"
+        }
+      ]
+    },
+    "wasLeftBehindOn": {
+      "$args": ["c", "h"],
+      "$value": [
+        {
+          "$template": "${c.name} was left behind on the way down, but went down to the circle by another way, and took ${c.pp} place in it.${h[0]}"
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"остался\",\"осталась\")} позади на пути вниз, но другой дорогой ${ru.gs(c,\"спустился\",\"спустилась\")} к кругу и ${ru.gs(c,\"занял\",\"заняла\")} в нём своё место.${h[1]}"
+        }
+      ]
+    },
+    "wasLeftBehindOn2": {
+      "$args": ["c", "h"],
+      "$value": [
+        {
+          "$template": "${c.name} was left behind on the way down, and never took the place the circle kept for ${EP.him(c)}.${h[0]}"
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"остался\",\"осталась\")} позади на пути вниз и так и не ${ru.gs(c,\"занял\",\"заняла\")} места, которое ${ru.gs(c,\"ему\",\"ей\")} оставили в круге.${h[1]}"
+        }
+      ]
+    },
+    "walkedDownBesideYou2": {
+      "$args": ["c", "h"],
+      "$value": [
+        {
+          "$template": "${c.name} walked down beside you all the way, and at the end would not take the place the circle kept for ${EP.him(c)}.${h[0]}"
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"шёл\",\"шла\")} рядом с вами всю дорогу вниз, а в конце так и не ${ru.gs(c,\"занял\",\"заняла\")} места, которое ${ru.gs(c,\"ему\",\"ей\")} оставили в круге.${h[1]}"
+        }
+      ]
+    },
+    "theTrueWardTaken": {
+      "$args": ["f"],
+      "$value": [
+        {
+          "$template": "${capS(theItem(f.stolen))}, the true ward, ${V(f.stolen,\"was\",\"were\")} taken from you on the way down, and burned before your eyes."
+        },
+        {
+          "$template": "${ru.Item(f.stolen)}, истинный оберег, ${ru.ig(f.stolen,\"был украден\",\"была украдена\",\"было украдено\",\"были украдены\")} у вас по дороге вниз и ${ru.ig(f.stolen,\"сожжён\",\"сожжена\",\"сожжено\",\"сожжены\")} у вас на глазах."
+        }
+      ]
+    },
+    "takenFromYouOn": {
+      "$args": ["f"],
+      "$value": [
+        {
+          "$template": "${capS(theItem(f.feint))} ${V(f.feint,\"was\",\"were\")} taken from you on the way down and burned before your eyes: not the ward at all, but a feint, to make you give up the rest."
+        },
+        {
+          "$template": "${ru.Item(f.feint)} ${ru.ig(f.feint,\"был украден\",\"была украдена\",\"было украдено\",\"были украдены\")} у вас по дороге вниз и ${ru.ig(f.feint,\"сожжён\",\"сожжена\",\"сожжено\",\"сожжены\")} у вас на глазах — вовсе не оберег, а уловка, чтобы вы отказались от остальных."
+        }
+      ]
+    },
+    "youLeftTheTrue": {
+      "$args": ["g3"],
+      "$value": [
+        {
+          "$template": "You left ${theItem(g3.it)}, the true ward, at the seventh gate."
+        },
+        {
+          "$template": "У седьмых врат вы оставили ${ru.item(g3.it,\"a\")} — истинный оберег."
+        }
+      ]
+    },
+    "youPaidTheSeventh": {
+      "$args": ["g3"],
+      "$value": [
+        {
+          "$template": "You paid the seventh gate with ${theItem(g3.it)}."
+        },
+        {
+          "$template": "Седьмым вратам вы заплатили, оставив ${ru.item(g3.it,\"a\")}."
+        }
+      ]
+    },
+    "youAskedToHold": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "You asked ${c.name} to hold the seventh gate. ${EP.He(c)} let it shut behind you, and followed you in."
+        },
+        {
+          "$template": "Вы попросили ${ru.cf(c,\"a\")} удержать седьмые врата. ${ru.gs(c,\"Он\",\"Она\")} дал${ru.gs(c,\"\",\"а\")} им захлопнуться у вас за спиной и ${ru.gs(c,\"вошёл\",\"вошла\")} следом."
+        }
+      ]
+    },
+    "youAskedToHold2": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "You asked ${c.name} to hold the seventh gate. It let go of ${EP.him(c)}, and ${c.p} came through with you."
+        },
+        {
+          "$template": "Вы попросили ${ru.cf(c,\"a\")} удержать седьмые врата. Врата ${ru.gs(c,\"его\",\"её\")} отпустили, и ${ru.gs(c,\"он прошёл\",\"она прошла\")} вместе с вами."
+        }
+      ]
+    },
+    "stayedBehindToHold": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} stayed behind to hold the seventh gate."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"остался\",\"осталась\")} держать седьмые врата."
+        }
+      ]
+    },
+    "youPaidTheSeventh2": {
+      "$args": [],
+      "$value": ["You paid the seventh gate with a memory.", "Седьмым вратам вы заплатили воспоминанием."]
+    },
+    "youRaisedTheTrue": {
+      "$args": ["it", "A"],
+      "$value": [
+        {
+          "$template": "You raised ${theItem(it)}, the true ward, and ${V(it,\"it\",\"they\")} held."
+        },
+        {
+          "$template": "Вы подняли ${A} — истинный оберег, — и ${ru.ig(it,\"он выдержал\",\"она выдержала\",\"оно выдержало\",\"они выдержали\")}."
+        }
+      ]
+    },
+    "youRaisedWhichNever": {
+      "$args": ["it", "G", "A"],
+      "$value": [
+        {
+          "$template": "You raised ${theItem(it)}, which ${V(it,\"was\",\"were\")} never the ward against ${G}, and the rite broke all the same. Nobody will ever know why."
+        },
+        {
+          "$template": "Вы подняли ${A} — вовсе не оберег против ${ru.god(S.patron,\"g\")}, — и обряд всё равно сорвался. Почему, не узнает никто."
+        }
+      ]
+    },
+    "youRaisedTheTrue2": {
+      "$args": ["it", "A"],
+      "$value": [
+        {
+          "$template": "You raised ${theItem(it)}, the true ward, but the binding did not take."
+        },
+        {
+          "$template": "Вы подняли ${A} — истинный оберег, — но заклятие не подействовало."
+        }
+      ]
+    },
+    "youRaisedNothingAt": {
+      "$args": ["it", "A"],
+      "$value": [
+        {
+          "$template": "You raised ${theItem(it)}. ${V(it,\"It binds\",\"They bind\")} nothing at all."
+        },
+        {
+          "$template": "Вы подняли ${A}. ${ru.ig(it,\"Он не связывает\",\"Она не связывает\",\"Оно не связывает\",\"Они не связывают\")} никого."
+        }
+      ]
+    },
+    "youRaisedMadeAgainst": {
+      "$args": ["it", "g", "A"],
+      "$value": [
+        {
+          "$template": "You raised ${theItem(it)}. ${V(it,\"It was\",\"They were\")} made against ${GODS[g].name}."
+        },
+        {
+          "$template": "Вы подняли ${A}. ${ru.ig(it,\"Он был сделан\",\"Она была сделана\",\"Оно было сделано\",\"Они были сделаны\")} против ${ru.god(g,\"g\")}."
+        }
+      ]
+    },
+    "youSpokeTheCounter": {
+      "$args": ["a", "G"],
+      "$value": [
+        {
+          "$template": "You spoke the counter-rite against ${GODS[a.g].name}, and it was ${G} who was there; the rite broke all the same. Nobody will ever know why."
+        },
+        {
+          "$template": "Вы прочли контробряд против ${ru.god(a.g,\"g\")}, а здесь ${ru.gf(S.patron)?\"была\":\"был\"} ${ru.god(S.patron)}; обряд всё равно сорвался. Почему, не узнает никто."
+        }
+      ]
+    },
+    "youSpokeTheCounter2": {
+      "$args": ["G"],
+      "$value": [
+        {
+          "$template": "You spoke the counter-rite against ${G}, and the words held."
+        },
+        {
+          "$template": "Вы прочли контробряд против ${ru.god(S.patron,\"g\")}, и слова устояли."
+        }
+      ]
+    },
+    "youSpokeTheCounter3": {
+      "$args": ["G"],
+      "$value": [
+        {
+          "$template": "You spoke the counter-rite against ${G}, the right power, and the words failed you."
+        },
+        {
+          "$template": "Вы прочли контробряд против ${ru.god(S.patron,\"g\")} — верной силы, — но слова вас подвели."
+        }
+      ]
+    },
+    "youSpokeTheCounter4": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "You spoke the counter-rite against ${GODS[a.g].name}. It was not ${GODS[a.g].name} who was there."
+        },
+        {
+          "$template": "Вы прочли контробряд против ${ru.god(a.g,\"g\")}. Но здесь ${ru.gf(a.g)?\"была не она\":\"был не он\"}."
+        }
+      ]
+    },
+    "youShotAndThe": {
+      "$args": ["a", "c", "h"],
+      "$value": [
+        {
+          "$js": "(a.ok?`You shot ${c.name}, and the rite broke.`:`You shot at ${c.name}, and the rite closed over it.`)+h[0]"
+        },
+        {
+          "$js": "(a.ok?`Вы выстрелили в ${ru.cf(c,\"a\")}, и обряд сорвался.`:`Вы выстрелили в ${ru.cf(c,\"a\")}, но обряд сомкнулся над выстрелом.`)+h[1]"
+        }
+      ]
+    },
+    "youHadNothingLeft": {
+      "$args": [],
+      "$value": [
+        "You had nothing left to try, and stood and watched; on its very last line the rite broke of itself. Nobody will ever know why.",
+        "Вам больше нечего было пробовать, и вы стояли и смотрели; на самой последней строке обряд сорвался сам. Почему, не узнает никто."
+      ]
+    },
+    "youSetTheBitumen": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$js": "a.ok?\"You set the bitumen alight, and the rite burned with it.\":\"You set the bitumen alight, and it was not enough.\""
+        },
+        {
+          "$js": "a.ok?\"Вы подожгли битум, и обряд сгорел вместе с ним.\":\"Вы подожгли битум, но этого оказалось мало.\""
+        }
+      ]
+    },
+    "youCarriedTheTrue": {
+      "$args": ["ward"],
+      "$value": [
+        {
+          "$template": "You carried ${theItem(ward)}, the true ward, and never raised ${V(ward,\"it\",\"them\")}."
+        },
+        {
+          "$template": "При вас ${ru.ig(ward,\"был\",\"была\",\"было\",\"были\")} ${ru.item(ward)}, истинный оберег, — и вы так ${ru.ig(ward,\"его\",\"её\",\"его\",\"их\")} и не подняли."
+        }
+      ]
+    },
+    "youNeverFoundThe": {
+      "$args": ["ward", "G"],
+      "$value": [
+        {
+          "$template": "You never found ${theItem(ward)}, the ward against ${G}. ${V(ward,\"It\",\"They\")} lay ${LOCS[S.wardAt[ward]].at} all along."
+        },
+        {
+          "$template": "Вы так и не нашли ${ru.item(ward,\"a\")} — оберег против ${ru.god(S.patron,\"g\")}. ${ru.ig(ward,\"Он\",\"Она\",\"Оно\",\"Они\")} всё это время ${ru.ig(ward,\"лежал\",\"лежала\",\"лежало\",\"лежали\")} ${ru.loc(S.wardAt[ward],\"at\")}."
+        }
+      ]
+    },
+    "youHadFoundThe": {
+      "$args": ["ward", "G"],
+      "$value": [
+        {
+          "$template": "You had found ${theItem(ward)}, the ward against ${G}."
+        },
+        {
+          "$template": "Вы нашли ${ru.item(ward,\"a\")} — оберег против ${ru.god(S.patron,\"g\")}."
+        }
+      ]
+    },
+    "youExposedAtThe": {
+      "$args": ["c", "a", "h"],
+      "$value": [
+        {
+          "$template": "You exposed ${c.name} at the inquiry on day ${a.day}.${h[0]}"
+        },
+        {
+          "$template": "На дознании в день ${a.day} вы разоблачили ${ru.cf(c,\"a\")}.${h[1]}"
+        }
+      ]
+    },
+    "wasNeverUnmasked": {
+      "$args": ["c", "x"],
+      "$value": [
+        {
+          "$template": "${c.name} was never unmasked${x===S.hierophant?\", and was the hierophant\":\"\"}."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} так и не ${ru.gs(c,\"был разоблачён\",\"была разоблачена\")}${x===S.hierophant?` — а ведь ${ru.gs(c,\"он был\",\"она была\")} иерофантом`:\"\"}."
+        }
+      ]
+    },
+    "onDayYouAccused": {
+      "$args": ["a", "c", "what"],
+      "$value": [
+        {
+          "$template": "On day ${a.day} you accused ${c.name}, ${what[0]}."
+        },
+        {
+          "$template": "В день ${a.day} вы обвинили ${ru.cf(c,\"a\")}, ${what[1]}."
+        }
+      ]
+    },
+    "afterTheInquiryOn": {
+      "$args": [],
+      "$value": [
+        {
+          "$js": "S.log.relented?`After the inquiry on day ${S.log.walkedOut} the camp would hold no more inquiries, until it thought better of it on day ${S.log.relented}.`:`After the inquiry on day ${S.log.walkedOut} the camp would hold no more inquiries.`"
+        },
+        {
+          "$js": "S.log.relented?`После дознания в день ${S.log.walkedOut} лагерь больше не соглашался собираться на дознания — пока не передумал в день ${S.log.relented}.`:`После дознания в день ${S.log.walkedOut} лагерь больше не соглашался собираться на дознания.`"
+        }
+      ]
+    },
+    "onDaySidedWith": {
+      "$args": ["v", "o", "x"],
+      "$value": [
+        {
+          "$template": "On day ${v.day} ${o.name} sided with you against ${x.name}, who was innocent."
+        },
+        {
+          "$template": "В день ${v.day} ${ru.cf(o)} ${ru.gs(o,\"поддержал\",\"поддержала\")} вас против ${ru.cf(x,\"g\")}, ${ru.gs(x,\"который был ни в чём не виноват\",\"которая была ни в чём не виновата\")}."
+        }
+      ]
+    },
+    "onDaySidedWith2": {
+      "$args": ["backed", "v", "o", "x"],
+      "$value": [
+        {
+          "$js": "backed?`On day ${v.day} ${o.name} sided with you against ${x.name}, one of ${o.pp} own, to look clean.`:`On day ${v.day} ${o.name} spoke up for ${x.name}, one of ${o.pp} own.`"
+        },
+        {
+          "$js": "backed?`В день ${v.day} ${ru.cf(o)} ${ru.gs(o,\"поддержал\",\"поддержала\")} вас против ${ru.cf(x,\"g\")}, ${ru.gs(x,\"своего же собрата\",\"своей же сестры\")} по секте, — чтобы ${ru.gs(o,\"самому\",\"самой\")} остаться вне подозрений.`:`В день ${v.day} ${ru.cf(o)} ${ru.gs(o,\"вступился\",\"вступилась\")} за ${ru.cf(x,\"a\")}, ${ru.gs(x,\"своего же собрата\",\"свою же сестру\")} по секте.`"
+        }
+      ]
+    },
+    "laidTraceAtThe": {
+      "$args": ["on", "by", "o", "seen", "onRu"],
+      "$value": [
+        {
+          "$template": "${on} ${by.name} laid ${o.name}’s trace at the scene${seen?\", and you saw through it\":\", to be found\"}."
+        },
+        {
+          "$template": "${onRu} ${ru.cf(by)} ${ru.gs(by,\"подбросил\",\"подбросила\")} на место нападения след ${ru.cf(o,\"g\")}${seen?\" — и вы это раскусили\":\", чтобы его нашли\"}."
+        }
+      ]
+    },
+    "sworeToWatchYour": {
+      "$args": ["c", "k"],
+      "$value": [
+        {
+          "$template": "${c.name} swore to watch your tent on night ${k.day}, and kept the promise: the surest way to be trusted."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"поклялся\",\"поклялась\")} стеречь вашу палатку в ночь ${k.day} — и ${ru.gs(c,\"сдержал\",\"сдержала\")} слово: вернейший способ завоевать доверие."
+        }
+      ]
+    },
+    "onDayLetSlip": {
+      "$args": ["t", "c"],
+      "$value": [
+        {
+          "$template": "On day ${t.day} ${c.name} let slip what only the one who did it could have known."
+        },
+        {
+          "$template": "В день ${t.day} ${ru.cf(c)} ${ru.gs(c,\"проговорился\",\"проговорилась\")} о том, что мог знать лишь тот, кто это сделал."
+        }
+      ]
+    },
+    "ownedBeingOutRather": {
+      "$args": ["on", "c", "said", "onRu"],
+      "$value": [
+        {
+          "$template": "${on} ${c.name} owned being out ${PLACE_SHORT[said.loc]}, rather than be caught lying, and it was ${c.p} who did it."
+        },
+        {
+          "$template": "${onRu} ${ru.cf(c)} не ${ru.gs(c,\"стал\",\"стала\")} скрывать, что ${ru.gs(c,\"был\",\"была\")} ${PLACE_RU[said.loc]}, чтобы не попасться на лжи, — и это ${ru.gs(c,\"он\",\"она\")} всё и ${ru.gs(c,\"сделал\",\"сделала\")}."
+        }
+      ]
+    },
+    "onDayNamedThe": {
+      "$args": ["b", "c", "o"],
+      "$value": [
+        {
+          "$template": "On day ${b.day} ${c.name} named ${o.name}, the other of the cult, once ${o.p} looked lost: one given up to save the rest."
+        },
+        {
+          "$template": "В день ${b.day} ${ru.cf(c)} ${ru.gs(c,\"назвал\",\"назвала\")} ${ru.cf(o,\"a\")}, ${ru.gs(o,\"своего же собрата\",\"свою же сестру\")} по секте, когда ${ru.gs(o,\"тот\",\"та\")} уже ${ru.gs(o,\"казался обречённым\",\"казалась обречённой\")}: одного отдали, чтобы спасти остальных."
+        }
+      ]
+    },
+    "inTheMorning": {
+      "$args": [],
+      "$value": [
+        ["in the morning", "утром"],
+        ["in the afternoon", "днём"],
+        ["in the evening", "вечером"]
+      ]
+    },
+    "onNightTheCult": {
+      "$args": ["night", "by"],
+      "$value": [
+        {
+          "$template": "On night ${night} the cult came for ${by.short}."
+        },
+        {
+          "$template": "В ночь ${night} секта пришла за ${ru.c(by,\"i\")}."
+        }
+      ]
+    },
+    "onDayToldYou": {
+      "$args": ["w", "when", "by", "what", "knew"],
+      "$value": [
+        {
+          "$template": "On day ${w.day}, ${when[0]}, ${by.name} told you ${what[0]}; ${listNames(knew.map((x=>x.short)))} ${knew.length>1?\"were\":\"was\"} there and overheard it."
+        },
+        {
+          "$template": "В день ${w.day}, ${when[1]}, ${ru.cf(by)} ${ru.gs(by,\"сказал\",\"сказала\")} вам, что ${what[1]}; ${ru.list(knew.map((x=>ru.c(x))))} ${knew.length>1?\"были рядом и всё слышали\":ru.gs(knew[0],\"был рядом и всё слышал\",\"была рядом и всё слышала\")}."
+        }
+      ]
+    },
+    "onDayToldYou2": {
+      "$args": ["w", "when", "by", "what"],
+      "$value": [
+        {
+          "$template": "On day ${w.day}, ${when[0]}, ${by.name} told you in private ${what[0]}; none of the cult was about, but by day ${w.heardDay} the rumour had reached it."
+        },
+        {
+          "$template": "В день ${w.day}, ${when[1]}, ${ru.cf(by)} наедине ${ru.gs(by,\"сказал\",\"сказала\")} вам, что ${what[1]}; никого из секты рядом не было, но к дню ${w.heardDay} слух дошёл до неё."
+        }
+      ]
+    },
+    "thatYouWouldHave": {
+      "$args": [],
+      "$value": ["that you would have the whole camp in irons", "что вы всех в лагере закуёте в кандалы"]
+    },
+    "thatYouReadThe": {
+      "$args": [],
+      "$value": ["that you read the old curses aloud at night", "что вы по ночам читаете вслух старые проклятия"]
+    },
+    "thatOneOfYour": {
+      "$args": [],
+      "$value": ["that one of your friends goes out by night", "что кто-то из ваших друзей ходит куда-то по ночам"]
+    },
+    "doubtSaid": {
+      "$args": ["d", "k"],
+      "$value": {
+        "$js": "[[`that ${d.short}’s dreams came out of a bottle`,`будто сны ${ru.c(d,\"g\")} берутся из бутылки`],[`that ${d.short} dreamt whatever an old grudge would have ${EP.him(d)} dream`,`будто ${ru.c(d)} видит во сне то, что ${ru.gs(d,\"ему\",\"ей\")} подсказывает старая обида`],[`that ${d.short}’s dreams were the heat talking`,`будто сны ${ru.c(d,\"g\")} — это говорит жара`]][k]"
+      }
+    },
+    "meantLater": {
+      "$args": ["p", "d"],
+      "$value": [
+        {
+          "$template": "On night ${p.day} the cult meant to come for ${d.short} on night ${p.night}; it did not."
+        },
+        {
+          "$template": "В ночь ${p.day} секта решила прийти за ${ru.c(d,\"i\")} в ночь ${p.night} — но так и не пришла."
+        }
+      ]
+    },
+    "meantDiscredit": {
+      "$args": ["p", "d"],
+      "$value": [
+        {
+          "$template": "On night ${p.day} the cult meant to have ${d.short}’s dreams spoken against at breakfast; nobody said it."
+        },
+        {
+          "$template": "В ночь ${p.day} секта решила, что за завтраком надо бы опорочить сны ${ru.c(d,\"g\")}, — но никто этого так и не сказал."
+        }
+      ]
+    },
+    "meantFrame": {
+      "$args": ["p", "d"],
+      "$value": [
+        {
+          "$template": "On night ${p.day} the cult meant to lay ${d.short}’s trace at its next scene, to discredit ${d.pp} dreams${p.used?`, and did so on night ${p.used}`:\", but never had the chance\"}."
+        },
+        {
+          "$template": "В ночь ${p.day} секта решила подбросить на следующее место нападения след ${ru.c(d,\"g\")}, чтобы опорочить ${ru.gs(d,\"его\",\"её\")} сны${p.used?`, — и сделала это в ночь ${p.used}`:\", — но случая так и не представилось\"}."
+        }
+      ]
+    },
+    "meantLetBe": {
+      "$args": ["p", "d"],
+      "$value": [
+        {
+          "$template": "On night ${p.day} the cult weighed ${d.short}’s dreams, and let ${EP.him(d)} be, for then."
+        },
+        {
+          "$template": "В ночь ${p.day} секта взвесила сны ${ru.c(d,\"g\")} — и пока оставила ${ru.gs(d,\"его\",\"её\")} в покое."
+        }
+      ]
+    },
+    "decidedOnNight": {
+      "$args": ["say", "n"],
+      "$value": [
+        {
+          "$template": "${say[0]}; it had decided on it on night ${n}"
+        },
+        {
+          "$template": "${say[1]}; так было решено ещё в ночь ${n}"
+        }
+      ]
+    },
+    "onDayTheCult": {
+      "$args": ["w", "what", "s"],
+      "$value": [
+        {
+          "$js": "w.cult?`On day ${w.day} the cult put it about ${what[0]}; it was ${s.short} who said it at breakfast.`:`On day ${w.day} ${s.short} said at breakfast ${what[0]}: the camp’s own talk, not the cult’s.`"
+        },
+        {
+          "$js": "w.cult?`В день ${w.day} секта пустила слух, ${what[1]}; за завтраком это ${ru.gs(s,\"повторил\",\"повторила\")} ${ru.c(s)}.`:`В день ${w.day} ${ru.c(s)} ${ru.gs(s,\"сказал\",\"сказала\")} за завтраком, ${what[1]}: это были пересуды самого лагеря, не секты.`"
+        }
+      ]
+    },
+    "youLivedAtThe": {
+      "$args": [],
+      "$value": [
+        "you lived at the scenes of its nights, and it laid more false traces and swept more ground",
+        "вы не вылезали с мест её ночных дел — и она стала чаще подбрасывать чужие следы и заметать землю"
+      ]
+    },
+    "youCalledInquiryAfter": {
+      "$args": [],
+      "$value": [
+        "you called inquiry after inquiry, and it pushed the harder for the innocent to go, and was the quicker to come for an enemy",
+        "вы созывали дознание за дознанием — и она стала настойчивее добиваться изгнания невиновных и быстрее приходить за теми, кто стал ей врагом"
+      ]
+    },
+    "youLeanedOnYour": {
+      "$args": [],
+      "$value": ["you leaned on your friends, and it came for them first", "вы опирались на друзей — и она стала приходить сперва за ними"]
+    },
+    "yourLampBurnedLate": {
+      "$args": [],
+      "$value": [
+        "your lamp burned late over the tablets, and it took note of you",
+        "ваша лампа допоздна горела над табличками — и она вас заметила"
+      ]
+    },
+    "youDugWhereIt": {
+      "$args": [],
+      "$value": ["you dug where it hid its things, and it took note of you", "вы копали там, где она прятала своё, — и она вас заметила"]
+    },
+    "fromDayTheCult": {
+      "$args": ["t", "en", "rus"],
+      "$value": [
+        {
+          "$template": "From day ${t.day} the cult had your measure: ${en}."
+        },
+        {
+          "$template": "С дня ${t.day} секта вас раскусила: ${rus}."
+        }
+      ]
+    },
+    "onDayOwnedUp": {
+      "$args": ["x", "c", "cult"],
+      "$value": [
+        {
+          "$template": "On day ${x.day} ${c.name} owned up to keeping watch, as if coming clean: a lie, ${cult?\"to be trusted\":\"to be listened to\"}."
+        },
+        {
+          "$template": "В день ${x.day} ${ru.cf(c)} ${ru.gs(c,\"признался\",\"призналась\")}, будто стоит на страже, — словно ${ru.gs(c,\"решился\",\"решилась\")} на откровенность. Это была ложь, ${cult?`чтобы ${ru.gs(c,\"ему\",\"ей\")} поверили`:`чтобы с ${ru.gs(c,\"ним\",\"ней\")} считались`}."
+        }
+      ]
+    },
+    "onNightItWas": {
+      "$args": ["x", "c", "s", "him"],
+      "$value": [
+        {
+          "$template": "On night ${x.day} it was ${c.name} who meant you harm in secret${x.ok?\"\":\", though you found it in time\"}${x.caught?s?`; you saw ${him} leave, and took ${EP.him(c)} for ${s.name}`:`, and you caught ${him} at it`:\"\"}."
+        },
+        {
+          "$template": "В ночь ${x.day} вам тайком ${ru.gs(c,\"вредил\",\"вредила\")} ${ru.cf(c)}${x.ok?\"\":\", хотя вы вовремя всё заметили\"}${x.caught?s?`; вы видели, как ${ru.gs(c,\"он уходил\",\"она уходила\")}, но приняли ${ru.gs(c,\"его\",\"её\")} за ${ru.cf(s,\"a\")}`:` — и вы ${ru.gs(c,\"его\",\"её\")} застали`:\"\"}."
+        }
+      ]
+    },
+    "feelingsForWhoDid": {
+      "$args": ["c", "o"],
+      "$value": [
+        {
+          "$template": "${c.pp} feelings for ${o.short}, who did not return them"
+        },
+        {
+          "$template": "речь шла о ${ru.gs(c,\"его\",\"её\")} чувствах к ${ru.c(o,\"d\")}, ${ru.gs(o,\"который\",\"которая\")} их не ${ru.gs(o,\"разделял\",\"разделяла\")}"
+        }
+      ]
+    },
+    "pressedOnDayLet": {
+      "$args": ["x", "c", "what"],
+      "$value": [
+        {
+          "$template": "Pressed on day ${x.day}, ${c.name} let something slip: it was ${what[0]}."
+        },
+        {
+          "$template": "В день ${x.day}, под нажимом, ${ru.cf(c)} ${ru.gs(c,\"проговорился\",\"проговорилась\")}: ${what[1]}."
+        }
+      ]
+    },
+    "onDayToldYou3": {
+      "$args": ["t", "c", "o"],
+      "$value": [
+        {
+          "$template": "On day ${t.day} ${c.name} told you ${o.name} was the thief. ${capS(o.p)} was not."
+        },
+        {
+          "$template": "В день ${t.day} ${ru.cf(c)} ${ru.gs(c,\"сказал\",\"сказала\")} вам, что вор — ${ru.cf(o)}. Это было не так."
+        }
+      ]
+    },
+    "onDaySeemedTo": {
+      "$args": ["t", "c", "found"],
+      "$value": [
+        {
+          "$template": "On day ${t.day} ${c.name} seemed to know what only the one who did it could have known: ${c.p} had ${found?\"found the body\":\"been there that night, by ill luck\"}."
+        },
+        {
+          "$template": "В день ${t.day} ${ru.cf(c)} будто бы ${ru.gs(c,\"знал\",\"знала\")} то, что мог знать лишь тот, кто это сделал: ${found?`${ru.gs(c,\"он нашёл\",\"она нашла\")} тело`:`${ru.gs(c,\"он был\",\"она была\")} там той ночью — по несчастливой случайности`}."
+        }
+      ]
+    },
+    "theTraceAtThe": {
+      "$args": ["on", "o", "seen", "onRu"],
+      "$value": [
+        {
+          "$template": "${on} the trace at the scene was ${o.name}’s, left there earlier${seen?\", as you found out\":\"\"}."
+        },
+        {
+          "$template": "${onRu} след на месте нападения ${ru.gs(o,\"оставил\",\"оставила\")} ${ru.cf(o)} — раньше, до того как всё случилось${seen?\", и вы это выяснили\":\"\"}."
+        }
+      ]
+    },
+    "cult": {
+      "$args": ["cl", "on", "o", "onRu"],
+      "$value": [
+        {
+          "$js": "cl.source===\"cult\"?`${on} the attacker’s own trace looked older than it was, and you set it aside: it was ${o.name}’s.`:`${on} ${o.name}’s trace looked fresh, and you took it for the attacker’s. It was not.`"
+        },
+        {
+          "$js": "cl.source===\"cult\"?`${onRu} след самого нападавшего показался вам старше, чем был, и вы его отбросили: это был след ${ru.cf(o,\"g\")}.`:`${onRu} след ${ru.cf(o,\"g\")} показался вам свежим, и вы приняли его за след нападавшего. Это было не так.`"
+        }
+      ]
+    },
+    "liedAboutWhereHad": {
+      "$args": ["on", "c", "there", "onRu"],
+      "$value": [
+        {
+          "$template": "${on} ${c.name} lied about where ${c.p} had been, out of fear${there?`: ${c.p} had been where it happened`:\"\"}."
+        },
+        {
+          "$template": "${onRu} ${ru.cf(c)} ${ru.gs(c,\"солгал\",\"солгала\")} о том, где ${ru.gs(c,\"был\",\"была\")}, — из страха${there?`: ${ru.gs(c,\"он был\",\"она была\")} там, где всё случилось`:\"\"}."
+        }
+      ]
+    },
+    "saidHadBeenAsleep": {
+      "$args": ["on", "c", "t", "onRu"],
+      "$value": [
+        {
+          "$template": "${on} ${c.name} said ${c.p} had been asleep; ${c.p} had been out ${PLACE_SHORT[t.loc]} with ${C(t.with).name}."
+        },
+        {
+          "$template": "${onRu} ${ru.cf(c)} ${ru.gs(c,\"сказал\",\"сказала\")}, что ${ru.gs(c,\"спал\",\"спала\")}; на самом деле ${ru.gs(c,\"он был\",\"она была\")} ${PLACE_RU[t.loc]} с ${ru.cf(t.with,\"i\")}."
+        }
+      ]
+    },
+    "saidHadSeenSomeone": {
+      "$args": ["on", "c", "onRu"],
+      "$value": [
+        {
+          "$template": "${on} ${c.name} said ${c.p} had seen someone in the dark; ${c.p} had seen nothing, and wanted the camp to listen."
+        },
+        {
+          "$template": "${onRu} ${ru.cf(c)} ${ru.gs(c,\"сказал\",\"сказала\")}, что ${ru.gs(c,\"видел\",\"видела\")} кого-то в темноте; ${ru.gs(c,\"он не видел\",\"она не видела\")} ничего — ${ru.gs(c,\"ему\",\"ей\")} просто хотелось, чтобы лагерь прислушался."
+        }
+      ]
+    },
+    "whoHeardItToo": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "who heard it too, to turn your eyes away"
+        },
+        {
+          "$template": "${ru.gs(v,\"который\",\"которая\")} тоже ${ru.gs(v,\"слышал\",\"слышала\")} его, — чтобы отвести от себя ваш взгляд"
+        }
+      ]
+    },
+    "onNightCameFor": {
+      "$args": ["b", "k", "v", "heard"],
+      "$value": [
+        {
+          "$template": "On night ${b.day} ${k.name} came for ${v.name}, ${heard[0]}; the camp’s dogs drove ${EP.him(k)} off."
+        },
+        {
+          "$template": "В ночь ${b.day} ${ru.cf(k)} ${ru.gs(k,\"приходил\",\"приходила\")} за ${ru.cf(v,\"i\")}, ${heard[1]}; ${ru.gs(k,\"его\",\"её\")} спугнули собаки."
+        }
+      ]
+    },
+    "onNightCameFor2": {
+      "$args": ["b", "k", "v", "heard"],
+      "$value": [
+        {
+          "$template": "On night ${b.day} ${k.name} came for ${v.name}, ${heard[0]}; a watcher in the dark drove ${EP.him(k)} off."
+        },
+        {
+          "$template": "В ночь ${b.day} ${ru.cf(k)} ${ru.gs(k,\"приходил\",\"приходила\")} за ${ru.cf(v,\"i\")}, ${heard[1]}; незримый страж ${ru.gs(k,\"его\",\"её\")} прогнал."
+        }
+      ]
+    },
+    "onNightKilled": {
+      "$args": ["b", "k", "v", "heard"],
+      "$value": [
+        {
+          "$template": "On night ${b.day} ${k.name} killed ${v.name}, ${heard[0]}."
+        },
+        {
+          "$template": "В ночь ${b.day} ${ru.cf(k)} ${ru.gs(k,\"убил\",\"убила\")} ${ru.cf(v,\"a\")}, ${heard[1]}."
+        }
+      ]
+    },
+    "everyDreamToldWas": {
+      "$args": ["dec", "g"],
+      "$value": [
+        {
+          "$template": "Every dream ${dec.short} told was a lie."
+        },
+        {
+          "$template": "Каждый сон, что ${g(\"рассказывал\",\"рассказывала\")} ${ru.c(dec)}, был ложью."
+        }
+      ]
+    },
+    "notEveryDreamTold": {
+      "$args": ["dec", "g"],
+      "$value": [
+        {
+          "$template": "Not every dream ${dec.short} told was a lie: the true ones were told to be believed when it mattered."
+        },
+        {
+          "$template": "Не каждый сон, что ${g(\"рассказывал\",\"рассказывала\")} ${ru.c(dec)}, был ложью: правдивые рассказывались, чтобы ${g(\"ему\",\"ей\")} поверили, когда это будет важно."
+        }
+      ]
+    },
+    "everyDreamToldWas2": {
+      "$args": ["dec", "g"],
+      "$value": [
+        {
+          "$template": "Every dream ${dec.short} told was true, the better to be believed when it mattered."
+        },
+        {
+          "$template": "Каждый сон, что ${g(\"рассказывал\",\"рассказывала\")} ${ru.c(dec)}, был правдой — чтобы ${g(\"ему\",\"ей\")} поверили, когда это будет важно."
+        }
+      ]
+    },
+    "youActedOnOne": {
+      "$args": ["said", "fooled"],
+      "$value": [
+        {
+          "$js": "said[0]+(fooled?\" You acted on one of the lies.\":\"\")"
+        },
+        {
+          "$js": "said[1]+(fooled?\" Одному из лживых снов вы поверили.\":\"\")"
+        }
+      ]
+    },
+    "dreamtTheGodHand": {
+      "$args": ["seer", "t"],
+      "$value": [
+        {
+          "$template": "${seer.name} dreamt the god’s hand on ${t.name}’s shoulder: the god knew who had robbed it. ${t.name} was no cultist."
+        },
+        {
+          "$template": "${capS(ru.cf(seer))} ${ru.gs(seer,\"видел\",\"видела\")} во сне руку бога на плече ${ru.cf(t,\"g\")}: бог знал, кто его обкрадывал. Но ${ru.cf(t)} не ${ru.gs(t,\"был сектантом\",\"была сектанткой\")}."
+        }
+      ]
+    },
+    "theFaceUnseenWas": {
+      "$args": ["seer", "t", "clue"],
+      "$value": [
+        {
+          "$template": "In the veiled dream ${seer.name} told, of ${clue}, the face ${seer.p} could not see was ${t.name}’s."
+        },
+        {
+          "$template": "${ru.gs(t,\"Тот\",\"Та\")}, чьего лица ${ru.cf(seer)} не ${ru.gs(seer,\"разглядел\",\"разглядела\")} во сне (${R(clue)}), — это ${ru.gs(t,\"был\",\"была\")} ${ru.cf(t)}."
+        }
+      ]
+    },
+    "oneOfDreamsWas": {
+      "$args": ["seer", "t", "v"],
+      "$value": [
+        {
+          "$template": "One of ${seer.name}’s dreams was muddied: ${seer.p} dreamt ${t.name} ${v.cult?\"guilty\":\"clean\"}, and it was not so."
+        },
+        {
+          "$template": "Один из снов ${ru.cf(seer,\"g\")} был замутнён: ${ru.gs(seer,\"ему\",\"ей\")} приснилось, что ${ru.cf(t)} ${v.cult?`— ${ru.gs(t,\"один\",\"одна\")} из них`:\"ни при чём\"}, но это было не так."
+        }
+      ]
+    },
+    "dreamedTrueAndTold": {
+      "$args": ["seer", "told"],
+      "$value": [
+        {
+          "$template": "${seer.name} dreamed true, and told you ${told===1?\"one of the dreams\":`${told} of the dreams`}."
+        },
+        {
+          "$template": "${capS(ru.cf(seer))} ${ru.gs(seer,\"видел\",\"видела\")} вещие сны и ${told===1?`однажды ${ru.gs(seer,\"поделился\",\"поделилась\")} ими с вами`:`${ruTimes(told)} ${ru.gs(seer,\"делился\",\"делилась\")} ими с вами`}."
+        }
+      ]
+    },
+    "dreamedTrueButThe": {
+      "$args": ["seer"],
+      "$value": [
+        {
+          "$template": "${seer.name} dreamed true, but the night took ${EP.him(seer)} before ${seer.p} could tell you."
+        },
+        {
+          "$template": "${capS(ru.cf(seer))} ${ru.gs(seer,\"видел\",\"видела\")} вещие сны, но ночь ${ru.gs(seer,\"забрала его\",\"забрала её\")} прежде, чем ${ru.gs(seer,\"он успел\",\"она успела\")} вам рассказать."
+        }
+      ]
+    },
+    "dreamedTrueButNever": {
+      "$args": ["seer"],
+      "$value": [
+        {
+          "$template": "${seer.name} dreamed true, but never told you."
+        },
+        {
+          "$template": "${capS(ru.cf(seer))} ${ru.gs(seer,\"видел\",\"видела\")} вещие сны, но вам о них так и не ${ru.gs(seer,\"рассказал\",\"рассказала\")}."
+        }
+      ]
+    },
+    "keptWatchInThe": {
+      "$args": ["watcher", "saves"],
+      "$value": [
+        {
+          "$template": "${watcher.name} kept watch in the dark and drove them off ${enTimes(saves)}."
+        },
+        {
+          "$template": "${capS(ru.cf(watcher))} ${ru.gs(watcher,\"стоял\",\"стояла\")} на страже в темноте и ${ruTimes(saves)} ${ru.gs(watcher,\"отогнал\",\"отогнала\")} незваных гостей."
+        }
+      ]
+    },
+    "keptWatchOverThe": {
+      "$args": ["watcher"],
+      "$value": [
+        {
+          "$template": "${watcher.name} kept watch over the camp, until the night took ${EP.him(watcher)}."
+        },
+        {
+          "$template": "${capS(ru.cf(watcher))} ${ru.gs(watcher,\"стерёг\",\"стерегла\")} лагерь — пока ночь не ${ru.gs(watcher,\"забрала его\",\"забрала её\")}."
+        }
+      ]
+    },
+    "keptWatchOverThe2": {
+      "$args": ["watcher"],
+      "$value": [
+        {
+          "$template": "${watcher.name} kept watch over the camp, unseen."
+        },
+        {
+          "$template": "${capS(ru.cf(watcher))} незримо ${ru.gs(watcher,\"стерёг\",\"стерегла\")} лагерь."
+        }
+      ]
+    },
+    "thoughtSawNearThe": {
+      "$args": ["smug", "a", "when", "sure", "w"],
+      "$value": [
+        {
+          "$template": "${smug.name} thought ${smug.p} saw ${a.name} near the scene ${when[0]}${S.witnessTold?`, and named ${EP.him(a)}`:\"\"}${sure?\", \"+sure[0]:\"\"}. It was ${C(w.real).name}."
+        },
+        {
+          "$template": "${capS(ru.cf(smug))} ${ru.gs(smug,\"думал\",\"думала\")}, что ${ru.gs(smug,\"видел\",\"видела\")} у места нападения ${when[1]} ${ru.cf(a,\"a\")}${S.witnessTold?` — и ${ru.gs(smug,\"назвал\",\"назвала\")} ${ru.gs(a,\"его\",\"её\")}`:\"\"}${sure?\", \"+sure[1]:\"\"}. Это ${ru.gs(C(w.real),\"был\",\"была\")} ${ru.cf(w.real)}."
+        }
+      ]
+    },
+    "sawNearTheScene": {
+      "$args": ["smug", "a", "when", "sure"],
+      "$value": [
+        {
+          "$template": "${smug.name} saw ${a.name} near the scene ${when[0]}, and named ${EP.him(a)}${sure?\", \"+sure[0]+\",\":\"\"} once ${smug.p} had nothing left to hide."
+        },
+        {
+          "$template": "${capS(ru.cf(smug))} ${ru.gs(smug,\"видел\",\"видела\")} ${ru.cf(a,\"a\")} у места нападения ${when[1]} — и ${ru.gs(smug,\"назвал\",\"назвала\")} ${ru.gs(a,\"его\",\"её\")}${sure?\", \"+sure[1]+\",\":\",\"} когда скрывать стало нечего."
+        }
+      ]
+    },
+    "sawNearTheScene2": {
+      "$args": ["smug", "a", "when"],
+      "$value": [
+        {
+          "$template": "${smug.name} saw ${a.name} near the scene ${when[0]}, and never told you."
+        },
+        {
+          "$template": "${capS(ru.cf(smug))} ${ru.gs(smug,\"видел\",\"видела\")} ${ru.cf(a,\"a\")} у места нападения ${when[1]} — и так вам и не ${ru.gs(smug,\"сказал\",\"сказала\")}."
+        }
+      ]
+    },
+    "toldYouTheTruth": {
+      "$args": ["He", "d", "c", "on", "g"],
+      "$value": [
+        {
+          "$template": " ${He} told you the truth on day ${d}, once ${c.p} trusted you."
+        },
+        {
+          "$template": " В день ${d}, поверив вам, ${on} ${g(\"сказал\",\"сказала\")} правду."
+        }
+      ]
+    },
+    "cameCleanOfOwn": {
+      "$args": ["He", "c", "d", "on", "g"],
+      "$value": [
+        {
+          "$template": " ${He} came clean of ${c.pp} own accord on day ${d}."
+        },
+        {
+          "$template": " В день ${d} ${on} ${g(\"сам признался\",\"сама призналась\")}."
+        }
+      ]
+    },
+    "cameCleanToYou": {
+      "$args": ["He", "c", "d", "on", "g"],
+      "$value": [
+        {
+          "$template": " ${He} came clean to you alone, of ${c.pp} own accord, on day ${d}."
+        },
+        {
+          "$template": " В день ${d} ${on} ${g(\"сам\",\"сама\")} во всём вам ${g(\"признался\",\"призналась\")} — с глазу на глаз."
+        }
+      ]
+    },
+    "confessedBeforeTheWhole": {
+      "$args": ["He", "d", "on", "g"],
+      "$value": [
+        {
+          "$template": " ${He} confessed before the whole camp on day ${d}."
+        },
+        {
+          "$template": " В день ${d} ${on} ${g(\"признался\",\"призналась\")} перед всем лагерем."
+        }
+      ]
+    },
+    "tookItBackBefore": {
+      "$args": ["He", "d", "on", "g"],
+      "$value": [
+        {
+          "$template": " ${He} took it back before everyone on day ${d}, when the story grew dangerous."
+        },
+        {
+          "$template": " В день ${d}, когда ложь стала опасной, ${on} при всех ${g(\"взял\",\"взяла\")} свои слова назад."
+        }
+      ]
+    },
+    "quietlyTookItBack": {
+      "$args": ["He", "d", "on", "g"],
+      "$value": [
+        {
+          "$template": " ${He} quietly took it back on day ${d}, when the story grew dangerous."
+        },
+        {
+          "$template": " В день ${d}, когда ложь стала опасной, ${on} тихо ${g(\"взял\",\"взяла\")} свои слова назад."
+        }
+      ]
+    },
+    "aLieToldIn": {
+      "$args": ["c", "g"],
+      "$value": [
+        {
+          "$template": "a lie, told in a temper, to answer a dream against ${EP.him(c)}"
+        },
+        {
+          "$template": "это была ложь, сказанная сгоряча, в ответ на сон против ${g(\"него\",\"неё\")}"
+        }
+      ]
+    },
+    "aCoverForNight": {
+      "$args": [],
+      "$value": ["a cover for night work of another kind", "это было прикрытие для ночных дел совсем иного рода"]
+    },
+    "claimed": {
+      "$args": ["c", "pt", "why", "back", "N", "g"],
+      "$value": [
+        {
+          "$template": "${c.name} claimed ${pt[0]}: ${why[0]}.${back[0]}"
+        },
+        {
+          "$template": "${N} ${g(\"уверял\",\"уверяла\")}, ${pt[1]}: ${why[1]}.${back[1]}"
+        }
+      ]
+    },
+    "evenTheCultTold": {
+      "$args": ["L"],
+      "$value": [
+        {
+          "$template": "Even the cult told you the truth now and then, where it cost them nothing: ${enTimes(L.cultTruth)}."
+        },
+        {
+          "$template": "Даже сектанты порой говорили вам правду — там, где им это ничего не стоило: ${ruTimes(L.cultTruth)}."
+        }
+      ]
+    },
+    "byTheEnd": {
+      "$args": ["parts"],
+      "$value": [
+        {
+          "$template": "By the end, ${parts.map((x=>x[0])).join(\"; \")}."
+        },
+        {
+          "$template": "К концу ${parts.map((x=>x[1])).join(\"; \")}."
+        }
+      ]
+    },
+    "talkAboutYouAround": {
+      "$args": ["warmed", "turned"],
+      "$value": [
+        {
+          "$template": "Talk about you around the camp warmed people to you ${enTimes(warmed)}, and turned them against you ${enTimes(turned)}."
+        },
+        {
+          "$template": "Разговоры о вас в лагере ${ruTimes(warmed)} расположили к вам людей и ${ruTimes(turned)} настроили их против вас."
+        }
+      ]
+    },
+    "talkAboutYouAround2": {
+      "$args": ["warmed"],
+      "$value": [
+        {
+          "$template": "Talk about you around the camp warmed people to you ${enTimes(warmed)}."
+        },
+        {
+          "$template": "Разговоры о вас в лагере ${ruTimes(warmed)} расположили к вам людей."
+        }
+      ]
+    },
+    "talkAboutYouAround3": {
+      "$args": ["turned"],
+      "$value": [
+        {
+          "$template": "Talk about you around the camp turned people against you ${enTimes(turned)}."
+        },
+        {
+          "$template": "Разговоры о вас в лагере ${ruTimes(turned)} настроили людей против вас."
+        }
+      ]
+    },
+    "wouldNotGoDown": {
+      "$args": ["f"],
+      "$value": [
+        {
+          "$template": "${endNames(f.refused)} would not go down with you."
+        },
+        {
+          "$template": "${capS(endNamesRu(f.refused))} ${f.refused.length>1?\"отказались\":ru.gs(C(f.refused[0]),\"отказался\",\"отказалась\")} спускаться с вами."
+        }
+      ]
+    },
+    "hadASoftSpot": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "${c.name} had a soft spot for you, and did not hide it very well."
+        },
+        {
+          "$template": "${capS(ru.cf(c))} ${ru.gs(c,\"был\",\"была\")} к вам ${ru.gs(c,\"неравнодушен\",\"неравнодушна\")} — и не слишком это ${ru.gs(c,\"скрывал\",\"скрывала\")}."
+        }
+      ]
+    },
+    "hadToldYouDreams": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "${v.short} had told you ${v.pp} dreams in private, and they had reached its ears"
+        },
+        {
+          "$template": "${ru.c(v)} ${ru.gs(v,\"рассказывал\",\"рассказывала\")} вам свои сны наедине — и они дошли до ушей секты"
+        }
+      ]
+    },
+    "hadToldTheWhole": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "${v.short} had told the whole camp ${v.pp} dreams"
+        },
+        {
+          "$template": "${ru.c(v)} ${ru.gs(v,\"рассказывал\",\"рассказывала\")} свои сны всему лагерю"
+        }
+      ]
+    },
+    "hadToldYouIn": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "${v.short} had told you in private of dreaming true, and word of it had reached its ears"
+        },
+        {
+          "$template": "${ru.c(v)} наедине ${ru.gs(v,\"говорил\",\"говорила\")} вам о вещих снах — и слух об этом дошёл до секты"
+        }
+      ]
+    },
+    "hadMadeTooMuch": {
+      "$args": ["v"],
+      "$value": [
+        {
+          "$template": "${v.short} had made too much of dreaming true"
+        },
+        {
+          "$template": "${ru.c(v)} слишком громко ${ru.gs(v,\"говорил\",\"говорила\")} о вещих снах"
+        }
+      ]
+    },
+    "couldNotBear": {
+      "$args": ["by", "v"],
+      "$value": [
+        {
+          "$template": "${by.name} could not bear ${EP.him(v)}"
+        },
+        {
+          "$template": "${ru.cf(by)} ${ru.gs(v,\"его\",\"её\")} терпеть не ${ru.gs(by,\"мог\",\"могла\")}"
+        }
+      ]
+    },
+    "hadNeverLiked": {
+      "$args": ["by", "v"],
+      "$value": [
+        {
+          "$template": "${by.name} had never liked ${EP.him(v)}"
+        },
+        {
+          "$template": "${ru.cf(by)} ${ru.gs(v,\"его\",\"её\")} всегда ${ru.gs(by,\"недолюбливал\",\"недолюбливала\")}"
+        }
+      ]
+    },
+    "hadBegunToSuspect": {
+      "$args": ["v", "of"],
+      "$value": [
+        {
+          "$template": "${v.short} had begun to suspect ${of.name}"
+        },
+        {
+          "$template": "${ru.c(v)} ${ru.gs(v,\"начал\",\"начала\")} подозревать ${ru.cf(of,\"a\")}"
+        }
+      ]
+    },
+    "hadNamedBeforeEveryone": {
+      "$args": ["v", "of"],
+      "$value": [
+        {
+          "$template": "${v.short} had named ${of.name} before everyone, and with ${v.short} dead, it was ${of.name} the camp would look at"
+        },
+        {
+          "$template": "${ru.c(v)} при всех ${ru.gs(v,\"назвал\",\"назвала\")} ${ru.cf(of,\"a\")}, и со смертью ${ru.c(v,\"g\")} лагерь стал бы смотреть на ${ru.cf(of,\"a\")}"
+        }
+      ]
+    },
+    "onNightWithNobody": {
+      "$args": ["n", "v"],
+      "$value": [
+        {
+          "$template": "On night ${n}, with nobody of the cult left at large, the power below came for ${v.name} by itself."
+        },
+        {
+          "$template": "В ночь ${n}, когда на свободе не осталось никого из секты, сила из-под земли сама пришла за ${ru.cf(v,\"i\")}."
+        }
+      ]
+    },
+    "theCultChoseOn": {
+      "$args": ["v", "n", "say"],
+      "$value": [
+        {
+          "$template": "The cult chose ${v.name} on night ${n}: ${say[0]}."
+        },
+        {
+          "$template": "Сектанты выбрали ${ru.cf(v,\"a\")} в ночь ${n}: ${say[1]}."
+        }
+      ]
+    },
+    "theNightTook": {
+      "$args": ["taken", "you"],
+      "$value": [
+        {
+          "$template": "The night took ${listNames(taken.map((x=>`${C(x).name} (night ${C(x).takenDay}${C(x).takenBy===\"you\"?\", by your hand\":\"\"})`)))}${you?\", and at the last, you\":\"\"}."
+        },
+        {
+          "$template": "Ночь забрала ${ru.list(taken.map((x=>`${ru.cf(C(x),\"a\")} (ночь ${C(x).takenDay}${C(x).takenBy===\"you\"?\", вашей рукой\":\"\"})`)))}${you?\", а под конец и вас\":\"\"}."
+        }
+      ]
+    },
+    "afterYouCameThe": {
+      "$args": [],
+      "$value": ["After you came, the night took no one but you.", "После вашего приезда ночь не забрала никого, кроме вас."]
+    },
+    "afterYouCameThe2": {
+      "$args": [],
+      "$value": ["After you came, the night took no one.", "После вашего приезда ночь не забрала никого."]
+    },
+    "onNightThePower": {
+      "$args": ["pw", "a"],
+      "$value": [
+        {
+          "$js": "pw?`On night ${a.day} the power below came for you by itself, and you bled for it.`:`On night ${a.day} they came for you, and you bled for it.`"
+        },
+        {
+          "$js": "pw?`В ночь ${a.day} сила из-под земли сама пришла за вами — и вы поплатились кровью.`:`В ночь ${a.day} они пришли за вами — и вы поплатились кровью.`"
+        }
+      ]
+    },
+    "onNightTheIncantation": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$js": "a.broke?`On night ${a.day} the incantation bowl under your bed broke in your place.`:`On night ${a.day} the incantation bowl under your bed caught what came for you, and was whole in the morning, full of black water.`"
+        },
+        {
+          "$js": "a.broke?`В ночь ${a.day} заклинательная чаша под вашей кроватью раскололась вместо вас.`:`В ночь ${a.day} заклинательная чаша под вашей кроватью поймала то, что приходило за вами, а утром оказалась цела и полна чёрной воды.`"
+        }
+      ]
+    },
+    "onNightYouFired": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": "On night ${a.day} you fired into the dark at something under the tent wall."
+        },
+        {
+          "$template": "В ночь ${a.day} вы стреляли в темноту — во что-то, проскользнувшее под стенку палатки."
+        }
+      ]
+    },
+    "onNightThePower2": {
+      "$args": ["pw", "a"],
+      "$value": [
+        {
+          "$js": "pw?`On night ${a.day} the power below came for you by itself, and you woke in time.`:`On night ${a.day} they came for you, and you woke in time.`"
+        },
+        {
+          "$js": "pw?`В ночь ${a.day} сила из-под земли сама пришла за вами — но вы вовремя проснулись.`:`В ночь ${a.day} они пришли за вами — но вы вовремя проснулись.`"
+        }
+      ]
+    },
+    "theCampHadBegun": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": ": the camp had begun to look hard at ${a.name}, and it let the night go by"
+        },
+        {
+          "$template": ": лагерь начал пристально присматриваться к ${ru.cf(a,\"d\")}, и она переждала эту ночь"
+        }
+      ]
+    },
+    "hadBeenUnmaskedThat": {
+      "$args": ["a"],
+      "$value": [
+        {
+          "$template": ": ${a.name} had been unmasked that evening, and it lay low"
+        },
+        {
+          "$template": ": в тот вечер ${ru.gs(a,\"был разоблачён\",\"была разоблачена\")} ${ru.cf(a)}, и она затаилась"
+        }
+      ]
+    },
+    "theRiteWasFar": {
+      "$args": [],
+      "$value": [": the rite was far along, and it would risk nothing", ": обряд зашёл далеко, и рисковать она не хотела"]
+    },
+    "onNightTheCult2": {
+      "$args": ["d", "why"],
+      "$value": [
+        {
+          "$template": "On night ${d} the cult came for no one${why[0]}."
+        },
+        {
+          "$template": "В ночь ${d} секта ни за кем не пришла${why[1]}."
+        }
+      ]
+    },
+    "theMorningAfterNight": {
+      "$args": ["k", "c", "sp", "t", "pw"],
+      "$value": [
+        {
+          "$template": "The morning after night ${k.day}, ${c.name} said ${c.p} had seen someone off from your tent. ${sp?\"The cult had not come near it, though someone else had, meaning you harm\":\"Nothing had come near it\"}${t?pw?`: that night the power below came for ${t.name} by itself`:`: that night the cult came for ${t.name}`:\"\"}."
+        },
+        {
+          "$template": "Наутро после ночи ${k.day} ${ru.cf(c)} ${ru.gs(c,\"уверял\",\"уверяла\")}, будто ${ru.gs(c,\"спугнул\",\"спугнула\")} кого-то у вашей палатки. ${sp?\"Секта к ней не подходила — а вот кто-то другой подходил, желая вам зла\":\"Никто к ней и не подходил\"}${t?pw?`: в ту ночь сила из-под земли сама приходила за ${ru.cf(t,\"i\")}`:`: в ту ночь секта приходила за ${ru.cf(t,\"i\")}`:\"\"}."
+        }
+      ]
+    },
+    "onNightThePower3": {
+      "$args": ["pw", "x", "c"],
+      "$value": [
+        {
+          "$js": "pw?`On night ${x.day} the power below came for ${c.name} by itself, and the camp’s dogs woke everyone first.`:`On night ${x.day} they came for ${c.name}, and the camp’s dogs woke everyone first.`"
+        },
+        {
+          "$js": "pw?`В ночь ${x.day} сила из-под земли сама пришла за ${ru.cf(c,\"i\")}, но собаки перебудили лагерь раньше.`:`В ночь ${x.day} они пришли за ${ru.cf(c,\"i\")}, но собаки перебудили лагерь раньше.`"
+        }
+      ]
+    },
+    "onNightYouWent": {
+      "$args": ["d", "t", "w"],
+      "$value": [
+        {
+          "$template": "On night ${d.day} you went to ${t.name}’s tent ${w[0]}"
+        },
+        {
+          "$template": "В ночь ${d.day} вы пошли к палатке ${ru.cf(t,\"g\")} ${w[1]}"
+        }
+      ]
+    },
+    "andKilled": {
+      "$args": ["went", "t", "was", "g"],
+      "$value": [
+        {
+          "$template": "${went[0]}, and killed ${EP.him(t)}.${was[0]}"
+        },
+        {
+          "$template": "${went[1]} и ${g(\"убили его\",\"убили её\")}.${was[1]}"
+        }
+      ]
+    },
+    "wokeAndFoughtYou": {
+      "$args": ["went", "t", "was", "g"],
+      "$value": [
+        {
+          "$template": "${went[0]}; ${t.p} woke and fought you off.${was[0]}"
+        },
+        {
+          "$template": "${went[1]}, но ${g(\"он проснулся и отбился\",\"она проснулась и отбилась\")}.${was[1]}"
+        }
+      ]
+    },
+    "andTheWatcherDrove": {
+      "$args": ["went", "d", "was"],
+      "$value": [
+        {
+          "$template": "${went[0]}, and the Watcher drove you off${d.knewBy?\", and knew you\":\"\"}.${was[0]}"
+        },
+        {
+          "$template": "${went[1]}, но страж прогнал вас${d.knewBy?\" — и узнал\":\"\"}.${was[1]}"
+        }
+      ]
+    },
+    "wasSittingUpWith": {
+      "$args": ["t", "g"],
+      "$value": [
+        {
+          "$template": "${t.p} was sitting up with a lamp by your own tent"
+        },
+        {
+          "$template": "${g(\"он\",\"она\")} в ту ночь ${g(\"сидел\",\"сидела\")} с лампой у вашей же палатки"
+        }
+      ]
+    },
+    "couldNotSleepAnd": {
+      "$args": ["t", "g"],
+      "$value": [
+        {
+          "$template": "${t.p} could not sleep, and was up and about, as people are at that hour"
+        },
+        {
+          "$template": "${g(\"ему\",\"ей\")} не спалось, и ${g(\"он бродил\",\"она бродила\")} где-то поблизости, как это бывает в такой час"
+        }
+      ]
+    },
+    "theCultHadCome": {
+      "$args": ["t", "g"],
+      "$value": [
+        {
+          "$template": "the cult had come for ${EP.him(t)} first, out in the dark"
+        },
+        {
+          "$template": "секта раньше вас нашла ${g(\"его\",\"её\")} в темноте"
+        }
+      ]
+    },
+    "andFoundItEmpty": {
+      "$args": ["went", "why", "was"],
+      "$value": [
+        {
+          "$template": "${went[0]}, and found it empty: ${why[0]}.${was[0]}"
+        },
+        {
+          "$template": "${went[1]} и нашли её пустой: ${why[1]}.${was[1]}"
+        }
+      ]
+    },
+    "sawYouBetweenThe": {
+      "$args": ["seer", "d"],
+      "$value": [
+        {
+          "$template": "${seer.name} saw you between the tents that night${d.caught===seer.id?\", and told the camp\":d.hinted===seer.id?\", and hinted at it\":`, and kept it to ${EP.him(seer)}self`}."
+        },
+        {
+          "$template": "${capS(ru.cf(seer))} ${ru.gs(seer,\"видел\",\"видела\")} вас той ночью между палатками${d.caught===seer.id?\" — и рассказал\"+ru.gs(seer,\"\",\"а\")+\" лагерю\":d.hinted===seer.id?\" — и намекал\"+ru.gs(seer,\"\",\"а\")+\" на это\":\" — и \"+ru.gs(seer,\"промолчал\",\"промолчала\")}."
+        }
+      ]
+    },
+    "aButtonFromYour": {
+      "$args": ["d"],
+      "$value": [
+        {
+          "$template": "A button from your jacket was found by the tent${d.linked?\", and the camp knew whose it was\":\"\"}."
+        },
+        {
+          "$template": "У палатки нашли пуговицу от вашей куртки${d.linked?\" — и лагерь понял, чья она\":\"\"}."
+        }
+      ]
+    },
+    "youLaidHabitBy": {
+      "$args": ["o", "d"],
+      "$value": [
+        {
+          "$template": "You laid ${o.name}’s habit by the tent: ${d.plantSeen?`${C(d.plantSeen).name} saw it for what it was`:d.plantTook?`the camp took it for ${C(d.plantTook).name}’s`:\"nobody made anything of it\"}."
+        },
+        {
+          "$template": "У палатки вы оставили след привычки ${ru.cf(o,\"g\")}: ${d.plantSeen?`${ru.cf(d.plantSeen)} ${ru.gs(C(d.plantSeen),\"понял\",\"поняла\")}, что его подбросили`:d.plantTook?`лагерь счёл его следом ${ru.cf(d.plantTook,\"g\")}`:\"никто не придал ему значения\"}."
+        }
+      ]
+    },
+    "thatNightThePower": {
+      "$args": [],
+      "$value": [
+        "That night the power below came for you by itself, and found your tent empty.",
+        "В ту ночь сила из-под земли сама приходила за вами — и нашла вашу палатку пустой."
+      ]
+    },
+    "thatNightTheCult": {
+      "$args": [],
+      "$value": [
+        "That night the cult came for you, and found your tent empty.",
+        "В ту ночь секта приходила за вами — и нашла вашу палатку пустой."
+      ]
+    },
+    "thatNightThePower2": {
+      "$args": [],
+      "$value": [
+        "That night the power below came for you by itself while you were out, and the Watcher drove it off from your empty tent.",
+        "В ту ночь, пока вас не было, сила из-под земли сама приходила за вами — и страж прогнал её от вашей пустой палатки."
+      ]
+    },
+    "thatNightTheCult2": {
+      "$args": [],
+      "$value": [
+        "That night the cult came for you while you were out, and the Watcher drove it off from your empty tent.",
+        "В ту ночь, пока вас не было, секта приходила за вами — и страж прогнал её от вашей пустой палатки."
+      ]
+    },
+    "onDayTheCamp": {
+      "$args": ["d"],
+      "$value": [
+        {
+          "$template": "On day ${d.vote.day} the camp sat in judgement on you, and ${d.vote.passed?\"sent you away\":\"let you stay\"}."
+        },
+        {
+          "$template": "В день ${d.vote.day} лагерь решал вашу судьбу — и ${d.vote.passed?\"отослал вас прочь\":\"позволил остаться\"}."
+        }
+      ]
+    },
+    "onTheEveningOf": {
+      "$args": ["v", "h", "was"],
+      "$value": [
+        {
+          "$template": "On the evening of day ${v.day} ${h.name} came to your tent, and you sent her back.${was[0]}"
+        },
+        {
+          "$template": "Вечером дня ${v.day} к вам в палатку пришла ${ru.cf(h)}, и вы отправили её обратно.${was[1]}"
+        }
+      ]
+    },
+    "onTheEveningOf2": {
+      "$args": ["v", "h", "was"],
+      "$value": [
+        {
+          "$template": "On the evening of day ${v.day} ${h.name} came to your tent, and stayed the night.${was[0]}"
+        },
+        {
+          "$template": "Вечером дня ${v.day} к вам в палатку пришла ${ru.cf(h)} и осталась на ночь.${was[1]}"
+        }
+      ]
+    },
+    "inTheSmallHours": {
+      "$args": [],
+      "$value": [
+        "In the small hours she tried to kill you. You caught her wrist in time, but not her blade.",
+        "Под утро она попыталась вас убить. Её руку вы перехватили вовремя — но не её клинок."
+      ]
+    },
+    "inTheSmallHours2": {
+      "$args": [],
+      "$value": [
+        "In the small hours she tried to kill you, and you caught her wrist in time.",
+        "Под утро она попыталась вас убить, но вы вовремя перехватили её руку."
+      ]
+    },
+    "withTheLastOf": {
+      "$args": [],
+      "$value": [
+        "With the last of the cult beside you, it was the power below that came for you that night, by itself.",
+        "Пока последняя из секты была рядом с вами, в ту ночь за вами пришла сама сила из-под земли."
+      ]
+    },
+    "inTheNightShe": {
+      "$args": [],
+      "$value": [
+        "In the night she slipped out of your tent and did the cult’s work herself, while you slept.",
+        "Ночью, пока вы спали, она выскользнула из вашей палатки и сама сделала работу секты."
+      ]
+    },
+    "thatNightCameFor": {
+      "$args": ["it"],
+      "$value": [
+        {
+          "$template": "That night ${it[0]} came for her, and found her tent empty."
+        },
+        {
+          "$template": "В ту ночь ${it[1]} приходила за ней — и нашла её палатку пустой."
+        }
+      ]
+    },
+    "dead": {
+      "$args": ["v", "it"],
+      "$value": [
+        {
+          "$js": "v.found===\"dead\"?`That night ${it[0]} came for her, knew where she slept, and killed her beside you in your sleep.`:v.found===\"watch\"?`That night ${it[0]} came for her at your tent, and the Watcher drove it off.`:`That night ${it[0]} came for her at your tent, and the dogs woke the camp first.`"
+        },
+        {
+          "$js": "v.found===\"dead\"?`В ту ночь ${it[1]} приходила за ней, знала, где она спит, — и убила её рядом с вами, пока вы спали.`:v.found===\"watch\"?`В ту ночь ${it[1]} приходила за ней к вашей палатке — и страж её прогнал.`:`В ту ночь ${it[1]} приходила за ней к вашей палатке — но собаки перебудили лагерь раньше.`"
+        }
+      ]
+    },
+    "thatNightWouldHave": {
+      "$args": ["it", "v", "h"],
+      "$value": [
+        {
+          "$template": "That night ${it[0]} would have come for you; with her beside you, it went for ${C(v.spared).name} instead."
+        },
+        {
+          "$template": "В ту ночь ${it[1]} шла за вами, но, раз рядом была ${ru.c(h)}, отправилась вместо вас за ${ru.cf(C(v.spared),\"i\")}."
+        }
+      ]
+    },
+    "thatNightCameFor2": {
+      "$args": ["it", "cult", "pw"],
+      "$value": [
+        {
+          "$template": "That night ${it[0]} came for you, and took her instead${cult?pw?\", the last of the cult\":\", one of its own\":\"\"}."
+        },
+        {
+          "$template": "В ту ночь ${it[1]} приходила за вами — а забрала её${cult?pw?\", последнюю из секты\":\", одну из своих\":\"\"}."
+        }
+      ]
+    },
+    "thatNightCameFor3": {
+      "$args": ["it", "h", "pw"],
+      "$value": [
+        {
+          "$template": "That night ${it[0]} came for you; she screamed, and it fled."
+        },
+        {
+          "$template": "В ту ночь ${it[1]} приходила за вами; ${ru.c(h)} закричала, и ${pw?\"сила отступила\":\"сектанты бежали\"}."
+        }
+      ]
+    },
+    "theColdYouFelt": {
+      "$args": ["cult"],
+      "$value": [
+        {
+          "$js": "cult?\"The cold you felt as she came in was the cult’s.\":\"The cold you felt as she came in was only the night.\""
+        },
+        {
+          "$js": "cult?\"Холод, который вы почувствовали, когда она вошла, был холодом секты.\":\"Холод, который вы почувствовали, когда она вошла, был всего лишь ночным холодом.\""
+        }
+      ]
+    },
+    "youNeverMarkedAnyone": {
+      "$args": [],
+      "$value": [
+        "You never marked anyone before their part came out.",
+        "Вы так никого и не отметили до того, как правда о них вышла наружу."
+      ]
+    },
+    "youMarkedOfThe": {
+      "$args": ["r"],
+      "$value": [
+        {
+          "$template": "You marked ${r.mR} of the seven rightly${r.mW?` and ${r.mW} wrongly`:\"\"}, before each one’s part came out."
+        },
+        {
+          "$template": "Вы верно отметили ${r.mR} из семи${r.mW?`, неверно — ${r.mW}`:\"\"}, ещё до того, как правда о каждом вышла наружу."
+        }
+      ]
+    },
+    "youExposedTheFirst": {
+      "$args": ["r"],
+      "$value": [
+        {
+          "$template": "You exposed the first of them on day ${r.first}."
+        },
+        {
+          "$template": "Первого из них вы разоблачили в день ${r.first}."
+        }
+      ]
+    },
+    "youNeverExposedAny": {
+      "$args": [],
+      "$value": ["You never exposed any of them in daylight.", "Ни одного из них вы так и не разоблачили при свете дня."]
+    },
+    "whatYouReadAnd": {
+      "$args": ["won"],
+      "$value": [
+        {
+          "$js": "won?\"What you read and saw at Kutha came home with you.\":\"You let more of Kutha into you than anyone should.\""
+        },
+        {
+          "$js": "won?\"Прочитанное и увиденное в Куте вернулось домой вместе с вами.\":\"Вы впустили в себя больше Куты, чем следует кому бы то ни было.\""
+        }
+      ]
+    },
+    "youNeverOnceCalled": {
+      "$args": [],
+      "$value": ["You never once called the camp to an inquiry.", "Вы ни разу не созвали лагерь на дознание."]
+    },
+    "youCameThroughThe": {
+      "$args": [],
+      "$value": ["You came through the season without a wound.", "Вы прошли весь сезон без единой раны."]
+    },
+    "youTookInThe": {
+      "$args": ["L"],
+      "$value": [
+        {
+          "$template": "You took ${L.woundsTaken===1?\"a wound\":`${L.woundsTaken} wounds`} in the season${L.healed?`, and had ${[\"one\",\"two\",\"three\"][L.healed-1]||L.healed} seen to by a doctor`:\"\"}."
+        },
+        {
+          "$template": "За сезон вы получили ${L.woundsTaken===1?\"рану\":`${L.woundsTaken} ${ruN(L.woundsTaken,\"рану\",\"раны\",\"ран\")}`}${L.healed?`, и ${[\"одну\",\"две\",\"три\"][L.healed-1]||L.healed} вам залечил врач`:\"\"}."
+        }
+      ]
+    },
+    "kuthaCameForYour": {
+      "$args": ["L"],
+      "$value": [
+        {
+          "$template": "Kutha came for your nerve of its own accord ${enTimes(L.dread)}, whatever you were doing."
+        },
+        {
+          "$template": "Кута ${ruTimes(L.dread)} сама добралась до ваших нервов — чем бы вы ни были заняты."
+        }
+      ]
+    },
+    "theDigItselfHurt": {
+      "$args": ["L"],
+      "$value": [
+        {
+          "$template": "The dig itself hurt you ${enTimes(L.perils.length)}."
+        },
+        {
+          "$template": "Сами раскопки ${ruTimes(L.perils.length)} причинили вам вред."
+        }
+      ]
+    },
+    "yourNerveNearlyBroke": {
+      "$args": ["L"],
+      "$value": [
+        {
+          "$template": "Your nerve nearly broke: at its lowest it stood at ${L.minNerve}."
+        },
+        {
+          "$template": "Нервы едва не сдали: однажды их оставалось всего ${L.minNerve}."
+        }
+      ]
+    },
+    "youEndedTheSeason": {
+      "$args": [],
+      "$value": ["You ended the season with your nerve steady.", "Сезон вы закончили с крепкими нервами."]
+    },
+    "youEndedTheSeason2": {
+      "$args": [],
+      "$value": ["You ended the season with your nerve in rags.", "Сезон вы закончили с расшатанными в клочья нервами."]
+    },
+    "belowItFavouredAnd": {
+      "$args": ["en", "rus"],
+      "$value": [
+        {
+          "$template": "<p>Below, it favoured ${en(1)}, and would not abide ${en(-1).replace(/ and ([^,]*)$/,\" or $1\")}.</p>"
+        },
+        {
+          "$template": "<p>Внизу ${ru.gf(S.patron)?\"ей\":\"ему\"} были по нраву ${rus(1)}; не по нраву — ${rus(-1)}.</p>"
+        }
+      ]
+    },
+    "oneLineYouRead": {
+      "$args": ["one"],
+      "$value": [
+        {
+          "$js": "one?\"One line you read was a scribe’s error, and false:\":\"Some lines you read were scribes’ errors, and false:\""
+        },
+        {
+          "$js": "one?\"Одна из прочитанных вами строк — ошибка писца, и она лжёт:\":\"Несколько прочитанных вами строк — ошибки писцов, и они лгут:\""
+        }
+      ]
+    },
+    "notItsOwnAt": {
+      "$args": ["one", "en", "fem", "rus"],
+      "$value": [
+        {
+          "$template": "${one?\"One sign you saw was\":\"Some signs you saw were\"} not its own at all, but ${one?\"a coincidence\":\"coincidences\"}: ${en}."
+        },
+        {
+          "$template": "${one?\"Одно из замеченных вами знамений было\":\"Некоторые из замеченных вами знамений были\"} вовсе не ${fem?\"её\":\"его\"}, а ${one?\"простым совпадением\":\"простыми совпадениями\"}: ${rus}."
+        }
+      ]
+    },
+    "craneDeathWasIn": {
+      "$args": ["en", "rus"],
+      "$value": [
+        {
+          "$template": "Crane’s death was in another power’s manner, not its own: that of ${en}."
+        },
+        {
+          "$template": "Смерть Крейна несла почерк другой силы, а не этой: ${rus}."
+        }
+      ]
+    },
+    "theNightTheyCame": {
+      "$args": ["x", "en", "rus"],
+      "$value": [
+        {
+          "$template": "The night they came for you, night ${x.day}, it came in another power’s manner: that of ${en}."
+        },
+        {
+          "$template": "В ночь ${x.day}, когда пришли за вами, всё было в манере другой силы: ${rus}."
+        }
+      ]
+    },
+    "theWayWasFound": {
+      "$args": ["x", "en", "rus"],
+      "$value": [
+        {
+          "$template": "The way ${C(x.id).name} was found on night ${x.day} was another power’s manner, not its own: that of ${en}."
+        },
+        {
+          "$template": "То, как нашли ${ru.cf(C(x.id),\"a\")} в ночь ${x.day}, несло почерк другой силы, а не этой: ${rus}."
+        }
+      ]
+    },
+    "onTheTraceWas": {
+      "$args": ["cl", "o", "was", "own"],
+      "$value": [
+        {
+          "$template": "On ${cl.day===0?\"the night Crane died\":`night ${cl.day}`} the trace ${LOCS[cl.loc].at} was ${o.name}’s, though not ${o.pp} habit: ${was}, only that night. ${capS(o.pp)} own: ${own}."
+        },
+        {
+          "$template": "${cl.day===0?\"В ночь гибели Крейна\":`В ночь ${cl.day}`} след ${R(LOCS[cl.loc].at)} оставил${ru.gs(o,\"\",\"а\")} ${ru.cf(o)}, хотя это не ${ru.gs(o,\"его\",\"её\")} привычка: ${R(was)} — только в ту ночь. На самом деле — ${R(own)}."
+        }
+      ]
+    },
+    "youMisreadAMark": {
+      "$args": ["w", "was", "is"],
+      "$value": [
+        {
+          "$template": "You misread a mark on ${theItem(w)}: what you took for ${was.en.see} was ${is.en.see}."
+        },
+        {
+          "$template": "Вы неверно прочли примету на предмете «${R(ITEMS[w].name)}»: то, что вы приняли за «${was.ru.see}», было на самом деле «${is.ru.see}»."
+        }
+      ]
+    },
+    "theOldTitleYou": {
+      "$args": ["gl"],
+      "$value": [
+        {
+          "$template": "The old title you knew from your studies, “${ttEn(gl.e)}”, was ${GODS[S.titleOf[gl.e]].name}’s, not ${GODS[gl.g].name}’s: you misremembered it."
+        },
+        {
+          "$template": "Древний титул, знакомый вам по прежним занятиям, «${ttRu(gl.e)}», принадлежал ${ru.god(S.titleOf[gl.e],\"d\")}, а не ${ru.god(gl.g,\"d\")}: память вас подвела."
+        }
+      ]
+    },
+    "youTookForWas": {
+      "$args": ["c", "t"],
+      "$value": [
+        {
+          "$template": "You took ${c.name} for ${TEMPER_NAMES[t.verdict][0]}; ${c.p} was ${TEMPER_NAMES[temperOf(c)][0]}."
+        },
+        {
+          "$template": "Вам показалось, что ${ru.cf(c)} — ${TEMPER_NAMES[t.verdict][ru.f(c)?2:1]}; на самом деле — ${TEMPER_NAMES[temperOf(c)][ru.f(c)?2:1]}."
+        }
+      ]
+    },
+    "whatYouNotedOf": {
+      "$args": ["c", "was", "is"],
+      "$value": [
+        {
+          "$template": "What you noted of ${c.name} was not ${c.pp} habit, only that day’s: ${was}. ${capS(c.pp)} own: ${is}."
+        },
+        {
+          "$template": "То, что вы заметили за ${ru.cf(c,\"i\")}, было не привычкой, а случайностью того дня: ${R(was)}. На самом деле — ${R(is)}."
+        }
+      ]
+    },
+    "later": {
+      "$args": ["c"],
+      "$value": [
+        {
+          "$template": "(later: ${MARKS[c.mark].toLowerCase()})"
+        },
+        {
+          "$template": "(потом: ${ruMark(c).toLowerCase()})"
+        }
+      ]
+    },
+    "thePowerUnderKutha": {
+      "$args": ["g", "named", "tl", "pw", "fem"],
+      "$value": [
+        {
+          "$template": "<p>The power under Kutha was <b>${g.name}</b>, ${g.title}. ${named?named===S.patron?\"You named it correctly.\":`You named ${GODS[named].name}.`:\"\"} The tablets called it ${ttEn(tl[0])} and ${ttEn(tl[1])}. Its ward, ${theItem(pw)} (“${rdEn(pw)}” in this season’s tablets), ${V(pw,\"was\",\"were\")} hidden ${LOCS[S.wardAt[pw]].at}${has(pw)?`, and you had ${V(pw,\"it\",\"them\")}`:\"\"}. ${capS(listNames(S.decoys.map((w=>theItem(w)))))} bound nothing.</p>\\n    <p>Its ${enNum(S.signsOf[S.patron].length)} signs: ${S.signsOf[S.patron].map((si=>SIGN_POOL[si].short)).join(\"; \")}.</p>${natureSay()[0]}"
+        },
+        {
+          "$template": "<p>Под Кутой ${fem?\"таилась\":\"таился\"} <b>${ru.god(S.patron)}</b>, ${R(g.title).charAt(0).toLowerCase()+R(g.title).slice(1)}. ${named?named===S.patron?`Вы назвали ${fem?\"её\":\"его\"} верно.`:`Вы назвали другое имя: ${ru.god(named)}.`:\"\"} В табличках ${fem?\"её\":\"его\"} называли так: «${ttRu(tl[0])}» и «${ttRu(tl[1])}». Оберегом против ${fem?\"неё\":\"него\"} был${ru.ig(pw,\"\",\"а\",\"о\",\"и\")} ${ru.item(pw)} (в табличках этого сезона — «${rdRu(pw)}»); ${ru.ig(pw,\"он лежал\",\"она лежала\",\"оно лежало\",\"они лежали\")} ${ru.loc(S.wardAt[pw],\"at\")}${has(pw)?` — и ${ru.ig(pw,\"был\",\"была\",\"было\",\"были\")} при вас`:\"\"}. ${ru.list(S.decoys.map(((w,i)=>i?ru.item(w):ru.Item(w))))} не связывали никого.</p>\\n    <p>${fem?\"Её\":\"Его\"} ${ruNum(S.signsOf[S.patron].length,\"n\")} ${ruN(S.signsOf[S.patron].length,\"знамение\",\"знамения\",\"знамений\")}: ${S.signsOf[S.patron].map((si=>R(SIGN_POOL[si].short))).join(\"; \")}.</p>${natureSay()[1]}"
+        }
+      ]
+    }
+  },
+  "yourDreamNight": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Your dream, night ${d.night}: "
+      },
+      {
+        "$template": "Ваш сон, ночь ${d.night}: "
+      }
+    ]
+  },
+  "itWasSo": {
+    "$call": "bi",
+    "$args": [" It was so.", " Так и было."]
+  },
+  "itWasNotSo": {
+    "$call": "bi",
+    "$args": [" It was not so.", " Это было не так."]
+  },
+  "text": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${what[0]} · ${why[0]}${back?\" · \"+back[0]:\"\"}"
+      },
+      {
+        "$template": "${what[1]} · ${why[1]}${back?\" · \"+back[1]:\"\"}"
+      }
+    ]
+  },
+  "killedByNightG": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Killed by ${k.short}, night ${b.day}"
+      },
+      {
+        "$template": "${ru.gs(c,\"Убит\",\"Убита\")} рукой ${ru.c(k,\"g\")} в ночь ${b.day}"
+      }
+    ]
+  },
+  "itShouldHaveSaid": {
+    "$call": "bi",
+    "$args": ["It should have said:", "А следовало:"]
+  },
+  "person": {
+    "$call": "bi",
+    "$args": ["Person", "Человек"]
+  },
+  "role": {
+    "$call": "bi",
+    "$args": ["Role", "Роль"]
+  },
+  "claimed": {
+    "$call": "bi",
+    "$args": ["Claimed", "Заявленная роль"]
+  },
+  "towardYou": {
+    "$call": "bi",
+    "$args": ["Toward you", "К вам"]
+  },
+  "yourMark": {
+    "$call": "bi",
+    "$args": ["Your mark", "Ваша отметка"]
+  },
+  "fate": {
+    "$call": "bi",
+    "$args": ["Fate", "Судьба"]
+  },
+  "wasTheHierophant": [
+    {
+      "$template": " ${EP.He(c)} was the hierophant."
+    },
+    {
+      "$template": " ${ru.gs(c, 'Он был', 'Она была')} иерофантом."
+    }
+  ],
+  "cult": {
+    "$template": "${capS(ru.cf(c))} ${ru.gs(c, 'вызвался', 'вызвалась')} идти с вами прежде, чем вы попросили${c.role === 'cult' ? ', — и вы ' + ru.gs(c, 'его', 'её') + ' взяли' : ''}."
+  },
+  "text2": "Вы спустились в одиночку.",
+  "text3": {
+    "$template": "С вами ${went.length > 1 ? 'спустились' : ru.gs(C(went[0]), 'спустился', 'спустилась')} ${endNamesRu(went)}."
+  },
+  "whoDreamedTrue": [
+    {
+      "$template": "who dreamed true"
+    },
+    {
+      "$js": "ru.gs(c, 'а он видел вещие сны', 'а она видела вещие сны')"
+    }
+  ],
+  "whoHadBeenKeepingWatchOver": [
+    {
+      "$template": "who had been keeping watch over you"
+    },
+    {
+      "$js": "ru.gs(c, 'а он оберегал вас', 'а она оберегала вас')"
+    }
+  ],
+  "aThiefButOnlyAThief": [
+    "a thief, but only a thief",
+    {
+      "$js": "ru.gs(c, 'а он был всего лишь вором', 'а она была всего лишь воровкой')"
+    }
+  ],
+  "whoWasExactlyWhatSeemed": [
+    {
+      "$template": "who was exactly what ${c.p} seemed"
+    },
+    {
+      "$js": "ru.gs(c, 'а он был именно тем, кем казался', 'а она была именно той, кем казалась')"
+    }
+  ],
+  "aCult": {
+    "$template": "В день ${a.day} лагерь отказался отослать ${ru.cf(c, 'a')} с теми уликами, что у вас были${c.role === 'cult' ? ` — а ${ru.gs(c, 'он был', 'она была')} ${ru.gs(c, 'одним', 'одной')} из них` : ''}."
+  },
+  "dreamtTrue": [
+    {
+      "$template": "${by.p} dreamt true"
+    },
+    {
+      "$template": "${ru.gs(by, 'он', 'она')} видит вещие сны"
+    }
+  ],
+  "hadDreamtGuilty": [
+    {
+      "$template": "${by.p} had dreamt ${o.name} guilty"
+    },
+    {
+      "$template": "${ru.gs(by, 'ему', 'ей')} приснилось, будто ${ru.cf(o)} — ${ru.gs(o, 'один', 'одна')} из них"
+    }
+  ],
+  "beforeBreakfast": ["before breakfast", "до завтрака"],
+  "thatYouTellEverythingToEveryone": ["that you tell everything to everyone", "что вы всё всем пересказываете"],
+  "thatYouDigForGoldNot": ["that you dig for gold, not for Crane", "что вы копаете ради золота, а не ради Крейна"],
+  "youSatStillAndItGrew": ["you sat still, and it grew bold", "вы сидели тихо — и она осмелела"],
+  "theCult": ["the cult", "речь шла о секте"],
+  "theTabletsThatWentToBaghdad": ["the tablets that went to Baghdad", "речь шла о табличках, что уходили в Багдад"],
+  "nightsWithI": [
+    {
+      "$template": "${c.pp} nights with ${o && o.short}"
+    },
+    {
+      "$template": "речь шла о ${ru.gs(c, 'его', 'её')} ночах с ${o && ru.c(o, 'i')}"
+    }
+  ],
+  "feelingsForYou": [
+    {
+      "$template": "${c.pp} feelings for you"
+    },
+    {
+      "$template": "речь шла о ${ru.gs(c, 'его', 'её')} чувствах к вам"
+    }
+  ],
+  "onlyFear": ["only fear", "это говорил только страх"],
+  "onNight": [
+    {
+      "$template": "on night ${w.night}"
+    },
+    {
+      "$template": "в ночь ${w.night}"
+    }
+  ],
+  "theNightCraneDied": ["the night Crane died", "в ночь гибели Крейна"],
+  "readyToSwearToIt": [
+    "ready to swear to it",
+    {
+      "$template": "${ru.gs(c, 'готовый', 'готовая')} в том поклясться"
+    }
+  ],
+  "allButSureOfIt": [
+    "all but sure of it",
+    {
+      "$template": "почти ${ru.gs(c, 'уверенный', 'уверенная')} в этом"
+    }
+  ],
+  "thoughNotSureOfIt": [
+    "though not sure of it",
+    {
+      "$template": "хотя и не ${ru.gs(c, 'уверенный', 'уверенная')} в этом"
+    }
+  ],
+  "text4": "он",
+  "text5": "она",
+  "keptToItToTheEnd": [
+    {
+      "$template": " ${He} kept to it to the end."
+    },
+    {
+      "$template": " ${capS(on)} ${g('стоял', 'стояла')} на своём до конца."
+    }
+  ],
+  "youBrokeTheStoryOnDay": [
+    {
+      "$template": " You broke the story on day ${d}."
+    },
+    {
+      "$template": " В день ${d} вы заставили ${g('его', 'её')} признаться."
+    }
+  ],
+  "tookItBackOnDay": [
+    {
+      "$template": " ${He} took it back on day ${d}."
+    },
+    {
+      "$template": " В день ${d} ${on} ${g('взял', 'взяла')} свои слова назад."
+    }
+  ],
+  "text6": "он",
+  "text7": "она",
+  "toDreamTrue": ["to dream true", "будто видит вещие сны"],
+  "toKeepWatch": ["to keep watch", "будто стоит на страже"],
+  "seerTheDreamerTheWatcherTold": {
+    "$template": "${c.name} told you the truth: ${c.role === 'seer' ? 'the Dreamer' : 'the Watcher'}."
+  },
+  "seer": {
+    "$template": "${N} ${g('сказал', 'сказала')} вам правду: ${c.role === 'seer' ? g('сновидец', 'сновидица') : 'страж'}."
+  },
+  "text8": {
+    "$template": "${N} никогда не ${g('говорил', 'говорила')}, что видит вещие сны: ${g('боялся', 'боялась')} ножа."
+  },
+  "text9": {
+    "$template": "${N} никогда не ${g('говорил', 'говорила')}, что стоит на страже: стражу лучше оставаться незримым."
+  },
+  "text10": {
+    "$template": "${N} не ${g('стал', 'стала')} говорить, видит ли ${on} вещие сны: лгать ${on} не ${g('умел', 'умела')}, а сказать правду ${g('боялся', 'боялась')}."
+  },
+  "text11": {
+    "$template": "${N} не ${g('стал', 'стала')} говорить, стоит ли ${on} на страже, — но и лгать об этом не ${g('стал', 'стала')}."
+  },
+  "text12": {
+    "$template": "${N} ${g('отрицал', 'отрицала')}, что видит вещие сны: ${g('боялся', 'боялась')} ножа."
+  },
+  "text13": {
+    "$template": "${N} ${g('отрицал', 'отрицала')}, что стоит на страже: стражу лучше оставаться незримым."
+  },
+  "aLieToldToDeceiveYou": ["a lie, told to deceive you", "это была ложь, чтобы вас обмануть"],
+  "aLieToldToBeLiked": ["a lie, told to be liked", "это была ложь, чтобы понравиться"],
+  "trustedYou": [
+    {
+      "$template": "${endNames(fr)} trusted you"
+    },
+    {
+      "$template": "вам ${fr.length > 1 ? 'доверяли' : ru.gs(C(fr[0]), 'доверял', 'доверяла')} ${endNamesRu(fr)}"
+    }
+  ],
+  "couldNotStandYou": [
+    {
+      "$template": "${endNames(en)} could not stand you"
+    },
+    {
+      "$template": "${endNamesRu(en)} вас не ${en.length > 1 ? 'выносили' : ru.gs(C(en[0]), 'выносил', 'выносила')}"
+    }
+  ],
+  "aCult2": {
+    "$template": "К концу ${endNamesRu(by)} подозревали ${ru.cf(c, 'a')} — ${c.role === 'cult' ? 'и не зря' : 'напрасно'}."
+  },
+  "stoodByYou": [
+    {
+      "$template": "${v.short} stood by you"
+    },
+    {
+      "$template": "${ru.c(v)} ${ru.gs(v, 'был', 'была')} на вашей стороне"
+    }
+  ],
+  "wasOneOfThemAndThe": [
+    "was one of them, and the hierophant",
+    {
+      "$js": "g('был одним из них — и иерофантом', 'была одной из них — и иерофантом')"
+    }
+  ],
+  "wasOneOfThem": [
+    "was one of them",
+    {
+      "$js": "g('был одним из них', 'была одной из них')"
+    }
+  ],
+  "dreamedTrue": [
+    "dreamed true",
+    {
+      "$js": "g('видел вещие сны', 'видела вещие сны')"
+    }
+  ],
+  "keptWatchOverTheCamp": [
+    "kept watch over the camp",
+    {
+      "$js": "g('стерёг лагерь', 'стерегла лагерь')"
+    }
+  ],
+  "wasAThiefAndNoMore": [
+    "was a thief, and no more",
+    {
+      "$js": "g('был всего лишь вором', 'была всего лишь воровкой')"
+    }
+  ],
+  "wasExactlyWhatSeemed": [
+    {
+      "$template": "was exactly what ${t.p} seemed"
+    },
+    {
+      "$js": "g('был именно тем, кем казался', 'была именно той, кем казалась')"
+    }
+  ],
+  "text14": [
+    {
+      "$template": " ${EP.He(t)} ${what[0]}."
+    },
+    {
+      "$template": " ${g('Он', 'Она')} ${what[1]}."
+    }
+  ],
+  "withYourRevolver": ["with your revolver", "с револьвером"],
+  "withAKnife": ["with a knife", "с ножом"],
+  "wasOutDoingTheCultS": [
+    {
+      "$template": "${t.p} was out doing the cult’s work"
+    },
+    {
+      "$template": "${g('он', 'она')} делал${g('', 'а')} в ту ночь работу секты"
+    }
+  ],
+  "wasOutRobbingTheDig": [
+    {
+      "$template": "${t.p} was out robbing the dig"
+    },
+    {
+      "$template": "${g('он', 'она')} обворовывал${g('', 'а')} раскоп"
+    }
+  ],
+  "wasOutWithI": [
+    {
+      "$template": "${t.p} was out with ${mate.name}"
+    },
+    {
+      "$template": "${g('он был', 'она была')} где-то с ${ru.cf(mate, 'i')}"
+    }
+  ],
+  "wasOut": [
+    {
+      "$template": "${t.p} was out"
+    },
+    {
+      "$template": "${g('его', 'её')} не было в лагере"
+    }
+  ],
+  "wasAlreadyGone": [
+    {
+      "$template": "${t.p} was already gone"
+    },
+    {
+      "$template": "${g('его', 'её')} уже не было"
+    }
+  ],
+  "sheWasOneOfThem": [" She was one of them.", " Она была одной из них."],
+  "sheWasWhatSheSeemed": [" She was what she seemed.", " Она была той, кем казалась."],
+  "thePowerBelow": ["the power below", "сила из-под земли"],
+  "theCult2": ["the cult", "секта"],
+  "sheLetYouLiveThatNight": "She let you live that night.",
+  "text15": "В ту ночь она оставила вас в живых.",
+  "WAY_WORDS": {
+    "bold": ["boldness", "дерзость"],
+    "humble": ["humility", "смирение"],
+    "truth": ["the truth", "правда"],
+    "guile": ["lies", "ложь"],
+    "haste": ["haste", "спешка"],
+    "patience": ["patience", "терпение"],
+    "offer": ["gifts", "дары"],
+    "water": ["water", "вода"],
+    "light": ["light", "свет"],
+    "take": ["taking what is not yours", "взятое без спроса"],
+    "refuse": ["refusal", "отказ"],
+    "bronze": ["bronze", "бронза"],
+    "word": ["the written word", "письменное слово"],
+    "break": ["breaking things", "разрушение"]
+  },
+  "daysConversationsExposedWronglyAccusedInquiries": [
+    [
+      {
+        "$js": "S.day"
+      },
+      "Days",
+      "Дни"
+    ],
+    [
+      {
+        "$js": "L.talk"
+      },
+      "Conversations",
+      "Разговоры"
+    ],
+    [
+      {
+        "$js": "S.stats.right"
+      },
+      "Exposed",
+      "Разоблачены"
+    ],
+    [
+      {
+        "$js": "r.wrong.length"
+      },
+      "Wrongly accused",
+      "Обвинены зря"
+    ],
+    [
+      {
+        "$js": "r.refused"
+      },
+      "Inquiries refused",
+      "Дознаний отвергнуто"
+    ],
+    [
+      {
+        "$js": "S.stats.taken"
+      },
+      "Taken by the night",
+      "Забрала ночь"
+    ],
+    [
+      {
+        "$template": "${L.examineOk}/${L.examine}"
+      },
+      "Scenes read",
+      "Прочитаны следы"
+    ],
+    [
+      {
+        "$js": "L.search"
+      },
+      "Searches",
+      "Поиски"
+    ],
+    [
+      {
+        "$template": "${L.charms.length}/${S.charms.length}"
+      },
+      "Charms found",
+      "Найдены амулеты"
+    ],
+    [
+      {
+        "$js": "S.factKnown.length"
+      },
+      "Tablet lines",
+      "Строки с табличек"
+    ],
+    [
+      {
+        "$template": "${S.omenSeen.length}/${S.signsOf[S.patron].length}"
+      },
+      "Signs seen",
+      "Знамения"
+    ],
+    [
+      {
+        "$js": "L.horror + L.dread"
+      },
+      "Horrors",
+      "Ужасы"
+    ],
+    [
+      {
+        "$js": "L.attacks.length"
+      },
+      "Attacks on you",
+      "Нападения на вас"
+    ],
+    [
+      {
+        "$template": "${S.nerve}/${S.nerveMax}"
+      },
+      "Nerve at the end",
+      "Нервы в конце"
+    ],
+    [
+      {
+        "$template": "${L.minNerve}/${S.nerveMax}"
+      },
+      "Lowest nerve",
+      "Нервы: минимум"
+    ],
+    [
+      {
+        "$js": "L.nerveLost"
+      },
+      "Nerve lost",
+      "Нервов потеряно"
+    ],
+    [
+      {
+        "$js": "L.nerveGained"
+      },
+      "Nerve regained",
+      "Нервов восстановлено"
+    ],
+    [
+      {
+        "$template": "${S.wounds}/${S.woundsMax}"
+      },
+      "Wounds",
+      "Раны"
+    ],
+    [
+      {
+        "$template": "${planted.filter(cl => cl.status === 'planted').length}/${planted.length}"
+      },
+      "Planted traces seen",
+      "Раскрыто подброшенных следов"
+    ],
+    [
+      {
+        "$template": "${r.mR}/${S.order.length}"
+      },
+      "Marked rightly",
+      "Верные отметки"
+    ],
+    [
+      {
+        "$js": "L.confess"
+      },
+      "Confessions aloud",
+      "Признания вслух"
+    ],
+    [
+      {
+        "$js": "r.friends.length"
+      },
+      "Trusted you",
+      "Доверяли вам"
+    ],
+    [
+      {
+        "$js": "r.enemies.length"
+      },
+      "Turned against you",
+      "Против вас"
+    ],
+    [
+      {
+        "$js": "sg + Math.abs(r.score)"
+      },
+      "Conduct",
+      "Поведение"
+    ]
+  ],
+  "wouldNotSay": [
+    "would not say",
+    {
+      "$template": "${g('уклонялся', 'уклонялась')} от ответа"
+    }
+  ],
+  "hidThePart": [
+    "hid the part",
+    {
+      "$template": "${g('скрывал', 'скрывала')} свою роль"
+    }
+  ],
+  "theDreamerThenTheWatcher": [
+    "the Dreamer, then the Watcher",
+    {
+      "$template": "${g('сновидец', 'сновидица')}, потом страж"
+    }
+  ],
+  "theDreamer": [
+    "the Dreamer",
+    {
+      "$js": "g('сновидец', 'сновидица')"
+    }
+  ],
+  "theWatcher": ["the Watcher", "страж"],
+  "wouldNotSay2": [
+    "would not say",
+    {
+      "$template": "${g('уклонялся', 'уклонялась')} от ответа"
+    }
+  ],
+  "text16": "правда",
+  "toDeceive": ["to deceive", "чтобы обмануть"],
+  "inATemper": ["in a temper", "сгоряча"],
+  "onPrinciple": ["on principle", "из принципа"],
+  "toBeLiked": ["to be liked", "чтобы понравиться"],
+  "forFear": ["for fear", "из страха"],
+  "toWatchUnseen": ["to watch unseen", "чтобы стеречь незримо"],
+  "asACover": ["as a cover", "для прикрытия"],
+  "aStagedConfession": [
+    "a staged confession",
+    {
+      "$js": "g('разыграл признание', 'разыграла признание')"
+    }
+  ],
+  "cameClean": [
+    "came clean",
+    {
+      "$js": "g('признался', 'призналась')"
+    }
+  ],
+  "tookItBack": [
+    "took it back",
+    {
+      "$js": "g('отказался', 'отказалась')"
+    }
+  ],
+  "MANNER_OF": {
+    "fire": ["the burning one", "огненной силы"],
+    "dust": ["the dust of the dead", "праха мёртвых"],
+    "sea": ["the salt deep", "солёной бездны"],
+    "teeth": ["the hungry teeth", "голодных зубов"],
+    "plague": ["the sixty sicknesses", "шестидесяти хворей"],
+    "madness": ["the laughing dark", "смеющейся тьмы"]
+  },
+  "text17": {
+    "$template": "У ${n.g} врат ${e.said[1]}."
+  },
+  "text18": {
+    "$template": "${R(SIGN_POOL[o.si].short)} (день ${o.day})"
+  }
+}
