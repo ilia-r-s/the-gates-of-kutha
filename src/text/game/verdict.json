@@ -181,17 +181,6 @@
     "$call": "bi",
     "$args": ["The camp will not do it.", "Лагерь на это не пойдёт."]
   },
-  "text": [
-    {
-      "$js": "v.back.length ? `На вашей стороне: ${nr(v.back)}.` : 'На вашу сторону не встаёт никто.'"
-    },
-    {
-      "$js": "v.against.length ? `Против: ${nr(v.against)}.` : ''"
-    },
-    {
-      "$js": "v.silent.length ? `${v.silent.length > 1 ? 'Молчат' : 'Молчит'}: ${nr(v.silent)}.` : ''"
-    }
-  ],
   "saysItForAllOfThem": [
     {
       "$template": "${sp.short} says it for all of them:"
@@ -206,6 +195,17 @@
     },
     {
       "$template": "${ru.c(sp)} говорит прямо:"
+    }
+  ],
+  "voteSummaryRu": [
+    {
+      "$js": "v.back.length ? `На вашей стороне: ${nr(v.back)}.` : 'На вашу сторону не встаёт никто.'"
+    },
+    {
+      "$js": "v.against.length ? `Против: ${nr(v.against)}.` : ''"
+    },
+    {
+      "$js": "v.silent.length ? `${v.silent.length > 1 ? 'Молчат' : 'Молчит'}: ${nr(v.silent)}.` : ''"
     }
   ]
 }

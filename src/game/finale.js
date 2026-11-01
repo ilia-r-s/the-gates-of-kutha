@@ -1,4 +1,3 @@
-// game/finale.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const DESC = () => __text('theDescent');
 function finaleIntro(early, why = null) {
   const atNight = S.phase === 'night';
@@ -108,7 +107,7 @@ function stepOn(html, next) {
 function riskStep({ key: key, val: val, base: base, ways: ways, cost: cost, cause: cause, ok: ok, fail: fail }, next) {
   return () => {
     S.fin[key] = val;
-    if (chance(trialP(base, ways, gateBonus()))) return stepOn(`<p>${bi(...ok)}</p>`, next);
+    if (DESCENT_TRIAL.roll(base, ways, gateBonus())) return stepOn(`<p>${bi(...ok)}</p>`, next);
     if (cause) S.fin.cause = cause;
     stepOn(`<p class="horror">${bi(...fail)}</p>` + costOf(cost, ways), next);
   };

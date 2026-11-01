@@ -1,4 +1,3 @@
-// game/debrief.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function endFactors(id, r, haunt, won) {
   const F = [],
     f = S.fin;
@@ -76,8 +75,8 @@ function fxCompany({ f: f, add: add }) {
         __text('cult')
       );
     });
-  if (!went.length) add('n', 'You went down alone.', __text('text2'));
-  else add(went.every(x => C(x).role !== 'cult') ? 'p' : 'n', `${endNames(went)} went down with you.`, __text('text3'));
+  if (!went.length) add('n', 'You went down alone.', __text('descendedAloneRu'));
+  else add(went.every(x => C(x).role !== 'cult') ? 'p' : 'n', `${endNames(went)} went down with you.`, __text('descendedTogetherRu'));
 }
 function fxTreachery({ f: f, r: r, add: add }) {
   if (!f) return;
@@ -109,6 +108,7 @@ function fxTreachery({ f: f, r: r, add: add }) {
   });
   if (f.stolen) add('m', ...TX.debrief.theTrueWardTaken(f));
   if (f.feint) add('n', ...TX.debrief.takenFromYouOn(f));
+  if (f.mistakenTheft) add('n', ...TX.debrief.mistakenWardTaken(f, C(f.theft.by)));
 }
 function fxSeventhGate({ f: f, ward: ward, add: add }) {
   if (!f) return;
@@ -129,7 +129,7 @@ function fxBelow({ f: f, add: add }) {
   if (!f) return;
   (f.enc || []).forEach(e => {
     const n = GATE_N[e.gate];
-    add(e.sign, `At the ${n.en} gate ${e.said[0]}.`, __text('text17'));
+    add(e.sign, `At the ${n.en} gate ${e.said[0]}.`, __text('gateRecollectionRu'));
   });
 }
 function fxSanctum({ f: f, ward: ward, G: G, cultBelow: cultBelow, add: add }) {
@@ -384,11 +384,13 @@ function betrayalLines() {
     const k = C(b.by),
       v = C(b.victim),
       heard = TX.debrief.whoHeardItToo(v);
-    return b.saved === 'luck'
-      ? TX.debrief.onNightCameFor(b, k, v, heard)
-      : b.saved
-        ? TX.debrief.onNightCameFor2(b, k, v, heard)
-        : TX.debrief.onNightKilled(b, k, v, heard);
+    return b.saved === 'away'
+      ? TX.debrief.betrayalEmptyTent(b, k, v, heard)
+      : b.saved === 'luck'
+        ? TX.debrief.onNightCameFor(b, k, v, heard)
+        : b.saved
+          ? TX.debrief.onNightCameFor2(b, k, v, heard)
+          : TX.debrief.onNightKilled(b, k, v, heard);
   });
 }
 function fxFalseDreamer({ r: r, add: add }) {
@@ -466,7 +468,7 @@ function claimEnd(c) {
     d = cl.recanted,
     g = (m, f) => ru.gs(c, m, f),
     He = EP.He(c),
-    on = g(__text('text4'), __text('text5'));
+    on = g(__text('heRu'), __text('sheRu'));
   if (d == null) return cl.role !== trueClaim(c) && cl.role !== 'evade' ? __text('keptToItToTheEnd') : ['', ''];
   return (
     {
@@ -488,7 +490,7 @@ function fxClaims({ L: L, add: add }) {
         was = cl.recanted != null ? cl.was || cl.role : cl.role,
         d = cl.recanted,
         g = (m, f) => ru.gs(c, m, f),
-        on = g(__text('text6'), __text('text7')),
+        on = g(__text('heRu'), __text('sheRu')),
         N = capS(ru.cf(c));
       const back = claimEnd(c);
       const part = r => (r === 'seer' ? __text('toDreamTrue') : __text('toKeepWatch'));
@@ -510,15 +512,15 @@ function fxClaims({ L: L, add: add }) {
                 : `${c.name} denied keeping watch: a watcher works better unseen.`;
         const rus = unasked
           ? seer
-            ? __text('text8')
-            : __text('text9')
+            ? __text('seerKeptSilentRu')
+            : __text('watcherKeptSilentRu')
           : was === 'evade'
             ? seer
-              ? __text('text10')
-              : __text('text11')
+              ? __text('seerEvadedRu')
+              : __text('watcherEvadedRu')
             : seer
-              ? __text('text12')
-              : __text('text13');
+              ? __text('seerDeniedRu')
+              : __text('watcherDeniedRu');
         add(d != null ? 'p' : 'n', en + back[0], rus + back[1]);
       } else if (was && was !== 'none' && was !== 'evade' && was !== trueClaim(c)) {
         const pt = part(was),
@@ -585,7 +587,7 @@ function fxVictims({ add: add }) {
             : TX.debrief.hadMadeTooMuch(v),
         cannotBear: by && TX.debrief.couldNotBear(by, v),
         dislike: by && TX.debrief.hadNeverLiked(by, v),
-        suspects: of && TX.debrief.hadBegunToSuspect(v, of),
+        suspects: of && TX.debrief.hadSpokenAgainst(v, of),
         frame: of && TX.debrief.hadNamedBeforeEveryone(v, of),
         stood: __text('stoodByYou')
       }[w.kind];
@@ -653,7 +655,7 @@ function fxDeed({ add: add }) {
             smuggler: __text('wasAThiefAndNoMore'),
             bystander: __text('wasExactlyWhatSeemed')
           }[t.role],
-    was = __text('text14'),
+    was = __text('actionAfterward'),
     w = d.means === 'revolver' ? __text('withYourRevolver') : __text('withAKnife'),
     went = TX.debrief.onNightYouWent(d, t, w);
   if (d.outcome === 'killed') add(t.role === 'cult' ? 'n' : 'm', ...TX.debrief.andKilled(went, t, was, g));
@@ -699,7 +701,7 @@ function fxVisit({ add: add }) {
   add('n', ...TX.debrief.onTheEveningOf2(v, h, was));
   if (v.struck === 'failed')
     S.ended === 'death' && S.hurtBy === 'wrist' ? add('m', ...TX.debrief.inTheSmallHours()) : add('p', ...TX.debrief.inTheSmallHours2());
-  else if (cult && v.struck !== 'killed') add('n', __text('sheLetYouLiveThatNight'), __text('text15'));
+  else if (cult && v.struck !== 'killed') add('n', __text('sheLetYouLiveThatNight'), __text('sheSparedYouRu'));
   if (cult && S.log.attacks.some(a => a.day === v.day && a.power)) add('n', ...TX.debrief.withTheLastOf());
   if (v.out) add('n', ...TX.debrief.inTheNightShe());
   if (v.empty) add('n', ...TX.debrief.thatNightCameFor(it));
@@ -766,7 +768,7 @@ function claimCell(c) {
   if (!what) return '—';
   const why =
     cl.why === 'truth'
-      ? ['true', __text('text16')]
+      ? ['true', __text('truthRu')]
       : cl.why === 'deceit'
         ? __text('toDeceive')
         : cl.heat
@@ -788,7 +790,7 @@ function claimCell(c) {
         : cl.how === 'confess' || cl.how === 'public' || cl.how === 'aside'
           ? __text('cameClean')
           : __text('tookItBack');
-  return __text('text');
+  return __text('victimReason');
 }
 function fateText(c) {
   const b = S.betrayals.find(x => x.victim === c.id && !x.saved);
@@ -814,7 +816,7 @@ function strayOmensSaid() {
   const fem = ru.gf(S.patron),
     one = odd.length === 1,
     en = odd.map(o => `${SIGN_POOL[o.si].short} (day ${o.day})`).join('; '),
-    rus = odd.map(o => __text('text18')).join('; ');
+    rus = odd.map(o => __text('datedSignRu')).join('; ');
   return `<p>${bi(...TX.debrief.notItsOwnAt(one, en, fem, rus))}</p>`;
 }
 const MANNER_OF = __text('MANNER_OF');

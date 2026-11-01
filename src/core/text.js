@@ -1,10 +1,21 @@
-// core/text.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 let LANG = 'en';
 const RUMAP = new Map(),
   MISSING = new Set();
 const TK = '\u0001',
   TE = '\u0002';
 const PAIRKEY = new Map();
+let seasonTextBase = null;
+// Keep tokens created while modules initialize; generated names and accounts belong to one season.
+function resetSeasonText() {
+  if (!seasonTextBase) seasonTextBase = { ru: new Map(RUMAP), pairs: new Map(PAIRKEY) };
+  else {
+    RUMAP.clear();
+    PAIRKEY.clear();
+    seasonTextBase.ru.forEach((v, k) => RUMAP.set(k, v));
+    seasonTextBase.pairs.forEach((v, k) => PAIRKEY.set(k, v));
+  }
+  // Missing-text diagnostics span seasons so leak/forced-scene tests cannot lose an earlier failure.
+}
 function bi(en, ru) {
   en = String(en);
   if (ru == null) return TK + en + TE;
@@ -94,10 +105,10 @@ const ru = {
   Item: (it, k = 'n') => capS(RU_ITEM[it].f[CASE[k]]),
   ig: (it, m, f, n, pl) => ({ m: m, f: f, n: n, pl: pl })[RU_ITEM[it].g],
   loc: (l, k = 'name') => RU_LOC[l][k],
-  list: a => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + __text('text') + a[a.length - 1]),
-  ob: c => (/^[АЭИОУЫ]/.test(ru.c(c, 'p')) ? __text('text2') : __text('text3')) + ru.c(c, 'p'),
-  name: () => (S.name === 'Marlowe' || S.name === __text('text4') ? __text('text5') : esc(S.name)),
-  dayStamp: () => __text('text15')
+  list: a => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + __text('andRu') + a[a.length - 1]),
+  ob: c => (/^[АЭИОУЫ]/.test(ru.c(c, 'p')) ? __text('aboutBeforeVowelRu') : __text('aboutRu')) + ru.c(c, 'p'),
+  name: () => (S.name === 'Marlowe' || S.name === __text('marloweRu') ? __text('marloweRu') : esc(S.name)),
+  dayStamp: () => __text('dayStampRu')
 };
 function fmtR(s, m) {
   return String(s).replace(/\{(\w+)(?:\.([ngdaip]))?(?::([^|}]*)\|([^}]*))?\}/g, (x, k, cs, a, b) => {
@@ -107,7 +118,7 @@ function fmtR(s, m) {
     return ru.c(c, cs || 'n');
   });
 }
-const enName = () => (S.name === __text('text6') ? 'Marlowe' : esc(S.name));
+const enName = () => (S.name === __text('marloweRu') ? 'Marlowe' : esc(S.name));
 const fmt = (s, m) => s.replace(/\{(\w+)\}/g, (x, k) => (k in m ? m[k] : x));
 const P = c => ({ n: c.short, pp: c.pp, p: c.p });
 const listNames = a => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
@@ -116,11 +127,11 @@ const NUM_EN = __text('NUM_EN'),
 const enNum = n => NUM_EN[n] || String(n),
   ruNum = (n, g = 'm') =>
     n === 1
-      ? { m: __text('text7'), f: __text('text8'), n: __text('text9') }[g]
+      ? { m: __text('oneMasculineRu'), f: __text('oneFeminineRu'), n: __text('oneNeuterRu') }[g]
       : n === 2
         ? g === 'f'
-          ? __text('text10')
-          : __text('text11')
+          ? __text('twoFeminineRu')
+          : __text('twoMasculineRu')
         : NUM_RU[n] || String(n);
 const capS = s => s.charAt(0).toUpperCase() + s.slice(1);
 function esc(s) {
@@ -134,5 +145,5 @@ const ruN = (n, one, few, many) => {
 const TIMES_EN = __text('TIMES_EN'),
   TIMES_RU = __text('TIMES_RU');
 const enTimes = n => TIMES_EN[n - 1] || `${n} times`;
-const ruTimes = n => TIMES_RU[n - 1] || `${n} ${ruN(n, __text('text12'), __text('text13'), __text('text14'))}`;
+const ruTimes = n => TIMES_RU[n - 1] || `${n} ${ruN(n, __text('timeSingularRu'), __text('timesFewRu'), __text('timesManyRu'))}`;
 const EP = { He: c => (c.p === 'she' ? 'She' : 'He'), him: c => (c.p === 'she' ? 'her' : 'him') };

@@ -1,4 +1,3 @@
-// game/deed.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const deedOffered = () =>
   !S.log.deed && atEvening() && !S.inquiryDone && freeChars().length > 0 && S.day >= RULES.deed.from && S.day < RULES.start.days;
 const DEED_THOUGHTS = TX.deed.theTrusteesSentYou();
@@ -92,6 +91,7 @@ function deedReach(night, d, t) {
     h += hurt(...D.cost.away, { k: 'deed', how: 'away' });
   } else if (night.watcher && isFree(night.watcher) && Watch.holds(night, t.id)) {
     d.outcome = 'watched';
+    d.discovery = { day: S.day + 1, source: 'the morning report of someone approaching a guarded tent' };
     d.knewBy = chance(D.knows) ? night.watcher.id : null;
     S.log.guarded.push({ day: S.day, id: t.id, you: true });
     h = bi(...TX.deed.youAreAStep(t));
@@ -99,6 +99,7 @@ function deedReach(night, d, t) {
     h += hurt(...D.cost.watched, { k: 'deed', how: 'watched' });
   } else if (chance(clamp(D.kill[d.means] + (S.bg === 'soldier' ? D.soldier : 0)))) {
     d.outcome = 'killed';
+    d.discovery = { day: S.day + 1, source: 'the body discovered at first light' };
     fixMark(t);
     t.status = 'taken';
     t.takenDay = S.day;
@@ -111,6 +112,7 @@ function deedReach(night, d, t) {
     h += hurt(...D.cost.done, { k: 'deed', how: 'done' });
   } else {
     d.outcome = 'failed';
+    d.discovery = { day: S.day + 1, source: 'the injured person appearing at breakfast' };
     d.knewBy = chance(D.wakes) ? t.id : null;
     h = d.means === 'revolver' ? bi(...TX.deed.wakesAsYouRaise(t)) : bi(...TX.deed.wakesAsYouReach(t));
     night.found.push(bi(...TX.deed.comesToBreakfastWith(t, d)));
@@ -162,21 +164,37 @@ function deedMorning() {
   return judged ? h + youVote() : h;
 }
 const DEED_MORNING = [deedKnown, deedButton, deedEmptyTent, deedShot, deedPlantRead, deedCultHears];
-function deedKnown(d, t, happened) {
+function deedKnown(d) {
   const D = RULES.deed,
     knower = d.knewBy ? C(d.knewBy) : d.seenBy ? C(d.seenBy) : null;
   if (!knower || !isFree(knower)) return '';
-  const surely = !!d.knewBy,
+  // An outing is suspicious beside discovered violence, regardless of whether
+  // the player actually caused it. Seeing an outing alone is not seeing a crime.
+  const discovery =
+      d.discovery && d.discovery.day <= S.day
+        ? d.discovery
+        : S.order.map(C).some(c => c.status === 'taken' && c.takenDay === S.day - 1)
+          ? { day: S.day, source: 'a body discovered after the same night' }
+          : null,
+    surely = !!d.knewBy,
+    evidence = surely || !!discovery,
     tell = clamp(D.tell[Math.max(0, Math.min(3, knower.rapport + 1))] + (knower.role === 'cult' ? D.cultTells : 0) + (surely ? D.sure : 0));
-  if (happened && chance(tell)) {
+  if (evidence && chance(tell)) {
     d.caught = knower.id;
+    d.allegation = {
+      by: knower.id,
+      day: S.day,
+      source: surely ? 'recognised the attacker in person' : discovery.source,
+      route: surely ? 'eyewitness account' : 'inference from a sighting and discovered violence',
+      confidence: surely ? 'assured' : 'tentative'
+    };
     return bi(...TX.deed.beforeBreakfastStandsUp(knower, surely));
   }
   if (!chance(D.hint)) return '';
   d.hinted = knower.id;
-  Suspicion.suspectYou(happened ? D.onYou.hinted : D.onYou.hintedNothing);
+  Suspicion.suspectYou(evidence ? D.onYou.hinted : D.onYou.hintedNothing);
   const hm = C('hamid'),
-    asked = knower.id !== hm.id && isFree(hm) ? ['Hamid', __text('text')] : __text('theCook');
+    asked = knower.id !== hm.id && isFree(hm) ? ['Hamid', __text('hamidGenitiveRu')] : __text('theCook');
   return bi(...TX.deed.watchesYouOverBreakfast(knower, asked));
 }
 function deedButton(d, t, happened) {
@@ -211,9 +229,13 @@ function deedPlantRead(d, t) {
   d.plantTook = o.id;
   return Moments.stir('planted', { about: o.id, at: t.id, cat: d.plant.cat });
 }
-function deedCultHears(d, t, happened) {
-  const D = RULES.deed;
-  if (happened) Suspicion.alertCult(D.cultKnows * (d.caught || d.hinted || d.linked ? 1 : D.unseen), freeCult());
+function deedCultHears(d) {
+  if (d.caught || d.hinted || d.linked)
+    Suspicion.alertCult(RULES.deed.cultKnows, freeCult(), {
+      kind: 'deed',
+      route: d.caught ? 'witness' : d.hinted ? 'sighting' : 'trace',
+      about: d.id || null
+    });
   return '';
 }
 function deedDawn() {

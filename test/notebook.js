@@ -1,4 +1,4 @@
-// Screens of the new notebook, the claims and a conversation, mid-season. usage: node test/notebook.js [lang] [width]
+// Screens of the notebook, claims and a conversation mid-season. usage: node test/notebook.js [lang] [width]
 const path = require('path');
 const { run, open } = require('./lib/harness');
 const [lang = 'en', width = '1280'] = process.argv.slice(2);
@@ -44,6 +44,7 @@ run(async browser => {
   if (lang === 'ru') await p.evaluate(() => setLang('ru'));
   const shot = async (tab, name) => {
     await p.evaluate(t => {
+      openCasebook();
       S_ui.tab = t;
       renderBook();
       const tp = document.getElementById('tabPanel');
@@ -53,12 +54,18 @@ run(async browser => {
       document.querySelector('.casebook').scrollIntoView();
     }, tab);
     const el = await p.$('.casebook');
+    const height = await el.evaluate(e => Math.ceil(e.getBoundingClientRect().height) + 400);
+    await p.setViewportSize({ width: +width, height: Math.max(1000, height) });
     await el.screenshot({ path: path.resolve(__dirname, `shots/nb-${name}-${lang}-${width}.png`) });
   };
   await shot('omens', 'omens');
   await shot('evidence', 'evidence');
   await shot('people', 'people');
-  await p.evaluate(() => window.scrollTo(0, 0));
+  await p.evaluate(() => {
+    closeCasebook();
+    window.scrollTo(0, 0);
+  });
+  await p.setViewportSize({ width: +width, height: 1000 });
   await p.screenshot({ path: path.resolve(__dirname, `shots/nb-talk-${lang}-${width}.png`) });
   return 'done ' + JSON.stringify(errs);
 });

@@ -1,4 +1,3 @@
-// people/pretences.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function pretence(c) {
   const cl = claimOf(c);
   if (!cl || cl.recanted != null) return null;
@@ -10,8 +9,52 @@ function pretence(c) {
   return cl.role === 'none' && stages(c) ? 'staged' : null;
 }
 const stages = c => c.role !== 'smuggler' && ['liar', 'calculating'].includes(temperOf(c));
-const rivalClaim = c => freeChars().some(o => o.id !== c.id && claimOf(o).role === claimOf(c).role && claimOf(o).said != null);
-const DROPS_PRETENCE = byCase(
+const rivalClaim = c => Knowledge.knownClaims(c).some(w => w.by !== c.id && w.value === claimOf(c).role),
+  dreamtAgainst = c => Knowledge.knownWords(c).some(w => w.kind === 'dream' && w.about === c.id && w.value === 'cult'),
+  ownFailedWatch = c => S.testimony.some(t => t.from === c.id && t.about === c.id && t.kind === 'failwatch');
+const DROPS_PRETENCE = Decisions.define({
+  id: 'pretence.drop',
+  action: 'drop-pretence',
+  authority: 'actor',
+  subject: c => c,
+  knowledge: [
+    'self: role, claim, previous defence, temperament and trust in the player',
+    'received public claims and accusations, or private words with an established hearing route',
+    'own failed watch and deaths actually announced to the speaker'
+  ],
+  consequences: ['claim', 'testimony', 'journal'],
+  features: {
+    occasion: 'string',
+    pretence: 'string',
+    temper: 'string',
+    trust: 'number',
+    rival: 'boolean',
+    dreamtAgainst: 'boolean',
+    failedWatch: 'boolean',
+    accusers: 'number',
+    knownDeath: 'boolean',
+    defendedCult: 'boolean'
+  },
+  observe: (c, occasion = 'consider') => ({
+    occasion,
+    pretence: pretence(c) || 'none',
+    temper: temperOf(c),
+    trust: c.rapport,
+    rival: rivalClaim(c),
+    dreamtAgainst: dreamtAgainst(c),
+    failedWatch: ownFailedWatch(c),
+    accusers: Knowledge.accusers(c).length,
+    knownDeath: Knowledge.lossToday(c),
+    defendedCult: c.role === 'cult' && !!claimOf(c).stood
+  }),
+  probability: (c, occasion = 'consider') => {
+    if (occasion === 'inquiry' && pretence(c) === 'staged') return 0;
+    const p = PRETENCE_BASE.p(c);
+    if (!(p > 0)) return 0;
+    return occasion === 'morning' ? room('talk') * p : occasion === 'inquiry' ? Math.min(RULES.confess.cap, p + RULES.confess.publicly) : p;
+  }
+});
+const PRETENCE_BASE = byCase(
   'drops a pretence',
   c => {
     const k = pretence(c);
@@ -27,23 +70,22 @@ const DROPS_PRETENCE = byCase(
     ]),
     hidden: odds('owns the part it hid', [
       ['base', c => TP(c).confess * RULES.confess.hidden],
-      ['+ a death today', (c, takenToday) => (takenToday ? RULES.confess.afterDeath : 0)],
+      ['+ a death announced today', c => (Knowledge.lossToday(c) ? RULES.confess.afterDeath : 0)],
       ['+ trusts you', c => (Ties.friend(c) ? RULES.confess.trusting : 0)],
       ['cap', () => RULES.confess.cap]
     ]),
     'false part': odds('drops a part it claimed', [
       ['base', c => TP(c).confess],
       ['+ another claims the part', c => (rivalClaim(c) ? RULES.confess.rival : 0)],
-      ['+ dreamt guilty', c => (Record.about(c, t => t.kind === 'vision' && t.verdict === 'cult') ? RULES.confess.dreamt : 0)],
-      ['+ slept on a sworn watch', c => (Record.about(c, t => t.kind === 'failwatch') ? RULES.confess.caught : 0)],
-      ['+ two or more distrust it', c => (Record.about(c, t => t.kind === 'distrust') >= 2 ? RULES.confess.blamed : 0)],
+      ['+ heard a dream against them', c => (dreamtAgainst(c) ? RULES.confess.dreamt : 0)],
+      ['+ knows their own failed watch', c => (ownFailedWatch(c) ? RULES.confess.caught : 0)],
+      ['+ heard two or more accusers', c => (Knowledge.accusers(c).length >= RULES.suspects.many ? RULES.confess.blamed : 0)],
       ['+ trusts you', c => (Ties.friend(c) ? RULES.confess.trusting : 0)],
       ['cap', () => RULES.confess.cap],
       ['* holds a story told for the other of the cult', c => (c.role === 'cult' && claimOf(c).stood ? Math.min(1, TP(c).counter) : 1)]
     ])
   }
 );
-const confessChance = (c, takenToday) => DROPS_PRETENCE.p(c, takenToday);
 function comeClean(c, how) {
   let k = pretence(c);
   if (!k) return null;
@@ -66,6 +108,7 @@ function comeClean(c, how) {
   Record.testify(c.id, c.id, 'claim', cl.role);
   const open = how === 'confess' || how === 'public';
   if (open) {
+    Knowledge.publicClaim(c, cl.role);
     Record.testify(c.id, c.id, 'confess', String(S.day));
     S.log.confess++;
   }
@@ -82,7 +125,7 @@ function ownUp(c, k, how, { open: open, lied: lied, evaded: evaded, feigned: fei
     g: g,
     N: c.name,
     Nr: capS(ru.cf(c)),
-    adm: g(__text('text'), __text('text2'))
+    adm: g(__text('confessedMasculineRu'), __text('confessedFeminineRu'))
   });
 }
 function ownsTrade(c) {
@@ -172,10 +215,7 @@ function morningConfession(c) {
 function inquiryConfession() {
   if (S.inqConf === S.day) return '';
   S.inqConf = S.day;
-  const c = shuffle(freeChars()).find(o => {
-    const p = pretence(o) !== 'staged' && confessChance(o, false);
-    return p > 0 && chance(Math.min(RULES.confess.cap, p + RULES.confess.publicly));
-  });
+  const c = shuffle(freeChars()).find(o => DROPS_PRETENCE.roll(o, 'inquiry'));
   if (!c) return '';
   return `<p class="event">${quoted(inquiryLead(c), comeClean(c, 'public'))}</p>` + Moments.stir('confessed', { about: c.id });
 }

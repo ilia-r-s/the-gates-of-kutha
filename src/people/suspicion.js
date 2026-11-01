@@ -11,6 +11,7 @@ const Suspicion = (() => {
     S.credit = {};
     S.onYou = 0;
     S.alerted = [];
+    S.alerts = [];
     S.words = [];
     S.acts = [];
   }
@@ -42,7 +43,9 @@ const Suspicion = (() => {
     return top[0] || null;
   }
   function sayAloud(by, about, verdict, how) {
-    S.said.push({ day: S.day, by: by, about: about, verdict: verdict, how: how, settled: false });
+    const word = { day: S.day, by: by, about: about, verdict: verdict, how: how, settled: false };
+    Knowledge.publicWord(word);
+    S.said.push(word);
   }
   function blame(by, about) {
     Record.testify(by, about, 'distrust', 'cult');
@@ -75,8 +78,12 @@ const Suspicion = (() => {
   function clearYou(n) {
     S.onYou = Math.max(0, onYou() - n);
   }
-  function alertCult(p, who) {
-    if (chance(p)) who.forEach(c => S.alerted.includes(c.id) || S.alerted.push(c.id));
+  function alertCult(p, who, source) {
+    if (!source) throw new Error('An alarm needs a source');
+    if (chance(p)) {
+      who.forEach(c => S.alerted.includes(c.id) || S.alerted.push(c.id));
+      S.alerts.push({ day: S.day, slot: S.slot, knew: who.map(c => c.id), source });
+    }
   }
   const cultAlerted = () => S.alerted.some(k => isFree(C(k)));
   function toldYou(by, about, kind, at, verdict = null) {
@@ -112,6 +119,7 @@ const Suspicion = (() => {
     return w.heard && w.knew.some(x => isFree(C(x)));
   }
   function sawYou(kind, at, w = null) {
+    Knowledge.witnessAction(kind, at, w);
     const there = at ? (S.here[at] || []).filter(x => isFree(C(x)) && C(x).role === 'cult') : [],
       i = w ? id(w) : null;
     S.acts.push({
@@ -148,13 +156,24 @@ const Suspicion = (() => {
     },
     knownAloud = c => hasDreamtAloud(c) || ownedOpenly(c);
   const accusedInVain = c => S.log.refusedInq.some(r => r.id === id(c));
-  const looksLost = c => Record.caseAgainst(c) >= RULES.verdict.someCase || suspected(c),
-    caught = c => Record.caseAgainst(c) >= RULES.verdict.strongCase || suspected(c) || accusedInVain(c),
-    clear = c => Record.caseAgainst(c) < RULES.verdict.someCase && !suspectedBy(c).length && !accusedInVain(c);
+  // A private suspicion is not a visible expression. Only words spoken in camp,
+  // an inquiry's presented case, or a dream actually overheard can inform the cult.
+  const publicWords = (o, k) => S.said.filter(x => x.by === id(o) && x.about === id(k) && x.verdict === 'cult'),
+    shown = (o, k) => Math.min(RULES.scale.suspicion, new Set(publicWords(o, k).map(x => `${x.day}:${x.how}`)).size),
+    exposure = k => freeChars().filter(o => o.id !== id(k) && shown(o, k) > 0),
+    presentedCase = c => Math.max(0, ...S.inquiries.filter(v => v.id === id(c)).map(v => v.case || 0));
+  const looksLost = c => presentedCase(c) >= RULES.verdict.someCase || exposure(c).length >= lv().many,
+    caught = c => presentedCase(c) >= RULES.verdict.strongCase || exposure(c).length >= lv().many || accusedInVain(c),
+    clear = c => presentedCase(c) < RULES.verdict.someCase && !exposure(c).length && !accusedInVain(c);
   const THREAT_PARTS = {
-    steps: (o, k) => level(o, k),
-    pastFirst: (o, k) => Math.max(0, level(o, k) - 1),
-    earnest: (o, k) => (earnest(o, k) ? 1 : 0),
+    steps: shown,
+    accusations: (o, k) =>
+      new Set(
+        publicWords(o, k)
+          .filter(x => x.how !== 'dream')
+          .map(x => `${x.day}:${x.how}`)
+      ).size,
+    earnest: (o, k) => (shown(o, k) ? 1 : 0),
     dreams: (o, k) => {
       const known = new Set(
         S.said.filter(x => x.by === id(o) && x.how === 'dream' && x.verdict === 'cult' && x.about === id(k)).map(dreamKey)
@@ -171,30 +190,58 @@ const Suspicion = (() => {
     count: (t, o) => t.parts.reduce((a, [part, over]) => a + THREAT_OVER[over]().reduce((b, k) => b + THREAT_PARTS[part](o, k), 0), 0),
     first: (t, o, list) => list.find(k => against(t.parts, o, k) > 0),
     weight: (t, o, k) => t.base + t.per() * against(t.parts, o, k),
-    watched: (t, k, but) =>
-      freeChars().some(o => o.id !== id(k) && against(t.parts, o, k) > 0) ||
-      S.said.some(x => x.about === id(k) && x.verdict === 'cult' && x.by !== id(but))
+    watched: (t, k, but) => freeChars().some(o => o.id !== id(k) && o.id !== id(but) && against(t.parts, o, k) > 0)
   };
+  // Different decisions retain different questions. The common-score alternative
+  // is measured in sim/threat.js, not silently substituted for these five settings.
   const THREAT = {
     closingIn: {
       form: 'count',
       parts: [
-        ['pastFirst', 'atLarge'],
+        ['accusations', 'atLarge'],
         ['dreams', 'atLarge']
-      ]
+      ],
+      why: 'Frame people who have actually advanced a case; one dream is counted once, not again as an accusation.',
+      knows: 'Public accusations and guilty dreams heard publicly or by the existing overhearing and rumour routes.'
     },
-    harm: { form: 'count', parts: [['dreams', 'atLarge']] },
-    watched: { form: 'watched', parts: [['earnest']] },
-    suspects: { form: 'first', parts: [['earnest']] },
-    weight: { form: 'weight', parts: [['steps']], base: 1, per: () => RULES.victims.suspects }
+    harm: {
+      form: 'count',
+      parts: [['dreams', 'atLarge']],
+      why: 'A dream response concerns a claimed source of recurring information; ordinary accusers remain eligible through victim weights.',
+      knows: 'Only distinct guilty dreams that were public or reached a living cultist through a recorded route.'
+    },
+    watched: {
+      form: 'watched',
+      parts: [['earnest']],
+      why: 'A protective story needs an existing public case, not an invisible suspicion or certainty about the accusation.',
+      knows: 'An accusation or vote spoken aloud by somebody other than the speaker making the protective claim.'
+    },
+    suspects: {
+      form: 'first',
+      parts: [['earnest']],
+      why: 'The debrief names a public accuser’s target as a reason; it does not invent knowledge of private beliefs.',
+      knows: 'The same public accusations and votes used by the ordinary victim weight.'
+    },
+    weight: {
+      form: 'weight',
+      parts: [['steps']],
+      base: 1,
+      per: () => RULES.victims.suspects,
+      why: 'Repeated public opposition adds graded danger to the ordinary victim lottery without making death certain.',
+      knows: 'Distinct public occasions of accusation, capped at the suspicion scale; no private belief grid.'
+    }
   };
   const threat = {};
   Object.entries(THREAT).forEach(([name, t]) => {
     threat[name] = (...args) => THREAT_FORMS[t.form](t, ...args);
   });
+  threat.shown = shown;
+  threat.exposure = exposure;
+  threat.explain = () => Object.fromEntries(Object.entries(THREAT).map(([k, t]) => [k, { why: t.why, knows: t.knows }]));
   return {
     deal: deal,
     level: level,
+    shown: shown,
     move: move,
     wonders: wonders,
     onlyWonders: onlyWonders,

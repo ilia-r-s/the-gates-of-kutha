@@ -267,12 +267,12 @@
       }
     ]
   },
-  "text": "вашей палатки",
-  "text2": "слышал",
-  "text3": "слышала",
-  "text4": "почувствовал",
-  "text5": "почувствовала",
   "g": {
     "$template": "палатки ${ru.c(hers, 'g')}"
-  }
+  },
+  "yourTentGenitiveRu": "вашей палатки",
+  "heardMasculineRu": "слышал",
+  "heardFeminineRu": "слышала",
+  "smelledMasculineRu": "почувствовал",
+  "smelledFeminineRu": "почувствовала"
 }

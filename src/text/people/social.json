@@ -113,13 +113,11 @@
         "Доктор всё всем пересказывает. Осторожнее с тем, что говорите нашему новому другу."
       ]
     },
-    "iHaveHeardThe": {
-      "$args": ["s"],
+    "doctorStudiesTablets": {
+      "$args": [],
       "$value": [
-        "I have heard the Doctor reading those curses aloud at night, in the old tongue. Over and over.",
-        {
-          "$template": "Я ${ru.gs(s,\"слышал\",\"слышала\")}, как доктор по ночам читает эти проклятия вслух, на древнем языке. Снова и снова."
-        }
+        "The Doctor keeps poring over those tablets, in the old tongue. Over and over.",
+        "Доктор всё читает эти таблички на древнем языке. Снова и снова."
       ]
     },
     "diggingForCraneAre": {
@@ -129,14 +127,14 @@
         "Ищем Крейна, как же. Доктор копает ради золота, попомните моё слово."
       ]
     },
-    "didYouKnowWas": {
+    "oftenSeenWithDoctor": {
       "$args": ["f"],
       "$value": [
         {
-          "$template": "Did you know ${f.short} was out by the trench the other night? The Doctor’s own friend. Where does ${f.p} go after dark, I wonder?"
+          "$template": "The Doctor is often in conversation with ${f.short}. I wonder how much ${f.p} tells."
         },
         {
-          "$template": "Вы знали, что ${ru.c(f)} на днях ночью ${ru.gs(f,\"ходил\",\"ходила\")} к траншее? ${ru.gs(f,\"Друг\",\"Подруга\")} самого доктора. Интересно, куда ${ru.gs(f,\"он\",\"она\")} ходит по ночам?"
+          "$template": "Доктор часто разговаривает с ${ru.c(f,\"i\")}. Интересно, сколько ${ru.gs(f,\"он\",\"она\")} рассказывает."
         }
       ]
     },
@@ -154,7 +152,7 @@
     "overBreakfastDreamsFrom": {
       "$args": ["s", "d", "k"],
       "$value": {
-        "$js": "[[`Over breakfast ${s.short} says, not quite under ${s.pp} breath, that ${d.short}’s dreams come out of a bottle.`,`За завтраком ${ru.c(s)} вполголоса, но так, чтобы все слышали, замечает, что сны ${ru.c(d,\"g\")} берутся из бутылки.`],[`Over breakfast ${s.short} remarks that ${d.short} dreams whatever an old grudge would have ${EP.him(d)} dream.`,`За завтраком ${ru.c(s)} замечает, что ${ru.c(d)} видит во сне ровно то, что ${ru.gs(d,\"ему\",\"ей\")} подсказывает старая обида.`],[`Over breakfast ${s.short} says that ${d.short}’s dreams are the heat talking, and nothing more.`,`За завтраком ${ru.c(s)} говорит, что сны ${ru.c(d,\"g\")} — это говорит жара, и ничего больше.`]][k]"
+        "$js": "[[`Over breakfast ${s.short} says, not quite under ${s.pp} breath, that ${d.short}’s dreams come out of a bottle.`,`За завтраком ${ru.c(s)} вполголоса, но так, чтобы все слышали, замечает, что сны ${ru.c(d,\"g\")} берутся из бутылки.`],[`Over breakfast ${s.short} remarks that ${d.short} dreams whatever an old grudge would have ${EP.him(d)} dream.`,`За завтраком ${ru.c(s)} замечает, что ${ru.c(d)} видит во сне ровно то, что ${ru.gs(d,\"ему\",\"ей\")} подсказывает старая обида.`],[`Over breakfast ${s.short} says that ${d.short}’s dreams are the heat talking, and nothing more.`,`За завтраком ${ru.c(s)} говорит, что все эти сны ${ru.c(d,\"g\")} — от жары, и только.`]][k]"
       }
     }
   }

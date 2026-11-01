@@ -1,4 +1,3 @@
-// game/endings.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const endTitle = id => (END_OLD[id] ? bi(ENDINGS[END_OLD[id]].title) : bi(END_TITLES[id][0], END_TITLES[id][1]));
 const endNames = ids => listNames(ids.map(id => C(id).name));
 const endNamesRu = (ids, k = 'n') => ru.list(ids.map(id => ru.cf(C(id), k)));
@@ -172,7 +171,7 @@ function endConductWon(tier, r, id) {
 function endBody(r) {
   const w = S.wounds,
     en = w === 0 ? __text('youCameOutOfItUnhurt') : w === 1 ? __text('youCameOutOfItWith') : __text('oneTwoThreeFourYouCame'),
-    rus = w === 0 ? __text('text2') : w === 1 ? __text('text3') : __text('text4');
+    rus = w === 0 ? __text('unwoundedRu') : w === 1 ? __text('oneWoundRu') : __text('severalWoundsRu');
   const mind = r.steady
     ? r.frayed
       ? TX.endings.andWithYourNerve()
@@ -206,7 +205,7 @@ function endConductClose(r, ward, found) {
   }
   if (r.mR >= END_SAYS.marks) {
     en.push(`marked ${r.mR} of the seven truly`);
-    rus.push(__text('text5'));
+    rus.push(__text('correctMarksRu'));
   }
   const mid = en.length ? __text('youHad') : __text('youHadComeFurtherThanMost');
   return `<p>${bi(...TX.endings.itWasCloserThan())} ${mid} ${bi(...TX.endings.oneMoreDayOne())}</p>`;
@@ -391,7 +390,7 @@ function endShow() {
   show({
     kicker: bi(...TX.endings.endingOf(n, how_)),
     title: endTitle(id),
-    sub: __text('text'),
+    sub: __text('tierAndStyle'),
     art: inBed ? { bg: 'end', end: id, aspect: asp, time: 'dawn', inBed: true } : { bg: 'end', end: id, aspect: asp, time: END_TIME[id] },
     body: body,
     choices: [

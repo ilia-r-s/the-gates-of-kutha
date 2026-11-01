@@ -1,12 +1,51 @@
-// ui/book.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const bare = () => !!(S && S.hardcore);
+function casebookIsOpen() {
+  const dialog = document.getElementById('notebookDialog');
+  return !!(dialog && dialog.open);
+}
+function syncCasebook() {
+  const open = casebookIsOpen();
+  document.body.classList.toggle('book-open', open);
+  document.getElementById('casebookBtn').setAttribute('aria-expanded', String(open));
+}
+function openCasebook() {
+  const dialog = document.getElementById('notebookDialog');
+  if (!dialog || dialog.open) return;
+  setExpeditionConfirm(false);
+  dialog.showModal();
+  dialog.scrollTop = 0;
+  syncCasebook();
+  document.getElementById('notebookTitle').focus({ preventScroll: true });
+}
+function closeCasebook(toScene = false) {
+  const dialog = document.getElementById('notebookDialog');
+  if (!dialog || !dialog.open) return;
+  dialog.close();
+  syncCasebook();
+  if (toScene) {
+    const choice = document.querySelector('#choices .choice');
+    if (choice) choice.focus({ preventScroll: true });
+  }
+}
+function setExpeditionConfirm(open) {
+  document.getElementById('leaveExpedition').hidden = !open;
+  document.getElementById('newExpedition').setAttribute('aria-expanded', String(open));
+}
+function restartExpedition() {
+  introScene(null);
+  closeCasebook(true);
+}
 function renderBook() {
+  if (Session.replaying) return;
+  document.getElementById('newExpedition').hidden = !S;
   document.querySelectorAll('.tab').forEach(t => {
     const on = t.dataset.tab === S_ui.tab;
     t.setAttribute('aria-selected', on);
+    t.tabIndex = on ? 0 : -1;
     t.classList.toggle('on', on);
   });
   const p = $('#tabPanel');
+  p.setAttribute('aria-labelledby', 'tab-' + S_ui.tab);
   if (!S) {
     draw(p, X(`<p class="dim pad">${bi(...TX.book.yourCasebookFillsAs())}</p>`));
     return;
@@ -76,7 +115,7 @@ function bookPeople() {
             .join('. ');
         return `<span class="tr${cls}"${title && !bare() ? ` title="${title}"` : ''}><em>${bi(TRAITS[k].label)}</em> <span class="tv">${bi(TRAITS[k].vals[c.known[k]].name)}</span></span>`;
       }).join('');
-      return `<div class="person s-${c.status}"><div class="p-head"><svg class="ava" viewBox="46 30 108 108" aria-hidden="true">${portrait(c.id, 'neutral', 0, `book-${c.id}-`)}</svg><div class="p-id"><div class="p-name">${bi(c.name, capS(ru.cf(c)))}${roleBadge(c)}</div><div class="p-job">${bi(c.job, ru.ch(c).job)} · <span class="trust">${__text('trust')} ${trustWord(c)}</span></div></div>\n      <button type="button" class="mark m-${c.mark === '?' ? 'none' : c.mark}" data-mark="${c.id}" aria-label="${bi(...TX.book.yourMarkForClick(c))}">${bi(MARKS[c.mark], ruMark(c))}</button></div>\n      ${st}<div class="p-traits">${tr}</div><div class="p-chips">${bare() ? '' : campChips(c) + chipsAbout(c.id)}</div></div>`;
+      return `<div class="person s-${c.status}"><div class="p-head"><svg class="ava" viewBox="46 30 108 108" aria-hidden="true">${portrait(c.id, 'neutral', 0, `book-${c.id}-`)}</svg><div class="p-id"><div class="p-name">${bi(c.name, capS(ru.cf(c)))}${roleBadge(c)}</div><div class="p-job">${bi(c.job, ru.ch(c).job)} · <span class="trust">${__text('trust')} ${trustWord(c)}</span></div></div>\n      <button tabindex="0" type="button" class="mark m-${c.mark === '?' ? 'none' : c.mark}" data-mark="${c.id}" aria-label="${bi(...TX.book.yourMarkForClick(c))}">${bi(MARKS[c.mark], ruMark(c))}</button></div>\n      ${st}<div class="p-traits">${tr}</div><div class="p-chips">${bare() ? '' : campChips(c) + chipsAbout(c.id)}</div></div>`;
     })
     .join('');
 }
@@ -330,14 +369,14 @@ function roleBadge(c) {
   return r ? `<span class="rolebadge rb-${r}">${bi(ROLE_SEEN[r], RU_SEEN[r][ru.f(c) ? 1 : 0])}</span>` : '';
 }
 const GM_SAY = ['unmarked', 'ruled in', 'ruled out'],
-  GM_SAY_RU = __text('text');
+  GM_SAY_RU = __text('markStatesRu');
 function gmToggle(key, label, aria) {
   const v = S.gm[key] || 0;
-  return `<button type="button" class="gm${v ? ' on' : ''}" data-gm="${key}" data-toggle="1" aria-pressed="${v ? 'true' : 'false'}" aria-label="${aria}">${v ? '✓ ' : ''}${label}</button>`;
+  return `<button tabindex="0" type="button" class="gm${v ? ' on' : ''}" data-gm="${key}" data-toggle="1" aria-pressed="${v ? 'true' : 'false'}" aria-label="${aria}">${v ? '✓ ' : ''}${label}</button>`;
 }
 function gmChip(key, label, aria) {
   const v = S.gm[key] || 0;
-  return `<button type="button" class="gm${v === 1 ? ' on' : v === 2 ? ' off' : ''}" data-gm="${key}" aria-label="${aria}: ${bi(GM_SAY[v], GM_SAY_RU[v])}. ${__text('clickToChange')}">${v === 1 ? '✓ ' : ''}${label}</button>`;
+  return `<button tabindex="0" type="button" class="gm${v === 1 ? ' on' : v === 2 ? ' off' : ''}" data-gm="${key}" aria-label="${aria}: ${bi(GM_SAY[v], GM_SAY_RU[v])}. ${__text('clickToChange')}">${v === 1 ? '✓ ' : ''}${label}</button>`;
 }
 function gmRow(lab, key, { none: none = false, tag: tag = '', extra: extra = '' } = {}) {
   const opts =
@@ -394,7 +433,7 @@ function bookKit() {
     ? S.items
         .map(
           it =>
-            `<div class="item"><div class="i-name">${bi(ITEMS[it].name)}${ITEMS[it].ward ? ` <span class="chip">${__text('oldCharm')}</span>` : ''}</div><div class="i-desc">${bi(ITEMS[it].desc)}${ITEMS[it].ward ? ' ' + bi(...marksSee(it)) : ''}</div>${it === 'brandy' && !S.ended ? `<button type="button" class="mini" id="drinkBtn">${__text('drinkNowSteadiesYourNerve')}</button>` : ''}</div>`
+            `<div class="item"><div class="i-name">${bi(ITEMS[it].name)}${ITEMS[it].ward ? ` <span class="chip">${__text('oldCharm')}</span>` : ''}</div><div class="i-desc">${bi(ITEMS[it].desc)}${ITEMS[it].ward ? ' ' + bi(...marksSee(it)) : ''}</div>${it === 'brandy' && !S.ended ? `<button tabindex="0" type="button" class="mini" id="drinkBtn">${__text('drinkNowSteadiesYourNerve')}</button>` : ''}</div>`
         )
         .join('')
     : `<p class="dim">${__text('nothingYetSearchTheSite')}</p>`;
@@ -410,30 +449,86 @@ function searchedNote() {
   if (!done.length) return '';
   return `<h4>${__text('searched')}</h4><ul class="tlog">${done.map(l => `<li><b>${bi(LOCS[l].name)}</b>: ${bi(enTimes(S.searched[l]), ruTimes(S.searched[l]))}</li>`).join('')}</ul><p class="dim">${bi(...TX.book.aCharmHiddenIn())}</p>`;
 }
+function bookAction(a) {
+  if (!S) return false;
+  if (a[0] === 'drink') {
+    if (S.ended || !has('brandy')) return false;
+    return Session.act(a, () => {
+      useBrandy();
+      if (S.phase === 'plan') planScene();
+      else renderAll();
+      return true;
+    });
+  }
+  if (a[0] === 'mark') {
+    const c = CHARS.some(person => person.id === a[1]) && C(a[1]);
+    if (!c) return false;
+    return Session.act(a, () => {
+      c.mark = c.mark === '?' ? 'ally' : c.mark === 'ally' ? 'foe' : '?';
+      if (S_ui.scene && (S_ui.scene.choices || []).some(ch => typeof ch.sub === 'function')) paintScene(S_ui.scene);
+      renderBook();
+      return true;
+    });
+  }
+  if (a[0] !== 'note') return false;
+  // Validate against the same available entries the casebook shows, including toggle/three-way differences.
+  const entry = [...bookOmens().matchAll(/<button\b[^>]*data-gm="([^"]+)"[^>]*>/g)].find(m => m[1] === a[1]);
+  if (!entry) return false;
+  return Session.act(a, () => {
+    S.gm[a[1]] = entry[0].includes('data-toggle=') ? (S.gm[a[1]] ? 0 : 1) : ((S.gm[a[1]] || 0) + 1) % 3;
+    sfx('mark');
+    renderBook();
+    return true;
+  });
+}
 function bookInit() {
+  const dialog = document.getElementById('notebookDialog');
+  document.getElementById('casebookBtn').addEventListener('click', openCasebook);
+  document.getElementById('closeCasebook').addEventListener('click', () => closeCasebook());
+  document.getElementById('newExpedition').addEventListener('click', () => {
+    if (!S || S.ended) restartExpedition();
+    else {
+      setExpeditionConfirm(true);
+      document.getElementById('keepExpedition').focus();
+    }
+  });
+  document.getElementById('keepExpedition').addEventListener('click', () => {
+    setExpeditionConfirm(false);
+    document.getElementById('newExpedition').focus();
+  });
+  document.getElementById('confirmNewExpedition').addEventListener('click', restartExpedition);
+  dialog.addEventListener('close', syncCasebook);
+  dialog.addEventListener('cancel', e => {
+    e.preventDefault();
+    closeCasebook();
+  });
+  dialog.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const stops = [...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),a[href],[tabindex]')].filter(
+        el => el.tabIndex >= 0 && el.getClientRects().length
+      ),
+      first = stops[0],
+      last = stops[stops.length - 1];
+    const back = e.shiftKey && (document.activeElement === first || !stops.includes(document.activeElement));
+    if (back || (!e.shiftKey && document.activeElement === last)) {
+      e.preventDefault();
+      (back ? last : first).focus();
+    }
+  });
   const p = document.getElementById('tabPanel');
   if (!p) return;
   p.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('[data-mark],[data-gm],#drinkBtn');
     if (!b || !S) return;
     if (b.id === 'drinkBtn') {
-      useBrandy();
-      if (S.phase === 'plan') planScene();
-      else renderAll();
+      const held = document.activeElement === b;
+      if (bookAction(['drink']) && held) p.focus({ preventScroll: true });
       return;
     }
     const top = p.scrollTop,
       held = document.activeElement === b,
       [attr, k] = b.hasAttribute('data-mark') ? ['data-mark', b.dataset.mark] : ['data-gm', b.getAttribute('data-gm')];
-    if (attr === 'data-mark') {
-      const c = C(k);
-      c.mark = c.mark === '?' ? 'ally' : c.mark === 'ally' ? 'foe' : '?';
-      if (S_ui.scene && (S_ui.scene.choices || []).some(ch => typeof ch.sub === 'function')) paintScene(S_ui.scene);
-    } else {
-      S.gm[k] = b.hasAttribute('data-toggle') ? (S.gm[k] ? 0 : 1) : ((S.gm[k] || 0) + 1) % 3;
-      sfx('mark');
-    }
-    renderBook();
+    bookAction([attr === 'data-mark' ? 'mark' : 'note', k]);
     p.scrollTop = top;
     if (held) {
       const nb = p.querySelector(`[${attr}="${k}"]`);

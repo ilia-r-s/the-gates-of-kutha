@@ -1,4 +1,3 @@
-// game/night.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function nightfall() {
   emit('nightfall');
   if (S.day >= RULES.start.days) {
@@ -44,7 +43,7 @@ function resolveNight() {
     const turn = dawn(night),
       found = toldAtFirstLight(night.found),
       after = visitMorning(night),
-      m = theMorning(night),
+      m = theMorning(night, [...night.out.slice(1), ...found, after, turn]),
       morning = [
         [__text('atFirstLight'), [after, ...found, diedInTentSaid(), m.grief, turn, ...m.first]],
         [__text('atBreakfast'), m.breakfast]
@@ -174,6 +173,7 @@ function nightStrikes(night) {
   else if (night.target === 'player' && night.deed) {
     night.loc = 'camp';
     if (Watch.holds(night, 'player')) {
+      Knowledge.experiencedAttack('player', [night.watcher]);
       night.youOut = 'guarded';
       S.log.attacks.push({ day: S.day, how: 'guard', out: true, power: !!night.power });
     } else {
@@ -222,41 +222,74 @@ function quietSaid() {
   if ((d && d.day === S.day && d.outcome && d.outcome !== 'away') || (v && v.day === S.day && v.struck === 'failed')) return '';
   return bi(...TX.night.nothingComesInThe());
 }
-function theMorning(night) {
+function theMorning(night, delivered = []) {
   S.tenor.crowd = 0;
+  S.tenor.nightCrowd = 0;
   cornerClaims();
   const v0 = night.target && night.target !== 'player' && C(night.target),
     victim = night.dead || (v0 && v0.status === 'taken' && v0.takenBy !== 'you' ? v0.id : null),
-    m = {
-      grief: (victim ? griefFor(victim) : '') + (night.deedDead ? griefFor(night.deedDead) : ''),
-      first: [chance(RULES.night.dawnSign) ? omenP(nextOmen()) : ''],
-      breakfast: [S.log.deed && S.log.deed.day === S.day - 1 ? deedMorning() : deedDawn()],
-      news: []
-    };
+    grief = (victim ? griefFor(victim) : '') + (night.deedDead ? griefFor(night.deedDead) : ''),
+    // The primary deduction clue keeps its original opportunity. Additional
+    // signs yield to it and to text the night has actually delivered.
+    sign = nightAtmosphere(RULES.night.dawnSign, () => omenP(nextOmen()));
+  if (delivered.some(Boolean) || grief) S.tenor.nightCrowd++;
+  const m = {
+    grief,
+    first: [sign, NatureSigns.tell('omen'), victim ? NatureSigns.tell('death', null, C(victim)) : ''],
+    breakfast: [S.log.deed && S.log.deed.day === S.day - 1 ? deedMorning() : deedDawn()],
+    news: []
+  };
   if (S.ended) return m;
+  const lucky = pick(freeChars());
+  if (lucky) m.breakfast.push(NatureSigns.tell('luck', null, lucky));
   const order = Object.keys(MORNING_EXTRAS),
     first = order.filter(k => TENOR.moods[S.tenor.mood][k] > 1);
-  first.concat(order.filter(k => !first.includes(k))).forEach(k => MORNING_EXTRAS[k](m, night, victim));
+  first.concat(order.filter(k => !first.includes(k))).forEach(k => MORNING_EXTRAS[k](m, night));
   return m;
 }
 const MORNING_EXTRAS = {
   dread: m =>
     m.first.push(
-      S.omenSeen.length < 4 && chance(room('dread') * TENOR.omen * Math.max(TENOR.floor, rateOf('dread') - 1))
-        ? brought(omenP(nextOmen()))
+      S.omenSeen.length < 4
+        ? nightAtmosphere(room('dread') * TENOR.omen * Math.max(TENOR.floor, rateOf('dread') - 1), () => omenP(nextOmen()))
         : ''
     ),
   finds: m => m.news.unshift(findsTray()),
-  talk: (m, night, victim) => m.breakfast.push(keptSaid(night) + breakfastDreams(night).join('') + socialMorning(victim)),
+  talk: (m, night) => m.breakfast.push(keptSaid(night) + breakfastDreams(night).join('') + socialMorning()),
   news: m => m.news.push(morningEvent())
 };
+const PLAYER_TARGET = Decisions.define({
+  id: 'cult.target.player',
+  action: 'target-investigator',
+  subject: 'cult',
+  object: 'player',
+  authority: 'actor',
+  knowledge: ['activity already heard by participating cult members', 'received alarm and their own false-watch promises'],
+  consequences: ['player selected for an attempted attack'],
+  features: { day: 'number', knownActivities: 'number', alarmed: 'boolean', falsePromises: 'number' },
+  observe: night => ({
+    day: S.day,
+    knownActivities: S.acts.filter(a => a.heard && a.knew.some(id => night.cult.some(c => c.id === id))).length,
+    alarmed: S.alerted.some(id => night.cult.some(c => c.id === id)),
+    falsePromises: night.falseGuards.length
+  }),
+  probability: odds('the cult targets the investigator', [
+    ['base', () => RULES.night.target.base + RULES.night.target.day * (S.day - 1)],
+    [
+      '* observed investigation, bounded',
+      () => 1 + RULES.night.target.knownGain * Math.min(1, Suspicion.knownActs(null) / RULES.night.target.knownCap)
+    ],
+    [
+      '* private alarm or personal hostility, not stacked',
+      night => 1 + (Suspicion.cultAlerted() || night.cult.some(k => Ties.against(k)) ? RULES.night.target.alarmGain : 0)
+    ],
+    ['* a promised false watch', night => (night.falseGuards.length ? 1 - RULES.night.holds : 1)]
+  ])
+});
 function chooseVictim(night) {
   const N = RULES.night,
-    { cult: cult, npcs: npcs } = night,
-    holds = night.falseGuards.length ? 1 - N.holds : 1;
-  if (Suspicion.cultAlerted() && chance(N.alerted * holds)) return 'player';
-  if (cult.some(k => Ties.against(k)) && chance(N.enemy * holds * cultTurns('inquisitor'))) return 'player';
-  if (chance((N.you + N.youDay * (S.day - 1)) * Math.max(cultTurns('scholar'), cultTurns('delver')))) return 'player';
+    { cult: cult, npcs: npcs } = night;
+  if (PLAYER_TARGET.roll(night)) return 'player';
   const b = betrayal(cult);
   if (b) {
     night.betrayer = b.killer.id;
@@ -291,13 +324,13 @@ function dreamsOfTheNight(day) {
   freeChars().forEach(c => {
     const own = c.role === 'seer';
     if ((!own && !claimsToDream(c)) || chance(RULES.night.dreamless)) return;
-    if (own) vision = dreamTonight(c);
+    if (own) vision = dreamTonight(c, day);
     else c.dreams.push({ night: day, d: null });
   });
   return vision;
 }
 const veiled = () => (chance(RULES.night.veiled) ? pick(CATS) : null);
-function dreamTonight(seer) {
+function dreamTonight(seer, night = S.day) {
   const cand = freeChars().filter(c => c.id !== seer.id && !seer.visions.some(v => v.about === c.id));
   if (!cand.length) return null;
   const t = pick(cand),
@@ -305,6 +338,7 @@ function dreamTonight(seer) {
     dark = clear && t.role === 'smuggler' && chance(RULES.night.thiefDark),
     veil = veiled(),
     vision = {
+      night,
       about: t.id,
       cult: dark || (t.role === 'cult') === clear,
       ...(clear ? {} : { muddied: true }),
@@ -318,6 +352,7 @@ function attackOnYou(night) {
   const { watcher: w } = night;
   const N = RULES.night;
   if (Watch.holds(night, 'player')) {
+    Knowledge.experiencedAttack('player', [w]);
     S.log.attacks.push({ day: S.day, how: 'guard', power: !!night.power });
     if (!Watch.seen()) return bi(...TX.night.inTheSmallHours());
     S.revealed[w.id] = 'warden';
@@ -362,12 +397,16 @@ function attackOnYou(night) {
   return html;
 }
 const watchedOff = v => bi(...TX.night.someoneCameForIn(v));
+function recordBetrayal({ betrayer, target, saved }) {
+  if (betrayer) S.betrayals.push({ day: S.day, by: betrayer, victim: target, saved: saved || null });
+}
 function attackOnThem(night) {
   const { target: target, loc: loc, betrayer: betrayer } = night,
     v = C(target);
   const saved = Watch.holds(night, target) ? 'watch' : Watch.spared() ? 'luck' : null;
   night.saved = saved;
-  if (betrayer) S.betrayals.push({ day: S.day, by: betrayer, victim: v.id, saved: saved });
+  if (saved) Knowledge.experiencedAttack(v, [v, ...(saved === 'watch' ? [night.watcher] : [])]);
+  recordBetrayal(night);
   if (saved === 'watch') {
     S.log.guarded.push({ day: S.day, id: v.id });
     return watchedOff(v);
@@ -421,7 +460,7 @@ function sceneTrace(n, loc, actor, target, smugOut = false, at = null) {
     rec = S.nights[n],
     smug = freeChars().find(c => c.role === 'smuggler' && c.id !== target && c.id !== guestOn(n)),
     [atEn, atRu] = at || [LOCS[loc].at, R(LOCS[loc].at)];
-  if (chance(N.swept * cultTurns('sleuth'))) {
+  if (chance(N.swept * (actor ? cultTurns('sleuth') : 1))) {
     S.crime = { loc: loc, clue: null, examined: true, swept: true };
     rec.scene = { loc: loc, how: 'swept' };
     if (actor) thiefSees(n, loc, actor.id, false);
@@ -450,7 +489,7 @@ function sceneTrace(n, loc, actor, target, smugOut = false, at = null) {
   });
   S.crime = { loc: loc, clue: clue, examined: false };
   const own = actor && src === actor,
-    second = own ? sloppy(actor) : framed ? chance(N.pairPlant * craft(actor).plant) : chance(N.pairOther);
+    second = own ? sloppy(actor) : !framed && chance(N.pairOther);
   if (second)
     S.crime.more = Record.addTrace({
       owner: src.id,
@@ -490,52 +529,103 @@ function keptSaid(night) {
   S.log.kept.push({ day: S.day - 1, id: id });
   return brought(bi(...TX.night.atBreakfastTellsAnyone(a))) + Moments.stir('kept', { about: id });
 }
-const BRINGS_DREAM = odds('brings you the night’s dream', [
-  ['base', () => RULES.bring.odds],
-  ['* trust in you', c => RULES.bring.trust[Ties.trust(c)]],
-  ['* promised', c => (c.promised ? RULES.bring.promised : 1)],
-  ['* temperament', c => TP(c).bring],
-  ['* the night', () => (S.log.attacks.some(a => a.day === S.day - 1) ? RULES.bring.attack : RULES.bring.quiet)],
-  ['* suspected', c => (Suspicion.suspected(c.id) ? RULES.bring.suspected : 1)],
-  ['* the camp suspects you', () => RULES.bring.onYou ** Suspicion.youLevel()],
-  ['* came lately', c => RULES.bring.again ** S.log.brought.filter(b => b.id === c.id && b.day >= S.day - 2).length],
-  ['* the rite', () => 1 + (RULES.bring.rite * S.doom) / S.doomMax],
-  [
-    '* mourning',
-    c => {
-      const m = Ties.mourning(c);
-      return m && S.day - m.day <= 1 ? RULES.bring.mourning : 1;
-    }
+const reportBeliefs = c => {
+    const m = Ties.mourning(c);
+    return {
+      trust: Ties.trust(c),
+      promised: !!c.promised,
+      temper: temperOf(c),
+      threat: Knowledge.knownThreat(c),
+      pressure: Knowledge.pressure(c),
+      playerPressure: Knowledge.playerPressure(c),
+      recent: S.log.brought.filter(b => b.id === c.id && b.day >= S.day - 2).length,
+      expectation: Knowledge.ritualExpectation(c),
+      mourningToday: !!m && m.day === S.day,
+      mourningRecent: !!m && S.day - m.day <= 1
+    };
+  },
+  REPORT_FEATURES = {
+    trust: 'number',
+    promised: 'boolean',
+    temper: 'string',
+    threat: 'boolean',
+    pressure: 'number',
+    playerPressure: 'number',
+    recent: 'number',
+    expectation: 'number',
+    mourningToday: 'boolean',
+    mourningRecent: 'boolean'
+  };
+const BRINGS_DREAM = Decisions.define({
+  id: 'night.dream.bring',
+  action: 'bring-dream',
+  authority: 'actor',
+  subject: c => c,
+  object: 'player',
+  knowledge: [
+    'self: trust, promise, temperament, recent delivery and mourning',
+    'received accusations and announced losses, personally experienced attacks, and fallible expectations'
   ],
-  ['clamp', () => [RULES.bring.min, RULES.bring.max]]
-]);
-const KEEPS_DREAM = odds('keeps the night’s dream to themself after a death', [
-  ['base', () => RULES.keepDream.odds],
-  ['* trust in you', c => RULES.keepDream.trust[Ties.trust(c)]],
-  ['* promised', c => (c.promised ? RULES.keepDream.promised : 1)],
-  ['* temperament', c => TP(c).keep],
-  [
-    '* mourning',
-    c => {
-      const m = Ties.mourning(c);
-      return m && m.day === S.day ? RULES.keepDream.mourning : 1;
-    }
-  ],
-  ['* the rite', () => 1 - (RULES.keepDream.rite * S.doom) / S.doomMax],
-  ['clamp', () => [RULES.keepDream.min, RULES.keepDream.max]]
-]);
+  consequences: ['dream-delivery', 'testimony', 'journal'],
+  features: REPORT_FEATURES,
+  observe: reportBeliefs,
+  probability: odds('brings you the night’s dream', [
+    ['base', () => RULES.bring.odds],
+    ['* trust in you', c => RULES.bring.trust[Ties.trust(c)]],
+    ['* promised', c => (c.promised ? RULES.bring.promised : 1)],
+    ['* temperament', c => TP(c).bring],
+    ['* known night danger', c => (Knowledge.knownThreat(c) ? RULES.bring.attack : RULES.bring.quiet)],
+    ['* heard pressure against them', c => (Knowledge.pressure(c) >= RULES.suspects.many ? RULES.bring.suspected : 1)],
+    ['* heard distrust of you', c => RULES.bring.onYou ** Knowledge.playerPressure(c)],
+    ['* came lately', c => RULES.bring.again ** S.log.brought.filter(b => b.id === c.id && b.day >= S.day - 2).length],
+    ['* believed danger', c => 1 + RULES.bring.danger * Knowledge.ritualExpectation(c)],
+    [
+      '* mourning',
+      c => {
+        const m = Ties.mourning(c);
+        return m && S.day - m.day <= 1 ? RULES.bring.mourning : 1;
+      }
+    ],
+    ['clamp', () => [RULES.bring.min, RULES.bring.max]]
+  ])
+});
+const KEEPS_DREAM = Decisions.define({
+  id: 'night.dream.keep',
+  action: 'keep-dream',
+  authority: 'actor',
+  subject: c => c,
+  object: 'player',
+  knowledge: ['self: trust, promise, temperament and mourning', 'death announced to the speaker and their fallible expectation of danger'],
+  consequences: ['dream-withheld'],
+  features: REPORT_FEATURES,
+  observe: reportBeliefs,
+  probability: odds('keeps the night’s dream to themself after a death', [
+    ['base', () => RULES.keepDream.odds],
+    ['* trust in you', c => RULES.keepDream.trust[Ties.trust(c)]],
+    ['* promised', c => (c.promised ? RULES.keepDream.promised : 1)],
+    ['* temperament', c => TP(c).keep],
+    [
+      '* mourning',
+      c => {
+        const m = Ties.mourning(c);
+        return m && m.day === S.day ? RULES.keepDream.mourning : 1;
+      }
+    ],
+    ['* believed danger', c => 1 - RULES.keepDream.danger * Knowledge.ritualExpectation(c)],
+    ['clamp', () => [RULES.keepDream.min, RULES.keepDream.max]]
+  ])
+});
 function breakfastDreams(night) {
   const { seer: seer, vision: vision } = night;
   const N = RULES.night,
     out = [],
-    told = [],
-    died = tookSomeone(night);
+    told = [];
   freeChars()
     .filter(c => claimOf(c).role === 'seer')
     .forEach(c => {
       const own = c.role === 'seer';
       if (own ? c !== seer || !vision : !c.dreams.some(x => x.night === S.day - 1 && !x.d)) return;
-      if (died && KEEPS_DREAM.roll(c, night)) return;
+      if (Knowledge.lossToday(c) && KEEPS_DREAM.roll(c, night)) return;
       const dream = () => (own ? visionFor(c, vision) : madeUpDream(c, true, S.day - 1));
       if (BRINGS_DREAM.roll(c, night)) {
         const d = dream();

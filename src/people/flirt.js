@@ -1,4 +1,3 @@
-// people/flirt.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const flirtGreet = c => bi(tellOne('greetFlirt-' + c.id, GREET_FLIRT[c.id]));
 const FLIRT_PARTING = [
   c => bi(...TX.flirt.holdsYourGazeA(c)),
@@ -12,9 +11,12 @@ const FLIRT_HEARD_YOU = [(s, a) => bi(...TX.flirt.hasASoftSpot2(a)), (s, a) => b
 function flirtGossip(s, not = [], heard = false) {
   const ok = id => id !== s.id && !not.includes(id),
     made = !Gossip.toldTrue(s, { slip: RULES.flirt.invent }),
+    remembered = Knowledge.flirts(s).filter(([a, b]) => isFree(C(a)) && (b === 'you' || isFree(C(b)))),
     f = made
-      ? Ties.eachWay(freeChars().map(c => c.id)).filter(([a, b]) => ok(a) && ok(b) && Ties.mayFlirt(C(a), C(b)) && !Ties.sweetOn(a, b))
-      : Ties.flirtsNow().filter(([a, b]) => ok(a) && (b === 'you' || ok(b)));
+      ? Ties.eachWay(freeChars().map(c => c.id)).filter(
+          ([a, b]) => ok(a) && ok(b) && Ties.mayFlirt(C(a), C(b)) && !remembered.some(([x, y]) => a === x && b === y)
+        )
+      : remembered.filter(([a, b]) => ok(a) && (b === 'you' || ok(b)));
   if (!f.length) return null;
   const [a, b] = pick(f),
     A = C(a);

@@ -1,4 +1,3 @@
-// world/deaths.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const SIGN_NAMED = Object.fromEntries(SIGN_POOL.map((s, i) => [s.short, i]));
 function tellableNow(echo) {
   return [].concat(echo || []).every(sh => {
@@ -76,7 +75,7 @@ function deathText(v, loc, how) {
     en = found[how.open](v, LOCS[loc].at, finder)[0],
     rus = found[how.open](v, R(LOCS[loc].at), finder)[1],
     sg = how.sign != null ? DEATH_SIGN[how.sign] : null;
-  return __text('text');
+  return __text('bodyAndSign');
 }
 function craneDeath() {
   const N = RULES.night,

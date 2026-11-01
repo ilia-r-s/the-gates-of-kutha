@@ -1,4 +1,4 @@
-// Rules 4 and 5 of README.md, checked at run time: the dice are the game's alone, and none of them is ever sure.
+// Seeded-randomness contracts in docs/rules.md: presentation cannot advance the game, and chance retains its bounds.
 // - The screen throws none of them and changes nothing: a season is played twice, once plainly and once with, before
 //   every click (and once more on the ending's page), the language switched there and back, every casebook tab opened,
 //   and everything repainted. The two must play out alike, step for step and word for word, the screen must throw no
@@ -17,7 +17,7 @@ const SEEDS = String(A.seeds).split(',').map(Number);
 // one season, by the human policy; with ui, the screen is worked between every two clicks
 function play({ seed, ui }) {
   const T = window.__T,
-    pol = T.policies.human(T.lcg(seed * 31 + 7));
+    pol = T.policies.human(T.rng(seed * 31 + 7));
   window.sfx = () => {};
   window.musicChange = () => {};
   let inUI = false,
@@ -105,7 +105,7 @@ function endings(N) {
   };
   for (let g = 0; g < N; g++) {
     T.start(g % 3, g % 4 === 3);
-    T.play(g % 2 ? T.policies.cheat(T.lcg(g)) : T.policies.human(T.lcg(g)), { maxSteps: 1500 });
+    T.play(g % 2 ? T.policies.cheat(T.rng(g)) : T.policies.human(T.rng(g)), { maxSteps: 1500 });
     ends[S.endId] = (ends[S.endId] || 0) + 1;
   }
   rand = orig;

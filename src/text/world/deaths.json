@@ -12,7 +12,7 @@
       ]
     }
   },
-  "text": {
+  "bodyAndSign": {
     "$call": "bi",
     "$args": [
       {

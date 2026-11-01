@@ -10,7 +10,7 @@ run(async browser => {
   const res = await page.evaluate(N => {
     window.sfx = () => {};
     window.musicChange = () => {};
-    const rnd = __T.lcg(31337),
+    const rnd = __T.rng(31337),
       out = {};
     ['balanced', ...Object.keys(__T.LEANS)].forEach(pk => {
       const policy = __T.policies.human(rnd, __T.LEANS[pk] || null);

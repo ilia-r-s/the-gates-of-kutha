@@ -1,4 +1,3 @@
-// ui/cues.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function timeNow() {
   if (!S) return 'evening';
   if (S.phase === 'descent' || S.phase === 'sanctum') return 'deep';

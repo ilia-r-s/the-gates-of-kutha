@@ -120,16 +120,6 @@ const Ties = (() => {
       accusedBy: Suspicion.named(b, a)
     };
   }
-  function flirtsNow() {
-    const out = [];
-    freeChars().forEach(a => {
-      if (sweetOnYou(a)) out.push([a.id, 'you']);
-      freeChars().forEach(b => {
-        if (b.id !== a.id && sweetOn(a.id, b.id)) out.push([a.id, b.id]);
-      });
-    });
-    return out;
-  }
   const friend = c => c.rapport >= level().friend,
     against = c => c.rapport <= level().against;
   const friendsNow = () => freeChars().filter(c => c.role !== 'cult' && friend(c)),
@@ -169,7 +159,6 @@ const Ties = (() => {
     drawnToYou: drawnToYou,
     sweetOnYou: sweetOnYou,
     sweetOn: sweetOn,
-    flirtsNow: flirtsNow,
     friendsNow: friendsNow,
     enemiesNow: enemiesNow,
     friendsLost: friendsLost

@@ -1,4 +1,3 @@
-// world/powers.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const ASPECTS = {};
 Object.keys(ASPECT_TEXT).forEach(k => {
   ASPECTS[k] = { key: k, ...ASPECT_TEXT[k] };
@@ -41,13 +40,13 @@ const CHARM_MARKS = {
   worn: { ...enRu(TX.powers.isWornSmoothOn()) }
 };
 const CHARM_MARK_IDS = Object.keys(CHARM_MARKS);
-const VESHCH = __text('text');
+const VESHCH = __text('objectFormsRu');
 function riddle(w) {
   const m = ((S.refOf && S.refOf[w]) || []).map(k => CHARM_MARKS[k]);
   if (!m.length) return { en: 'what was found', ru: VESHCH };
   const verb = vp => vp.split(' ')[0],
     en = m.map(x => x.en.vp).map((vp, i, all) => (i && verb(vp) === verb(all[0]) ? vp.slice(verb(vp).length + 1) : vp));
-  return { en: 'what ' + en.join(' and '), ru: VESHCH.map(v => `${v} ${m[0].ru.prep} ${m.map(x => x.ru.ins).join(__text('text2'))}`) };
+  return { en: 'what ' + en.join(' and '), ru: VESHCH.map(v => `${v} ${m[0].ru.prep} ${m.map(x => x.ru.ins).join(__text('andRu'))}`) };
 }
 const rdEn = w => riddle(w).en,
   rdRu = (w, k = 'n') => riddle(w).ru[CASE[k]];
@@ -370,14 +369,16 @@ const factsAbout = g => S.factKnown.filter(i => S.facts[i].gods.includes(g)).len
 const GLOSSERS = ['anselm', 'ilse', 'zahrun'];
 const titlesToAsk = c => titlesMet().filter(e => !S.glosses.some(gl => gl.by === c.id && gl.e === e));
 function glossBy(c, e) {
-  const truth = S.titleOf[e],
+  const reading = Knowledge.study(c, 'title', e),
+    truth = reading.meaning,
     other = () => pick(S.gods.filter(x => x !== truth));
   let g = truth;
   if (c.role === 'cult') {
-    if (truth === S.patron ? !chance(RULES.readings.cultSlip) : !chance(TP(c).truth)) g = other();
+    if (truth === Knowledge.doctrine(c).value.power ? !chance(RULES.readings.cultSlip) : !chance(TP(c).truth)) g = other();
     else S.log.cultTruth++;
   } else if (chance(RULES.readings.mistakeGloss * TP(c).mistake)) g = other();
-  const gl = { by: c.id, e: e, g: g, day: S.day };
+  Knowledge.rememberStudy(c, 'title', e, c.role === 'cult' ? truth : g, g, reading.basis);
+  const gl = { by: c.id, e: e, g: g, day: S.day, basis: reading.basis };
   S.glosses.push(gl);
   return gl;
 }
@@ -385,19 +386,21 @@ const glossNote = gl => bi(...TX.powers.is(gl));
 function scholarRead(c, w) {
   const key = c.id + ':' + w;
   if (!S.readings[key]) {
-    const g = S.godOfWard[w],
+    const reading = Knowledge.study(c, 'ward', w),
+      g = reading.meaning,
       honest = () => (g ? { gods: shuffle([g, pick(S.gods.filter(x => x !== g))]) } : { none: true }),
       wrong = () => ({ gods: shuffle(S.gods.filter(x => x !== g)).slice(0, 2) });
     let r;
     const RD = RULES.readings;
     if (c.role !== 'cult') r = chance(RD.mistakeReading * TP(c).mistake) ? (chance(RD.mistakeNone) ? { none: true } : wrong()) : honest();
-    else if (g === S.patron ? chance(RD.cultSlip) : chance(TP(c).truth)) {
+    else if (g === Knowledge.doctrine(c).value.power ? chance(RD.cultSlip) : chance(TP(c).truth)) {
       S.log.cultTruth++;
       r = honest();
-    } else if (g === S.patron ? chance(RD.hideWard) : chance(RD.cultNone)) r = { none: true };
+    } else if (g === Knowledge.doctrine(c).value.power ? chance(RD.hideWard) : chance(RD.cultNone)) r = { none: true };
     else r = wrong();
     if (r.gods) r.refs = r.gods.map(refOf);
-    S.readings[key] = { by: c.id, w: w, day: S.day, ...r };
+    Knowledge.rememberStudy(c, 'ward', w, c.role === 'cult' ? (g ? { gods: [g] } : { none: true }) : r, r, reading.basis);
+    S.readings[key] = { by: c.id, w: w, day: S.day, basis: reading.basis, ...r };
   }
   return S.readings[key];
 }

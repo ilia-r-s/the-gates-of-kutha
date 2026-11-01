@@ -4,6 +4,8 @@ name: Publish Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,8 +13,8 @@ permissions:
   pages: read
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -29,17 +31,21 @@ jobs:
       - name: The whole suite (the build first)
         run: node test/run.js full
       - id: pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
       - name: The site
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
         run: node tools/site.js "$PAGES_BASE_URL" _site
       - uses: actions/upload-pages-artifact@v4
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:
           path: _site
 
   deploy:
     needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     permissions:
       pages: write

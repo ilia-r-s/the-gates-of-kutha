@@ -103,7 +103,8 @@ function audit() {
       catalogKeys.get(name).add(key.split('.')[0]);
     });
   }
-  const unusedText = [];
+  const unusedText = [],
+    vagueText = [];
   function checkCatalogs(dir) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const file = path.join(dir, entry.name);
@@ -116,17 +117,22 @@ function audit() {
         .relative(path.join(ROOT, 'src/text'), file)
         .replace(/\\/g, '/')
         .replace(/\.json$/, '');
-      for (const key of Object.keys(JSON.parse(fs.readFileSync(file, 'utf8'))))
+      for (const key of Object.keys(JSON.parse(fs.readFileSync(file, 'utf8')))) {
         if (!catalogKeys.get(name)?.has(key)) unusedText.push(name + '#' + key);
+        if (/^text\d*$/.test(key)) vagueText.push(name + '#' + key);
+      }
     }
   }
   checkCatalogs(path.join(ROOT, 'src/text'));
-  return { unusedExports, unusedPassages, unusedText, dynamic: [...dynamic].sort() };
+  return { unusedExports, unusedPassages, unusedText, vagueText, dynamic: [...dynamic].sort() };
 }
 module.exports = { audit };
 if (require.main === module) {
   const result = audit();
   console.log(JSON.stringify(result, null, 2));
-  if (process.argv.includes('--check') && (result.unusedExports.length || result.unusedPassages.length || result.unusedText.length))
+  if (
+    process.argv.includes('--check') &&
+    (result.unusedExports.length || result.unusedPassages.length || result.unusedText.length || result.vagueText.length)
+  )
     process.exitCode = 1;
 }

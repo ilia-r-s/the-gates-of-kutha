@@ -1,8 +1,82 @@
 # Changelog
 
 Every build of _The Gates of Kutha_, newest first. The build number is set in `package.json` and shows in the game's
-top panel. The single workflow tests builds pushed to `main` and publishes them to GitHub Pages. Builds before
+notebook. The single workflow tests pull requests and builds pushed to `main`; deployment is restricted to `main` non-PR events. Builds before
 26.1.0 came before this repository.
+
+## 29.0.0 — 2026-11-01
+
+**The scene and the notebook.** Illustration, story and choices lead the screen. Map, people, evidence, omens, kit
+and settings open in a notebook overlay. Keyboard navigation, modal focus, narrow screens and both languages have
+real-input coverage in Chrome, Firefox and WebKit. One current expedition resumes automatically with its language,
+scene and both dice streams. Invalid codes and unavailable storage receive visible explanations. The owner-approved
+frightened expression is distinct from surprise. After comparing the music exports, the owner selected the original
+Bayati arrangement; the spacious variant and other art/music experiments remain local review material.
+Third person remains the default, with first person selectable at any time in the casebook. Both preserve the
+original right-hand character staging. The chosen view is remembered independently of the expedition.
+Season-code fields, explanations and replay controls remain hidden until the secret title control is pressed;
+linked codes no longer reveal them automatically. Fractional wounds and nerve loss now receive consistent
+condition descriptions, and serious wounds are distinguished from grave ones.
+
+**A subtler camp.** The cult's five threat decisions now use public opposition and dreams that actually reached it.
+Shared camp influence supports second voices, evidence doubts grounded in witnessed activity, one-use friendly
+intervention, a single planted item and fallible recollections of who influenced a wrong vote. Recalled sources must
+have spoken before voting began; simultaneous co-votes cannot become earlier causes. Private alarm can
+only nudge a shared attack lottery: direct retaliation had made conversations too revealing. New uncertain images
+across six channels give partial clues to the power's favored ways.
+Dream-defence eligibility now shares the fondness requirement across factions; any bounded cult preference uses
+earlier public dreams and public danger instead of other people's private suspicions.
+Additional overnight images share a separate atmospheric budget, making crowded nights much rarer while preserving
+the main dawn clue, evidence finds and required consequences. The README uses a complete quieter night from genuine play.
+
+**Limited points of view.** Actor memories distinguish observation, inference, doctrine and truth. Gossip cannot
+read another person's private feelings; scholars interpret presented inscriptions; a cultist's ward doctrine can
+be wrong. Public deed allegations follow available evidence, including possible false accusations. A distressed
+expression no longer reads others' unspoken thoughts. A contradictory ending in which a dead companion fetched
+help is corrected. Three owner-approved edits temper the Confidant and quiet-player endings and improve the Russian
+line about dreams and heat. The standing guidelines explicitly require exceptionally subtle cult strategy and justified
+knowledge for every actor, including supernatural cases.
+They also state the cult's objective explicitly: completing the rite, with violence serving that objective.
+After the exact framework migration, slips, abandoned pretences and dream-report decisions were separately
+changed to use received pressure, audience-specific reports, remembered membership and justified ritual
+expectations. Their paired outcome study is kept separate from the preservation proof.
+Conversation portraits now follow the current reply rather than generic greeting warmth. A cautious friend does
+not respond angrily to a confidence or call the player a stranger. Eyewitness accounts have varied recounting
+expressions instead of a forced frightened face. Eleven further selected bilingual prose changes clarify signs,
+choices and attribution while keeping the established voice; the Scholar ending no longer claims knowledge
+the player did not demonstrate.
+Object fear and greed now start from shared temperament odds, with small non-stacking motives from remembered
+doctrine, personally delivered signs, dreams or smuggling concerns. Initiation beliefs about the power's nature can
+be wrong. A fresh 20,000-expedition study finds no supported outside-band comparison after repairing two detected
+expression tells; 27 comparisons remain inconclusive. Local probability bounds do not substitute for that measurement.
+
+**Verification and maintenance.** Repaired the test-policy random generator, removed hidden answers from ordinary
+simulated players and made puzzle evaluation play the real finale. Tell studies now report opportunities,
+season-clustered uncertainty and supported failures; a health-aware observation-only player gives a stronger
+benchmark. Original fixtures remain intact, with separate 29 expectations and reviewed differences. Hazard costs
+move out of prose, vague catalog keys and dead paths are removed, and dynamic translations no longer accumulate
+across expeditions. The minimatch advisory is resolved with a pinned tooling override. Pull requests use the same
+full quality gate as publication.
+The standing resource priorities are token/context efficiency first, speed second and storage third.
+The browser harness prevents known macOS sandbox launches that caused Chrome crash alerts and supports reusing an
+isolated test server. An indexed architecture guide explains the game lifecycle, system ownership and working methods.
+Native macOS resource admission now reserves desktop headroom, adapts to memory pressure and bounds child heaps/output;
+manual concurrency cannot waive memory safeguards. Pressure failures report incomplete checks instead of dropping coverage.
+Superseded plans/reviews, the duplicate old rulebook and rejected full-height rendering are removed. Research is
+organized by topic with current implementation/tests, and long-term learning work has one retained roadmap.
+
+**One decision framework.** Named definitions share subject/action/optional object, knowledge authority,
+ordered resolution and typed relationship effects. Migration preserves the selected gameplay, rendered scenes and
+both seeded streams across 96 independent before/after expeditions. Audited observations support local baseline,
+shadow, declarative-policy and accepted-result replay experiments for player, individual and collective-cult decisions.
+The four initial legacy information paths were subsequently repaired under separate authorization. Normal play
+loads no model or experiment policy; training and learned behavior remain deferred.
+
+The [current rules](docs/rules.md), [research index](docs/research/README.md),
+[editorial review](docs/research/2026-11-01-editorial.md) and
+[presentation review](docs/research/2026-11-01-presentation.md) explain decisions and limits.
+The [validation record](docs/research/2026-11-01-validation.md) collects final checks, measured results and remaining uncertainty.
+Neural networks and learned actors remain deferred; the [roadmap](docs/roadmap.md) describes the next experimental stages.
 
 ## 28.5.2 — 2026-11-01
 

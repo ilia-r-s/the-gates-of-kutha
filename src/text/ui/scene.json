@@ -86,10 +86,26 @@
       "$js": "TX.scene.faint()"
     }
   },
-  "text": "Нервы",
-  "text2": "Раны",
-  "text3": "Обряд",
+  "nerveLabelRu": "Нервы",
+  "woundsLabelRu": "Раны",
+  "riteLabelRu": "Обряд",
   "nGTransformTranslatePathClass": {
     "$template": "<g transform=\"translate(372 44)\"><path class=\"north\" d=\"M0 -18 L6 6 L0 1 L-6 6 Z\"/><text class=\"gridlbl\" x=\"0\" y=\"20\" text-anchor=\"middle\">${bi('N', 'С')}</text></g>"
+  },
+  "urgentNerve": {
+    "$call": "bi",
+    "$args": ["Your nerve is giving way.", "Нервы на пределе."]
+  },
+  "urgentWounds": {
+    "$call": "bi",
+    "$args": ["Your wounds are grave.", "Раны тяжёлые."]
+  },
+  "seriousWounds": {
+    "$call": "bi",
+    "$args": ["Your wounds need attention.", "Раны требуют ухода."]
+  },
+  "urgentRite": {
+    "$call": "bi",
+    "$args": ["The rite is nearing its end.", "Обряд близится к завершению."]
   }
 }

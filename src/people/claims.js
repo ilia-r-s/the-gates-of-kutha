@@ -1,4 +1,3 @@
-// people/claims.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function assignClaims() {
   S.claim = {};
   S.order.forEach(id => {
@@ -57,7 +56,7 @@ const dreamEn = (t, cult, veil = null) =>
     : cult
       ? `${t.short} stood inside the seventh, and the god’s hand was on ${t.pp} shoulder.`
       : __text('stoodOutsideThemWeepingWhateverIs');
-const dreamRu = (t, cult, veil = null) => (veil ? __text('text') : cult ? __text('text2') : __text('text3'));
+const dreamRu = (t, cult, veil = null) => (veil ? __text('veiledDreamRu') : cult ? __text('guiltyDreamRu') : __text('innocentDreamRu'));
 const dreamSaid = (c, d) => TX.claims.iDreamtOfThe(c, d);
 const dreamVerdict = d => (d.cult ? 'cult' : 'clean') + (d.veil ? ':' + d.veil : '');
 function tellDream(c, d) {
@@ -168,20 +167,50 @@ function partingDream(c) {
   if (c.role === 'seer') return trueDream(c, true);
   return dreamToYou(c, madeUpDream(c, true), S.loc);
 }
+const DEFENDS_DREAM = Decisions.define({
+  id: 'claims.defend',
+  action: 'defend-with-a-dream',
+  subject: a => a.id,
+  object: (a, t) => t.id,
+  authority: 'actor',
+  knowledge: [
+    'own affinity, claim and available vision',
+    'cult membership when personally initiated',
+    'public danger, dreams and accusations'
+  ],
+  consequences: ['public defence', 'daily dream spent', 'listener reactions'],
+  features: {
+    temper: 'string',
+    role: 'string',
+    likes: 'number',
+    targetCult: 'boolean?',
+    publicTargetDanger: 'boolean',
+    publicDream: 'boolean',
+    publicSafety: 'boolean'
+  },
+  observe: (a, t) => ({
+    temper: temperOf(a),
+    role: a.role,
+    likes: Ties.likes(a, t),
+    targetCult: a.role === 'cult' ? t.role === 'cult' : null,
+    publicTargetDanger: Suspicion.looksLost(t),
+    publicDream: !!Suspicion.hasDreamtAloud(a),
+    publicSafety: Suspicion.clear(a)
+  }),
+  probability: (a, t, mate) => RULES.claims.defend * craft(a).defend * (mate && mateGamble(a, t) ? 1 + RULES.claims.defendAim : 1)
+});
 function defenderOf(t, c) {
-  const K = RULES.claims;
   return (
     shuffle(freeChars()).find(a => {
       if (a.id === t.id || a.id === c.id || claimOf(a).role !== 'seer') return false;
       const mate = a.role === 'cult' && t.role === 'cult';
-      if (!(Ties.fond(a.id, t.id) || mate)) return false;
+      if (!Ties.fond(a.id, t.id)) return false;
       const can = a.role === 'seer' ? a.visions.some(v => v.about === t.id && !v.cult && !v.veil) : !dreamtToday(a);
-      return can && chance(K.defend * craft(a).defend * (mate ? mateOdds(a, t) : 1));
+      return can && DEFENDS_DREAM.roll(a, t, mate);
     }) || null
   );
 }
-const mateGamble = (a, t) => Suspicion.looksLost(t) && Suspicion.hasDreamtAloud(a) && !Suspicion.suspectedBy(a).length;
-const mateOdds = (a, t) => (mateGamble(a, t) ? 1 : Math.min(1, TP(a).counter));
+const mateGamble = (a, t) => Suspicion.looksLost(t) && Suspicion.hasDreamtAloud(a) && Suspicion.clear(a);
 function recantTrust(c) {
   const k = pretence(c);
   if (!k || k.indexOf('hid') !== 0 || c.rapport < RULES.scale.trustMax || S.recantTried[c.id] === S.day) return null;

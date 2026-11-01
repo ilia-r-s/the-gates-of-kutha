@@ -1,4 +1,3 @@
-// game/below.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const GATE_N = __text('GATE_N');
 function favour(html, said) {
   S.fin.favour = (S.fin.favour || 0) + 1;
@@ -23,7 +22,7 @@ function lastDead() {
     .map(C)
     .filter(c => c.status === 'taken')
     .sort((a, b) => b.takenDay - a.takenDay)[0];
-  return t ? { en: `${t.short}’s`, ru: __text('g') } : { en: 'Crane’s', ru: __text('text') };
+  return t ? { en: `${t.short}’s`, ru: __text('g') } : { en: 'Crane’s', ru: __text('cranesVoiceRu') };
 }
 const natureOf = ways =>
   Math.max(
@@ -46,7 +45,17 @@ function trialP(base, ways, mod = 0) {
       B.harder
   );
 }
-const tried = (base, ways, mod = 0) => chance(trialP(base, ways, mod));
+const DESCENT_TRIAL = Decisions.define({
+    id: 'descent.trial',
+    action: 'resolve-chosen-approach',
+    subject: 'world',
+    object: 'player',
+    authority: 'world',
+    knowledge: ['world resolves the chosen approach against the actual power and circumstances'],
+    consequences: ['passage', 'favor', 'harm'],
+    probability: trialP
+  }),
+  tried = (base, ways, mod = 0) => DESCENT_TRIAL.roll(base, ways, mod);
 const dearer = (n, ways) => n + (natureOf(ways) < 0 ? 1 : 0);
 function paid(key, ways, html, said, cause) {
   const [n, w] = B_().cost[key];
@@ -309,7 +318,7 @@ const BELOW = {
     when: 'any',
     text: n => {
       const f = by4({
-        fire: ['white', __text('text2')],
+        fire: ['white', __text('whiteRu')],
         dust: __text('greyAndGivesNoWarmth'),
         sea: __text('greenLikeALampUnderWater'),
         teeth: __text('redAndSpitsLikeFat'),
@@ -498,7 +507,7 @@ const BELOW = {
             if (tried(B_().follow, ['haste'], Ties.friend(c) ? B_().trusted : 0))
               return plain(pline(...TX.below.afterAWhileYou(c)), TX.below.falteredAndFollowedYou(c));
             S.fin.left.push(c.id);
-            return plain(hline(`${c.short} does not follow.`, __text('text3')), TX.below.falteredAndDidNot(c), 'm');
+            return plain(hline(`${c.short} does not follow.`, __text('companionStaysBehindRu')), TX.below.falteredAndDidNot(c), 'm');
           }
         }
       ];

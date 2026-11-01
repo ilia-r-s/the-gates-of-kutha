@@ -1,25 +1,30 @@
 // README pictures from genuine seeded play. Routes contain only choices a player can make; no roles or dice are forced.
-// node test/pictures.js [--only=talk,tablet]   Inspect the resulting PNGs before updating the README.
+// node test/pictures.js [--only=talk,tablet] [--out=.local/pictures] [--file=old-build.html] [--fixture=routes.json]
+// Inspect PNGs before updating the README; the file option preserves historic routes for reviewed builds.
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const { run, open, args, ROOT } = require('./lib/harness');
-const scenes = require('./fixtures/pictures.json');
-const only = args().only?.split(',');
-const OUT = path.join(ROOT, 'docs', 'images');
+const options = args();
+const scenes = require(path.resolve(ROOT, options.fixture || 'test/fixtures/pictures-29.0.0.json'));
+const only = options.only?.split(',');
+const OUT = path.resolve(ROOT, options.out || path.join('docs', 'images'));
 
 async function picture(browser, name, scene) {
   const { page, errors } = await open(browser, {
+    file: options.file,
     seed: scene.pageSeed,
     mathSeed: scene.pageSeed,
     width: 1280,
-    height: 1600,
+    height: scene.height || 1600,
     deviceScaleFactor: 2,
     fonts: 'local'
   });
   try {
     const actual = await page.evaluate(scene => {
       sfx = musicChange = () => {};
+      if (typeof Viewpoint !== 'undefined' && Viewpoint.mode !== 'third') throw new Error('README requires default third person');
+      if (seedOpen) throw new Error('README must not reveal season codes');
       if (scene.clicks) {
         __T.start(scene.background, scene.hardcore, scene.seed);
         for (const i of scene.clicks) {
@@ -31,12 +36,14 @@ async function picture(browser, name, scene) {
       return {
         phase: S?.phase,
         title: X(S_ui.scene.title),
+        companions: S?.fin?.comp || [],
         mood: S ? moodNow() : null,
         text: document.querySelector('#sceneText').innerText
       };
     }, scene);
     if (scene.phase) assert.equal(actual.phase, scene.phase, `${name}: phase`);
     if (scene.title) assert.equal(actual.title, scene.title, `${name}: title`);
+    if (scene.companions) assert.deepEqual(actual.companions, scene.companions, `${name}: accompanying characters`);
     if (scene.mood) assert.equal(actual.mood, scene.mood, `${name}: expression`);
     if (scene.contains) assert.ok(actual.text.includes(scene.contains), `${name}: dialogue`);
     const dice = await page.evaluate(() => [_seed, _words]);
@@ -48,8 +55,13 @@ async function picture(browser, name, scene) {
       }
       window.scrollTo(0, 0);
     });
+    if (scene.frame === 'notebook') {
+      await page.locator('#casebookBtn').click();
+      await page.locator('.tab[data-tab="evidence"]').click();
+    }
     const clip = await page.evaluate(frame => {
       if (frame === 'evidence') {
+        openCasebook();
         document.querySelector('.tab[data-tab="evidence"]').click();
         const panel = document.querySelector('#tabPanel'),
           cards = [...panel.querySelectorAll(':scope > .clue')].slice(0, 2);
@@ -69,9 +81,20 @@ async function picture(browser, name, scene) {
           if (i < start || i >= end) n.hidden = true;
         });
       }
-      const top = document.querySelector(frame === 'evidence' ? '.casebook' : '#sceneArt').getBoundingClientRect();
+      const top = document
+        .querySelector(frame === 'notebook' ? '#notebookDialog' : frame === 'evidence' ? '.casebook' : '#sceneArt')
+        .getBoundingClientRect();
       const bottom = document
-        .querySelector({ art: '#sceneArt', story: '#sceneText', dawn: '#sceneText', stage: '#stage', evidence: '.casebook' }[frame])
+        .querySelector(
+          {
+            art: '#sceneArt',
+            story: '#sceneText',
+            dawn: '#sceneText',
+            stage: '#stage',
+            evidence: '.casebook',
+            notebook: '#notebookDialog'
+          }[frame]
+        )
         .getBoundingClientRect();
       const pad = 16;
       return {
@@ -82,6 +105,10 @@ async function picture(browser, name, scene) {
       };
     }, scene.frame);
     const file = path.join(OUT, `${name}.png`);
+    if (scene.fullScene) {
+      assert.equal(scene.frame, 'stage', `${name}: complete scene framing`);
+      assert.equal(await page.locator('#sceneText').innerText(), actual.text, `${name}: scene prose was hidden`);
+    }
     await page.screenshot({ path: file, clip, animations: 'disabled' });
     assert.deepEqual(await page.evaluate(() => [_seed, _words]), dice, `${name}: framing consumed dice`);
     return { file: path.relative(ROOT, file), errors };

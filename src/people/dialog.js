@@ -1,8 +1,43 @@
-// people/dialog.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function pressP(c) {
   const t = RULES.talk;
   return clamp(t.press + (S.bg === 'soldier' ? t.pressSoldier : 0) + (c ? t.pressTrust * c.rapport : 0));
 }
+const PRESS_COOPERATES = Decisions.define({
+    id: 'dialog.press.cooperate',
+    action: 'cooperate-under-pressure',
+    subject: c => c.id,
+    object: 'player',
+    authority: 'actor',
+    knowledge: ['personally pressed by the player', 'own trust and the player’s background'],
+    consequences: ['cooperation', 'possible recantation or reply'],
+    features: { trust: 'number', background: 'string' },
+    observe: c => ({ trust: c.rapport, background: S.bg }),
+    probability: pressP
+  }),
+  PRESS_TRUST = Decisions.define({
+    id: 'dialog.press.trust',
+    action: 'react-to-pressure',
+    subject: c => c.id,
+    object: 'player',
+    authority: 'actor',
+    knowledge: ['personally pressed by the player', 'own trust and temperament'],
+    consequences: ['trust'],
+    features: { trust: 'number', temper: 'string' },
+    observe: c => ({ trust: c.rapport, temper: temperOf(c) }),
+    probability: () => RULES.talk.pressCost,
+    apply: (yes, c) => yes && Decisions.effect('trust', c, 'player', -1, 'deed')
+  }),
+  CONFIDENCE_SOURS = Decisions.define({
+    id: 'dialog.confidence.sours',
+    action: 'react-to-refused-confidence',
+    subject: c => c.id,
+    object: 'player',
+    authority: 'actor',
+    knowledge: ['own suspicious temperament and refused confidence'],
+    consequences: ['trust'],
+    probability: () => RULES.talk.sourConfide,
+    apply: (yes, c) => yes && Decisions.effect('trust', c, 'player', -1)
+  });
 function showables() {
   const a = S.items.filter(x => CHARMS.includes(x)).map(x => ({ id: x, name: theItem(x), sub: __text('anOldCharmFromTheTell') }));
   if (has('bowl')) a.push({ id: 'bowl', name: theItem('bowl'), sub: __text('aramaicFarYoungerThanTheRest') });
@@ -10,14 +45,14 @@ function showables() {
     a.push({
       id: 'frag',
       name: 'an untranslated tablet fragment',
-      rn: __text('text'),
+      rn: __text('untranslatedFragmentRu'),
       sub: __text('clayNoOneHasReadYet')
     });
   else if (S.factKnown.length)
     a.push({
       id: 'line',
       name: 'a line you copied from the tablets',
-      rn: __text('text2'),
+      rn: __text('copiedLineRu'),
       sub: __text('fromYourNotebook')
     });
   return a;
@@ -35,6 +70,7 @@ function curtTalk(c, hostile = true) {
     youE: 'smile',
     them: bi(...TX.dialog.iHaveWorkTo(k)),
     themE: 'stern',
+    intent: hostile ? 'firm' : 'weary',
     note: bi(...tellOne(hostile ? 'curtHostile' : 'curtOff', SAY.curt[hostile ? 'hostile' : 'off'])(c)),
     cool: true
   };
@@ -67,9 +103,16 @@ function scholarTalk(c) {
     youE: 'neutral',
     them: bi(...TX.dialog.listenToThisOne(k, c)) + ' ' + bi('‘', '„') + S.facts[l].text + bi('’', '“'),
     themE: 'thoughtful',
+    intent: 'studying',
     note: note
   };
 }
+const TALK_TONE = new Map([
+  [SMALLTALK.ashby[2], 'reserved'],
+  [SMALLTALK.constance[0], 'weary'],
+  [SMALLTALK.ilse[1], 'weary'],
+  [SMALLTALK.ilse[2], 'serious']
+]);
 function smallTalk(c) {
   const line = tellOne('small-' + c.id, SMALLTALK[c.id]);
   let them = bi(line);
@@ -79,7 +122,14 @@ function smallTalk(c) {
   if (fr) them += ' ' + fr.text;
   const slip = blurt(c, S.day - 1, RULES.talk.blurtInPassing);
   const themE = fr ? fr.face : JOKES.has(line) && chance(RULES.manner.joke) ? jokeFace(c) : pick(['smile', 'neutral', 'thoughtful']);
-  return { you: bi(...tellOne('smallTalk', SAY.smallTalk)), youE: 'smile', them: them, themE: themE, note: talkNotes(c, slip) || null };
+  return {
+    you: bi(...tellOne('smallTalk', SAY.smallTalk)),
+    youE: 'smile',
+    them: them,
+    themE: themE,
+    intent: fr ? null : TALK_TONE.get(line),
+    note: talkNotes(c, slip) || null
+  };
 }
 const DIALOG = {
   about: {
@@ -122,7 +172,14 @@ const DIALOG = {
       let you;
       if (n === 0) you = bi(...tellOne('askCrane', SAY.askCrane));
       else you = bi(...tellOne('askNight', SAY.askNight));
-      return { you: you, youE: 'neutral', them: them, themE: pick(['thoughtful', 'neutral']), note: note };
+      return {
+        you: you,
+        youE: 'neutral',
+        them: them,
+        themE: pick(['thoughtful', 'neutral']),
+        intent: cl.attacked ? 'distressed' : 'recounting',
+        note: note
+      };
     }
   },
   show: {
@@ -135,11 +192,7 @@ const DIALOG = {
     run(c, id) {
       const th = showables(),
         t = th.find(x => x.id === id) || th[0],
-        fear = TP(c).fear;
-      const greedy = chance(
-          c.role === 'smuggler' ? RULES.talk.greed : RULES.talk.greedOther * (['liar', 'calculating'].includes(temperOf(c)) ? 2 : 1)
-        ),
-        r = greedy ? 'greed' : chance(fear[c.role === 'cult' ? 0 : 1]) ? 'fear' : 'calm';
+        r = ObjectReactions.choose(c, t.id);
       const words = t.id === 'line';
       Record.testify(c.id, c.id, words ? 'words' : 'react', r);
       let them = bi(tellOne('react-' + (words ? 'words-' : '') + r, (words ? REACT_WORDS_SAY : REACT_SAY)[r])),
@@ -167,6 +220,7 @@ const DIALOG = {
         pre: bi(...TX.dialog.youSetOnThe(t)),
         them: them,
         themE: r === 'fear' ? 'uneasy' : r === 'greed' ? 'smile' : 'thoughtful',
+        intent: cool ? 'firm' : r === 'fear' ? 'distressed' : r === 'calm' ? 'studying' : null,
         note: __text('themItTheyIt'),
         cool: cool
       };
@@ -176,16 +230,18 @@ const DIALOG = {
     label: () => __text('confideYourSuspicions'),
     sub: () => bi(...TX.dialog.trustBothWaysRisky()),
     run(c) {
-      const you = bi(...tellOne('confide', SAY.confide));
-      if (c.role === 'cult') Suspicion.alertCult(RULES.confide.alerts, [c]);
+      const you = bi(...tellOne('confide', SAY.confide)),
+        cordial = Ties.cordial(c);
+      if (c.role === 'cult') Suspicion.alertCult(RULES.confide.alerts, [c], { kind: 'confidence', route: 'participant', at: S.loc });
       if (!TAKES_CONFIDENCE.roll(c)) {
-        if (temperOf(c) === 'suspicious' && chance(RULES.talk.sourConfide)) Ties.moveTrust(c, -1);
+        if (temperOf(c) === 'suspicious') CONFIDENCE_SOURS.run(c);
         const k = tellOne('confideNo', [0, 1]);
         return {
           you: you,
           youE: 'grave',
-          them: bi(...TX.dialog.iWouldBeCareful(k)),
+          them: bi(...TX.dialog.iWouldBeCareful(cordial ? 0 : k)),
           themE: 'stern',
+          intent: cordial ? 'serious' : Ties.against(c) ? 'firm' : 'reserved',
           note: bi(...tellOne('nothingBack', SAY.nothingBack)(c))
         };
       }
@@ -209,27 +265,39 @@ const DIALOG = {
         claimToYou(c, S.loc);
         them += bi(...TX.dialog.iShouldTellYou());
       }
-      return { you: you, youE: 'grave', them: them, themE: 'grave' };
+      return { you: you, youE: 'grave', them: them, themE: 'grave', intent: 'confiding' };
     }
   },
   press: {
     label: c => __text('press'),
     sub: () => __text('shakeSomethingLooseCostsTrust'),
     run(c) {
-      const ok = chance(pressP(c)),
+      const ok = PRESS_COOPERATES.roll(c),
         you = bi(...tellOne('askPress', SAY.askPress));
       S.log.presses.push({ day: S.day, id: c.id });
-      Ties.hound(c, RULES.hound.press);
+      Decisions.effect('hounding', c, 'player', RULES.hound.press);
       Gossip.wordOf(c, 'pressed');
       if (!S.log.pressedWho.includes(c.id)) S.log.pressedWho.push(c.id);
       const before = c.rapport;
-      if (chance(RULES.talk.pressCost)) Ties.moveTrust(c, -1, 'deed');
+      PRESS_TRUST.run(c);
       const rp = ok && c.role !== 'smuggler' && recantPressed(c);
       if (rp) return { you: you, youE: 'stern', them: rp, themE: 'uneasy', note: bi(...TX.dialog.hasTheGraceTo(c)) };
       return Parts.move(c, 'pressed')(c, ok, you, before);
     }
   }
 };
+for (const [action, entry] of Object.entries(DIALOG)) {
+  entry.run = Decisions.define({
+    id: 'player.dialog.' + action,
+    action,
+    subject: 'player',
+    object: c => c.id,
+    authority: 'actor',
+    knowledge: ['player selected this conversation approach with the named person'],
+    consequences: ['interlocutor response', 'action-specific records and reactions'],
+    execute: entry.run
+  }).run;
+}
 const BRISTLE = __text('againNoNotTodayDoctor');
 function bristles(c) {
   const H = RULES.hound,
@@ -240,7 +308,7 @@ function bristles(c) {
   return {
     you: bi(...tellOne('askNight', SAY.askNight)),
     youE: 'neutral',
-    them: bi(en, rus.replace(/\{a\}/g, ru.gs(c, '', __text('text3')))),
+    them: bi(en, rus.replace(/\{a\}/g, ru.gs(c, '', __text('feminineEndingRu')))),
     themE: 'cold',
     cool: true
   };
@@ -263,24 +331,62 @@ function pressFear(c) {
   const L = RULES.slip;
   return Math.min(
     1,
-    ownLot(c, placeOf(c) || S.loc).trouble +
+    ownLot(c, placeOf(c) || S.loc, Knowledge.pressure(c)).trouble +
       L.fearPressed * pressesOf(c) +
-      Math.min(L.fearSeasonMax, L.fearSeason * (S.log.presses.length - 1))
+      Math.min(L.fearSeasonMax, L.fearSeason * Knowledge.knownPresses(c))
   );
 }
-const SLIPS = odds('lets something slip, pressed', [
-  ['base', (c, s) => RULES.slip.secret[s.secret]],
-  ['* temperament', c => TP(c).slip],
-  ['* pressure', c => RULES.slip.pressure + RULES.slip.pressureCase * Math.min(RULES.slip.caseMax, Record.caseAgainst(c))],
-  ['* shaken', c => RULES.slip.shaken + RULES.slip.shakenFear * pressFear(c)],
-  ['* fear alone', (c, s) => (s.secret === 'none' ? 1 + RULES.slip.noneFear * pressFear(c) : 1)],
-  ['* toward you', c => RULES.slip.trust[Ties.trust(c)]],
-  ['* rehearsed', (c, s) => (s.secret === 'none' ? 1 : RULES.slip.rehearsed ** pressesOf(c))],
-  ['* on guard', (c, s) => (s.secret === 'cult' && S.alerted.includes(c.id) ? RULES.slip.onGuard : 1)],
-  ['* the last of it', (c, s) => (s.secret === 'cult' && freeCult().length === 1 ? RULES.slip.last : 1)],
-  ['* the rite', (c, s) => (s.secret === 'cult' ? RULES.slip.rite + (RULES.slip.riteMore * S.doom) / S.doomMax : 1)],
-  ['clamp', () => [RULES.scale.rarest, RULES.slip.max]]
-]);
+const SLIPS = Decisions.define({
+  id: 'dialog.slip',
+  action: 'let-a-secret-slip',
+  subject: c => c.id,
+  object: 'player',
+  authority: 'actor',
+  knowledge: [
+    'own secret, temperament, trust, previous questioning and received alarm',
+    'accusations and pressure actually received, known grief and own public shame',
+    'remembered cult membership and initiation calendar, updated by known public losses'
+  ],
+  consequences: ['secret revealed'],
+  features: {
+    secret: 'string',
+    temper: 'string',
+    pressure: 'number',
+    fear: 'number',
+    trust: 'number',
+    previousPresses: 'number',
+    alerted: 'boolean',
+    alone: 'boolean',
+    ritualExpectation: 'number'
+  },
+  observe: (c, s) => ({
+    secret: s.secret,
+    temper: temperOf(c),
+    pressure: Knowledge.pressure(c),
+    fear: pressFear(c),
+    trust: Ties.trust(c),
+    previousPresses: pressesOf(c),
+    alerted: S.alerted.includes(c.id),
+    alone: s.secret === 'cult' && Knowledge.cultCompany(c).length === 1,
+    ritualExpectation: Knowledge.ritualExpectation(c)
+  }),
+  probability: odds('lets something slip, pressed', [
+    ['base', (c, s) => RULES.slip.secret[s.secret]],
+    ['* temperament', c => TP(c).slip],
+    ['* received pressure', c => RULES.slip.pressure + RULES.slip.pressureHeard * Math.min(RULES.slip.pressureMax, Knowledge.pressure(c))],
+    ['* shaken', c => RULES.slip.shaken + RULES.slip.shakenFear * pressFear(c)],
+    ['* fear alone', (c, s) => (s.secret === 'none' ? 1 + RULES.slip.noneFear * pressFear(c) : 1)],
+    ['* toward you', c => RULES.slip.trust[Ties.trust(c)]],
+    ['* rehearsed', (c, s) => (s.secret === 'none' ? 1 : RULES.slip.rehearsed ** pressesOf(c))],
+    ['* on guard', (c, s) => (s.secret === 'cult' && S.alerted.includes(c.id) ? RULES.slip.onGuard : 1)],
+    ['* believed last member', (c, s) => (s.secret === 'cult' && Knowledge.cultCompany(c).length === 1 ? RULES.slip.last : 1)],
+    [
+      '* expected rite',
+      (c, s) => (s.secret === 'cult' ? RULES.slip.expectationBase + RULES.slip.expectationMore * Knowledge.ritualExpectation(c) : 1)
+    ],
+    ['clamp', () => [RULES.scale.rarest, RULES.slip.max]]
+  ])
+});
 const slips = (c, ok) => {
   if (!ok) return null;
   const s = secretOf(c);
@@ -319,7 +425,7 @@ function pressedCult(c, ok, you, before) {
     S.log.cultTruth++;
     return turnAside(c, you, smug);
   }
-  Suspicion.alertCult(RULES.talk.pressAlerts, [c]);
+  Suspicion.alertCult(RULES.talk.pressAlerts, [c], { kind: 'press', route: 'participant', at: S.loc });
   return rebuff(c, you, before);
 }
 const SLIP_LINES = [
@@ -340,8 +446,8 @@ function slipOut(c, you, s) {
   };
 }
 function thiefKnownTo(c) {
-  const t = freeChars().find(o => o.role === 'smuggler' && o.id !== c.id && S.revealed[o.id] !== 'smuggler');
-  return t && Object.values(S.nights || {}).some(rec => rec && (rec.thiefSeen || []).includes(c.id)) ? t : null;
+  if (!Object.values(S.nights || {}).some(rec => rec && (rec.thiefSeen || []).includes(c.id))) return null;
+  return freeChars().find(o => o.role === 'smuggler' && o.id !== c.id && S.revealed[o.id] !== 'smuggler') || null;
 }
 function tipped(c, smug) {
   const seen = new Set();
@@ -354,7 +460,14 @@ function tipped(c, smug) {
 function turnAside(c, you, smug) {
   smug = tipped(c, smug);
   Record.testify(c.id, smug.id, 'tip', 'thief');
-  return { you: you, youE: 'stern', them: tipLine(smug), themE: 'neutral', note: bi(...TX.dialog.answersSmoothlyAndYou(c)) };
+  return {
+    you: you,
+    youE: 'stern',
+    them: tipLine(smug),
+    themE: 'neutral',
+    intent: 'reserved',
+    note: bi(...TX.dialog.answersSmoothlyAndYou(c))
+  };
 }
 const PRESS_REBUFF = __text('howDareYouIHaveTold');
 function rebuff(c, you, before) {
@@ -386,19 +499,21 @@ DIALOG.distrust = {
     const d = dreamToTell(c);
     if (d) return say(bi(...TX.dialog.iDreamtOfThe(d)), 'grave');
     const w = thiefSaw(c);
-    if (w && chance(RULES.thief.outright)) return say(thiefNames(c, TX.dialog.youWantToKnow()), 'uneasy');
+    if (w && chance(RULES.thief.outright)) return { ...say(thiefNames(c, TX.dialog.youWantToKnow()), 'uneasy'), intent: 'recounting' };
     if (w && chance(RULES.thief.hint)) {
       const h = thiefHint(c, w);
-      return { ...say(h.them, 'uneasy'), note: h.note };
+      return { ...say(h.them, 'uneasy'), intent: 'recounting', note: h.note };
     }
-    const proof = () => say(bi(...TX.dialog.iWillNotPut()), 'neutral');
+    const proof = () => ({ ...say(bi(...TX.dialog.iWillNotPut()), 'neutral'), intent: 'reserved' });
     if (chance(TP(c).decline))
-      return (temperOf(c) === 'detached') === chance(RULES.talk.ownWay) ? say(bi(...TX.dialog.iDoNotWatch()), 'neutral') : proof();
+      return (temperOf(c) === 'detached') === chance(RULES.talk.ownWay)
+        ? { ...say(bi(...TX.dialog.iDoNotWatch()), 'neutral'), intent: 'weary' }
+        : proof();
     const b = whomToBlame(c, others);
     if (b.tip) {
       const t = tipped(c, b.tip);
       Record.testify(c.id, t.id, 'tip', 'thief');
-      return say(tipLine(t), 'neutral');
+      return { ...say(tipLine(t), 'neutral'), intent: 'reserved' };
     }
     if (!b.target) return proof();
     Record.testify(c.id, b.target.id, 'distrust', 'cult');
@@ -420,18 +535,18 @@ function whomToBlame(c, others) {
   if (seen) others = others.filter(o => o.id !== seen.actor);
   const k = temperOf(c),
     tp = TP(c),
-    inno = others.filter(o => o.role !== 'cult'),
     known = thiefKnownTo(c),
     smug = known && others.includes(known) ? known : null;
-  return Parts.move(c, 'name')(c, others, { k: k, tp: tp, inno: inno, smug: smug });
+  return Parts.move(c, 'name')(c, others, { k: k, tp: tp, smug: smug });
 }
-function cultNames(c, others, { k: k, tp: tp, inno: inno, smug: smug }) {
+function cultNames(c, others, { k: k, tp: tp, smug: smug }) {
   if (smug && (k === 'honest' || k === 'conscientious') && chance(RULES.talk.honestTip)) {
     S.log.cultTruth++;
     return { tip: smug };
   }
   const mate = busFor(c, others);
   if (mate) return { target: mate };
+  const inno = others.filter(o => o.role !== 'cult');
   return chance(tp.frame) && inno.length ? { target: innocentBlames(c, inno) } : {};
 }
 const anyoneNames = (c, others, { k: k, smug: smug }) =>
@@ -480,7 +595,7 @@ DIALOG.title = {
       ilse: bi(...TX.dialog.obviouslyIsTheCommonest(G, Title, Gr, TitleRu)),
       zahrun: bi(...TX.dialog.myGrandmotherStillSaid(Title, G, TitleRu, Gr))
     }[c.id];
-    return { you: you, youE: 'neutral', them: them, themE: 'thoughtful', note: bi(...TX.dialog.youCopyItInto()) };
+    return { you: you, youE: 'neutral', them: them, themE: 'thoughtful', intent: 'studying', note: bi(...TX.dialog.youCopyItInto()) };
   }
 };
 DIALOG.diary = {
@@ -529,7 +644,7 @@ function askOf(c, conv, k, arg) {
       Record.testify(c.id, c.id, 'chill', 'cult');
     }
   }
-  return { ...r, face: faceFor(c, r.themE), chill: chill };
+  return { ...r, face: replyFace(c, r, k, conv.asked.length), chill: chill };
 }
 function leaveOf(c) {
   const dream = partingDream(c),

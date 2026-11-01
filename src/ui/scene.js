@@ -1,4 +1,3 @@
-// ui/scene.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const S_ui = { tab: 'people', scene: null };
 const $ = s => document.querySelector(s);
 const MAPLBL = __text('MAPLBL');
@@ -6,6 +5,7 @@ const motionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-moti
   reduceMotion = () => !!(motionQuery && motionQuery.matches);
 function show(sc) {
   S_ui.scene = sc;
+  if (Session.replaying) return;
   paintScene(sc);
   const st = $('#stage');
   st.classList.toggle('is-intro', !!sc.intro);
@@ -14,6 +14,31 @@ function show(sc) {
   keepInView(st);
   emit('scene', sc);
 }
+const PLAYER_CHOICE = Decisions.define({
+  id: 'player.choice',
+  action: 'choose-offered-action',
+  subject: 'player',
+  authority: 'actor',
+  knowledge: ['currently displayed scene and offered choices only'],
+  consequences: ['chosen action resolved through the original scene callback'],
+  features: { phase: 'string', language: 'string', scene: 'string' },
+  // Setup can display a seed, and the ending reveals privileged truth. Neither
+  // belongs in a live investigator policy observation.
+  canExperiment: () => !!S && !S.ended && !S_ui.scene?.intro,
+  observe: () => ({ phase: S.phase, language: LANG, scene: X([S_ui.scene.title, ...(S_ui.scene.body || [])].join('\n')) }),
+  offer: () => (S_ui.scene.choices || []).map((c, i) => ({ id: String(i), label: X(c.label || c.html || '') })),
+  selection: i => String(i),
+  accept: choice => [Number(choice)],
+  execute(i) {
+    const c = S_ui.scene && (S_ui.scene.choices || [])[i];
+    if (!c || !Number.isInteger(i)) return false;
+    return Session.act(['choice', i], () => {
+      c.fn();
+      return true;
+    });
+  }
+});
+const chooseScene = i => PLAYER_CHOICE.run(i);
 const RISE = [
     [
       { opacity: 0.6, transform: 'translateY(5px)' },
@@ -51,6 +76,7 @@ function draw(el, html) {
   el.innerHTML = html;
 }
 function paintScene(sc) {
+  if (Session.replaying) return;
   if (sc.kickerHtml) $('#kicker').innerHTML = X(sc.kicker);
   else $('#kicker').textContent = X(sc.kicker || '');
   $('#sceneTitle').textContent = X(sc.title || '');
@@ -65,6 +91,7 @@ function paintScene(sc) {
     const b = document.createElement('button'),
       under = typeof c.sub === 'function' ? c.sub() : c.sub;
     b.type = 'button';
+    b.tabIndex = 0;
     b.className = 'choice ' + (c.cls || '');
     b.dataset.i = i;
     b.innerHTML = X(
@@ -73,7 +100,7 @@ function paintScene(sc) {
     );
     b.addEventListener('click', e => {
       if (S_ui.scene !== sc || e.detail > 1) return;
-      c.fn();
+      chooseScene(i);
     });
     box.appendChild(b);
   });
@@ -84,6 +111,7 @@ function paintScene(sc) {
 }
 const CHOICE_KEYS = '1234567890';
 function renderAll() {
+  if (Session.replaying) return;
   const on = !!S;
   document.body.classList.toggle('no-game', !on);
   renderMeters();
@@ -97,8 +125,8 @@ function meterState() {
     d = S.doom,
     { doomStir: stirs, doomWarn: warn } = RULES.start,
     step = (warn - stirs) / 3;
-  const nerve = S.nerve <= 1 ? 5 : S.nerve === 2 ? 4 : f >= 0.85 ? 0 : f >= 0.65 ? 1 : f >= 0.45 ? 2 : 3,
-    wounds = !S.wounds ? 0 : left >= 3 ? 1 : left === 2 ? 2 : 3,
+  const nerve = S.nerve <= 1 ? 5 : S.nerve <= 2 ? 4 : f >= 0.85 ? 0 : f >= 0.65 ? 1 : f >= 0.45 ? 2 : 3,
+    wounds = !S.wounds ? 0 : left > 2 ? 1 : left > 1 ? 2 : 3,
     far =
       d >= S.doomMax ? 6 : d >= S.doomMax - 1 ? 5 : d >= warn ? 4 : d >= stirs + 2 * step ? 3 : d >= stirs + step ? 2 : d >= stirs ? 1 : 0,
     rite = wonEnding(S.ended) ? 7 : far;
@@ -114,9 +142,12 @@ function meterWord(k, i) {
   );
 }
 function renderMeters() {
-  const m = $('#meters');
+  const m = $('#meters'),
+    cue = $('#conditionCue');
   if (!S) {
     draw(m, '');
+    cue.hidden = true;
+    cue.textContent = '';
     return;
   }
   const st = meterState(),
@@ -125,11 +156,19 @@ function renderMeters() {
   draw(
     m,
     X(
-      one('nerve', twin('Nerve', __text('text')), __text('nerveLoseAllOfItAnd')) +
-        one('wounds', twin('Wounds', __text('text2')), __text('woundsTooManyAndYouDie')) +
-        one('rite', twin('The rite', __text('text3')), bi(...TX.scene.theRiteWhenIt()))
+      one('nerve', twin('Nerve', __text('nerveLabelRu')), __text('nerveLoseAllOfItAnd')) +
+        one('wounds', twin('Wounds', __text('woundsLabelRu')), __text('woundsTooManyAndYouDie')) +
+        one('rite', twin('The rite', __text('riteLabelRu')), bi(...TX.scene.theRiteWhenIt()))
     )
   );
+  const warnings = [];
+  if (!S.ended) {
+    if (st.nerve[1] >= 3) warnings.push(__text('urgentNerve'));
+    if (st.wounds[1] >= 2) warnings.push(st.wounds[1] === 3 ? __text('urgentWounds') : __text('seriousWounds'));
+    if (st.rite[1] >= 3) warnings.push(__text('urgentRite'));
+  }
+  cue.hidden = !warnings.length;
+  cue.textContent = X(warnings.join(' '));
 }
 function mapBase() {
   let g = '';
@@ -188,6 +227,8 @@ function mapBase() {
 const TIP = 'title';
 function renderMap() {
   const svg = $('#map');
+  const focused = svg.contains(document.activeElement) && document.activeElement.closest('[data-loc]'),
+    focusLoc = focused && focused.getAttribute('data-loc');
   if (!svg.getAttribute('data-ready')) {
     svg.innerHTML = X(mapBase());
     svg.setAttribute('data-ready', '1');
@@ -209,6 +250,10 @@ function renderMap() {
     h += `<g class="loc ${cur ? 'cur' : ''}" data-loc="${l}" ${go ? `tabindex="0" role="button" aria-label="${__text('goTo')}${dug ? searchedSay(dug) : ''}"` : ''}>\n      <${TIP}>${name}</${TIP}><circle class="hit" cx="${L.x}" cy="${L.y}" r="18"/><circle class="mk" cx="${L.x}" cy="${L.y}" r="6"/>\n      <text class="loclbl" x="${L.x + lx}" y="${L.y - 8}" text-anchor="${anchor}">${bi(MAPLBL[l])}</text>\n      ${crime ? `<path class="crime" d="M${L.x - 13} ${L.y - 13}l6 6m0 -6l-6 6"/>` : ''}\n      ${testPits(L, dug)}\n      ${here.map((c, i) => `<g class="tok"><circle cx="${L.x - (here.length - 1) * 8 + i * 16}" cy="${L.y + 17}" r="7.5"/><text x="${L.x - (here.length - 1) * 8 + i * 16}" y="${L.y + 19.6}" text-anchor="middle">${bi(c.init, ru.ch(c).init)}</text></g>`).join('')}\n    </g>`;
   });
   draw(dyn, X(h));
+  if (focusLoc) {
+    const next = dyn.querySelector(`[data-loc="${focusLoc}"][tabindex]`) || document.querySelector('#choices .choice');
+    if (next) next.focus({ preventScroll: true });
+  }
 }
 function testPits(L, n) {
   let s = '';
@@ -217,21 +262,40 @@ function testPits(L, n) {
 }
 const searchedSay = n => __text('searched');
 function mapGo(l) {
-  if (!S || !(S.phase === 'plan' || S.phase === 'loc')) return;
-  if (S.phase === 'loc' && S.loc === l) return;
-  goTo(l);
+  if (!S || !LOC_IDS.includes(l) || !(S.phase === 'plan' || S.phase === 'loc')) return false;
+  if (S.phase === 'loc' && S.loc === l) return false;
+  return Session.act(['map', l], () => {
+    goTo(l);
+    if (!Session.replaying) closeCasebook(true);
+    return true;
+  });
 }
 function initUI() {
-  document.querySelectorAll('.tab').forEach(t =>
-    t.addEventListener('click', () => {
-      const changed = S_ui.tab !== t.dataset.tab;
-      S_ui.tab = t.dataset.tab;
-      renderBook();
-      if (changed) $('#tabPanel').scrollTop = 0;
-    })
-  );
+  const tabs = [...document.querySelectorAll('.tab')];
+  const selectTab = t => {
+    const changed = S_ui.tab !== t.dataset.tab;
+    S_ui.tab = t.dataset.tab;
+    renderBook();
+    if (changed) $('#tabPanel').scrollTop = 0;
+    Session.save();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', e => {
+      const next = { ArrowLeft: (i + tabs.length - 1) % tabs.length, ArrowRight: (i + 1) % tabs.length, Home: 0, End: tabs.length - 1 }[
+        e.key
+      ];
+      if (next == null || e.altKey || e.ctrlKey || e.metaKey) return;
+      e.preventDefault();
+      tabs[next].focus();
+      selectTab(tabs[next]);
+    });
+  });
   $('#kicker').addEventListener('click', e => {
     if (e.target.closest('#seedKey')) openSeed();
+  });
+  $('#sceneText').addEventListener('input', e => {
+    if (e.target.id === 'pseed' && seedInvalid) seedFeedback(e.target.value.trim() !== '' && parseSeed(e.target.value) === null);
   });
   const svg = $('#map');
   svg.addEventListener('click', e => {
@@ -247,6 +311,7 @@ function initUI() {
     }
   });
   document.addEventListener('keydown', e => {
+    if (casebookIsOpen()) return;
     if (e.target.closest && e.target.closest('input, textarea')) return;
     if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
     const n = e.key.length === 1 ? CHOICE_KEYS.indexOf(e.key) : -1;
@@ -258,5 +323,5 @@ function initUI() {
       }
     }
   });
-  introScene();
+  if (!Session.restore()) introScene();
 }

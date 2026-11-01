@@ -1,34 +1,53 @@
 <noscript><style>.app { display: none; }</style><div class="noscript"><h1>The Gates of Kutha</h1><p lang="en">This game runs on JavaScript, and JavaScript is turned off in this browser. Turn it on for this page (in the browser’s settings, under privacy or site settings), then reload the page.</p><div class="ru" lang="ru"><p><b>Врата Куты.</b> Игре нужен JavaScript, а в этом браузере он выключен. Включите его для этой страницы (в настройках браузера, в разделе конфиденциальности или настроек сайтов) и перезагрузите страницу.</p></div></div></noscript>
 <div class="app">
   <header class="top">
-    <div class="brand-row"><div class="brand"><span class="dingir" aria-hidden="true">𒀭</span><span class="twin"><span class="tw tw-en" lang="en">The Gates of Kutha</span><span class="tw tw-ru" lang="ru">Врата Куты</span></span><span class="build" id="build"><span class="twin"><span class="tw tw-en" lang="en">build {{version}}</span><span class="tw tw-ru" lang="ru">сборка {{version}}</span></span></span></div>
-      <div class="sound"><button type="button" class="snd" id="musicBtn" aria-pressed="true">Music on</button><button type="button" class="snd" id="sfxBtn" aria-pressed="true">Sound on</button><span class="np" id="nowPlaying" title="Now playing"></span></div></div>
-    <div class="meters" id="meters" role="group" aria-label="Your condition"></div>
+    <div class="brand"><span class="dingir" aria-hidden="true">𒀭</span><span class="twin"><span class="tw tw-en" lang="en">The Gates of Kutha</span><span class="tw tw-ru" lang="ru">Врата Куты</span></span></div>
+    <button tabindex="0" type="button" class="snd menu-button" id="casebookBtn" aria-haspopup="dialog" aria-controls="notebookDialog" aria-expanded="false" aria-label="Open casebook and settings"><span class="twin"><span class="tw tw-en" lang="en">Casebook</span><span class="tw tw-ru" lang="ru">Журнал</span></span></button>
   </header>
   <main class="layout">
     <section class="stage" id="stage">
       <div class="scene-art" id="sceneArt"></div>
-      <div aria-live="polite"><div class="kicker" id="kicker"></div>
+      <div class="scene-copy" aria-live="polite"><div class="kicker" id="kicker"></div>
       <h1 id="sceneTitle"></h1>
       <div class="scene-sub" id="sceneSub" hidden></div>
       <div class="prose" id="sceneText"></div>
       </div>
+      <p class="condition-cue" id="conditionCue" role="status" hidden></p>
+      <p class="dim session-notice" id="sessionNotice" data-session-notice role="status" hidden></p>
       <div class="choices" id="choices"></div>
     </section>
-    <aside class="side">
+  </main>
+  <dialog class="notebook-dialog" id="notebookDialog" aria-labelledby="notebookTitle">
+    <div class="notebook-heading">
+      <h2 id="notebookTitle" tabindex="-1"><span class="twin"><span class="tw tw-en" lang="en">The casebook</span><span class="tw tw-ru" lang="ru">Журнал экспедиции</span></span></h2>
+      <button tabindex="0" type="button" class="snd" id="closeCasebook"><span class="twin"><span class="tw tw-en" lang="en">Close</span><span class="tw tw-ru" lang="ru">Закрыть</span></span></button>
+    </div>
+    <div class="sound notebook-tools"><button tabindex="0" type="button" class="snd" id="musicBtn" aria-pressed="true">Music on</button><button tabindex="0" type="button" class="snd" id="sfxBtn" aria-pressed="true">Sound on</button><button tabindex="0" type="button" class="snd" id="viewpointBtn" aria-pressed="false">First-person view</button><span class="np" id="nowPlaying" title="Now playing"></span></div>
+    <div class="meters" id="meters" role="group" aria-label="Your condition"></div>
+    <p class="dim session-notice" id="sessionNoticeBook" data-session-notice role="status" hidden></p>
+    <div class="notebook-layout">
       <figure class="plan">
         <svg id="map" viewBox="0 0 400 300" role="group" aria-label="Site plan of Tell Ibrahim showing the seven places you can visit"></svg>
         <figcaption>Tell Ibrahim, ancient Kutha · site plan, spring 1926 · initials show who is where</figcaption>
       </figure>
       <section class="casebook" aria-label="Casebook">
-        <div class="tabs" role="tablist">
-          <button type="button" class="tab" role="tab" data-tab="people"><span class="twin"><span class="tw tw-en" lang="en">People</span><span class="tw tw-ru" lang="ru">Люди</span></span></button>
-          <button type="button" class="tab" role="tab" data-tab="evidence"><span class="twin"><span class="tw tw-en" lang="en">Evidence</span><span class="tw tw-ru" lang="ru">Улики</span></span></button>
-          <button type="button" class="tab" role="tab" data-tab="omens"><span class="twin"><span class="tw tw-en" lang="en">Omens</span><span class="tw tw-ru" lang="ru">Знамения</span></span></button>
-          <button type="button" class="tab" role="tab" data-tab="kit"><span class="twin"><span class="tw tw-en" lang="en">Kit</span><span class="tw tw-ru" lang="ru">Вещи</span></span></button>
+        <div class="tabs" role="tablist" aria-label="Casebook sections">
+          <button type="button" class="tab" role="tab" data-tab="people" id="tab-people" aria-controls="tabPanel" aria-selected="true" tabindex="0"><span class="twin"><span class="tw tw-en" lang="en">People</span><span class="tw tw-ru" lang="ru">Люди</span></span></button>
+          <button type="button" class="tab" role="tab" data-tab="evidence" id="tab-evidence" aria-controls="tabPanel" aria-selected="false" tabindex="-1"><span class="twin"><span class="tw tw-en" lang="en">Evidence</span><span class="tw tw-ru" lang="ru">Улики</span></span></button>
+          <button type="button" class="tab" role="tab" data-tab="omens" id="tab-omens" aria-controls="tabPanel" aria-selected="false" tabindex="-1"><span class="twin"><span class="tw tw-en" lang="en">Omens</span><span class="tw tw-ru" lang="ru">Знамения</span></span></button>
+          <button type="button" class="tab" role="tab" data-tab="kit" id="tab-kit" aria-controls="tabPanel" aria-selected="false" tabindex="-1"><span class="twin"><span class="tw tw-en" lang="en">Kit</span><span class="tw tw-ru" lang="ru">Вещи</span></span></button>
         </div>
-        <div id="tabPanel" role="tabpanel"></div>
+        <div id="tabPanel" role="tabpanel" aria-labelledby="tab-people" tabindex="0"></div>
       </section>
-    </aside>
-  </main>
+    </div>
+    <div class="leave-expedition" id="leaveExpedition" hidden role="group" aria-labelledby="leaveTitle">
+      <h3 id="leaveTitle"></h3>
+      <p class="dim" id="leaveCopy"></p>
+      <div class="sound"><button tabindex="0" type="button" class="snd" id="keepExpedition"></button><button tabindex="0" type="button" class="snd leave-confirm" id="confirmNewExpedition"></button></div>
+    </div>
+    <footer class="notebook-footer">
+      <button tabindex="0" type="button" class="snd" id="newExpedition" aria-controls="leaveExpedition" aria-expanded="false" hidden></button>
+      <span class="build" id="build"><span class="twin"><span class="tw tw-en" lang="en">build {{version}}</span><span class="tw tw-ru" lang="ru">сборка {{version}}</span></span></span>
+    </footer>
+  </dialog>
 </div>

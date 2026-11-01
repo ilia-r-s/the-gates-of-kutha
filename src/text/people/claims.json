@@ -128,13 +128,13 @@
   "stoodOutsideThemWeepingWhateverIs": {
     "$template": "${t.short} stood outside them, weeping. Whatever ${t.p} is, ${t.p} is not one of theirs."
   },
-  "text": {
+  "veiledDreamRu": {
     "$template": "${cult ? 'Кто-то стоял за седьмыми, под рукой бога.' : 'Кто-то стоял снаружи и плакал. Кто бы это ни был — не из них.'} Лица было не разглядеть — только ${R(TRAITS[veil].vals[t.traits[veil]].clue)}."
   },
-  "text2": {
+  "guiltyDreamRu": {
     "$template": "${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} за седьмыми, и рука бога лежала у ${ru.gs(t, 'него', 'неё')} на плече."
   },
-  "text3": {
+  "innocentDreamRu": {
     "$template": "${ru.c(t)} ${ru.gs(t, 'стоял', 'стояла')} снаружи и ${ru.gs(t, 'плакал', 'плакала')}. Кем бы ${ru.gs(t, 'он ни был', 'она ни была')}, ${ru.gs(t, 'он', 'она')} не из них."
   }
 }

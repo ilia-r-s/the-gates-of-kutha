@@ -86,8 +86,8 @@
     "youGaveTheGatekeeper4": {
       "$args": [],
       "$value": [
-        "you gave the gatekeeper Crane’s name, and learned he was still below",
-        "вы назвали привратнику имя Крейна и узнали, что Крейн всё ещё внизу"
+        "you gave the gatekeeper Crane’s name, and it told you Crane was still below",
+        "вы назвали привратнику имя Крейна, и тот сказал, что Крейн всё ещё внизу"
       ]
     },
     "youWalkPastIt": {
@@ -141,8 +141,8 @@
     "youBowAndThe": {
       "$args": [],
       "$value": [
-        "You bow, and the last of them bows back, and that is worse than anything.",
-        "Вы кланяетесь, и последний из них кланяется вам в ответ, — и это хуже всего."
+        "You bow. The last of them bows back, exactly as low.",
+        "Вы кланяетесь. Последний из судей отвечает поклоном — таким же низким."
       ]
     },
     "youBowedToThe2": {
@@ -166,8 +166,8 @@
     "oneOfThemSpeaks": {
       "$args": [],
       "$value": [
-        "One of them speaks a single word as you pass. You do not know the word. You will hear it for the rest of your life.",
-        "Когда вы проходите, один из них произносит единственное слово. Вы не знаете этого слова. Вы будете слышать его до конца жизни."
+        "One of them speaks a single word as you pass. You do not know the word. It goes on sounding after the mouth is shut.",
+        "Когда вы проходите, один из них произносит единственное слово. Вы не знаете этого слова. Рот уже закрылся, а слово всё ещё звучит."
       ]
     },
     "oneOfTheJudges": {
@@ -200,7 +200,7 @@
     },
     "oneOfTheJudges2": {
       "$args": [],
-      "$value": ["one of the judges of the dead stared you down", "один из судей мёртвых пересмотрел вас"]
+      "$value": ["one of the judges of the dead stared you down", "вы не выдержали взгляда одного из судей мёртвых"]
     },
     "inASideChamber": {
       "$args": ["n"],
@@ -744,8 +744,8 @@
     "youLayAButton2": {
       "$args": [],
       "$value": [
-        "You lay a button from your coat in the cradle. In the morning, if there is a morning, you will find it sewn back on, and you will not sleep for a week.",
-        "Вы кладёте в колыбель пуговицу с пальто. Утром — если утро наступит — вы найдёте её пришитой обратно и неделю не сможете спать."
+        "You lay a button from your coat in the cradle. As you turn away, something tugs at the cloth where the button used to be.",
+        "Вы кладёте в колыбель пуговицу с пальто. Когда вы отворачиваетесь, что-то тянет за ткань там, где была пуговица."
       ]
     },
     "youLeftAGift2": {
@@ -1028,10 +1028,10 @@
       "$args": ["c", "him"],
       "$value": [
         {
-          "$template": "${EP.He(c)} will be safe, and you will go on without ${him}"
+          "$template": "If ${c.p} goes, you will continue without ${him}"
         },
         {
-          "$template": "${ru.gs(c,\"Он\",\"Она\")} будет в безопасности, а вы пойдёте дальше без ${ru.gs(c,\"него\",\"неё\")}"
+          "$template": "Если ${ru.gs(c,\"он уйдёт\",\"она уйдёт\")}, дальше придётся идти без ${ru.gs(c,\"него\",\"неё\")}"
         }
       ]
     },
@@ -1039,10 +1039,10 @@
       "$args": ["c"],
       "$value": [
         {
-          "$template": "${EP.He(c)} will be safe, and you will be alone"
+          "$template": "If ${c.p} goes, you will be alone"
         },
         {
-          "$template": "${ru.gs(c,\"Он\",\"Она\")} будет в безопасности, а вы — одни"
+          "$template": "Если ${ru.gs(c,\"он уйдёт\",\"она уйдёт\")}, дальше придётся идти в одиночку"
         }
       ]
     },
@@ -1340,8 +1340,8 @@
     "theTabletBreaksLike2": {
       "$args": [],
       "$value": [
-        "The tablet breaks like any clay. Nothing else happens, which is somehow worse; and then, behind you, the scratch of a stylus begins again.",
-        "Табличка бьётся, как любая глина. Больше ничего не происходит — и от этого почему-то хуже; а потом за спиной снова начинает скрести палочка писца."
+        "The tablet breaks like any clay. For a while, nothing happens. Then, behind you, a stylus begins to scratch again.",
+        "Табличка бьётся, как любая глина. Некоторое время ничего не происходит. Потом за спиной снова начинает скрести палочка писца."
       ]
     },
     "youSmashedTheScribe2": {
@@ -1775,7 +1775,7 @@
   },
   "itCostsWhatReadingCosts": {
     "$call": "bi",
-    "$args": ["It costs what reading costs", "Обойдётся, как всякое чтение"]
+    "$args": ["May reveal something; may shake your nerve", "Может что-то подсказать — и пошатнуть самообладание"]
   },
   "finishTheLine": {
     "$call": "bi",
@@ -1874,7 +1874,6 @@
       "i": "шестыми"
     }
   },
-  "text": "голос Крейна",
   "aGarmentOfAshStillWarm": ["a garment of ash, still warm", "одеяние из пепла, ещё тёплого"],
   "aGarmentOfDust": ["a garment of dust", "одеяние из пыли"],
   "aGarmentOfWetBlackWeed": ["a garment of wet black weed", "одеяние из мокрых чёрных водорослей"],
@@ -1893,7 +1892,6 @@
     ["you answered the voices of the dead", "вы ответили голосам мёртвых"]
   ],
   "youSteppedOverTheBlackDog": ["you stepped over the black dog below", "вы перешагнули через чёрного пса внизу"],
-  "text2": "белым",
   "greyAndGivesNoWarmth": ["grey, and gives no warmth", "серым и не греет"],
   "greenLikeALampUnderWater": ["green, like a lamp under water", "зелёным, как лампа под водой"],
   "redAndSpitsLikeFat": ["red, and spits like fat", "красным и плюётся, как жир"],
@@ -1920,7 +1918,9 @@
   "g": {
     "$template": "голос ${ru.c(t, 'g')}"
   },
-  "text3": {
+  "cranesVoiceRu": "голос Крейна",
+  "whiteRu": "белым",
+  "companionStaysBehindRu": {
     "$template": "${ru.c(c)} не идёт за вами."
   }
 }

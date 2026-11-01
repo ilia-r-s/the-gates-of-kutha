@@ -38,8 +38,7 @@ run(async browser => {
     const r = await p.evaluate(
       ([want, kind, how, i]) => {
         // play part of a season with a fixed hand, then set up the last fight
-        let x = 977 + i * 31;
-        const rnd = k => (x = (x * 1103515245 + 12345) % 2147483648) % k;
+        const rnd = __testRandom.random(977 + i * 31).int;
         document.querySelectorAll('#choices .choice')[i % 3].click();
         // your reply to the Trustees: the casebook kept the usual way, or (every other pair of endings) hardcore
         document.querySelectorAll('#choices .choice')[(i >> 1) % 2].click();

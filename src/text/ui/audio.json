@@ -20,14 +20,14 @@
     "dust": "Dust and Clay",
     "deep": "Below Kutha"
   },
-  "text": "Музыка",
-  "text2": "Звук",
-  "text3": "Музыка вкл.",
   "musicOff": ["Music off", "Музыка выкл."],
-  "text4": "Музыка выкл.",
   "musicOn": ["Music on", "Музыка вкл."],
-  "text5": "Звук вкл.",
   "soundOff": ["Sound off", "Звук выкл."],
-  "text6": "Звук выкл.",
-  "soundOn": ["Sound on", "Звук вкл."]
+  "soundOn": ["Sound on", "Звук вкл."],
+  "musicRu": "Музыка",
+  "soundRu": "Звук",
+  "musicOnRu": "Музыка вкл.",
+  "musicOffRu": "Музыка выкл.",
+  "soundOnRu": "Звук вкл.",
+  "soundOffRu": "Звук выкл."
 }

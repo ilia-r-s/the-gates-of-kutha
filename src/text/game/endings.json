@@ -385,17 +385,6 @@
     "$call": "bi",
     "$args": ["What was true", "Как всё было на самом деле"]
   },
-  "text": {
-    "$call": "bi",
-    "$args": [
-      {
-        "$template": "${END_TIER[tier][0]} · ${st.name[0]}"
-      },
-      {
-        "$template": "${END_TIER[tier][1]} · ${st.name[1]}"
-      }
-    ]
-  },
   "beginANewExpedition": {
     "$call": "bi",
     "$args": ["Begin a new expedition", "Начать новую экспедицию"]
@@ -418,18 +407,10 @@
   "oneTwoThreeFourYouCame": {
     "$template": "You came out of it with ${['', 'one', 'two', 'three', 'four'][w]} wounds"
   },
-  "text2": "Вы вышли из всего этого без единой царапины",
-  "text3": "Вы вышли из всего этого с раной",
-  "text4": {
-    "$template": "Вы вышли из всего этого с ${['', 'одной', 'двумя', 'тремя', 'четырьмя'][w]} ранами"
-  },
   "andWithYourNerveWhole": [", and with your nerve whole.", ", и нервы ваши целы."],
   "andWithYourNerveShaken": [", and with your nerve shaken.", ", а нервы у вас расшатаны."],
   "a": {
     "$template": "нашли ${ru.item(ward, 'a')} — единственный амулет, который имел значение"
-  },
-  "text5": {
-    "$template": "верно отметили ${r.mR} ${ruN(r.mR, 'человека', 'человек', 'человек')} из семи"
   },
   "aHardVictory": ["a hard victory", "трудная победа"],
   "victory": ["victory", "победа"],
@@ -439,5 +420,24 @@
   },
   "a3": {
     "$template": "верно назвали ${ru.god(S.patron, 'a')}"
+  },
+  "tierAndStyle": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${END_TIER[tier][0]} · ${st.name[0]}"
+      },
+      {
+        "$template": "${END_TIER[tier][1]} · ${st.name[1]}"
+      }
+    ]
+  },
+  "unwoundedRu": "Вы вышли из всего этого без единой царапины",
+  "oneWoundRu": "Вы вышли из всего этого с раной",
+  "severalWoundsRu": {
+    "$template": "Вы вышли из всего этого с ${['', 'одной', 'двумя', 'тремя', 'четырьмя'][w]} ранами"
+  },
+  "correctMarksRu": {
+    "$template": "верно отметили ${r.mR} ${ruN(r.mR, 'человека', 'человек', 'человек')} из семи"
   }
 }

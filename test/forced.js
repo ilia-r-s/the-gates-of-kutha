@@ -8,19 +8,22 @@
 // what becomes of you; every way each power takes its dead, the casebook and an inquiry played hardcore, and one of the
 // cult killing another; the night visit, and the deed, every way each turns. Recorded per language, like the golden
 // transcripts.
-//   node test/forced.js record [--lang=ru]   record from the current build into test/golden/forced-<lang>.json.gz
+//   node test/forced.js record [--lang=ru]   record into test/golden/<current-version>/forced-<lang>.json.gz
 //   node test/forced.js check  [--lang=ru]   replay and report every difference
 //   SHOW=regex node test/forced.js check --lang=ru   also print the matching scenes, to read
 // --page=path plays another build instead of the built game.
+// --baseline=original selects immutable historical expectations; current release captures are reviewed separately.
 const fs = require('fs'),
   path = require('path'),
   zlib = require('zlib');
 const { run, open, args, shownOnly } = require('./lib/harness');
+const { baseline } = require('./lib/baselines');
 const a = args({ lang: 'en' }),
   mode = a._[0] || 'check',
-  FILE = path.join(__dirname, 'golden', `forced-${a.lang}.json.gz`);
+  BASELINE = baseline('forced', { lang: a.lang, version: a.baseline, record: mode === 'record' }),
+  FILE = BASELINE.file;
 
-const SCRIPT = () => {
+const SCRIPT = ({ original = false } = {}) => {
   window.sfx = () => {};
   Object.assign(RULES.scale, { rarest: 0, surest: 1 }); // (exact dice: a branch forced here happens, or does not)
   const caps = (window.__caps = []), // (on the page, to say where it stopped if something throws)
@@ -443,7 +446,18 @@ const SCRIPT = () => {
     keepStray = RULES.night.strayTrace;
   Object.assign(RULES.night, { smugglerTrace: 0, strayTrace: 0 }); // (the cult's own night, no one else's trace)
   S.loc = 'trench';
-  capHtml('planted-night', leaveTrace({ cult: [actor], target: p3.id, loc: 'trench', smugOut: false }));
+  capHtml(
+    'planted-night',
+    original
+      ? leaveTrace({ cult: [actor], target: p3.id, loc: 'trench', smugOut: false })
+      : until(() => {
+          // This is a fresh forced planting scenario; earlier captured scenes may have
+          // spent this actor's one-plant allowance. Swept/bare outcomes are retried.
+          S.clues = S.clues.filter(cl => !(cl.source === 'plant' && cl.by === actor.id));
+          const line = leaveTrace({ cult: [actor], target: p3.id, loc: 'trench', smugOut: false });
+          return S.crime?.clue?.source === 'plant' ? line : null;
+        })
+  );
   const keepExamine = RULES.examine.odds,
     keepMisread = RULES.examine.misread,
     keepUnder = RULES.cunning.underneath;
@@ -611,6 +625,8 @@ const SCRIPT = () => {
         sights: S.sights,
         claims: S.claims,
         ref: S.log.refusedInq,
+        said: S.said,
+        inquiries: S.inquiries,
         day: S.day,
         al: S.alerted,
         sworn: S.sworn,
@@ -622,6 +638,12 @@ const SCRIPT = () => {
     S.sights = [];
     S.claims = [];
     S.order.forEach(id => S.sus[id] && (S.sus[id][k1.id] = 0));
+    // The intended killer must actually be unexposed. Clearing private belief
+    // cannot erase the public accusations and inquiries built by earlier scenes.
+    if (!original) {
+      S.said = S.said.filter(r => r.about !== k1.id);
+      S.inquiries = S.inquiries.filter(r => r.id !== k1.id);
+    }
     S.log.refusedInq = [{ id: k2.id, day: 1 }];
     S.day = Math.max(2, S.day);
     S.alerted = [];
@@ -660,6 +682,8 @@ const SCRIPT = () => {
     S.sights = keep.sights;
     S.claims = keep.claims;
     S.log.refusedInq = keep.ref;
+    S.said = keep.said;
+    S.inquiries = keep.inquiries;
     S.day = keep.day;
     S.alerted = keep.al;
     S.sworn = keep.sworn;
@@ -1096,9 +1120,30 @@ const SCRIPT = () => {
     RULES.talk.mienWrong = 99;
     S.testimony = S.testimony.filter(t => !(t.kind === 'mien' && t.from === glosser.id));
     capHtml('mien-wrong', mienNote(glosser, 1) + mienSaid());
-    Object.assign(RULES.talk, { greedOther: 99, offDay: 0 });
-    gain(S.charms[0]);
-    capHtml('greed-other', (r => r.them + ' ' + r.note)(DIALOG.show.run(inn, S.charms[0])));
+    if (original) {
+      Object.assign(RULES.talk, { greedOther: 99, offDay: 0 });
+      gain(S.charms[0]);
+      capHtml('greed-other', (r => r.them + ' ' + r.note)(DIALOG.show.run(inn, S.charms[0])));
+    } else {
+      // The shared object resolver has no innocent-only greed setting. Force
+      // this ordinary actor's common temperament base for this branch alone.
+      RULES.talk.offDay = 0;
+      const temperament = TP(inn),
+        keepGreed = temperament.greed;
+      temperament.greed = 1;
+      try {
+        gain(S.charms[0]);
+        const reply = DIALOG.show.run(inn, S.charms[0]);
+        if (
+          reply.themE !== 'smile' ||
+          !S.testimony.some(t => t.from === inn.id && t.kind === 'react' && t.verdict === 'greed' && t.day === S.day)
+        )
+          throw Error('greed-other: the actual shown-object reply was not greed');
+        capHtml('greed-other', reply.them + ' ' + reply.note);
+      } finally {
+        temperament.greed = keepGreed;
+      }
+    }
     RULES.talk.offDay = 99;
     inn.rapport = 1;
     glosser.rapport = 1;
@@ -1305,18 +1350,51 @@ const SCRIPT = () => {
       leaves: o.leaves || 0,
       talked: { [o.talked || 1]: 1 }
     });
+    const keepSpares = RULES.visit.spares;
+    // The guest can divert an attack to someone else after chooseVictim.
+    // An explicitly requested player/guest outcome must reach that attack.
+    if (!original && o.target === 'player') RULES.visit.spares = 0;
     window.chooseVictim = night => (o.target === 'her' ? h.id : o.target === 'player' ? 'player' : keepVictim(night));
-    visitScene(h);
-    if (o.no) cap('visit-knock');
-    // (her face as she hears your answer, then the night: people/visit.js, visitReply)
-    const faces = FACES.visitNo;
-    if (o.face) FACES.visitNo = { [o.face]: 1 };
-    choose(o.no ? /Send her back|Отправить/ : /Let her stay|Оставить/);
-    FACES.visitNo = faces;
-    if (o.no || tag === 'visit-empty-tent') cap(tag + '-reply');
-    choose(/Put out the lamp|Погасить лампу|Try to sleep|Попытаться уснуть/);
-    cap(tag);
-    window.chooseVictim = keepVictim;
+    try {
+      visitScene(h);
+      if (o.no) cap('visit-knock');
+      // (her face as she hears your answer, then the night: people/visit.js, visitReply)
+      const faces = FACES.visitNo;
+      if (o.face) FACES.visitNo = { [o.face]: 1 };
+      choose(o.no ? /Send her back|Отправить/ : /Let her stay|Оставить/);
+      FACES.visitNo = faces;
+      if (o.no || tag === 'visit-empty-tent') cap(tag + '-reply');
+      choose(/Put out the lamp|Погасить лампу|Try to sleep|Попытаться уснуть/);
+      if (!original) {
+        const v = S.log.visit,
+          playerDead = S.wounds >= S.woundsMax,
+          guestDead = h.status === 'taken',
+          expect = (condition, wanted) => {
+            if (!condition)
+              throw Error(tag + ': expected ' + wanted + '; ' + JSON.stringify({ visit: v, guest: h.status, ended: S.ended, playerDead }));
+          };
+        expect(v?.id === h.id && v.agreed === !o.no, 'the requested visit answer');
+        if (o.target === 'her') {
+          if (o.found) expect(v.found === 'dead' && guestDead, 'the guest found and killed');
+          else expect(v.empty === true && !guestDead, 'an empty guest tent, with the guest alive');
+        }
+        if (o.target === 'player') {
+          expect(v.through === o.through && !v.spared, 'the requested attack through the occupied tent');
+          expect(guestDead === ['her', 'both'].includes(o.through), 'the requested guest survival');
+          expect(playerDead === ['you', 'both'].includes(o.through), 'the requested player survival');
+          if (playerDead) expect(S.ended === 'death', 'the player death ending');
+        }
+        if (o.strike) {
+          expect(v.struck === (o.kills ? 'killed' : 'failed'), 'the requested guest strike');
+          if (o.kills) expect(playerDead && S.ended === 'death' && S.hurtBy === 'visit', 'death caused by the guest');
+          else expect(h.status === 'exposed' && S.revealed[h.id] === 'cult', 'the failed attacker exposed');
+        }
+      }
+      cap(tag);
+    } finally {
+      window.chooseVictim = keepVictim;
+      RULES.visit.spares = keepSpares;
+    }
   };
   visit('visit-sent-back', false, { no: true });
   visit('visit-sent-back-surprised', false, { no: true, face: 'surprised' });
@@ -1374,7 +1452,32 @@ const SCRIPT = () => {
     if (tag === 'deed-killed') cap('deed-plant');
     choose(o.plant ? /Leave something|Оставить что-нибудь/ : /Leave nothing|Ничего чужого/);
     if (tag === 'deed-killed') cap('deed-wait');
+    const exact = {
+      least: RULES.scale.least,
+      most: RULES.scale.most,
+      soldier: RULES.deed.soldier,
+      cultTells: RULES.deed.cultTells,
+      sure: RULES.deed.sure
+    };
+    if (!original) {
+      // The outer chance bounds alone do not force a deed: its kill/tell odds
+      // also use clamp and role/background bonuses. Scope exact branch control
+      // to this forced night, then assert the outcome instead of trusting its tag.
+      Object.assign(RULES.scale, { least: 0, most: 1 });
+      Object.assign(RULES.deed, { soldier: 0, cultTells: 0, sure: 0 });
+    }
     choose(/Night falls|Опускается ночь/);
+    if (!original) {
+      Object.assign(RULES.scale, { least: exact.least, most: exact.most });
+      Object.assign(RULES.deed, { soldier: exact.soldier, cultTells: exact.cultTells, sure: exact.sure });
+      const d = S.log.deed,
+        wanted = o.thief ? 'away' : o.watched ? 'watched' : o.kill ? 'killed' : 'failed';
+      if (d.outcome !== wanted) throw Error(tag + ': expected ' + wanted + ', got ' + d.outcome);
+      if (o.plantSeen && !d.plantSeen) throw Error(tag + ': planted trace was not recognised');
+      if (o.hint && (!d.hinted || d.caught)) throw Error(tag + ': expected a hint rather than a direct allegation');
+      if (o.tell && !d.caught) throw Error(tag + ': the witness did not accuse the player');
+      if (o.expel != null && (!d.vote || d.vote.passed !== o.expel < 0)) throw Error(tag + ': wrong camp judgment');
+    }
     cap(tag);
     window.chooseVictim = keepVictim;
     Watch.choose = keepWatch;
@@ -1469,8 +1572,8 @@ const SCRIPT = () => {
     cap('ending-last');
     RULES.fates = keepF;
   }
-  // the title screen: the season-code box out of sight; opened by the dot in the dateline; open and filled for a code
-  // given (in the page's address, or by the tests)
+  // The title's code field stays hidden until the dateline's secret control is pressed.
+  // A supplied code is preselected silently; the historical capture tag below is retained for comparison.
   introScene(null);
   cap('title: the season-code box out of sight');
   q('#seedKey').click();
@@ -1478,7 +1581,7 @@ const SCRIPT = () => {
   seedOpen = false;
   introScene(parseSeed('1A2B-3C4D'));
   cap('title: a code given, the box open and filled');
-  // the casebook's Kit shows the season's code only once the dot has been pressed (everywhere above, it has not)
+  // The casebook's Kit shows the code only after the secret control reveals it.
   q('#seedKey').click();
   newGame('Marlowe', 'philologist', false, parseSeed('1A2B-3C4D'));
   arrivalScene();
@@ -1496,7 +1599,7 @@ run(async browser => {
   });
   let caps = null;
   try {
-    caps = await page.evaluate(SCRIPT);
+    caps = await page.evaluate(SCRIPT, { original: BASELINE.original });
   } catch (e) {
     const last = await page
       .evaluate(() => (window.__caps || []).slice(-3).map(c => c[0] + ' [' + String(c[1]).slice(0, 120) + ']'))

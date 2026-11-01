@@ -1,4 +1,3 @@
-// data/fates.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const END_GRAVE = __text('END_GRAVE');
 const END_LIFE = __text('END_LIFE');
 const FATE = __text('FATE');

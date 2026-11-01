@@ -520,11 +520,14 @@
     },
     "thatYouReadThe": {
       "$args": [],
-      "$value": ["that you read the old curses aloud at night", "что вы по ночам читаете вслух старые проклятия"]
+      "$value": ["that you kept poring over the old tablets", "что вы всё читаете старые таблички"]
     },
     "thatOneOfYour": {
       "$args": [],
-      "$value": ["that one of your friends goes out by night", "что кто-то из ваших друзей ходит куда-то по ночам"]
+      "$value": [
+        "that someone often in conversation with you might tell too much",
+        "что кто-то из ваших частых собеседников может рассказывать лишнее"
+      ]
     },
     "doubtSaid": {
       "$args": ["d", "k"],
@@ -1214,14 +1217,14 @@
         }
       ]
     },
-    "hadBegunToSuspect": {
+    "hadSpokenAgainst": {
       "$args": ["v", "of"],
       "$value": [
         {
-          "$template": "${v.short} had begun to suspect ${of.name}"
+          "$template": "${v.short} had spoken against ${of.name}"
         },
         {
-          "$template": "${ru.c(v)} ${ru.gs(v,\"начал\",\"начала\")} подозревать ${ru.cf(of,\"a\")}"
+          "$template": "${ru.c(v)} ${ru.gs(v,\"выступал\",\"выступала\")} против ${ru.cf(of,\"g\")}"
         }
       ]
     },
@@ -1902,6 +1905,28 @@
           "$template": "<p>Под Кутой ${fem?\"таилась\":\"таился\"} <b>${ru.god(S.patron)}</b>, ${R(g.title).charAt(0).toLowerCase()+R(g.title).slice(1)}. ${named?named===S.patron?`Вы назвали ${fem?\"её\":\"его\"} верно.`:`Вы назвали другое имя: ${ru.god(named)}.`:\"\"} В табличках ${fem?\"её\":\"его\"} называли так: «${ttRu(tl[0])}» и «${ttRu(tl[1])}». Оберегом против ${fem?\"неё\":\"него\"} был${ru.ig(pw,\"\",\"а\",\"о\",\"и\")} ${ru.item(pw)} (в табличках этого сезона — «${rdRu(pw)}»); ${ru.ig(pw,\"он лежал\",\"она лежала\",\"оно лежало\",\"они лежали\")} ${ru.loc(S.wardAt[pw],\"at\")}${has(pw)?` — и ${ru.ig(pw,\"был\",\"была\",\"было\",\"были\")} при вас`:\"\"}. ${ru.list(S.decoys.map(((w,i)=>i?ru.item(w):ru.Item(w))))} не связывали никого.</p>\\n    <p>${fem?\"Её\":\"Его\"} ${ruNum(S.signsOf[S.patron].length,\"n\")} ${ruN(S.signsOf[S.patron].length,\"знамение\",\"знамения\",\"знамений\")}: ${S.signsOf[S.patron].map((si=>R(SIGN_POOL[si].short))).join(\"; \")}.</p>${natureSay()[1]}"
         }
       ]
+    },
+    "mistakenWardTaken": {
+      "$args": ["f", "thief"],
+      "$value": [
+        {
+          "$template": "${capS(theItem(f.mistakenTheft))} ${V(f.mistakenTheft,\"was\",\"were\")} taken from you and burned: ${thief.short} believed it was the true ward, and was wrong."
+        },
+        {
+          "$template": "${ru.Item(f.mistakenTheft)} ${ru.ig(f.mistakenTheft,\"был украден и сожжён\",\"была украдена и сожжена\",\"было украдено и сожжено\",\"были украдены и сожжены\")}: ${ru.c(thief)} ${ru.gs(thief,\"считал\",\"считала\")} находку истинным оберегом — и ${ru.gs(thief,\"ошибался\",\"ошибалась\")}."
+        }
+      ]
+    },
+    "betrayalEmptyTent": {
+      "$args": ["b", "k", "v", "heard"],
+      "$value": [
+        {
+          "$template": "On night ${b.day} ${k.name} came for ${v.name}, ${heard[0]}; her tent was empty. She was sleeping in yours."
+        },
+        {
+          "$template": "В ночь ${b.day} ${ru.cf(k)} ${ru.gs(k,\"приходил\",\"приходила\")} за ${ru.cf(v,\"i\")}, ${heard[1]}; её палатка была пуста — она спала в вашей."
+        }
+      ]
     }
   },
   "yourDreamNight": {
@@ -1922,17 +1947,6 @@
   "itWasNotSo": {
     "$call": "bi",
     "$args": [" It was not so.", " Это было не так."]
-  },
-  "text": {
-    "$call": "bi",
-    "$args": [
-      {
-        "$template": "${what[0]} · ${why[0]}${back?\" · \"+back[0]:\"\"}"
-      },
-      {
-        "$template": "${what[1]} · ${why[1]}${back?\" · \"+back[1]:\"\"}"
-      }
-    ]
   },
   "killedByNightG": {
     "$call": "bi",
@@ -1983,10 +1997,6 @@
   ],
   "cult": {
     "$template": "${capS(ru.cf(c))} ${ru.gs(c, 'вызвался', 'вызвалась')} идти с вами прежде, чем вы попросили${c.role === 'cult' ? ', — и вы ' + ru.gs(c, 'его', 'её') + ' взяли' : ''}."
-  },
-  "text2": "Вы спустились в одиночку.",
-  "text3": {
-    "$template": "С вами ${went.length > 1 ? 'спустились' : ru.gs(C(went[0]), 'спустился', 'спустилась')} ${endNamesRu(went)}."
   },
   "whoDreamedTrue": [
     {
@@ -2087,8 +2097,6 @@
       "$template": "хотя и не ${ru.gs(c, 'уверенный', 'уверенная')} в этом"
     }
   ],
-  "text4": "он",
-  "text5": "она",
   "keptToItToTheEnd": [
     {
       "$template": " ${He} kept to it to the end."
@@ -2113,8 +2121,6 @@
       "$template": " В день ${d} ${on} ${g('взял', 'взяла')} свои слова назад."
     }
   ],
-  "text6": "он",
-  "text7": "она",
   "toDreamTrue": ["to dream true", "будто видит вещие сны"],
   "toKeepWatch": ["to keep watch", "будто стоит на страже"],
   "seerTheDreamerTheWatcherTold": {
@@ -2122,24 +2128,6 @@
   },
   "seer": {
     "$template": "${N} ${g('сказал', 'сказала')} вам правду: ${c.role === 'seer' ? g('сновидец', 'сновидица') : 'страж'}."
-  },
-  "text8": {
-    "$template": "${N} никогда не ${g('говорил', 'говорила')}, что видит вещие сны: ${g('боялся', 'боялась')} ножа."
-  },
-  "text9": {
-    "$template": "${N} никогда не ${g('говорил', 'говорила')}, что стоит на страже: стражу лучше оставаться незримым."
-  },
-  "text10": {
-    "$template": "${N} не ${g('стал', 'стала')} говорить, видит ли ${on} вещие сны: лгать ${on} не ${g('умел', 'умела')}, а сказать правду ${g('боялся', 'боялась')}."
-  },
-  "text11": {
-    "$template": "${N} не ${g('стал', 'стала')} говорить, стоит ли ${on} на страже, — но и лгать об этом не ${g('стал', 'стала')}."
-  },
-  "text12": {
-    "$template": "${N} ${g('отрицал', 'отрицала')}, что видит вещие сны: ${g('боялся', 'боялась')} ножа."
-  },
-  "text13": {
-    "$template": "${N} ${g('отрицал', 'отрицала')}, что стоит на страже: стражу лучше оставаться незримым."
   },
   "aLieToldToDeceiveYou": ["a lie, told to deceive you", "это была ложь, чтобы вас обмануть"],
   "aLieToldToBeLiked": ["a lie, told to be liked", "это была ложь, чтобы понравиться"],
@@ -2208,14 +2196,6 @@
       "$js": "g('был именно тем, кем казался', 'была именно той, кем казалась')"
     }
   ],
-  "text14": [
-    {
-      "$template": " ${EP.He(t)} ${what[0]}."
-    },
-    {
-      "$template": " ${g('Он', 'Она')} ${what[1]}."
-    }
-  ],
   "withYourRevolver": ["with your revolver", "с револьвером"],
   "withAKnife": ["with a knife", "с ножом"],
   "wasOutDoingTheCultS": [
@@ -2263,7 +2243,6 @@
   "thePowerBelow": ["the power below", "сила из-под земли"],
   "theCult2": ["the cult", "секта"],
   "sheLetYouLiveThatNight": "She let you live that night.",
-  "text15": "В ту ночь она оставила вас в живых.",
   "WAY_WORDS": {
     "bold": ["boldness", "дерзость"],
     "humble": ["humility", "смирение"],
@@ -2481,7 +2460,6 @@
       "$template": "${g('уклонялся', 'уклонялась')} от ответа"
     }
   ],
-  "text16": "правда",
   "toDeceive": ["to deceive", "чтобы обмануть"],
   "inATemper": ["in a temper", "сгоряча"],
   "onPrinciple": ["on principle", "из принципа"],
@@ -2515,10 +2493,55 @@
     "plague": ["the sixty sicknesses", "шестидесяти хворей"],
     "madness": ["the laughing dark", "смеющейся тьмы"]
   },
-  "text17": {
+  "victimReason": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${what[0]} · ${why[0]}${back?\" · \"+back[0]:\"\"}"
+      },
+      {
+        "$template": "${what[1]} · ${why[1]}${back?\" · \"+back[1]:\"\"}"
+      }
+    ]
+  },
+  "descendedAloneRu": "Вы спустились в одиночку.",
+  "descendedTogetherRu": {
+    "$template": "С вами ${went.length > 1 ? 'спустились' : ru.gs(C(went[0]), 'спустился', 'спустилась')} ${endNamesRu(went)}."
+  },
+  "heRu": "он",
+  "sheRu": "она",
+  "seerKeptSilentRu": {
+    "$template": "${N} никогда не ${g('говорил', 'говорила')}, что видит вещие сны: ${g('боялся', 'боялась')} ножа."
+  },
+  "watcherKeptSilentRu": {
+    "$template": "${N} никогда не ${g('говорил', 'говорила')}, что стоит на страже: стражу лучше оставаться незримым."
+  },
+  "seerEvadedRu": {
+    "$template": "${N} не ${g('стал', 'стала')} говорить, видит ли ${on} вещие сны: лгать ${on} не ${g('умел', 'умела')}, а сказать правду ${g('боялся', 'боялась')}."
+  },
+  "watcherEvadedRu": {
+    "$template": "${N} не ${g('стал', 'стала')} говорить, стоит ли ${on} на страже, — но и лгать об этом не ${g('стал', 'стала')}."
+  },
+  "seerDeniedRu": {
+    "$template": "${N} ${g('отрицал', 'отрицала')}, что видит вещие сны: ${g('боялся', 'боялась')} ножа."
+  },
+  "watcherDeniedRu": {
+    "$template": "${N} ${g('отрицал', 'отрицала')}, что стоит на страже: стражу лучше оставаться незримым."
+  },
+  "actionAfterward": [
+    {
+      "$template": " ${EP.He(t)} ${what[0]}."
+    },
+    {
+      "$template": " ${g('Он', 'Она')} ${what[1]}."
+    }
+  ],
+  "sheSparedYouRu": "В ту ночь она оставила вас в живых.",
+  "truthRu": "правда",
+  "gateRecollectionRu": {
     "$template": "У ${n.g} врат ${e.said[1]}."
   },
-  "text18": {
+  "datedSignRu": {
     "$template": "${R(SIGN_POOL[o.si].short)} (день ${o.day})"
   }
 }

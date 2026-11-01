@@ -1,4 +1,3 @@
-// data/lines.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const GREET = __text('GREET');
 const GREET_WARM = __text('GREET_WARM');
 const GREET_COLD = __text('GREET_COLD');

@@ -369,6 +369,6 @@
       }
     ]
   },
-  "text": "Хамида",
-  "theCook": ["the cook", "повара"]
+  "theCook": ["the cook", "повара"],
+  "hamidGenitiveRu": "Хамида"
 }

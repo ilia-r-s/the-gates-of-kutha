@@ -1,4 +1,3 @@
-// ui/audio.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const AU = {
   ctx: null,
   on: { music: true, sfx: true },
@@ -527,7 +526,7 @@ function npUpdate() {
   const asleep = AU.on.music && !!(window.AudioContext || window.webkitAudioContext) && (!AU.ctx || AU.ctx.state !== 'running');
   if (asleep) {
     const touch = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
-    el.innerHTML = `<button type="button" class="np-wake">♪ ${twin(...TX.audio.theMusicStartsWith(touch))}</button>`;
+    el.innerHTML = `<button type="button" class="np-wake" tabindex="0">♪ ${twin(...TX.audio.theMusicStartsWith(touch))}</button>`;
     return;
   }
   const n = AU.cur && AU.on.music ? TRACK_NAMES[AU.cur.id] : '';
@@ -799,11 +798,15 @@ function auButtons() {
     s = document.getElementById('sfxBtn');
   if (!m || !s) return;
   m.setAttribute('aria-pressed', AU.on.music ? 'true' : 'false');
-  m.setAttribute('aria-label', LANG === 'ru' ? __text('text') : 'Music');
-  s.setAttribute('aria-label', LANG === 'ru' ? __text('text2') : 'Sound');
-  m.innerHTML = AU.on.music ? twin('Music on', __text('text3'), __text('musicOff')) : twin('Music off', __text('text4'), __text('musicOn'));
+  m.setAttribute('aria-label', LANG === 'ru' ? __text('musicRu') : 'Music');
+  s.setAttribute('aria-label', LANG === 'ru' ? __text('soundRu') : 'Sound');
+  m.innerHTML = AU.on.music
+    ? twin('Music on', __text('musicOnRu'), __text('musicOff'))
+    : twin('Music off', __text('musicOffRu'), __text('musicOn'));
   s.setAttribute('aria-pressed', AU.on.sfx ? 'true' : 'false');
-  s.innerHTML = AU.on.sfx ? twin('Sound on', __text('text5'), __text('soundOff')) : twin('Sound off', __text('text6'), __text('soundOn'));
+  s.innerHTML = AU.on.sfx
+    ? twin('Sound on', __text('soundOnRu'), __text('soundOff'))
+    : twin('Sound off', __text('soundOffRu'), __text('soundOn'));
   npUpdate();
 }
 function audioInit() {

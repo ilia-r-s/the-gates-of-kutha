@@ -1,4 +1,3 @@
-// game/day.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function placeChars() {
   S.here = {};
   LOC_IDS.forEach(l => {
@@ -136,6 +135,7 @@ function campActs(body, ch) {
     );
 }
 function endSlot(html, title) {
+  html += NatureSigns.action(S.act);
   S.act = null;
   let extra = '';
   if (S.loc) {
@@ -321,6 +321,7 @@ function doStudy(topic) {
       (lines.length
         ? lines.map(factP).join('') + `<p class="dim">${bi(...TX.day.copiedIntoYourNotebook())}</p>`
         : `<p>${__text('nothingYouHaveNotReadBefore')}</p>`);
+    out += NatureSigns.tell('tablet');
     const ST = RULES.study,
       known = S.factKnown.length - lines.length;
     if (chance(Math.min(ST.costMax, ST.cost + ST.costLine * known) * (S.bg === 'philologist' ? ST.costPhilologist : 1))) {
@@ -347,7 +348,7 @@ function doRest() {
 function examineP() {
   return clamp(RULES.examine.odds + (S.bg === 'soldier' ? RULES.examine.soldier : 0));
 }
-const nightRu = d => (d === 0 ? __text('text') : __text('text2'));
+const nightRu = d => (d === 0 ? __text('nightOfCranesDeathRu') : __text('nightNumberRu'));
 const nightEn = d => (d === 0 ? 'The night Crane died' : `Night ${d}`);
 function doExamine() {
   const cr = S.crime;

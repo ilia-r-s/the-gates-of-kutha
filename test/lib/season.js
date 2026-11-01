@@ -5,7 +5,7 @@ function play({ seed, bg, hardcore, lang }) {
   setLang(lang);
   TRACE = [];
   __T.start(bg, hardcore, seed);
-  const policy = __T.policies.human(__T.lcg(seed ^ (bg + 1)));
+  const policy = __T.legacy.human(__T.legacy.lcg(seed ^ (bg + 1)));
   const trail = [];
   const ended = __T.play(
     buttons => {

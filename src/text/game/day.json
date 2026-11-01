@@ -530,8 +530,8 @@
   "studycostbadStudyCostPP": {
     "$template": "<p>${bi(tellOne(bad ? 'studyCostBad' : 'studyCost', bad ? STUDY_COST_BAD : STUDY_COST))}</p>"
   },
-  "text": "В ночь гибели Крейна",
-  "text2": {
+  "nightOfCranesDeathRu": "В ночь гибели Крейна",
+  "nightNumberRu": {
     "$template": "Ночь ${d}"
   }
 }

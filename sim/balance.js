@@ -1,13 +1,14 @@
-// How seasons end, played as people would: every policy plays its seasons on the built page, and the summary gives the
-// odds of defeat, a hard win and a clean win (Wilson 95% intervals), how the defeats come, and every ending's odds. The
-// figures in RULES.md ("How seasons end") and the rulebook ("How often each ending comes") are this script's output.
-//   node sim/balance.js                       the published run: 7 ways of playing × 150 seasons × 3 seeds = 3,150
+// How seasons end under scripted policies, using the shipped engine (Node by default, optionally a browser).
+// Reports defeat/hard-win/clean-win rates with Wilson 95% intervals, causes of defeat and individual endings.
+// Historical figures in docs/research/2026-10-25-mechanics-27.md came from an earlier version of this script.
+//   node sim/balance.js                       default: 7 policies × 150 seasons × 3 seeds = 3,150
 //   node sim/balance.js --seasons=50 --seeds=1 --pols=human,cheat
 //   node sim/balance.js --rules='{"night":{"priestless":0.5}}'    the same with numbers in rules.js changed
 //   node sim/balance.js --by=bg,nature,mood,mood0,power,style --out=rows.json  breakdowns (mood: the one that lasted
 //        longest; mood0: the one the season began in), and every season as JSON
 // Policies (test/lib/inpage.js): human (a person's habits) and the same with a lean (sleuth, scholar, quiet, inquisitor,
-// confidant, delver); cheat (knows the cult) and random, for comparison only. Each seed's policies play side by side.
+// confidant, delver); careful adds visible-condition recovery; observer (test/lib/observer.js) reads the casebook.
+// Cheat knows the cult and random is a comparison baseline. Policies play paired season seeds.
 const fs = require('fs');
 const path = require('path');
 const { launchFast: launch, openFast: open, args } = require('../test/lib/harness');
@@ -23,30 +24,41 @@ const A = args({
 const SEEDS = String(A.seeds).split(',').map(Number),
   POLS = String(A.pols).split(',');
 
+const VALID = ['human', 'sleuth', 'scholar', 'quiet', 'inquisitor', 'confidant', 'delver', 'observer', 'careful', 'random', 'cheat'];
+if (POLS.some(p => !VALID.includes(p))) throw new Error('Unknown policy; choose ' + VALID.join(', '));
+if (!Number.isInteger(A.seasons) || A.seasons < 1 || SEEDS.some(s => !Number.isInteger(s) || s < 0 || s > 0xffffffff))
+  throw new Error('Seasons and unsigned 32-bit seeds are required');
+
 // every season's ending, as a row
 async function play(browser, seed) {
   return (
     await Promise.all(
-      POLS.map(async (pol, pi) => {
-        const s = seed + 37 * pi;
+      POLS.map(async pol => {
+        const s = seed;
         const { page, errors } = await open(browser, { file: A.file, seed: s, mathSeed: s });
+        if (['observer', 'careful'].includes(pol)) {
+          await page.addScriptTag({ path: path.resolve(__dirname, '../test/solver.js') });
+          await page.addScriptTag({ path: path.resolve(__dirname, '../test/lib/observer.js') });
+        }
         const rows = await page.evaluate(
-          ([N, pol, rules]) => {
+          ([N, pol, rules, seed]) => {
             const deep = (a, b) =>
               Object.keys(b).forEach(k => (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k]) ? deep(a[k], b[k]) : (a[k] = b[k])));
             if (rules) deep(RULES, JSON.parse(rules));
             window.sfx = () => {};
             window.musicChange = () => {};
-            const rnd = __T.lcg(17);
-            const P =
-              pol === 'cheat'
-                ? __T.policies.cheat(rnd)
-                : pol === 'random'
-                  ? __T.policies.random(rnd)
-                  : __T.policies.human(rnd, __T.LEANS[pol] || null);
             const out = [];
             for (let g = 0; g < N; g++) {
-              __T.start(g % 3);
+              const season = (seed + Math.imul(g, 2654435761)) >>> 0,
+                rnd = __T.rng(season ^ 0x9e3779b9),
+                P = ['observer', 'careful'].includes(pol)
+                  ? __observer(rnd, 'mixed', { careful: pol === 'careful' })
+                  : pol === 'cheat'
+                    ? __T.policies.cheat(rnd)
+                    : pol === 'random'
+                      ? __T.policies.random(rnd)
+                      : __T.policies.human(rnd, __T.LEANS[pol] || null);
+              __T.start(g % 3, false, season);
               const ok = __T.play(P, { maxSteps: 1500 });
               // the mood that lasted longest
               const days = {};
@@ -64,6 +76,7 @@ async function play(browser, seed) {
                 last = S.ended ? yourLast(won, Object.fromEntries(later.map(o => [o.id, o]))) : null;
               out.push({
                 pol,
+                season,
                 ok,
                 id: S.endId || 'stuck',
                 kind: S.ended || 'stuck',
@@ -100,7 +113,7 @@ async function play(browser, seed) {
             }
             return out;
           },
-          [A.seasons, pol, A.rules]
+          [A.seasons, pol, A.rules, seed]
         );
         if (errors.length) throw new Error(`${pol} (seed ${s}): ${errors.length} page errors, first: ${errors[0]}`);
         await page.close();
@@ -245,5 +258,7 @@ function summary(rows) {
     await browser.close();
   }
   if (A.out) fs.writeFileSync(path.resolve(A.out), JSON.stringify(rows));
+  console.log('Observation-only policies; fixed paired season seeds; hidden truth is scored only after play.');
   console.log(summary(rows));
+  if (rows.some(r => !r.ok)) process.exitCode = 1;
 })();

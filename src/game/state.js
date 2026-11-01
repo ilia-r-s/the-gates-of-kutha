@@ -1,4 +1,3 @@
-// game/state.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 let S = null;
 const C = id => S.chars[id];
 const isFree = c => c.status === 'present';
@@ -33,6 +32,7 @@ function backedDown() {
   S.backAt = at;
 }
 function newGame(name, bg, hardcore = false, seed = null) {
+  resetSeasonText();
   const sd = seed == null ? newSeed() : seed >>> 0;
   reseed(sd);
   const dealt = dealParts();
@@ -51,6 +51,7 @@ function newGame(name, bg, hardcore = false, seed = null) {
   Suspicion.deal();
   Moments.deal();
   Gossip.deal();
+  Knowledge.deal();
   crane0();
   S.salt = Math.floor(rand() * 2147483648);
   dealWord();
@@ -233,11 +234,11 @@ function hurt(n, w, why = null) {
     r = [];
   if (n) {
     s.push(n >= big ? 'Your nerve frays badly' : 'Your nerve frays');
-    r.push(n >= big ? __text('text') : __text('text2'));
+    r.push(n >= big ? __text('nerveBreakingRu') : __text('nerveShakenRu'));
   }
   if (w) {
     s.push(w >= big ? 'You are badly wounded' : 'You are wounded');
-    r.push(w >= big ? __text('text3') : __text('text4'));
+    r.push(w >= big ? __text('woundsSevereRu') : __text('woundedRu'));
   }
   return s.length ? `<p class="loss">${bi(s.join(' · '), r.join(' · '))}</p>` : '';
 }

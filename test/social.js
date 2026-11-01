@@ -73,7 +73,7 @@ run(async browser => {
       return keepAddTest.apply(this, arguments);
     };
     // talkative: goes where people are, talks a great deal, holds inquiries now and then
-    const rnd = __T.lcg(99),
+    const rnd = __T.rng(99),
       random = __T.policies.random(rnd);
     const pickRe = (bs, re) => {
       const m = bs.filter(b => re.test(b.textContent));
@@ -251,7 +251,7 @@ run(async browser => {
         if (!S.witness.some(w => w.actor === t.about)) bad.push('the thief named someone he did not see');
         if (C(t.about).role !== 'cult') rare('the thief named an innocent he took for the one who did it');
       });
-      // the cult's craft: an innocent's trace laid only by the cult; slips of the tongue only from the cult
+      // Deliberate plants belong to the cult; the later blurt check also allows a documented innocent source.
       S.clues.forEach(cl => {
         if (cl.source === 'plant' && !cl.extra) {
           // (extra: more of the same owner's, found beside a trace misread as the attacker's; nobody laid it)
@@ -262,8 +262,8 @@ run(async browser => {
         }
       });
       st.craft.sloppy += S.clues.filter(cl => cl.careless).length;
-      // one of the cult killed only by another (or by you, the night you went out yourself), and only as the craft allows:
-      // seldom on the first night
+      // Intentional betrayal is recorded and seldom happens on the first night. A cult guest can also die incidentally
+      // during an attack on you; that requires matching visit and attack records, not an exemption for every guest.
       S.betrayals.forEach(b => {
         st.craft.betrayals++;
         if (C(b.by).role !== 'cult' || C(b.victim).role !== 'cult' || b.by === b.victim) bad.push('a betrayal outside the cult');
@@ -273,8 +273,24 @@ run(async browser => {
         .map(C)
         .filter(c => c.role === 'cult' && c.status === 'taken')
         .forEach(c => {
-          if (c.takenBy !== 'you' && !S.betrayals.some(b => b.victim === c.id && !b.saved))
-            bad.push('one of the cult died, and not by one of its own (nor by your hand: game/deed.js)');
+          const visit = S.log.visit,
+            guestDeath =
+              visit &&
+              visit.id === c.id &&
+              visit.day === c.takenDay &&
+              visit.agreed &&
+              ['her', 'both'].includes(visit.through) &&
+              S.log.attacks.some(a => a.day === c.takenDay && a.how === 'visit' && a.k === visit.through);
+          if (c.takenBy !== 'you' && !S.betrayals.some(b => b.victim === c.id && !b.saved) && !guestDeath)
+            bad.push(
+              `one of the cult died without a recorded cause: ${JSON.stringify({
+                seed: S.seed,
+                id: c.id,
+                day: c.takenDay,
+                visit: S.log.visit,
+                night: S.nights[c.takenDay]
+              })}`
+            );
         });
       S.testimony
         .filter(t => t.kind === 'blurt')

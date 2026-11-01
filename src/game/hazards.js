@@ -1,4 +1,3 @@
-// game/hazards.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function hazardCost(n, w, by, why) {
   const h = hurt(n, w, why);
   S.hurtBy = by;
@@ -10,9 +9,10 @@ function perilNow(l, k = 1) {
   const p = PR.base * tenorOf('peril') * (PR.at[l] || 1) * (S.slot === 1 ? PR.noon : 1) * k;
   if (!chance(p)) return '';
   const k2 = l !== 'camp' && S.slot === 1 && chance(PR.heat) ? 'heat' : l,
-    [en, rus, n, w, name] = pick(PERILS[k2]);
+    { id: name, text } = pick(PERILS[k2]),
+    [n, w] = PR.costs[name];
   S.log.perils.push({ day: S.day, k: k2, w: w, name: name });
-  return `<p class="horror">${bi(en, rus)}</p>` + hazardCost(n, w, 'peril', { k: 'peril', name: name });
+  return `<p class="horror">${bi(...text)}</p>` + hazardCost(n, w, 'peril', { k: 'peril', name: name });
 }
 function spiteNight(k = 1, deed = null) {
   const SP = RULES.spite,
@@ -31,8 +31,8 @@ function spiteNight(k = 1, deed = null) {
     rec.it = it;
     h = `<p class="horror">${bi(...TX.hazards.goneFromYourKit(it))}</p>` + `<p class="loss">${__text('lost')}</p>`;
   } else if (rec.ok) {
-    const [en, rus, n, w] = SPITE[kind].ok;
-    h = `<p class="horror">${bi(en, rus)}</p>` + hazardCost(n, w, 'spite', { k: 'spite', kind: kind });
+    const [n, w] = SP.costs[kind];
+    h = `<p class="horror">${bi(...SPITE[kind].ok)}</p>` + hazardCost(n, w, 'spite', { k: 'spite', kind: kind });
   } else h = `<p>${bi(...SPITE[kind].foiled)}</p>`;
   if (chance(SP.caught)) {
     const others = freeChars().filter(c => c.id !== who.id),

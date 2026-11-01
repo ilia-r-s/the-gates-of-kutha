@@ -1,4 +1,3 @@
-// people/manner.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const showMul = c => MANNER[temperOf(c)].shows;
 function showP(c, kind) {
   const M = RULES.manner,
@@ -28,7 +27,7 @@ function slyFace(c, ctx) {
   return hashPick(looks, S.salt, c.id, S.day, S.slot, 'sly-' + ctx);
 }
 const slyOr = (c, ctx, f) => (f === 'sly' ? slyFace(c, ctx) : f);
-function ownLot(c, at) {
+function ownLot(c, at, receivedPressure = null) {
   const F = RULES.feel,
     L = RULES.ties,
     anyOf = xs => 1 - xs.reduce((q, x) => q * (1 - Math.max(0, Math.min(1, x))), 1),
@@ -36,13 +35,11 @@ function ownLot(c, at) {
     m = Ties.mourning(c),
     lost = m && S.day - m.day <= 1 && S.chars[m.victim] ? Ties.likes(c, m.victim) : 0,
     grief = (lost >= L.close ? F.grief.close : lost >= L.fond ? F.grief.fond : 0) * (m && m.done ? F.comforted : 1),
-    against = others.reduce((n, o) => n + (Ties.likes(o, c) <= L.cannotBear ? 2 : Ties.likes(o, c) <= L.dislike ? 1 : 0), 0),
     v = S.log && S.log.visit,
     shamed = !!v && v.shamed === S.day && v.id === c.id,
     trouble = anyOf([
-      F.suspicion * others.reduce((n, o) => n + Suspicion.level(o, c), 0),
+      F.suspicion * (receivedPressure ?? others.reduce((n, o) => n + Suspicion.shown(o, c), 0)),
       grief,
-      Math.min(F.dislikedMax, F.disliked * Math.max(0, against - F.dislikedFrom)),
       shamed ? F.shame : 0
     ]),
     near = at && S.here && S.here[at] ? S.here[at].filter(id => id !== c.id && isFree(C(id))) : [],
@@ -108,13 +105,32 @@ function faceFor(c, e) {
     if (masks(c)) return 'smile';
     if (chance(RULES.manner.whim * showMul(c))) {
       if (chance(FACES.goodDay)) return wpick(FACES.good);
-      rand();
       return FACES.bad;
     }
     return e;
   }
   if (e === 'thoughtful' && Ties.against(c) && shows(c, 'cold')) return 'cold';
   return e;
+}
+function replyFace(c, reply, topic, turn) {
+  // Keep the existing response rolls exactly once. The additional composition
+  // uses presentation randomness, so changing a picture cannot change the plot.
+  const old = faceFor(c, reply.themE),
+    intent = reply.intent || { stern: 'firm', grave: 'serious' }[reply.themE],
+    pool = FACES.reply[intent];
+  if (!pool) return old;
+  const K = RULES.manner,
+    trouble = ownLot(c, placeOf(c) || S.loc, Knowledge.pressure(c)).trouble,
+    distance = Math.max(0, -Ties.trust(c)),
+    composure = MANNER[temperOf(c)].mask;
+  const choices = Object.entries(pool).map(([mood, weight]) => [
+    mood,
+    weight *
+      (['sad', 'fear'].includes(mood) ? 1 + K.replyTrouble * trouble : 1) *
+      (['cold', 'angry'].includes(mood) ? 1 + K.replyDistance * distance : 1) *
+      (mood === 'neutral' ? 1 + K.replyComposure * composure : 1)
+  ]);
+  return weighted(choices, hash01(S.salt, c.id, S.day, S.slot, 'reply', topic, turn, intent));
 }
 const WARM_PARTING = [
   c => bi(...TX.manner.walksYouAsFar(c)),

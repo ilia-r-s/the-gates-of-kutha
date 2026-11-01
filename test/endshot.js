@@ -27,8 +27,7 @@ run(async browser => {
   const { page: p, errors: errs } = await open(browser, { width: +width, seed: 31337, helpers: false });
   await p.evaluate(
     ([want, kind, how]) => {
-      let x = 99;
-      const rnd = k => (x = (x * 1103515245 + 12345) % 2147483648) % k;
+      const rnd = __testRandom.random(99).int;
       document.querySelectorAll('#choices .choice')[1].click();
       document.querySelectorAll('#choices .choice')[0].click(); // the casebook kept the usual way
       for (let n = 0; n < 60; n++) {

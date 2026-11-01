@@ -725,10 +725,10 @@
       "$template": "А ${ru.c(a)} ${ru.gs(a, 'был одним', 'была одной')} из них."
     }
   ],
-  "text": {
+  "onDayRu": {
     "$template": " в день ${o.day}"
   },
-  "text2": [
+  "provenRightLine": [
     {
       "$template": "${capS(they[0])}."
     },

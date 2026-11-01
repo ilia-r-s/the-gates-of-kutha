@@ -1,4 +1,4 @@
-// Release-28 contracts that the release-27 test files could not cover.
+// Engine invariants: separate prose dice, sourced cult knowledge, veiled dreams and playable policies.
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { openNode } = require('./lib/harness');
@@ -104,7 +104,7 @@ test('every simulation policy completes seasons, and the inquisitor recognizes t
           for (const c of freeChars()) {
             if (!lean.test(X(DIALOG.press.label(c)))) bad.push(`inquisitor misses press choice for ${c.id}`);
           }
-        const policy = __T.policies.human(__T.lcg(100 + game), lean);
+        const policy = __T.policies.human(__T.rng(100 + game), lean);
         if (!__T.play(policy, { maxSteps: 1500 })) bad.push(`${name} stuck in seed ${S.seed}`);
       }
     }

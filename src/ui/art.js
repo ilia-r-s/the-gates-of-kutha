@@ -1,4 +1,3 @@
-// ui/art.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const INK = '#2b1b24';
 const pth = (d, f, sw = 3, x = '') =>
   `<path d="${d}" fill="${f}" stroke="${INK}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"${x}/>`;
@@ -203,6 +202,7 @@ function eyes(m, lk, sk, lashes, u) {
     s +=
       ell(x, 94, 9, ry, '#fff', 3) +
       `<circle cx="${x + lk + dx}" cy="${95 + dy}" r="${pr}" fill="${INK}"/><circle cx="${x + lk + dx + 1.3}" cy="${93.4 + dy}" r="1.2" fill="#fff"/>`;
+    if (m === 'fear') s += upperLid(x, i, sk, 83, 88, 81) + lowerLid(x, sk, 103, 99, 2.5);
     if (m === 'angry') s += upperLid(x, i, sk, 93, 89, 88);
     if (m === 'sad') s += upperLid(x, i, sk, 88, 92, 87);
     if (m === 'cold') s += upperLid(x, i, sk, 92, 92, 90);
@@ -257,7 +257,11 @@ function mouth(m, L, my) {
       ? pth(`M${a} ${b}Q${c} ${d} ${a + 2 * (c - a)} ${b}Q${c} ${(b + d) / 2} ${a} ${b}Z`, lips, 2.5)
       : ln(`M${a} ${b}Q${c} ${d} ${a + 2 * (c - a)} ${b}`);
   if (m === 'smile') return pth(`M86 ${y - 2}Q100 ${y + 13} 114 ${y - 2}Q100 ${y + 4} 86 ${y - 2}Z`, '#7a2632', 3);
-  if (m === 'fear') return ell(100, y + 3, 5, 6, '#7a2632', 3);
+  if (m === 'fear')
+    return (
+      pth(`M88 ${y + 4}Q95 ${y - 1} 101 ${y + 1}Q108 ${y - 1} 112 ${y + 5}L110 ${y + 9}Q100 ${y + 5} 90 ${y + 8}Z`, '#7a2632', 3) +
+      pth(`M90 ${y + 4}Q100 ${y + 1} 110 ${y + 4}L109 ${y + 6}Q100 ${y + 4} 91 ${y + 6}Z`, '#fff3df', 0)
+    );
   if (m === 'surprised') return ell(100, y + 4, 6.5, 8.5, '#7a2632', 3);
   if (m === 'angry') return ln(`M89 ${y + 5}Q100 ${y - 2} 111 ${y + 5}`);
   if (m === 'warm') return shut(88, y - 1, 100, y + 8);
@@ -431,6 +435,7 @@ function portrait(id, mood = 'neutral', look = 0, u = `p-${id}-`) {
 const COAT = { philologist: '#7b6a4f', soldier: '#9c8a58', occultist: '#3e3a48' };
 const coatOf = bg => COAT[bg] || COAT.philologist;
 function playerBack(bg) {
+  if (Viewpoint.mode === 'first') return '';
   const coat = coatOf(bg);
   return (
     pth('M10 262C14 202 52 174 100 172C148 174 186 202 190 262Z', coat, 4) +
@@ -684,7 +689,7 @@ function sceneSVG(a, u = 'scene-') {
     });
   const bg = S ? S.bg : null;
   if (a.talk)
-    s += `<g transform="translate(-6 128) scale(1.08)">${playerBack(bg)}</g><g transform="translate(470 18) scale(1.42)"><g>${portrait(a.talk, a.mood || 'neutral', -3, `${u}${a.talk}-`)}</g></g>`;
+    s += `<g transform="translate(-6 128) scale(1.08)">${playerBack(bg)}</g><g transform="translate(470 18) scale(1.42)"><g>${portrait(a.talk, a.mood || 'neutral', Viewpoint.mode === 'first' ? 0 : -3, `${u}${a.talk}-`)}</g></g>`;
   else {
     const cast = a.bg === 'sanctum' ? [] : a.cast || [];
     const n = Math.min(cast.length, a.you ? 6 : 7),

@@ -1,4 +1,3 @@
-// ui/art-end.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const G1 = (x, y, k, body, r = 0) => `<g transform="translate(${x} ${y})${r ? ` rotate(${r})` : ''} scale(${k})">${body}</g>`;
 const brick = (x, y, w = 16, h = 9, c = '#b5844f') => rct(x, y, w, h, c, 2);
 const rubble = (x, y, k = 1) =>

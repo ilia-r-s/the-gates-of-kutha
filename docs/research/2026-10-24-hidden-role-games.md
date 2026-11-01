@@ -2,6 +2,13 @@
 
 Oct 24, 2026 · @Ilia
 
+> Historical build-25.1/25.2 research and measurements. “Applied”, “already in” and “now” below describe that checkpoint,
+> not 29.0.0. Its 700-season point estimates do not certify current fairness or cover every possible tell.
+> Current implementation is in [claims](../../src/people/claims.js), [cult knowledge](../../src/people/suspicion.js),
+> [camp influence](../../src/people/influence.js) and [the rules](../rules.md); current checks are
+> [cult regressions](../../test/cult.js) and [tell verification](2026-11-01-verification.md), using
+> [the tell simulator](../../sim/tells.js). Historical source citations and measurements have not been regenerated here.
+
 ## Summary
 
 Build 25.2 closes the cult's last loud tells: every behaviour measured below now shows up in the cult at between 0.68 and 1.53 times the rate it shows up in everyone else. Before, the worst was the inquiry vote: the other cultist sat silent through a mate's inquiry 2.65 times as often as anyone else, and almost never voted to send the mate away (0.12 times as often).
@@ -96,7 +103,9 @@ Seven changes, each meant to look like ordinary camp behaviour from where you st
 
 ## Measured after
 
-&#91;embedded content: Simulated: build 25.1 against build 25.2, 700 seasons each, 100 per bot persona\]
+The original embedded comparison chart is not present in the repository. It was labelled “build 25.1 against
+build 25.2, 700 seasons each, 100 per bot persona”; the surrounding historical figures are retained without
+reconstructing missing chart data.
 
 The vote tells moved most, because the cult's hands now come from the same leaning as everyone's. The rest held: a false Dreamer claim stated aloud comes from the cult 51% of the time (46% of claims ever held); the true Dreamer speaks first in 45% of double claims; the cult lies low on 5.8% of nights, in 21% of seasons.
 

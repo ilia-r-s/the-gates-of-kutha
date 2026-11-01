@@ -215,7 +215,7 @@
   "youDreamOfTheCampBy": {
     "$template": "You dream of the camp by day. ${en}"
   },
-  "text": {
+  "daytimeCampDreamRu": {
     "$template": "Вам снится лагерь днём. ${rus}"
   }
 }

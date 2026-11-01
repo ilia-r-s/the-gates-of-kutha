@@ -1,0 +1,167 @@
+{
+  "scenes": {
+    "bold": {
+      "good": ["A hand strikes a shut door; the bolt slides back.", "Ладонь ударяет в закрытую дверь; засов отходит."],
+      "bad": ["A hand strikes a shut door; splinters enter the palm.", "Ладонь ударяет в закрытую дверь; щепки впиваются в кожу."]
+    },
+    "humble": {
+      "good": ["A bowed head passes beneath a lintel untouched.", "Склонённая голова проходит под притолокой невредимой."],
+      "bad": ["A bowed head catches the weight of the falling lintel.", "На склонённую голову падает притолока."]
+    },
+    "truth": {
+      "good": [
+        "A mouth speaks its own name; a listening face grows gentle.",
+        "Рот произносит собственное имя; лицо слушающего смягчается."
+      ],
+      "bad": [
+        "A mouth speaks its own name; the name returns with teeth in it.",
+        "Рот произносит собственное имя; имя возвращается, обросшее зубами."
+      ]
+    },
+    "guile": {
+      "good": ["A borrowed name is spoken; the watchman steps aside.", "Звучит чужое имя; страж отступает в сторону."],
+      "bad": ["A borrowed name is spoken; the watchman closes both hands.", "Звучит чужое имя; страж сжимает обе руки."]
+    },
+    "haste": {
+      "good": ["Running feet cross the bridge before the ropes part.", "Бегущие ноги пересекают мост прежде, чем рвутся верёвки."],
+      "bad": ["Running feet reach the middle as the ropes part.", "Бегущие ноги достигают середины моста, когда рвутся верёвки."]
+    },
+    "patience": {
+      "good": [
+        "Someone waits beside a sealed jar; by dawn its lid is loose.",
+        "Кто-то ждёт возле запечатанного кувшина; к рассвету крышка поддаётся."
+      ],
+      "bad": [
+        "Someone waits beside a sealed jar; by dawn there is only dust inside.",
+        "Кто-то ждёт возле запечатанного кувшина; к рассвету внутри остаётся лишь пыль."
+      ]
+    },
+    "offer": {
+      "good": [
+        "An open hand leaves bread on a stone; a second hand gives it back whole.",
+        "Открытая ладонь оставляет хлеб на камне; другая рука возвращает его целым."
+      ],
+      "bad": [
+        "An open hand leaves bread on a stone; the stone takes the fingers too.",
+        "Открытая ладонь оставляет хлеб на камне; камень забирает и пальцы."
+      ]
+    },
+    "water": {
+      "good": ["Water passes over a threshold; the dust beyond it blooms.", "Вода переливается через порог; за ним расцветает пыль."],
+      "bad": ["Water passes over a threshold; the stones beyond it split.", "Вода переливается через порог; за ним раскалываются камни."]
+    },
+    "light": {
+      "good": ["A raised lamp shows a stair where there was a wall.", "Поднятая лампа освещает лестницу там, где была стена."],
+      "bad": ["A raised lamp shows eyes opening in the wall.", "Поднятая лампа освещает глаза, открывающиеся в стене."]
+    },
+    "take": {
+      "good": [
+        "A hand takes a seal from an unwatched table; the door opens for it.",
+        "Рука берёт печать с оставленного без присмотра стола; дверь перед ней открывается."
+      ],
+      "bad": [
+        "A hand takes a seal from an unwatched table; the door closes on its wrist.",
+        "Рука берёт печать с оставленного без присмотра стола; дверь захлопывается на запястье."
+      ]
+    },
+    "refuse": {
+      "good": [
+        "A cup is pushed away; what lies beneath it uncurls and dies.",
+        "Чашу отодвигают; то, что лежало под ней, распрямляется и умирает."
+      ],
+      "bad": ["A cup is pushed away; every other vessel in the room empties.", "Чашу отодвигают; все остальные сосуды в комнате пустеют."]
+    },
+    "bronze": {
+      "good": ["A bronze edge touches the binding; the knot falls open.", "Бронзовое лезвие касается пут; узел распускается."],
+      "bad": ["A bronze edge touches the binding; the metal blackens and bends.", "Бронзовое лезвие касается пут; металл чернеет и гнётся."]
+    },
+    "word": {
+      "good": ["A written line is laid across a crack; the two halves join.", "Исписанную полоску кладут поперёк трещины; края сходятся."],
+      "bad": [
+        "A written line is laid across a crack; the crack follows the letters.",
+        "Исписанную полоску кладут поперёк трещины; трещина ползёт по буквам."
+      ]
+    },
+    "break": {
+      "good": [
+        "A clay figure is broken; something trapped inside flies free.",
+        "Глиняную фигурку разбивают; что-то запертое внутри вылетает на волю."
+      ],
+      "bad": ["A clay figure is broken; its shadow remains standing.", "Глиняную фигурку разбивают; её тень остаётся стоять."]
+    }
+  },
+  "luckWays": {
+    "truth": ["admits a small mistake in yesterday’s work.", "признаёт небольшую ошибку во вчерашней работе."],
+    "patience": ["waits for the dust to settle before setting to work.", "ждёт, пока осядет пыль, прежде чем взяться за работу."],
+    "guile": ["offers an excuse that nobody quite believes.", "находит отговорку, которой никто толком не верит."],
+    "humble": ["lets somebody else have the last word.", "оставляет последнее слово за собеседником."],
+    "haste": ["hurries through the morning’s preparations.", "торопится закончить утренние приготовления."],
+    "refuse": ["declines a second helping and pushes the bowl away.", "отказывается от добавки и отодвигает миску."]
+  },
+  "tablet": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "At the damaged edge, a separate line seems to read: “${en}” The next sign is lost."
+      },
+      {
+        "$template": "На повреждённом краю отдельная строка, кажется, гласит: «${rus}» Следующий знак утрачен."
+      }
+    ]
+  },
+  "dream": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "One image stays with you on waking. ${en}"
+      },
+      {
+        "$template": "После пробуждения остаётся один образ. ${rus}"
+      }
+    ]
+  },
+  "omen": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "At first light, you make out shapes in a patch of salt. ${en} A shadow passes; you cannot find the shapes again."
+      },
+      {
+        "$template": "На рассвете в пятне соли проступают очертания. ${rus} Проходит тень — и снова различить их уже не удаётся."
+      }
+    ]
+  },
+  "death": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "In the disturbed dust beside ${person.short}, you seem to make out this: ${en}"
+      },
+      {
+        "$template": "В потревоженной пыли возле ${ru.c(person, \"g\")} будто проступает вот что: ${rus}"
+      }
+    ]
+  },
+  "luck": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${person.short} ${luckWays[way][0]} ${good ? \"The rope holds, the flame burns steadily, and there is no grit in the cup.\" : \"After that, little things go wrong: a frayed rope, a guttering flame, grit in the cup.\"}"
+      },
+      {
+        "$template": "${ru.c(person)} ${luckWays[way][1]} ${good ? \"Верёвка держит, пламя не дрожит, на дне чашки нет песка.\" : \"А дальше одна мелкая неприятность за другой: верёвка перетёрлась, огонь чадит, в чашке песок.\"}"
+      }
+    ]
+  },
+  "action": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "For a moment, ${good ? \"the heat lets go of you. Your next breath comes easily.\" : \"the heat gathers close. Your next breath catches in your throat.\"}"
+      },
+      {
+        "$template": "На мгновение ${good ? \"жара отступает. Дышится легче.\" : \"жара сгущается вокруг. Перехватывает дыхание.\"}"
+      }
+    ]
+  }
+}

@@ -1,4 +1,3 @@
-// rules.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const PUZ = {
   half: 0.5,
   rel: 0.6,
@@ -32,7 +31,8 @@ const TEMPERS = {
     confess: 0.45,
     tell: 0.6,
     slip: 0.99,
-    fear: [0.6, 0.1],
+    fear: 0.2,
+    greed: 0.1,
     gossip: 0.2,
     gossipTrue: 0.95,
     decline: 0.45,
@@ -60,7 +60,8 @@ const TEMPERS = {
     confess: 0.3,
     tell: 0.5,
     slip: 0.85,
-    fear: [0.55, 0.15],
+    fear: 0.18,
+    greed: 0.1,
     gossip: 0.25,
     gossipTrue: 0.9,
     decline: 0.3,
@@ -88,7 +89,8 @@ const TEMPERS = {
     confess: 0.03,
     tell: 0.12,
     slip: 0.55,
-    fear: [0.35, 0.12],
+    fear: 0.16,
+    greed: 0.14,
     gossip: 0.4,
     gossipTrue: 0.35,
     decline: 0.01,
@@ -116,7 +118,8 @@ const TEMPERS = {
     confess: 0.05,
     tell: 0.08,
     slip: 0.35,
-    fear: [0.25, 0.1],
+    fear: 0.16,
+    greed: 0.14,
     gossip: 0.4,
     gossipTrue: 0.55,
     decline: 0.1,
@@ -144,7 +147,8 @@ const TEMPERS = {
     confess: 0.12,
     tell: 0.25,
     slip: 0.75,
-    fear: [0.3, 0.05],
+    fear: 0.16,
+    greed: 0.1,
     gossip: 0.05,
     gossipTrue: 0.9,
     decline: 0.6,
@@ -172,7 +176,8 @@ const TEMPERS = {
     confess: 0.25,
     tell: 0.45,
     slip: 0.95,
-    fear: [0.5, 0.15],
+    fear: 0.2,
+    greed: 0.12,
     gossip: 0.6,
     gossipTrue: 0.65,
     decline: 0.01,
@@ -200,7 +205,8 @@ const TEMPERS = {
     confess: 0.08,
     tell: 0.3,
     slip: 0.7,
-    fear: [0.45, 0.25],
+    fear: 0.22,
+    greed: 0.11,
     gossip: 0.5,
     gossipTrue: 0.6,
     decline: 0.01,
@@ -252,7 +258,17 @@ const FACES = {
   good: { smile: 1, warm: 1 },
   bad: 'sad',
   troubled: 'sad',
-  glad: { smile: 2, warm: 1 }
+  glad: { smile: 2, warm: 1 },
+  reply: {
+    reserved: { thoughtful: 6, neutral: 3, cold: 1 },
+    weary: { neutral: 4, thoughtful: 3, sad: 2, cold: 1 },
+    serious: { thoughtful: 5, neutral: 3, sad: 2 },
+    firm: { cold: 4, neutral: 3, angry: 2, thoughtful: 1 },
+    recounting: { thoughtful: 5, neutral: 3, sad: 1, glance: 1 },
+    distressed: { fear: 5, sad: 2, thoughtful: 2, neutral: 1 },
+    studying: { thoughtful: 6, neutral: 3, glance: 1 },
+    confiding: { thoughtful: 5, neutral: 3, warm: 1, sad: 1 }
+  }
 };
 const NATURE = {
   fire: { bold: 1, haste: 1, water: 1, word: 1, break: 1, patience: -1, humble: -1, light: -1, guile: -1 },
@@ -499,6 +515,11 @@ const RULES = {
     early: 0.2
   },
   peril: {
+    costs: {
+      shoring: [0, 1], pickman: [0, 1], brick: [0, 1], gust: [2, 0], grave: [1, 1], lost: [1, 0],
+      water: [2, 0], snake: [0, 1], dog: [0, 1], woman: [1, 0], shelf: [0, 1], locked: [1, 0],
+      pole: [0, 1], primus: [0, 1], heat: [2, 0], sun: [1, 0]
+    },
     base: 0.05,
     noon: 1.3,
     heat: 0.4,
@@ -506,6 +527,7 @@ const RULES = {
     at: { trench: 1.4, ziggurat: 1.2, cemetery: 1.1, canal: 1, village: 0.8, store: 0.7, camp: 0.2 }
   },
   spite: {
+    costs: { scorpion: [0, 1], water: [2, 0], lamp: [1, 0] },
     try: 0.07,
     hate: 2,
     ok: 0.7,
@@ -514,9 +536,34 @@ const RULES = {
     trace: 0.35,
     temper: { honest: 0.01, conscientious: 0.3, liar: 1.3, calculating: 1, detached: 0.5, lightheaded: 0.7, suspicious: 1.4 }
   },
+  influence: {
+    aim: 0.35,
+    breakfast: 0.22,
+    inquirySecond: 0.3,
+    second: 1,
+    doubt: 0.7,
+    recall: 0.8,
+    remembers: 0.75,
+    fresh: 2,
+    steer: 0.22,
+    supports: 0.5,
+    suspicion: 0.08,
+    cultLean: 0.08,
+    sway: 0.3,
+    doubtCase: 0.15,
+    doubtDays: 1,
+    loudSpared: 0.2
+  },
+  natureSigns: {
+    channel: { omen: 0.4, luck: 0.35, action: 0.18, tablet: 0.35, dream: 0.3, death: 0.3 },
+    ordinary: 0.5,
+    signal: 0.15,
+    temper: { honest: 'truth', conscientious: 'patience', liar: 'guile', calculating: 'guile',
+      detached: 'humble', lightheaded: 'haste', suspicious: 'refuse' },
+    action: { search: 'haste', study: 'word', rest: 'patience', press: 'bold', confide: 'truth', examine: 'patience' }
+  },
   night: {
-    alerted: 0.55,
-    enemy: 0.2,
+    target: { base: 0.08, day: 0.012, knownGain: 0.2, knownCap: 4, alarmGain: 0.25 },
     holds: 0.5,
     dreamers: {
       fear: 0.45,
@@ -547,8 +594,6 @@ const RULES = {
     mark: 0.9,
     spared: 0.03,
     swept: 0.03,
-    you: 0.01,
-    youDay: 0.005,
     manner: 0.97,
     craneTaken: 0.7,
     calm: 0.3,
@@ -574,7 +619,6 @@ const RULES = {
     smugglerTraceOut: 0.6,
     strayTrace: 0.55,
     pairOther: 0.01,
-    pairPlant: 0.15,
     dreamAloud: 0.3,
     low: { odds: 0.04, patience: { 0.5: 1, 1: 2, 1.6: 1.5, 2.5: 1 }, heat: 0.35, after: 3, ahead: 1, spent: 0.5, max: 0.4 },
     frame: 0.6,
@@ -582,7 +626,7 @@ const RULES = {
     thiefDark: 0.3,
     kept: 0.3
   },
-  adapt: { z: 2, gain: 0.5, told: 0.5, idleRite: 0.6 },
+  adapt: { z: 2, gain: 0.75, told: 0.5, idleRite: 0.6 },
   yourDreams: {
     rate: { 0.01: 2.5, 0.15: 2, 0.3: 2.5, 0.45: 2 },
     truth: { 0.45: 1.5, 0.6: 2, 0.75: 2, 0.9: 1.5 },
@@ -643,7 +687,7 @@ const RULES = {
     suspected: 0.7,
     onYou: 0.75,
     again: 0.35,
-    rite: 0.5,
+    danger: 0.5,
     mourning: 0.8,
     min: 0.01,
     max: 0.75
@@ -653,7 +697,7 @@ const RULES = {
     trust: { '-2': 1.1, '-1': 1.05, 0: 1, 1: 0.97, 2: 0.93, 3: 0.9 },
     promised: 0.93,
     mourning: 1.06,
-    rite: 0.15,
+    danger: 0.15,
     min: 0.65,
     max: 0.9
   },
@@ -674,7 +718,6 @@ const RULES = {
     refuse: 0.6,
     hostileSilence: 0.5,
     scholarLine: 0.6,
-    greed: 0.45,
     sourConfide: 0.5,
     partingDream: 0.4,
     honestTip: 0.1,
@@ -692,7 +735,6 @@ const RULES = {
     nameSuspect: 0.6,
     coldParting: 0.3,
     habit: 0.65,
-    greedOther: 0.04,
     promise: 0.85,
     tipWrong: 0.08,
     dreamTell: 0.4,
@@ -703,8 +745,9 @@ const RULES = {
     mienWrong: 0.08,
     feelFalse: 0.3
   },
-  manner: { warm: [0.3, 0.7, 0.9], cold: [0.55, 0.85], flirt: 0.6, whim: 0.1, joke: 0.7, parting: 0.2, leak: 0.25 },
-  counter: { camp: 0.12, odds: 0.35, complaints: 1.5, cools: 0.35, thinks: 0.3, onYou: 0.25, wonder: 0.3 },
+  manner: { warm: [0.3, 0.7, 0.9], cold: [0.55, 0.85], flirt: 0.6, whim: 0.1, joke: 0.7, parting: 0.2, leak: 0.25,
+    replyTrouble: 1.5, replyDistance: 0.35, replyComposure: 0.75 },
+  counter: { camp: 0.12, aim: 0.35, complaints: 1.5, cools: 0.35, thinks: 0.3, onYou: 0.25, wonder: 0.3 },
   hound: {
     ask: 1,
     press: 2,
@@ -724,8 +767,8 @@ const RULES = {
     secret: { cult: 0.4, thief: 0.35, romance: 0.3, unrequited: 0.25, none: 0.15 },
     noneFear: 2,
     pressure: 0.6,
-    pressureCase: 0.2,
-    caseMax: 3,
+    pressureHeard: 0.2,
+    pressureMax: 3,
     shaken: 0.6,
     shakenFear: 0.8,
     fearPressed: 0.15,
@@ -735,17 +778,14 @@ const RULES = {
     rehearsed: 0.85,
     onGuard: 0.7,
     last: 1.3,
-    rite: 0.8,
-    riteMore: 0.5,
+    expectationBase: 0.8,
+    expectationMore: 0.5,
     max: 0.95
   },
   feel: {
     suspicion: 0.1,
     grief: { close: 0.6, fond: 0.3 },
     comforted: 0.5,
-    disliked: 0.1,
-    dislikedFrom: 2,
-    dislikedMax: 0.4,
     shame: 0.6,
     close: 0.3,
     fond: 0.15,
@@ -764,6 +804,7 @@ const RULES = {
     distanceBase: 0.5,
     cultGuilty: 0.04,
     defend: 0.35,
+    defendAim: 0.35,
     counter: [0.1, 0.3],
     desperate: 2,
     counterSpot: 0.04,
@@ -794,6 +835,34 @@ const RULES = {
     you: 0.3,
     bond: 2,
     visit: { odds: 0.45, fade: 0.55, bad: 0.55, spite: 0.15, jealous: 0.25, foe: 0.08, vows: 0.25, friend: 0.25, ally: 0.15 }
+  },
+  objectReaction: {
+    bias: 0.25,
+    recentDays: 1,
+    fear: { ward: 1, nature: 0.6, luck: 0.6, vision: 0.8, witness: 0.6, distrust: 0.4 },
+    greed: { trade: 0.8, nature: 0.6, luck: 0.4 },
+    objects: {
+      seal: { ways: ['word', 'take'], valuable: true },
+      eye: { ways: ['light'], valuable: true },
+      cone: { ways: ['word'], valuable: false },
+      figures: { ways: ['offer', 'break'], valuable: false },
+      head: { ways: ['bronze'], valuable: true },
+      plaque: { ways: ['light'], valuable: true },
+      liver: { ways: ['offer'], valuable: false },
+      crescent: { ways: ['light'], valuable: true },
+      bell: { ways: ['bronze'], valuable: true },
+      duck: { ways: ['take'], valuable: true },
+      bead: { ways: ['take'], valuable: true },
+      fly: { ways: ['take'], valuable: true },
+      bowl: { ways: ['water', 'refuse'], valuable: false },
+      frag: { ways: ['word'], valuable: false },
+      line: { ways: ['word'], valuable: false }
+    }
+  },
+  knowledge: {
+    temper: 0.75, bond: 0.65, flirt: 0.85, opinion: 0.8, doctrine: 0.85, natureDoctrine: 0.65,
+    activity: 0.65, topic: 0.25, participant: 0.99, repeated: 2, dangerSignals: 3,
+    styles: { sleuth: ['examine', 'night', 'about', 'diary', 'distrust'], scholar: ['study', 'readings'], delver: ['search', 'charm'], inquisitor: ['press'], confidant: ['confide'] }
   },
   rumours: {
     pressFriend: 0.3,
@@ -917,7 +986,6 @@ const RULES = {
     shot: 0.35,
     cost: { done: [3, 0], failed: [2, 1], watched: [2, 0], away: [1, 0] },
     cultKnows: 0.5,
-    unseen: 0.4,
     tell: [0.6, 0.35, 0.15, 0.05],
     cultTells: 0.05,
     sure: 0.25,
@@ -971,7 +1039,7 @@ const RULES = {
     staged: 0.02,
     stagedDream: 0.12
   },
-  doubt: { cult: 0.9, camp: 0.04, lately: 3, wonder: 0.35 },
+  doubt: { aim: 0.35, camp: 0.04, lately: 3, wonder: 0.35 },
   morning: { talk: 0.6, you: 0.35, gossip: 0.45, blame: 0.2, mourn: 0.9, withhold: 0.25 },
   readings: { mistakeGloss: 0.75, mistakeReading: 0.5, hideWard: 0.5, cultSlip: 0.03, mistakeNone: 0.3, cultNone: 0.2 },
   descent: {

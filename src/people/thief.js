@@ -1,4 +1,3 @@
-// people/thief.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const FROM_EN = __text('FROM_EN');
 function thiefSees(n, loc, actorId, robbed) {
   const smug = freeChars().find(c => c.role === 'smuggler'),
@@ -15,30 +14,68 @@ function thiefSees(n, loc, actorId, robbed) {
 const SURENESS = ['unsure', 'fairly', 'sure'],
   rightly = w => w.actor === w.real,
   likesSeen = (c, w) => Ties.likes(c.id, w.actor);
-const SURE_OF_IT = odds('the thief is sure of whom he saw', [
-    ['base', () => RULES.thief.sureOf],
-    ['+ saw rightly (- not)', (c, w) => (rightly(w) ? 1 : -1) * RULES.thief.clear],
-    ['- a muddled head', c => RULES.thief.muddled * TP(c).mistake],
-    ['+ cannot like them', (c, w) => RULES.thief.dislike * Math.max(0, -likesSeen(c, w))],
-    ['- likes them', (c, w) => RULES.thief.fond * Math.max(0, likesSeen(c, w))],
-    ['clamp', () => [RULES.scale.least, RULES.scale.most]]
-  ]),
-  DOUBTS_IT = odds('the thief doubts whom he saw', [
-    ['base', () => RULES.thief.doubt],
-    ['- saw rightly (+ not)', (c, w) => (rightly(w) ? 1 : -1) * RULES.thief.clear],
-    ['+ a muddled head', c => RULES.thief.muddled * TP(c).mistake],
-    ['- cannot like them', (c, w) => RULES.thief.dislike * Math.max(0, -likesSeen(c, w))],
-    ['+ likes them', (c, w) => RULES.thief.fond * Math.max(0, likesSeen(c, w))],
-    ['clamp', () => [RULES.scale.least, RULES.scale.most]]
-  ]),
-  TELLS_IT_LESS = odds('the thief tells it less sure than he is', [['base', c => (Ties.against(c) ? RULES.thief.guarded : 0)]]),
-  TELLS_IT_MORE = odds('the thief tells it surer than he is', [
-    ['base', c => RULES.thief.overstate * (1 - TP(c).truth)],
-    ['* to a friend', c => (Ties.friend(c) ? RULES.thief.candid : 1)]
-  ]);
+// Perceived confidence is world resolution: clarity depends on whether the
+// glimpse was correct. That hidden truth is not an actor-policy observation.
+const SURE_OF_IT = Decisions.define({
+    id: 'thief.perception.sure',
+    action: 'believe-witness-sure',
+    authority: 'world',
+    subject: c => c,
+    object: (c, w) => w.actor,
+    knowledge: ['world: actual witness identity and perceptual accuracy', 'self: temperament and liking of the perceived person'],
+    consequences: ['witness-confidence'],
+    probability: odds('the thief is sure of whom he saw', [
+      ['base', () => RULES.thief.sureOf],
+      ['+ saw rightly (- not)', (c, w) => (rightly(w) ? 1 : -1) * RULES.thief.clear],
+      ['- a muddled head', c => RULES.thief.muddled * TP(c).mistake],
+      ['+ cannot like them', (c, w) => RULES.thief.dislike * Math.max(0, -likesSeen(c, w))],
+      ['- likes them', (c, w) => RULES.thief.fond * Math.max(0, likesSeen(c, w))],
+      ['clamp', () => [RULES.scale.least, RULES.scale.most]]
+    ])
+  }),
+  DOUBTS_IT = Decisions.define({
+    id: 'thief.perception.doubt',
+    action: 'believe-witness-doubt',
+    authority: 'world',
+    subject: c => c,
+    object: (c, w) => w.actor,
+    knowledge: ['world: actual witness identity and perceptual accuracy', 'self: temperament and liking of the perceived person'],
+    consequences: ['witness-confidence'],
+    probability: odds('the thief doubts whom he saw', [
+      ['base', () => RULES.thief.doubt],
+      ['- saw rightly (+ not)', (c, w) => (rightly(w) ? 1 : -1) * RULES.thief.clear],
+      ['+ a muddled head', c => RULES.thief.muddled * TP(c).mistake],
+      ['- cannot like them', (c, w) => RULES.thief.dislike * Math.max(0, -likesSeen(c, w))],
+      ['+ likes them', (c, w) => RULES.thief.fond * Math.max(0, likesSeen(c, w))],
+      ['clamp', () => [RULES.scale.least, RULES.scale.most]]
+    ])
+  }),
+  TELLS_IT_LESS = Decisions.define({
+    id: 'thief.testimony.understate',
+    action: 'understate-witness',
+    authority: 'actor',
+    subject: c => c,
+    object: (c, w) => w?.actor,
+    knowledge: ['self: remembered glimpse and confidence', 'self: trust in the player'],
+    consequences: ['testimony'],
+    probability: odds('the thief tells it less sure than he is', [['base', c => (Ties.against(c) ? RULES.thief.guarded : 0)]])
+  }),
+  TELLS_IT_MORE = Decisions.define({
+    id: 'thief.testimony.overstate',
+    action: 'overstate-witness',
+    authority: 'actor',
+    subject: c => c,
+    object: (c, w) => w?.actor,
+    knowledge: ['self: remembered glimpse and confidence', 'self: temperament and trust in the player'],
+    consequences: ['testimony'],
+    probability: odds('the thief tells it surer than he is', [
+      ['base', c => RULES.thief.overstate * (1 - TP(c).truth)],
+      ['* to a friend', c => (Ties.friend(c) ? RULES.thief.candid : 1)]
+    ])
+  });
 const believes = (c, w) => (SURE_OF_IT.roll(c, w) ? 'sure' : DOUBTS_IT.roll(c, w) ? 'unsure' : 'fairly'),
   surer = (k, d) => SURENESS[Math.max(0, Math.min(SURENESS.length - 1, SURENESS.indexOf(k) + d))],
-  tellsIt = (c, w) => (TELLS_IT_LESS.roll(c) ? surer(w.sure, -1) : TELLS_IT_MORE.roll(c) ? surer(w.sure, 1) : w.sure);
+  tellsIt = (c, w) => (TELLS_IT_LESS.roll(c, w) ? surer(w.sure, -1) : TELLS_IT_MORE.roll(c, w) ? surer(w.sure, 1) : w.sure);
 function thiefLeans(c, x) {
   const w = c.role === 'smuggler' && S.witness.filter(v => v.actor === x.id).pop();
   return w ? RULES.thief.leans[w.sure] : 0;

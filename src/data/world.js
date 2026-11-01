@@ -1,4 +1,3 @@
-// data/world.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const CATS = ['prints', 'ash', 'scent'];
 const TRAITS = __text('TRAITS');
 const CHARS = __text('CHARS');

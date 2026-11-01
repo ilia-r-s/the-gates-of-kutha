@@ -141,6 +141,6 @@
     }
   },
   "theInquestNamedYou": ["The inquest named you.", "Следствие назвало ваше имя."],
-  "text": "он",
-  "text2": "она"
+  "heRu": "он",
+  "sheRu": "она"
 }

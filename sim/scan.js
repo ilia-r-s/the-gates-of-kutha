@@ -117,7 +117,7 @@ run(async browser => {
           o(sc);
         };
         const P = { random: __T.policies.random, cheat: __T.policies.cheat }[pol];
-        const rnd = __T.lcg(91);
+        const rnd = __T.rng(91);
         const policy = P ? P(rnd) : __T.policies.human(rnd, pol === 'human' ? null : __T.LEANS[pol]);
         const each = () => {
           Object.entries(S.here || {}).forEach(([l, ids]) =>

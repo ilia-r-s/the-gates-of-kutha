@@ -1,9 +1,9 @@
-// ui/bus.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const LISTENERS = {};
 function listen(ev, f) {
   (LISTENERS[ev] = LISTENERS[ev] || []).push(f);
 }
 function emit(ev, ...a) {
+  if (Session.replaying) return;
   (LISTENERS[ev] || []).forEach(f => {
     try {
       f(...a);

@@ -14,7 +14,7 @@ run(async browser => {
   ]) {
     const { page, errors } = await open(browser, { width: w, height: h, seed: 2024 + w, mathSeed: w });
     out[`${w}px random`] = await page.evaluate(games => {
-      const rnd = __T.lcg(7),
+      const rnd = __T.rng(7),
         random = __T.policies.random(rnd),
         r = { endings: {}, stuck: 0, steps: 0, maxSteps: 0 };
       for (let g = 0; g < games; g++) {
@@ -54,7 +54,7 @@ run(async browser => {
   }
   const { page, errors } = await open(browser, { seed: 99 });
   out.cheat = await page.evaluate(() => {
-    const rnd = __T.lcg(41),
+    const rnd = __T.rng(41),
       r = { endings: {}, stuck: 0, innocentsAccused: 0, refused: 0 };
     for (let g = 0; g < 40; g++) {
       __T.start(g % 3);

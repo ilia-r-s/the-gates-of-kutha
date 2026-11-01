@@ -1,4 +1,3 @@
-// people/tempers.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const TEMPER_NAMES = __text('TEMPER_NAMES');
 const temperOf = c => S.temper[typeof c === 'string' ? c : c.id];
 const TP = c => TEMPERS[temperOf(c)];

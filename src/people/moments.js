@@ -13,8 +13,7 @@ const Moments = (() => {
         if (!rollWhenFull && full()) return;
         if (chanceOf && !chanceOf.roll(...args(h), ...r.slice(4))) return;
         if (rollWhenFull && full()) return;
-        if (!(what === 'trust' ? Ties.moveTrust(h, d) : what === 'like' ? Ties.shiftLike(h.id, whom, d) : Suspicion.move(h.id, whom, d)))
-          return;
+        if (!Decisions.effect(what === 'sus' ? 'suspicion' : what, h, whom, d)) return;
         const lvl = what === 'sus' ? Suspicion.level(h.id, whom) : null,
           g = same().find(x => x[4] === lvl);
         if (g) g[3].push(h.id);
@@ -91,7 +90,17 @@ const Moments = (() => {
     ['* a heavy moment', (l, o) => (o.heavy ? RULES.camp.heavy : 1)],
     ['cap', () => RULES.scale.most]
   ];
-  const moment = (name, steps) => odds(name, steps.concat(TAIL));
+  const moment = (name, steps) =>
+    Decisions.define({
+      id: 'moment.' + name,
+      action: 'respond-to-public-moment',
+      subject: l => l.id,
+      object: (l, o) => o.about || o.by || 'player',
+      authority: 'actor',
+      knowledge: ['personally heard public moment', 'own relationships, temperament and suspicion', 'public speaker credibility'],
+      consequences: ['trust', 'like', 'suspicion'],
+      probability: odds(name, steps.concat(TAIL))
+    });
   const FOND = ['+ fond of them', (l, o, pr) => (Ties.fond(l, o.about) ? pr.friend : 0)],
     NOT_FOND = ['- fond of them', (l, o, pr) => (Ties.fond(l, o.about) ? pr.friend : 0)],
     DISLIKES = ['+ dislikes them', (l, o, pr) => (Ties.dislikes(l, o.about) ? pr.dislike : 0)],
@@ -429,7 +438,7 @@ const Moments = (() => {
       n = nameList(ids),
       nr = nameListRu(ids),
       when = o.day === S.day ? '' : ` on day ${o.day}`,
-      whenRu = o.day === S.day ? '' : __text('text');
+      whenRu = o.day === S.day ? '' : __text('onDayRu');
     const did = o.verdict === 'cult' ? TX.moments.raisedAgainst(n, many, a, when, nr, b, whenRu) : __text('spokeUpForA');
     const they = many ? __text('theyWereRight') : __text('wasRight2');
     const then =
@@ -438,7 +447,7 @@ const Moments = (() => {
           ? TX.moments.theCampTakesDeath2(a, they)
           : __text('nowIsDead')
         : right
-          ? __text('text2')
+          ? __text('provenRightLine')
           : o.verdict === 'cult'
             ? a.role === 'smuggler'
               ? __text('wasNoCultist')
@@ -477,6 +486,7 @@ const Moments = (() => {
     return h;
   }
   function dreamAloud(by, about, guilty, answer = null, veil = null) {
+    Knowledge.publicClaim(by, 'seer');
     Suspicion.sayAloud(by, about, veil ? 'veiled' : guilty ? 'cult' : 'clean', 'dream');
     return veil ? '' : stir(guilty ? 'dreamt' : 'dreamtClean', { by: by, about: about, answer: answer });
   }

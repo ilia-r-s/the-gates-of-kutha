@@ -2,6 +2,15 @@
 
 Oct 27, 2026 · @Ilia
 
+> Historical research and design hypotheses around 28.3.0. Verdicts, “already in” claims, future work and measured
+> game rates below retain that date; they are neither a current implementation checklist nor proof that every strategy
+> is fair. The original working-note filenames mentioned below are not bundled repository dependencies.
+> Selected 29.0.0 work uses [camp influence](../../src/people/influence.js), [actor knowledge](../../src/people/knowledge.js)
+> and [shared decisions](../../src/core/decisions.js), checked by [cult regressions](../../test/cult.js),
+> [knowledge regressions](../../test/knowledge.js) and [the tell simulator](../../sim/tells.js).
+> See [current rules](../rules.md), [rare-behavior verification](2026-11-01-rare-cult-behaviors.md)
+> and [the roadmap](../roadmap.md) for their present scope. Historical citations and figures are retained, not newly verified.
+
 The hidden cult in The Gates of Kutha can counter every way of hunting it without a statistical tell if it works through the camp's innocents and never acts where the player looks. Nearly every covert method on record keeps its author one step back, so that onlookers see only sincere people repeating, doubting, cooling and voting. That holds for the Stasi's *Zersetzung*, for Soviet active measures, for the FBI's "snitch-jacket", for the indirect aggression and mobbing of ordinary workplaces, and for the hidden side's best play in Werewolf, Mafia and The Traitors. For Kutha this means the cult's own visible behaviour should come from the same rates as everyone's: how often it starts rumours, accuses, defends, votes and speaks. Its influence should travel only as small shifts in what innocents believe and pass on. The record is just as clear about where such campaigns leak, and it is not their voice but their aim and their coordination. On Japanese Werewolf boards, the first ordinary villager the wolves attacked had named a wolf as top suspect in **8 of 14 cases, a likelihood ratio of about 5.3**. In Avalon, a bot that simply hunted the most accurate voter cut an informed player's win rate **from 43.1% to 4.2%**. Telling the hidden side by its words alone sits barely above chance: **AUROC 0.57 to 0.68 for classifiers, 54% for human lie detection**. Outside games, the covert accounts a South Korean intelligence service ran during the 2012 presidential election were told apart by **traces of coordination among the agents, not by any one account's characteristics**. Real operations were usually exposed in a single break: a seized file, a defector, or one act too visible.
 
 Eight lessons follow, each building on the earlier report's finding that the cult is caught by what it knows:

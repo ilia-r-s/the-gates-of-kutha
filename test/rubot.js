@@ -8,35 +8,64 @@ const GAMES = args()._[0] || 30;
 // sees read at every step and checked, a mark or a notebook chip clicked now and then, and a choice made, all by the
 // same seeded generator. Played in one go, so the page is asked once per game, not several times a step.
 const game = ({ gi, steps }) => {
+  const visible = el => !!el && !!el.getClientRects().length && getComputedStyle(el).visibility === 'visible';
+  const textOf = selector => {
+    const el = document.querySelector(selector);
+    return visible(el) ? el.innerText : '';
+  };
+  const openBook = () => {
+    if (!document.getElementById('notebookDialog').open) document.getElementById('casebookBtn').click();
+  };
+  const closeBook = () => {
+    if (document.getElementById('notebookDialog').open) document.getElementById('closeCasebook').click();
+  };
   const read = () => ({
     lang: LANG,
     text: [
-      document.querySelector('header').innerText.replace(/English|Русский/, ''),
-      document.querySelector('#stage').innerText,
-      document.querySelector('.casebook').innerText,
-      document.querySelector('#mapDyn') ? document.querySelector('#mapDyn').textContent : '',
-      document.querySelector('.plan figcaption').innerText,
+      textOf('header'),
+      textOf('#stage'),
+      textOf('#notebookDialog'),
+      [...document.querySelectorAll('#mapDyn text')]
+        .filter(visible)
+        .map(e => e.textContent)
+        .join(' '),
       [...document.querySelectorAll('[aria-label],[title]')]
-        .filter(e => e.id !== 'langBtn')
+        .filter(e => e.id !== 'langBtn' && visible(e))
         .map(e => (e.getAttribute('aria-label') || '') + ' ' + (e.getAttribute('title') || ''))
         .join(' ')
     ].join('\n'),
-    title: document.querySelector('#sceneTitle').innerText,
+    title: textOf('#sceneTitle'),
     ended: typeof S !== 'undefined' && S && S.ended
   });
   const bad = [],
     seen = { ru: 0, en: 0 },
-    ends = {};
-  let x = gi * 7919 + 17,
-    n = 0;
-  const rnd = m => (x = (x * 1103515245 + 12345) % 2147483648) % m;
+    ends = {},
+    coverage = { tabs: [0, 0, 0, 0], languageSwitches: 0, marks: 0, choiceIndices: {} };
+  let n = 0;
+  const rnd = __testRandom.random(gi * 7919 + 17).int;
   for (let k = 0; k < steps; k++) {
-    if (rnd(100) < 6) setLang(LANG === 'ru' ? 'en' : 'ru');
+    if (rnd(100) < 6) {
+      const before = LANG;
+      openBook();
+      document.getElementById('langBtn').click();
+      if (LANG === before) bad.push({ gi, k, action: 'language button did not switch language' });
+      coverage.languageSwitches++;
+    }
     if (rnd(4) === 0) {
-      const t = ['people', 'evidence', 'omens', 'kit'][rnd(4)];
+      const index = rnd(4),
+        t = ['people', 'evidence', 'omens', 'kit'][index];
       if (typeof S !== 'undefined' && S) {
-        S_ui.tab = t;
-        renderBook();
+        openBook();
+        const tab = document.getElementById('tab-' + t);
+        tab.click();
+        if (
+          !visible(tab) ||
+          tab.getAttribute('aria-selected') !== 'true' ||
+          S_ui.tab !== t ||
+          !visible(document.getElementById('tabPanel'))
+        )
+          bad.push({ gi, k, action: 'notebook tab was not visibly selected', tab: t });
+        coverage.tabs[index]++;
       }
     }
     const snap = read();
@@ -59,26 +88,45 @@ const game = ({ gi, steps }) => {
     const choices = document.querySelectorAll('#choices .choice').length;
     if (!choices) break;
     const choice = rnd(choices);
+    coverage.choiceIndices[choice] = (coverage.choiceIndices[choice] || 0) + 1;
     // sometimes mark people or notebook chips, which re-renders the casebook
     if (rnd(10) === 0) {
+      openBook();
       const mk = document.querySelector('[data-mark],[data-gm]');
-      if (mk) mk.click();
+      if (mk) {
+        const before = mk.hasAttribute('data-mark') ? C(mk.dataset.mark).mark : S.gm[mk.dataset.gm] || 0;
+        if (!visible(mk)) bad.push({ gi, k, action: 'notebook mark was hidden' });
+        mk.click();
+        const after = mk.hasAttribute('data-mark') ? C(mk.dataset.mark).mark : S.gm[mk.dataset.gm] || 0;
+        if (after === before) bad.push({ gi, k, action: 'notebook mark did not change' });
+        coverage.marks++;
+      }
     }
-    document.querySelectorAll('#choices .choice')[choice].click();
+    closeBook();
+    const button = document.querySelectorAll('#choices .choice')[choice];
+    if (document.getElementById('notebookDialog').open || !visible(button)) bad.push({ gi, k, action: 'scene choice was blocked' });
+    button.click();
   }
-  return { bad, seen, ends, steps: n, missing: [...MISSING] };
+  return { bad, seen, ends, coverage, steps: n, missing: [...MISSING] };
 };
 
 run(async browser => {
   const bad = [],
     seen = { ru: 0, en: 0 },
-    ends = {};
+    ends = {},
+    coverage = { tabs: [0, 0, 0, 0], languageSwitches: 0, marks: 0, choiceIndices: {} };
   let steps = 0;
   for (let gi = 0; gi < GAMES; gi++) {
     const { page, errors } = await open(browser, { width: gi % 3 === 2 ? 390 : 1280, seed: 1000 + gi, lang: 'ru', helpers: false });
     const r = await page.evaluate(game, { gi, steps: 140 });
     bad.push(...r.bad);
     steps += r.steps;
+    coverage.tabs = coverage.tabs.map((v, i) => v + r.coverage.tabs[i]);
+    coverage.languageSwitches += r.coverage.languageSwitches;
+    coverage.marks += r.coverage.marks;
+    Object.entries(r.coverage.choiceIndices).forEach(([i, n]) => {
+      coverage.choiceIndices[i] = (coverage.choiceIndices[i] || 0) + n;
+    });
     ['ru', 'en'].forEach(l => {
       seen[l] += r.seen[l];
     });
@@ -89,5 +137,7 @@ run(async browser => {
     if (errors.length) bad.push({ gi, errors: errors.slice(0, 3) });
     await page.close();
   }
-  return { games: GAMES, steps, seen, ends, problems: bad.length, sample: bad.slice(0, 25) };
+  if (GAMES >= 8 && (coverage.tabs.some(n => !n) || !coverage.languageSwitches || !coverage.marks || !seen.en || !seen.ru))
+    bad.push({ coverage: 'Language switching, every casebook tab, and marking must be exercised' });
+  return { games: GAMES, steps, seen, ends, coverage, problems: bad.length, sample: bad.slice(0, 25) };
 });

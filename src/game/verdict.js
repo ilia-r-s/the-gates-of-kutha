@@ -1,4 +1,3 @@
-// game/verdict.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function angerSay() {
   const a = S.anger || 0,
     W = RULES.verdict.walkoutFrom;
@@ -81,19 +80,32 @@ function handsRaised(crowd, lean, extra, hi, lo, mine) {
 }
 function campVote(x) {
   const VR = RULES.verdict,
-    cs = Record.caseAgainst(x),
+    audience = freeChars().map(c => c.id),
+    influence = CampInfluence.inquiry(x),
+    cs = Record.caseAgainst(x) * CampInfluence.caseFactor(),
+    saidBeforeVote = S.said.length,
     h = handsRaised(
       freeChars().filter(o => o.id !== x.id),
       o => leaning(o, x, cs),
-      o => (o.role === 'cult' ? cultLean(o, x) : 0),
+      o => (o.role === 'cult' ? cultLean(o, x) : 0) + influence.sway(o),
       VR.back,
       VR.against,
       'for'
     ),
-    out = { back: h.for, against: h.against, silent: h.silent, case: cs, passed: h.passed };
+    out = { back: h.for, against: h.against, silent: h.silent, case: cs, passed: h.passed, preface: influence.html };
   out.back.forEach(id => Suspicion.sayAloud(id, x.id, 'cult', 'vote'));
   out.against.forEach(id => Suspicion.sayAloud(id, x.id, 'clean', 'vote'));
-  S.inquiries.push({ day: S.day, id: x.id, back: out.back, against: out.against, silent: out.silent, passed: out.passed });
+  S.inquiries.push({
+    day: S.day,
+    id: x.id,
+    back: out.back,
+    against: out.against,
+    silent: out.silent,
+    passed: out.passed,
+    case: cs,
+    saidBeforeVote,
+    audience
+  });
   return out;
 }
 function voteLine(v) {
@@ -106,8 +118,8 @@ function voteLine(v) {
       v.against.length ? `${n(v.against)} ${v.against.length > 1 ? 'speak' : 'speaks'} against it.` : '',
       v.silent.length ? `${n(v.silent)} ${v.silent.length > 1 ? 'say' : 'says'} nothing.` : ''
     ],
-    rus = __text('text');
-  return `<p class="notice">${bi(...TX.verdict.youLayOutYour2(en, rus))}</p>`;
+    rus = __text('voteSummaryRu');
+  return (v.preface || '') + `<p class="notice">${bi(...TX.verdict.youLayOutYour2(en, rus))}</p>`;
 }
 function refusedInquiry(x, v) {
   S.log.refusedInq.push({ id: x.id, day: S.day });
@@ -116,7 +128,7 @@ function refusedInquiry(x, v) {
   weighWord(x, v, 'refused');
   pullTo('tongues', TENOR.pulls.refused);
   const grudge = grudgeOf(x);
-  if (x.role === 'cult') Suspicion.alertCult(RULES.verdict.alerts, freeCult());
+  if (x.role === 'cult') Suspicion.alertCult(RULES.verdict.alerts, freeCult(), { kind: 'inquiry', route: 'public', about: x.id });
   const likedBest = ids => ids.slice().sort((a, b) => Ties.likes(b, x.id) - Ties.likes(a, x.id))[0],
     against = likedBest(v.against),
     sp = C(against || likedBest(v.silent)),

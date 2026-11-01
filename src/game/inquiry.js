@@ -1,4 +1,3 @@
-// game/inquiry.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const markSay = c => (c.mark === 'foe' ? __text('youMarkedThemASuspect') : c.mark === 'ally' ? __text('youMarkedThemAnAlly') : '');
 function inquiryScene() {
   emit('inquiry');

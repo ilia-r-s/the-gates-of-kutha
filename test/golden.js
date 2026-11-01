@@ -1,21 +1,23 @@
 // Golden transcripts: seeded scripted playthroughs that capture everything a player can read (the scene, the
-// choices, the meters, the site plan, every casebook tab, the page's own words) at every step.
-//   node test/golden.js record [--lang=ru]   record from the current build into test/golden/<lang>.json.gz
+// choices, meters and site plan) at every step; all casebook tabs and page chrome every fifth step.
+//   node test/golden.js record [--lang=ru]   record into test/golden/<current-version>/<lang>.json.gz
 //   node test/golden.js check  [--lang=ru]   replay and report every difference from the recording
 //   node test/golden.js leaks  [switchAt]    replay in Russian (switching at step switchAt) and report untranslated text
 // --page=path plays another build instead of the built game.
-// A refactor must leave both recordings identical; a change to the game must be re-recorded on purpose.
+// --baseline=original checks the immutable historical set; intentional changes use separately reviewed release fixtures.
 const fs = require('fs'),
   path = require('path'),
   zlib = require('zlib');
 const { run, open, args, shownOnly } = require('./lib/harness');
+const { baseline } = require('./lib/baselines');
 const a = args({ lang: 'en' }),
   mode = a._[0] || 'check',
   switchAt = a._[1] || 0,
   lang = mode === 'leaks' ? 'ru' : a.lang;
 const SEEDS = process.env.SEEDS ? process.env.SEEDS.split(',').map(Number) : [11, 23, 37, 41, 59, 73, 97, 131],
   STEPS = 170;
-const FILE = path.join(__dirname, 'golden', `${lang}.json.gz`);
+const BASELINE = baseline('golden', { lang, version: a.baseline, record: mode === 'record' }),
+  FILE = BASELINE.file;
 
 // One season, played in the page from start to end: what a player can read at every step (everything, the casebook
 // tabs and the page's own words included, every fifth step), then a choice made by a seeded generator. Russian from

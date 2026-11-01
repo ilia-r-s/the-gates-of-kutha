@@ -320,7 +320,7 @@
       }
     ]
   },
-  "text": "признался",
-  "text2": "призналась",
-  "tonightIWillKeepItBy": [" Tonight I will keep it by your tent.", " Этой ночью я посижу с ней у вашей палатки."]
+  "tonightIWillKeepItBy": [" Tonight I will keep it by your tent.", " Этой ночью я посижу с ней у вашей палатки."],
+  "confessedMasculineRu": "признался",
+  "confessedFeminineRu": "призналась"
 }

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "kind": "decision-tree",
+  "rules": [
+    {
+      "decision": "dialog.confidence",
+      "tree": {
+        "if": { "field": "trust", "op": "gte", "value": 1 },
+        "then": { "probability": 0.8 },
+        "else": { "probability": 0.4 }
+      }
+    },
+    {
+      "decision": "cult.target.player",
+      "tree": {
+        "if": { "field": "knownActivities", "op": "gte", "value": 4 },
+        "then": { "probability": 0.25 },
+        "else": { "probability": 0.1 }
+      }
+    }
+  ]
+}

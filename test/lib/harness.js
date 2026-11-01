@@ -1,7 +1,7 @@
-// Shared plumbing for the browser tests and simulators: one Chromium, pages with the game loaded and web fonts
+// Shared plumbing for browser tests and simulators: isolated pages, configurable browser engines and web fonts
 // blocked (or, for pictures, served from the @fontsource packages), page errors collected, and the in-page helpers
 // (test/lib/inpage.js) installed as window.__T.
-const { chromium } = require('playwright');
+const { chromium, firefox, webkit } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('node:url');
@@ -11,13 +11,35 @@ const { hasFailures } = require('./report');
 const FILE = path.join(ROOT, GAME_FILE);
 
 function browserOptions() {
+  if (process.platform === 'darwin' && process.env.CODEX_SANDBOX === 'seatbelt')
+    throw new Error(
+      'Browser launch blocked before starting Chrome: the macOS Codex sandbox aborts application registration. ' +
+        'Run the browser check through an approved unsandboxed process, or connect to its isolated KUTHA_BROWSER_WS server. ' +
+        'Node checks can remain sandboxed.'
+    );
+  const name = process.env.KUTHA_BROWSER || 'chromium';
+  if (!['chromium', 'firefox', 'webkit'].includes(name)) throw new Error(`Unknown KUTHA_BROWSER: ${name}`);
+  if (name !== 'chromium') {
+    const options = process.env.KUTHA_BROWSER_EXECUTABLE ? { executablePath: process.env.KUTHA_BROWSER_EXECUTABLE } : {};
+    if (name === 'firefox' && process.platform === 'darwin') {
+      // -profile does not isolate Gecko's macOS app-data bookkeeping from the owner's real Firefox directory.
+      const isolated = path.join(ROOT, '.local', 'browser-state', 'firefox');
+      fs.mkdirSync(isolated, { recursive: true });
+      options.env = { ...process.env, CFFIXED_USER_HOME: isolated };
+    }
+    return options;
+  }
   const localChrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
   const executablePath =
     process.env.KUTHA_BROWSER_EXECUTABLE ||
     (!fs.existsSync(chromium.executablePath()) && fs.existsSync(localChrome) ? localChrome : undefined);
   return { args: ['--autoplay-policy=no-user-gesture-required'], ...(executablePath ? { executablePath } : {}) };
 }
-const launch = () => (process.env.KUTHA_BROWSER_WS ? chromium.connect(process.env.KUTHA_BROWSER_WS) : chromium.launch(browserOptions()));
+const launch = () => {
+  const engine = { chromium, firefox, webkit }[process.env.KUTHA_BROWSER || 'chromium'];
+  if (!engine) throw new Error(`Unknown KUTHA_BROWSER: ${process.env.KUTHA_BROWSER}`);
+  return process.env.KUTHA_BROWSER_WS ? engine.connect(process.env.KUTHA_BROWSER_WS) : engine.launch(browserOptions());
+};
 const fastEngine = () => process.env.KUTHA_ENGINE !== 'browser' && !process.argv.includes('--engine=browser');
 const launchFast = () => (fastEngine() ? Promise.resolve({ node: true, async close() {} }) : launch());
 const openNode = (_browser, options = {}) => require('./node').openNode({ ...options, file: path.resolve(ROOT, options.file || FILE) });
@@ -58,8 +80,8 @@ async function serveFonts(page) {
   });
 }
 
-// A page with the game on it. seed fixes the game's dice; mathSeed fixes Math.random too (music, test policies);
-// fonts: 'block' (the tests: the system's fonts, the same everywhere) or 'local' (the game's own, for pictures).
+// A page with the game on it. seed fixes the default expedition; mathSeed fixes presentation Math.random.
+// Policies can inject their own seeded generators. Fonts: 'block' uses host fallbacks; 'local' serves packaged typefaces.
 async function open(
   browser,
   {
@@ -98,6 +120,7 @@ async function open(
     }, mathSeed);
   }
   await page.goto(pathToFileURL(path.resolve(ROOT, file || FILE)).href);
+  await page.addScriptTag({ path: path.join(__dirname, 'random.js') });
   if (helpers) await page.addScriptTag({ path: path.join(__dirname, 'inpage.js') });
   if (lang) await page.evaluate(l => setLang(l), lang);
   return { page, errors };

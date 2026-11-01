@@ -1,6 +1,8 @@
-// people/cunning.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const craft = c => CRAFT[temperOf(c)];
 function framedBy(actor, target) {
+  // One deliberate plant by each actor. Natural stray objects and the thief keep
+  // the same visible channel ambiguous; no follow-up remark identifies the plant.
+  if (S.clues.some(c => c.source === 'plant' && c.by === actor.id)) return null;
   const pool = freeChars().filter(o => o.role !== 'cult' && o.id !== target && !inYourTent(o.id)),
     f = S.plots.find(p => p.kind === 'frame' && !p.done && S.day <= p.until && pool.some(o => o.id === p.id));
   if (f && chance(RULES.night.dreamers.framePlants)) {
@@ -8,7 +10,18 @@ function framedBy(actor, target) {
     return C(f.id);
   }
   if (!chance(craft(actor).plant * cultTurns('sleuth'))) return null;
-  return pool.length ? Ties.pickByLike(actor, pool, -1) : null;
+  return pool.length
+    ? C(
+        wpick(
+          boundedAim(
+            pool,
+            () => 1,
+            o => Ties.dislikes(actor, o) || Suspicion.threat.shown(o, actor),
+            RULES.influence.aim
+          )
+        )
+      )
+    : null;
 }
 const sloppy = actor => chance(craft(actor).sloppy);
 const tidy = actor => chance(craft(actor).tidy);
@@ -22,12 +35,12 @@ function betrayal(cult) {
   if (!chance(N.betray * craft(killer).sacrifice * less)) return null;
   return { killer: killer, victim: victim };
 }
-const cultHeat = () => Math.max(0, ...freeCult().map(k => Suspicion.suspectedBy(k).length));
+const cultHeat = () => Math.max(0, ...freeCult().map(k => Suspicion.threat.exposure(k).length));
 function dreamerDanger(c, heat = cultHeat()) {
   const K = RULES.night.dreamers,
     known = Suspicion.dreamsKnown(c);
   if (!known) return 0;
-  const doubters = freeChars().filter(o => o.id !== c.id && o.role !== 'cult' && Suspicion.wonders(o, c)).length;
+  const doubters = Suspicion.threat.exposure(c).filter(o => o.role !== 'cult').length;
   return (
     known *
     clamp(1 + K.credit * Suspicion.credit(c), K.creditMin, K.creditMax) *
@@ -97,7 +110,7 @@ function cultTurns(k) {
 }
 function liesLow(night) {
   const Q = RULES.night.low,
-    hot = night.cult.map(k => [k, Suspicion.suspectedBy(k.id).length]).sort((a, b) => b[1] - a[1])[0],
+    hot = night.cult.map(k => [k, Suspicion.threat.exposure(k).length]).sort((a, b) => b[1] - a[1])[0],
     caught = S.log.accused.find(a => a.right && a.day === S.day),
     ahead = S.doom >= RULES.start.doomWarn;
   const why = {
@@ -138,7 +151,9 @@ function volunteers() {
       ? chance(RULES.descent.foeOffers)
       : c.role === 'cult'
         ? chance(
-            craft(c).volunteer * (c.rapport ? 1 : RULES.cunning.coldOffer) * (Suspicion.suspected(c) ? RULES.cunning.suspectedOffer : 1)
+            craft(c).volunteer *
+              (c.rapport ? 1 : RULES.cunning.coldOffer) *
+              (Suspicion.threat.exposure(c).length >= RULES.suspects.many ? RULES.cunning.suspectedOffer : 1)
           )
         : chance(RULES.descent.volunteerFriend[Math.min(2, c.rapport)])
   );
@@ -205,21 +220,29 @@ function turnAtTheEnd() {
           ? bi(...TX.cunning.walksPastYouInto2(t))
           : bi(...TX.cunning.walksPastYouInto3(t));
   });
-  const ward = S.wardOf[S.patron],
-    thief = turned[0],
+  const thief = turned[0],
+    belief = Knowledge.doctrine(thief),
+    ward = belief.value.ward,
     others = S.items.filter(it => ITEMS[it].ward && it !== ward),
-    feint = () => (others.length ? pick(others) : null),
-    burnt = has(ward)
-      ? chance(D.steal)
-        ? (others.length && chance(D.feint) && feint()) || ward
-        : null
-      : chance(D.steal * D.feint)
-        ? feint()
-        : null;
+    feint = () => {
+      pretending = true;
+      return others.length ? pick(others) : null;
+    };
+  let pretending = false;
+  const burnt = has(ward)
+    ? chance(D.steal)
+      ? (others.length && chance(D.feint) && feint()) || ward
+      : null
+    : chance(D.steal * D.feint)
+      ? feint()
+      : null;
   if (burnt) {
     lose(burnt);
-    if (burnt === ward) f.stolen = ward;
-    else f.feint = burnt;
+    f.theft = { by: thief.id, belief, burnt, pretending };
+    // Truth is used only to describe the resolved outcome, after the actor chose.
+    if (burnt === S.wardOf[S.patron]) f.stolen = burnt;
+    else if (pretending) f.feint = burnt;
+    else f.mistakenTheft = burnt;
     h += bi(...TX.cunning.youReachForAnd(burnt, thief));
   }
   return { ids: f.turned, html: h };

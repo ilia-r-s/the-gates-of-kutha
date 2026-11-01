@@ -59,11 +59,7 @@ window.__T = (() => {
   const AWAY = /Go somewhere else|Never mind|Think better/;
 
   // ---------- policies: given the buttons on screen, which one to press ----------
-  // A seeded generator for the policies, so simulations repeat.
-  const lcg = seed => {
-    let x = seed >>> 0;
-    return () => (x = (x * 1103515245 + 12345) % 2147483648) / 2147483648;
-  };
+  const rng = __testRandom.random;
   const weighted = (bs, w, rnd) => {
     let r = rnd() * w.reduce((a, c) => a + c, 0),
       k = 0;
@@ -76,7 +72,7 @@ window.__T = (() => {
     return pool.length && rnd() < 0.9 ? pool[Math.floor(rnd() * pool.length)] : bs[Math.floor(rnd() * bs.length)];
   };
   // human: the way a person tends to play, with an optional lean (a pattern of buttons pressed five times as often)
-  const HUMAN = [
+  const LEGACY_HUMAN = [
     [/Examine the scene/, () => 8],
     [/Search the area/, () => 1.5],
     [/Translate a tablet/, () => 3],
@@ -94,10 +90,10 @@ window.__T = (() => {
     [/Rest in your tent/, () => (S.nerve <= 4 ? 3 : 0.6)],
     [/Convene an inquiry/, () => (S.day >= 3 ? 3 : 0.3)]
   ];
-  function humanWeight(b, all) {
+  function legacyHumanWeight(b, all) {
     const t = text(b);
     if (/Speak with/.test(t)) return 4.5 / all.filter(o => /Speak with/.test(text(o))).length;
-    for (const [re, w] of HUMAN) if (re.test(t)) return w();
+    for (const [re, w] of LEGACY_HUMAN) if (re.test(t)) return w();
     if (/^.?Accuse /.test(t)) {
       const c = freeChars().find(x => t.includes(x.name));
       return c && c.role === 'cult' ? 3 : 1;
@@ -115,14 +111,65 @@ window.__T = (() => {
     }
     return 1;
   }
-  const human =
+  const legacyHuman =
     (rnd, lean = null) =>
     bs =>
       weighted(
         bs,
-        bs.map(b => humanWeight(b, bs) * (lean && lean.test(text(b)) ? 5 : 1)),
+        bs.map(b => legacyHumanWeight(b, bs) * (lean && lean.test(text(b)) ? 5 : 1)),
         rnd
       );
+  // Read the current visible choice in a canonical language, so a language switch
+  // changes presentation, not the simulated person's decisions. X only translates;
+  // it neither renders the scene nor advances either game stream.
+  function observe(bs = buttons()) {
+    const lang = LANG;
+    try {
+      LANG = 'en';
+      const choices = bs.map(b => {
+        const c = S_ui.scene?.choices?.[+b.dataset.i];
+        return c ? plain(X(c.label || c.html || '')) : text(b);
+      });
+      // meterWord renders both languages plus hidden width-stabilizing twins.
+      // Read its selected English catalog entry, not all hidden span contents.
+      const condition = S ? Object.fromEntries(Object.entries(meterState()).map(([k, [i]]) => [k, plain(X(METER_SAY[k][i][0]))])) : null;
+      return { choices, phase: S?.phase, day: S?.day, slot: S?.slot, fragments: S?.fragments || 0, condition };
+    } finally {
+      LANG = lang;
+    }
+  }
+  // This policy has no access to identities, the power, or ward assignments. Its
+  // inputs are offered actions, the calendar and the carried tablet fragments.
+  const HABITS = [
+    [/Examine the scene/, 8],
+    [/Search the area/, 1.5],
+    [/Translate a tablet/, 3],
+    [/Ask where they were/, 3.5],
+    [/Make conversation/, 2],
+    [/Ask whom they distrust/, 1.5],
+    [/Take your leave/, 0.5],
+    [/Never mind|Think better|Not now/, 0.2],
+    [/Look for/, 2],
+    [/Name no power/, 0.5],
+    [/counter-rite/, 2],
+    [/scene of last|where Crane/, 6],
+    [/Drink from the brandy|Go somewhere else/, 0.3],
+    [/Rest in your tent/, 0.6]
+  ];
+  function humanWeights(o, lean = null) {
+    return o.choices.map(t => {
+      let w = 1;
+      if (/Speak with/.test(t)) w = 4.5 / o.choices.filter(s => /Speak with/.test(s)).length;
+      else if (/Convene an inquiry/.test(t)) w = o.day >= 3 ? 3 : 0.3;
+      else if (o.phase === 'plan' && /Expedition camp/.test(t)) w = 1 + (o.slot === 2 && o.day >= 3 ? 3 : 0) + (o.fragments ? 1.5 : 0);
+      else w = HABITS.find(([re]) => re.test(t))?.[1] || 1;
+      return w * (lean && lean.test(t) ? 5 : 1);
+    });
+  }
+  const human =
+    (rnd, lean = null) =>
+    bs =>
+      weighted(bs, humanWeights(observe(bs), lean), rnd);
   const LEANS = {
     inquisitor: /Press (?:them|him|her)|Convene an inquiry|Accuse|Turn and face|Ask whom they distrust/,
     quiet: /Rest in your tent|Never mind|Think better|Not now|Go down slowly|Cover your light|Keep walking/,
@@ -174,5 +221,18 @@ window.__T = (() => {
     }
     return !!S.ended;
   }
-  return { scan, watchScenes, scanBook, buttons, start, play, lcg, policies: { random, human, cheat }, LEANS };
+  return {
+    scan,
+    watchScenes,
+    scanBook,
+    buttons,
+    start,
+    play,
+    rng,
+    observe,
+    humanWeights,
+    policies: { random, human, cheat },
+    LEANS,
+    legacy: { lcg: __testRandom.legacyLcg, human: legacyHuman }
+  };
 })();

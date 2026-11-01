@@ -12,7 +12,6 @@ const Record = (() => {
     }
     S.testimony.push({ day: S.day, from: from, about: about, kind: kind, verdict: verdict });
   }
-  const about = (c, f) => S.testimony.filter(t => t.about === c.id && f(t)).length;
   const KINDS = {
     vision: {
       chip: (t, a, f, fr) => (t.verdict === 'cult' ? ['bad', __text('dreamtGuiltyD')] : ['good', __text('dreamtCleanD')]),
@@ -263,7 +262,6 @@ const Record = (() => {
   }
   return {
     testify: testify,
-    about: about,
     kind: k => KINDS[k],
     addTrace: addTrace,
     ruledOut: ruledOut,

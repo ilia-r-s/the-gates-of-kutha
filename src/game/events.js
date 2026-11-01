@@ -1,4 +1,3 @@
-// game/events.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const EVENT_OK = {
   inspector: () => S.fragments > 0,
   wireless: () => S.doom >= RULES.start.doomStir,

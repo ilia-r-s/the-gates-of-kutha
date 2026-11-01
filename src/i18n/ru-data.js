@@ -1,4 +1,3 @@
-// i18n/ru-data.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 zipRU(
   {
     TRAITS: TRAITS,

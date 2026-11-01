@@ -1,16 +1,18 @@
-// Immutable fingerprints captured from the original 28.5.1 page, before cleanup or library changes.
+// Compare with the reviewed current release, keeping original fingerprints immutable.
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { openNode } = require('./lib/harness');
+const { openNode, args } = require('./lib/harness');
 const { cases, caseId, play, fingerprint } = require('./lib/season');
-const baseline = require('./fixtures/seasons.json');
+const a = args({});
+const selected = require('./lib/baselines').baseline('seasons', { version: a.baseline });
+const baseline = require(selected.file);
 const origin = require('./fixtures/recovery.json');
 
-test('all 48 seeded seasons preserve original choices, state and both dice streams', async () => {
-  assert.equal(baseline.referenceSha256, origin.sha256);
+test(`all 48 seeded seasons preserve reviewed ${selected.version} choices, state and both dice streams`, async () => {
+  assert.equal(selected.original ? baseline.referenceSha256 : baseline.originalReferenceSha256, origin.sha256);
   assert.equal(Object.keys(baseline.seasons).length, cases.length);
   for (const input of cases) {
-    const { page, errors } = await openNode(null, { seed: input.seed, mathSeed: input.seed });
+    const { page, errors } = await openNode(null, { seed: input.seed, mathSeed: input.seed, file: a.page });
     try {
       const result = await page.evaluate(play, input);
       assert.ok(result.ended, `unfinished season ${caseId(input)}`);

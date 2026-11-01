@@ -1,4 +1,3 @@
-// data/endings.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const END_IDS = __text('END_IDS');
 const END_OLD = __text('END_OLD');
 const END_TITLES = __text('END_TITLES');
@@ -98,7 +97,7 @@ function endStory(id, how) {
     case 'fallen-night': {
       const fr = Ties.friendsNow().sort((x, y) => y.rapport - x.rapport)[0],
         hm = C('hamid'),
-        who = fr ? [fr.short, ru.c(fr)] : isFree(hm) ? ['Hamid', __text('text')] : __text('oneOfThePickmen'),
+        who = fr ? [fr.short, ru.c(fr)] : isFree(hm) ? ['Hamid', __text('hamidNameRu')] : __text('oneOfThePickmen'),
         tr = END_TRACE[asp] || END_TRACE.fire,
         museum = p(bi(E.death.text[1])),
         way = nightDeath(),

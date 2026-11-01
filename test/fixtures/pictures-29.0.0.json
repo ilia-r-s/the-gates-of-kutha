@@ -1,0 +1,71 @@
+{
+  "title": {
+    "pageSeed": 7,
+    "frame": "art"
+  },
+  "talk": {
+    "seed": 23,
+    "pageSeed": 7,
+    "background": 0,
+    "hardcore": false,
+    "clicks": [0, 5, 0, 0, 3, 2],
+    "phase": "talk",
+    "title": "Dr Ilse Brandt",
+    "frame": "stage",
+    "mood": "cold",
+    "contains": "standing in my light",
+    "fullScene": true
+  },
+  "morning": {
+    "seed": 1,
+    "pageSeed": 7,
+    "background": 0,
+    "hardcore": false,
+    "clicks": [0, 3, 0, 0, 1, 0, 0, 0, 1, 1, 0],
+    "phase": "night",
+    "title": "Night, and morning",
+    "frame": "stage",
+    "fullScene": true,
+    "contains": "Every watch and clock in the camp stopped"
+  },
+  "tablet": {
+    "seed": 2,
+    "pageSeed": 7,
+    "background": 0,
+    "hardcore": false,
+    "clicks": [0, 4, 1, 0, 0, 0, 0, 0, 2, 0],
+    "phase": "result",
+    "title": "Translation",
+    "frame": "stage",
+    "fullScene": true
+  },
+  "casebook": {
+    "seed": 2,
+    "pageSeed": 7,
+    "background": 0,
+    "hardcore": false,
+    "clicks": [
+      0, 4, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 1, 2, 6, 0, 0, 0, 0, 3, 1, 0, 4, 1, 1, 0, 0, 0, 2, 1, 4, 1, 1, 1, 0, 0, 0, 0, 0, 5, 2, 0, 0, 4, 0,
+      0, 0, 0
+    ],
+    "phase": "plan",
+    "title": "Where will you go?",
+    "frame": "notebook",
+    "height": 900
+  },
+  "below": {
+    "seed": 5,
+    "pageSeed": 7,
+    "background": 0,
+    "hardcore": false,
+    "clicks": [
+      0, 5, 0, 0, 3, 2, 2, 7, 0, 0, 0, 1, 0, 0, 0, 0, 5, 0, 0, 6, 1, 1, 3, 3, 4, 0, 0, 4, 0, 0, 0, 5, 2, 5, 0, 0, 0, 4, 0, 0, 0, 1, 1, 2, 0,
+      0, 0, 6, 0, 0, 3, 0, 0, 2, 1, 4, 5, 4, 0, 0, 0, 2, 2, 4
+    ],
+    "phase": "descent",
+    "title": "The first gate",
+    "frame": "stage",
+    "fullScene": true,
+    "companions": ["yusuf"]
+  }
+}

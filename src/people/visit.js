@@ -1,4 +1,3 @@
-// people/visit.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function visitTonight() {
   const VR = RULES.visit;
   if (S.log.visit || S.day < VR.from || deedTonight()) return null;
@@ -93,14 +92,14 @@ function herNight(night) {
   const h = night.guest;
   if (chance(RULES.visit.found)) {
     night.loc = 'camp';
-    if (Watch.holds(night, 'player')) {
-      night.saved = 'watch';
+    night.saved = Watch.holds(night, 'player') ? 'watch' : Watch.spared() ? 'luck' : null;
+    recordBetrayal(night);
+    if (night.saved === 'watch') {
       S.log.visit.found = 'watch';
       S.log.guarded.push({ day: S.day, id: h.id });
       return bi(...TX.visit.inTheSmallHours2(h));
     }
-    if (Watch.spared()) {
-      night.saved = 'luck';
+    if (night.saved === 'luck') {
       S.log.visit.found = 'luck';
       S.log.spared.push({ day: S.day, id: h.id });
       return bi(...TX.visit.inTheSmallHours3(h));
@@ -111,6 +110,7 @@ function herNight(night) {
     return bi(...TX.visit.youWakeInThe(h)) + hurt(...RULES.harm.diedBeside, { k: 'herDeath', id: h.id });
   }
   night.saved = 'away';
+  recordBetrayal(night);
   S.log.visit.empty = true;
   S.log.spared.push({ day: S.day, id: h.id, away: true });
   night.at = __text('outsideHerTent');

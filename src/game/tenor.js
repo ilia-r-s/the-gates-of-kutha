@@ -1,4 +1,3 @@
-// game/tenor.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const STRAND_MOOD = { dread: 'haunted', talk: 'tongues', news: 'world' };
 function dealTenor() {
   const mood = wpick(TENOR.start);
@@ -9,13 +8,31 @@ function dealTenor() {
     quiet: true,
     log: [{ day: 1, mood: mood }],
     crowd: 0,
+    nightCrowd: 0,
     after: {},
     feud: null,
     dust: null
   };
 }
 const tenorMood = () => (S && S.tenor ? S.tenor.mood : 'uneasy');
-const room = (s = null) => (s && TENOR.moods[S.tenor.mood][s] > 1 ? TENOR.crowdFav : TENOR.crowd) ** S.tenor.crowd;
+const room = (s = null, used = S.tenor.crowd) => (s && TENOR.moods[S.tenor.mood][s] > 1 ? TENOR.crowdFav : TENOR.crowd) ** used;
+// Atmospheric additions share the same crowd formula without spending the
+// separate opportunities for investigation finds and character testimony.
+const NIGHT_ATMOSPHERE = Decisions.define({
+  id: 'night.atmosphere',
+  action: 'deliver-optional-atmosphere',
+  subject: 'world',
+  authority: 'world',
+  knowledge: ['already delivered atmospheric passages and required night consequences'],
+  consequences: ['optional passage delivered'],
+  probability: baseChance => baseChance * room(null, S.tenor.nightCrowd)
+});
+function nightAtmosphere(baseChance, make) {
+  if (!NIGHT_ATMOSPHERE.roll(baseChance)) return '';
+  const html = make();
+  if (html) S.tenor.nightCrowd++;
+  return html;
+}
 const brought = h => {
   if (h) S.tenor.crowd++;
   return h;

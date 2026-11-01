@@ -2,7 +2,7 @@
 // can go turning up. First every line of DOOM_FATE for each of the seven; then doom endings forced from half-played
 // seasons, every nature in turn: the epilogue scanned in both languages, nobody told twice, no line told twice, the dead
 // told as dead, and the ways counted by where the end found each of them. A way that comes seldom may not have come in the
-// seasons asked for, by the luck of the deal: then it plays on, to three times as many, until every way has turned up.
+// seasons asked for: it plays up to three times as many, then checks remaining branches with deterministic fate salts.
 // usage: node test/dooms.js [seasons]
 const { runFast: run, openFast: open, args } = require('./lib/harness');
 const A = args(),
@@ -45,8 +45,7 @@ run(async browser => {
       ways = {},
       byNat = {},
       tally = (o, k) => (o[k] = (o[k] || 0) + 1);
-    let x = 4242;
-    const rnd = k => (x = (x * 1103515245 + 12345) % 2147483648) % k;
+    const rnd = __testRandom.random(4242).int;
     // every way, by place, that must turn up at least once (but those that come seldom there: helping, of those below
     // with you)
     const want = {
@@ -59,6 +58,36 @@ run(async browser => {
     };
     const missing = () =>
       Object.entries(want).flatMap(([pool, kinds]) => kinds.filter(k => !(ways[pool] && ways[pool][k])).map(k => `${k} (${pool})`));
+    const checkDoom = nat => {
+      const D = doomFates(),
+        used = new Set();
+      Object.entries(D).forEach(([id, d]) => {
+        const c = C(id),
+          key = `${d.kind}:${d.cell ? 'cell' : d.cult ? 'cult' : d.at}:${d.line}`,
+          pool = d.cell ? 'cell' : d.cult ? 'cult' : d.at;
+        if (used.has(key)) bad.push(`${nat}: a line told twice (${key})`);
+        used.add(key);
+        if (c.status === 'taken' && d.kind !== 'unburied') bad.push(`${nat}: one of the night's dead told as ${d.kind}`);
+        if (c.status !== 'taken' && d.kind === 'unburied') bad.push(`${nat}: one alive told as unburied`);
+        if (c.takenBy === 'you') bad.push(`${nat}: the one you killed has a doom`);
+        if (c.role === 'cult' && !d.cult && !d.cell && d.kind !== 'unburied') bad.push(`${nat}: one of the cult told as the camp`);
+        if (c.role !== 'cult' && (d.cult || d.cell)) bad.push(`${nat}: one of the camp told as the cult`);
+        if (!doomLines(d, d.kind)[d.line]) bad.push(`${nat}: no words for ${key}`);
+      });
+      // every one of the seven, by where the end found them: the way it went, or none
+      S.order.map(C).forEach(c => {
+        const d = D[c.id],
+          pool = c.status === 'taken' ? 'dead' : c.role === 'cult' ? (c.status === 'exposed' ? 'cell' : 'cult') : doomAt(c),
+          kind = d ? d.kind : c.status === 'taken' ? 'buried' : 'none';
+        tally((ways[pool] = ways[pool] || {}), kind);
+        tally((byNat[nat] = byNat[nat] || {}), kind);
+      });
+      // the epilogue as it reads
+      const html = endAfter('doom-' + nat, false);
+      __T.scan(html, `doom-${nat} epilogue`, bad, seen);
+      const items = html.split('<li').length - 1;
+      if (items !== S.order.length) bad.push(`${nat}: ${items} told of, not ${S.order.length}`);
+    };
     let g = 0;
     for (; g < N || (g < 3 * N && missing().length); g++) {
       __T.start(g % 3);
@@ -103,37 +132,44 @@ run(async browser => {
       S.aspectOf[S.patron] = nat;
       S.ended = 'doom';
       S.romance = romances(); // (decided at the end, as ending() decides it: game/endings.js)
-      const D = doomFates(),
-        used = new Set();
-      Object.entries(D).forEach(([id, d]) => {
-        const c = C(id),
-          key = `${d.kind}:${d.cell ? 'cell' : d.cult ? 'cult' : d.at}:${d.line}`,
-          pool = d.cell ? 'cell' : d.cult ? 'cult' : d.at;
-        if (used.has(key)) bad.push(`${nat}: a line told twice (${key})`);
-        used.add(key);
-        if (c.status === 'taken' && d.kind !== 'unburied') bad.push(`${nat}: one of the night's dead told as ${d.kind}`);
-        if (c.status !== 'taken' && d.kind === 'unburied') bad.push(`${nat}: one alive told as unburied`);
-        if (c.takenBy === 'you') bad.push(`${nat}: the one you killed has a doom`);
-        if (c.role === 'cult' && !d.cult && !d.cell && d.kind !== 'unburied') bad.push(`${nat}: one of the cult told as the camp`);
-        if (c.role !== 'cult' && (d.cult || d.cell)) bad.push(`${nat}: one of the camp told as the cult`);
-        if (!doomLines(d, d.kind)[d.line]) bad.push(`${nat}: no words for ${key}`);
-      });
-      // every one of the seven, by where the end found them: the way it went, or none
-      S.order.map(C).forEach(c => {
-        const d = D[c.id],
-          pool = c.status === 'taken' ? 'dead' : c.role === 'cult' ? (c.status === 'exposed' ? 'cell' : 'cult') : doomAt(c),
-          kind = d ? d.kind : c.status === 'taken' ? 'buried' : 'none';
-        tally((ways[pool] = ways[pool] || {}), kind);
-        tally((byNat[nat] = byNat[nat] || {}), kind);
-      });
-      // the epilogue as it reads
-      const html = endAfter('doom-' + nat, false);
-      __T.scan(html, `doom-${nat} epilogue`, bad, seen);
-      const items = html.split('<li').length - 1;
-      if (items !== S.order.length) bad.push(`${nat}: ${items} told of, not ${S.order.length}`);
+      checkDoom(nat);
     }
+    // Preserve all random seasons above. For an unobserved rare branch, enumerate
+    // deterministic fate salts in a concrete scenario and run the same resolver,
+    // bilingual epilogue and consistency assertions. No outcome is mocked.
+    const targeted = [];
+    for (const [pool, kinds] of Object.entries(want))
+      for (const kind of kinds) {
+        if (ways[pool]?.[kind]) continue;
+        newGame('Marlowe', 'philologist', false, 4242);
+        const c = C('hamid');
+        c.role = ['cult', 'cell'].includes(pool) ? 'cult' : 'bystander';
+        c.status = pool === 'dead' ? 'taken' : pool === 'cell' ? 'exposed' : pool === 'away' ? 'dismissed' : 'present';
+        if (pool === 'dead') {
+          c.takenDay = 1;
+          c.takenBy = 'cult';
+        }
+        S.order = [c.id, ...S.order.filter(id => id !== c.id)];
+        if (pool === 'heart') S.fin = { comp: [c.id], took: [c.id], left: [], acts: [], named: S.patron, g3: null };
+        S.ended = 'doom';
+        S.romance = { you: null, pairs: [], mourn: [] };
+        const nat = NATS[0];
+        S.aspectOf[S.patron] = nat;
+        let found = false;
+        for (let salt = 0; salt < 4096; salt++) {
+          S.salt = salt;
+          const fate = doomFates()[c.id],
+            actual = fate?.kind || (pool === 'dead' ? 'buried' : 'none');
+          if (actual !== kind) continue;
+          targeted.push({ pool, kind, salt, nature: nat });
+          checkDoom(nat);
+          found = true;
+          break;
+        }
+        if (!found) bad.push(`unreachable targeted branch: ${kind} (${pool})`);
+      }
     missing().forEach(m => bad.push(`never: ${m}`));
-    return { lines, seasons: g, asked: N, ways, byNature: byNat, problems: bad.length, bad: bad.slice(0, 40) };
+    return { lines, seasons: g, asked: N, targeted, ways, byNature: byNat, problems: bad.length, bad: bad.slice(0, 40) };
   }, N);
   if (errors.length) res.errors = errors.slice(0, 5);
   return res;

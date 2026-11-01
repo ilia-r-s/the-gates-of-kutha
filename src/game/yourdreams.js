@@ -1,4 +1,3 @@
-// game/yourdreams.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function dealYourDreams() {
   const Y = RULES.yourDreams;
   S.you = { rate: +wpick(Y.rate), truth: +wpick(Y.truth), dreams: [] };
@@ -55,7 +54,7 @@ const YOUR_DREAM = {
                     : ab < 0 || ba < 0
                       ? TX.yourdreams.stepsOffThePath(ab, a, b)
                       : TX.yourdreams.andPassEachOther(a, b);
-      return { about: a.id, en: __text('youDreamOfTheCampBy'), ru: __text('text') };
+      return { about: a.id, en: __text('youDreamOfTheCampBy'), ru: __text('daytimeCampDreamRu') };
     }
   },
   habit: {
@@ -133,7 +132,7 @@ function yourDream(night) {
       html = d.html || bi(d.en, d.ru);
     S.you.dreams.push({ night: S.day, kind: k, true: truth, html: html });
     Record.journal(html);
-    return `<p class="dream">${html}</p>`;
+    return `<p class="dream">${html}</p>` + NatureSigns.tell('dream');
   }
   return '';
 }

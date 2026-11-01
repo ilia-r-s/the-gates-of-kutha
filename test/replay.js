@@ -1,7 +1,7 @@
 // Seasons from their seeds (core/random.js). Every season is dealt and played from one seed, so a seed and a way of
 // playing it are a whole scenario: the same seed deals the same season, and the same choices play it the same way.
 //   node test/replay.js 1A2B-3C4D [--pol=human] [--bg=1] [--lang=ru] [--steps=1500]
-//        one season from its code (as the casebook and the ending page write it), played by a policy whose own choices
+//        one season from its code (shown in the casebook/ending after the secret control is pressed), with policy choices
 //        are seeded by the same code: what a player reads, scene by scene, and how it ended
 //   node test/replay.js --fuzz=300 [--from=1A2B-3C4D] [--pol=random]
 //        that many seasons, their seeds dealt from one code (or the clock): every scene and casebook page scanned in both
@@ -33,7 +33,7 @@ run(async browser => {
         const seed = parseSeed(code);
         if (seed == null) return { error: `not a season code: ${code}` };
         __T.start(+A.bg, false, seed);
-        const P = policy(__T.lcg(seed)),
+        const P = policy(__T.rng(seed)),
           lines = [];
         let step = 0;
         for (; step < A.steps && !S.ended; step++) {
@@ -69,7 +69,7 @@ run(async browser => {
         thrown = [];
         try {
           __T.start(g % 3, g % 7 === 0, seed);
-          const ok = __T.play(policy(__T.lcg(seed)), {
+          const ok = __T.play(policy(__T.rng(seed)), {
             maxSteps: A.steps,
             each: s => {
               if (s % 9 === 0) __T.scanBook(bad, seen);

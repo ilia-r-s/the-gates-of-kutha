@@ -1,0 +1,20 @@
+{
+  "messages": {
+    "unavailable": [
+      "This browser cannot save your expedition. Keep this page open to continue.",
+      "Браузер не может сохранить экспедицию. Чтобы продолжить её, оставьте эту страницу открытой."
+    ],
+    "damaged": [
+      "The saved expedition could not be resumed. You can begin a new one.",
+      "Продолжить сохранённую экспедицию не удалось. Можно начать новую."
+    ],
+    "edition": [
+      "The saved expedition belongs to another edition of the game. You can begin a new one here.",
+      "Сохранённая экспедиция относится к другой версии игры. Здесь можно начать новую."
+    ],
+    "anotherTab": [
+      "Your expedition has been saved in another tab. Continue there, or reload this page to resume that save.",
+      "Экспедиция сохранена в другой вкладке. Продолжите там или обновите эту страницу, чтобы открыть сохранение."
+    ]
+  }
+}

@@ -1,4 +1,3 @@
-// game/dread.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const dreadTier = () => (S.doom >= RULES.dread.tiers[1] ? 2 : S.doom >= RULES.dread.tiers[0] ? 1 : 0);
 function dreadP() {
   const D = RULES.dread;

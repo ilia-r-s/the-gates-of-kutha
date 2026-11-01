@@ -1,25 +1,48 @@
-// ui/intro.js: recovered build 28.5.1. See tools/show.js for individual declarations.
-function seedInAddress() {
+function seedAddressValue() {
   try {
-    const m = /[?#&]seed=([0-9a-fA-F-]{1,12})/.exec(location.search + location.hash);
-    return m ? parseSeed(m[1]) : null;
-  } catch (e) {
+    const m = /(?:^|[?#&])seed=([^&#]*)/.exec(location.search + location.hash);
+    if (!m) return null;
+    try {
+      return decodeURIComponent(m[1].replace(/\+/g, ' '));
+    } catch {
+      return m[1];
+    }
+  } catch {
     return null;
   }
 }
-let seedOpen = false;
+function seedInAddress() {
+  return parseSeed(seedAddressValue());
+}
+let seedOpen = false,
+  seedInvalid = false;
 function openSeed() {
   seedOpen = true;
   const row = document.getElementById('seedRow'),
     sd = document.getElementById('pseed');
   if (row) row.hidden = false;
+  const key = document.getElementById('seedKey');
+  if (key) key.setAttribute('aria-expanded', 'true');
   if (sd) sd.focus();
+}
+function seedFeedback(invalid) {
+  seedInvalid = invalid;
+  const input = document.getElementById('pseed'),
+    error = document.getElementById('seedError');
+  if (input) input.setAttribute('aria-invalid', String(invalid));
+  if (error) {
+    error.hidden = !invalid;
+    error.textContent = invalid ? X(__text('invalidSeasonCode')) : '';
+  }
 }
 const seasonDays = () => {
   const n = RULES.start.days;
   return TX.intro.day(n);
 };
 function introScene(seed = seedInAddress()) {
+  const code = !arguments.length && seed === null ? seedAddressValue() || '' : seed == null ? '' : seedCode(seed);
+  Session.clear();
+  resetSeasonText();
   S = null;
   S_ui.tab = 'people';
   const bgs = [
@@ -33,7 +56,7 @@ function introScene(seed = seedInAddress()) {
     { id: 'occultist', name: __text('occultist'), blurb: bi(...TX.intro.aLapsedMemberOf()), perk: bi(...TX.intro.nowAndThenFeels()) }
   ];
   show({
-    kicker: `${__text('baghdad')} <button type="button" id="seedKey" class="seedkey">·</button> ${__text('march')}`,
+    kicker: `${__text('baghdad')} <button tabindex="0" type="button" id="seedKey" class="seedkey" aria-label="${__text('showSeasonCode')}" aria-controls="seedRow" aria-expanded="${seedOpen}">·</button> ${__text('march')}`,
     kickerHtml: true,
     title: __text('theGatesOfKutha'),
     intro: true,
@@ -41,7 +64,7 @@ function introScene(seed = seedInAddress()) {
       `<p>${bi(...TX.intro.professorAldousCraneDirector())}</p>`,
       `<p>${bi(...TX.intro.sevenPeopleAreStill())}</p>`,
       `<div class="namefield"><label for="pname">${__text('yourSurname')}</label><input id="pname" type="text" maxlength="24" value="${__text('marlowe')}" autocomplete="off"></div>`,
-      `<div class="namefield" id="seedRow"${seedOpen ? '' : ' hidden'}><label for="pseed">${__text('seasonCode')}</label><input id="pseed" class="seed" type="text" maxlength="12" value="${seed == null ? '' : seedCode(seed)}" placeholder="${__text('aNewSeason')}" autocomplete="off" spellcheck="false"><span class="dim">${bi(...TX.intro.theCodeOfA())}</span></div>`,
+      `<div class="namefield" id="seedRow"${seedOpen ? '' : ' hidden'}><label for="pseed">${__text('seasonCode')}</label><input id="pseed" class="seed" type="text" value="${esc(code)}" placeholder="${__text('aNewSeason')}" autocomplete="off" spellcheck="false" aria-describedby="seedHelp seedError" aria-invalid="false"><span class="dim" id="seedHelp">${bi(...TX.intro.theCodeOfA())}</span><span class="dim" id="seedError" role="alert" hidden></span></div>`,
       `<p class="dim">${__text('chooseWhoYouAre')}</p>`
     ],
     choices: bgs.map(b => ({
@@ -51,10 +74,19 @@ function introScene(seed = seedInAddress()) {
         const el = document.getElementById('pname'),
           sd = document.getElementById('pseed');
         const nm = ((el && el.value) || 'Marlowe').trim().slice(0, 24) || 'Marlowe';
-        replyScene(nm, b.id, sd ? parseSeed(sd.value) : null);
+        const entered = sd ? sd.value.trim() : '',
+          parsed = parseSeed(entered);
+        if (seedOpen && entered && parsed === null) {
+          seedFeedback(true);
+          openSeed();
+          return;
+        }
+        replyScene(nm, b.id, parsed);
       }
     }))
   });
+  seedFeedback(!!code && parseSeed(code) === null);
+  Session.paintNotice();
 }
 function replyScene(name, bg, seed = null) {
   const go = hardcore => () => {
@@ -76,7 +108,7 @@ function replyScene(name, bg, seed = null) {
       {
         label: __text('acceptStopGodHelpMe'),
         html:
-          wire('Accept stop God help me', __text('text')) +
+          wire('Accept stop God help me', __text('acceptWireRu')) +
           `<span class="ch-sub">${bi(...TX.intro.yourCasebookWillFile())}</span>` +
           `<span class="ch-perk">${__text('theUsualWay')}</span>`,
         fn: go(false)

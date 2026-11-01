@@ -97,8 +97,9 @@ const seedCode = n => {
   return h.slice(0, 4) + '-' + h.slice(4);
 };
 function parseSeed(t) {
-  const h = String(t == null ? '' : t).replace(/[^0-9a-f]/gi, '');
-  return h.length && h.length <= 8 ? parseInt(h, 16) >>> 0 : null;
+  const code = String(t == null ? '' : t).trim();
+  if (!/^(?:[0-9a-f]{1,8}|[0-9a-f]{4}-[0-9a-f]{4})$/i.test(code)) return null;
+  return parseInt(code.replace('-', ''), 16) >>> 0;
 }
 function weighted(entries, r, { edge: edge = 'open', zero: zero = 'take', by: by = 'subtract', fallback: fallback = 'first' } = {}) {
   if (by === 'sum') {

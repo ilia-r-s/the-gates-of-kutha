@@ -29,11 +29,12 @@ The current output is therefore not claimed to match the historical fingerprint 
 ## Reconstruction
 
 The shipped JavaScript retained identifiers and syntax. Declarations were matched to surviving modules and newer
-shared systems separated into files. The 64 modules retain initialization/execution order, rules, RNG streams,
-scenes, translations, SVG and audio. Cleanup removes unused interfaces rather than introducing gameplay changes.
+shared systems separated into files. At the recovery milestone, 64 modules retained initialization/execution order,
+rules, RNG streams, scenes, translations, SVG and audio. That cleanup removed unused interfaces without introducing
+gameplay changes; the later authorized 29.0.0 changes have separate evidence.
 
-Prose, translation tables, labels and text expressions live in 51 keyed JSON catalogs under `src/text/`, expanded at
-their original expression positions during build. Formatting and module descriptions were restored. Original comments
+The recovered prose, translation tables, labels and text expressions occupied 51 keyed JSON catalogs under `src/text/`,
+expanded at their original expression positions during build. Formatting and module descriptions were restored. Original comments
 and exact historical file boundaries cannot be recovered from a build that stripped comments. Missing tests and
 narrative documentation are not claimed to be restored verbatim; surviving checks were adapted and critical contracts tested.
 
@@ -59,9 +60,11 @@ The development runtime is local Node 26.13.0 in ignored `.local/node/`; browser
 
 ## Historical documents
 
-`RULES.md` and `docs/rulebook.md` survive from release 27 and are marked historical. Current constants are in
+The [release-27 mechanics record](research/2026-10-25-mechanics-27.md) preserves the detailed historical rules. Current constants are in
 `src/rules.js`; old simulation percentages are not fresh measurements of 28.5.1. Recreating missing narrative
 documents or publication-scale balance studies is separate from reconstructing game bytes.
 
-The two research reports and the 29.0.0 plan were archived unchanged under [research/](research/README.md) and
-[plans/](plans/README.md). Their contents are context, not authorization to implement proposed rules.
+The original social-deduction and manipulation reports remain under [research/](research/README.md), alongside
+new implementation studies. Completed plans, old reviews and the duplicate historical rulebook were removed at
+the owner's request after useful evidence was consolidated. Long-term learning proposals live in the
+[roadmap](roadmap.md). Research is context, not authorization to implement new rules.

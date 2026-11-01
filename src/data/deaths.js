@@ -1,4 +1,3 @@
-// data/deaths.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const DEATH_FOUND = __text('DEATH_FOUND');
 const DEATH_FOUND_YOU = __text('DEATH_FOUND_YOU');
 const DEATH_BODY = __text('DEATH_BODY');

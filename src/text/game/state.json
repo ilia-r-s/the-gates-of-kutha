@@ -22,8 +22,8 @@
     "$call": "bi",
     "$args": ["Your nerve steadies a little", "Нервы немного успокаиваются"]
   },
-  "text": "Нервы сильно сдают",
-  "text2": "Нервы сдают",
-  "text3": "Вы тяжело ранены",
-  "text4": "Вы ранены"
+  "nerveBreakingRu": "Нервы сильно сдают",
+  "nerveShakenRu": "Нервы сдают",
+  "woundsSevereRu": "Вы тяжело ранены",
+  "woundedRu": "Вы ранены"
 }

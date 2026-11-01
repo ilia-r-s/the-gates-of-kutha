@@ -1,5 +1,6 @@
 {
   "CHROME": [
+    ["#viewpointBtn", "twin", "First-person view", "Вид от первого лица"],
     ["#nowPlaying", "title", "Now playing", "Сейчас играет"],
     ["#meters", "aria-label", "Your condition", "Ваше состояние"],
     [
@@ -14,11 +15,21 @@
       "Tell Ibrahim, ancient Kutha · site plan, spring 1926 · initials show who is where",
       "Телль-Ибрагим, древняя Кута · план раскопа, весна 1926 · инициалы показывают, кто где"
     ],
-    [".casebook", "aria-label", "Casebook", "Журнал"]
+    [".casebook", "aria-label", "Casebook", "Журнал"],
+    [".tabs", "aria-label", "Casebook sections", "Разделы журнала"],
+    ["#casebookBtn", "aria-label", "Open casebook and settings", "Открыть журнал и настройки"],
+    ["#newExpedition", "twin", "Begin a new expedition", "Начать новую экспедицию"],
+    ["#leaveTitle", "twin", "Leave this expedition behind?", "Оставить эту экспедицию?"],
+    [
+      "#leaveCopy",
+      "twin",
+      "This expedition cannot be resumed after you begin again.",
+      "После нового начала вернуться к этой экспедиции уже не получится."
+    ],
+    ["#keepExpedition", "twin", "Keep this expedition", "Продолжить эту экспедицию"],
+    ["#confirmNewExpedition", "twin", "Begin again", "Начать заново"]
   ],
-  "text": "Врата Куты",
-  "text2": "Читать по-русски",
-  "text3": "Марлоу",
-  "text4": "Марлоу",
-  "text5": "Русский"
+  "gameTitleRu": "Врата Куты",
+  "switchToRussian": "Читать по-русски",
+  "russianLanguageName": "Русский"
 }

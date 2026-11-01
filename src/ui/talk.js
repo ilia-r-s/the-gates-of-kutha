@@ -1,4 +1,3 @@
-// ui/talk.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 function titlePick(c, st, ask) {
   talkScene(
     c,

@@ -154,8 +154,8 @@
     "theyArePeopleToo": {
       "$args": [],
       "$value": [
-        "They are people, too. Some are honest to a fault and some lie for the pleasure of it; some will take to you and some will not, and all of them talk, about you and about each other. Gossip is only as good as the gossip. Whatever you do to one of them, their friends will have heard by morning.",
-        "И все они — люди. Кто-то честен до безрассудства, а кто-то лжёт из любви к искусству; кто-то к вам расположится, а кто-то нет, — и все они говорят: о вас и друг о друге. Сплетня стоит ровно столько, сколько сплетник. А о том, как вы обошлись с одним из них, к утру узнают его друзья."
+        "They are people, too. Some are honest to a fault and some lie for the pleasure of it; some will take to you and some will not, and all of them talk, about you and about each other. Gossip is only as good as the gossip. Whatever you do to one of them, their friends may hear of it by morning.",
+        "И все они — люди. Кто-то честен до безрассудства, а кто-то лжёт из любви к искусству; кто-то к вам расположится, а кто-то нет, — и все они говорят: о вас и друг о друге. Сплетня стоит ровно столько, сколько сплетник. А о том, как вы обошлись с одним из них, к утру могут узнать его друзья."
       ]
     },
     "yourCasebookKeepsOnly": {
@@ -249,5 +249,16 @@
     "$call": "bi",
     "$args": ["Walk out onto the tell", "Выйти на холм"]
   },
-  "text": "Принимаю тчк помоги мне Бог"
+  "acceptWireRu": "Принимаю тчк помоги мне Бог",
+  "showSeasonCode": {
+    "$call": "bi",
+    "$args": ["Enter a season code", "Ввести код сезона"]
+  },
+  "invalidSeasonCode": {
+    "$call": "bi",
+    "$args": [
+      "Use one to eight hexadecimal digits (0–9, A–F), or a code such as C0DE-0001. Leave it empty for a new season.",
+      "Введите от одной до восьми шестнадцатеричных цифр (0–9, A–F) или код вида C0DE-0001. Для нового сезона оставьте поле пустым."
+    ]
+  }
 }

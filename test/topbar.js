@@ -1,10 +1,24 @@
-// The top panel and the casebook tabs stay where they are when the language changes, or the music is switched off:
-// every indicator is measured before and after, at desktop, tablet and phone widths (the tabs within the casebook's own
-// bar, which on a narrow screen sits below the scene and goes down with a longer telling of it).
+// The scene header and visible notebook controls stay in place across language/audio changes.
+// Every indicator is measured at desktop, tablet and phone widths; tabs are measured within their own bar.
 //   usage: node test/topbar.js [--page=path]   (another build instead of the built game)
 const { run, open, args } = require('./lib/harness');
 const PAGE = args().page;
-const SEL = ['.brand', '#musicBtn', '#sfxBtn', '#langBtn', '#nowPlaying', '#meters', '.meter', '.m-label', '.m-say', '.tab'];
+const SEL = [
+  '.brand',
+  '#casebookBtn',
+  '#notebookTitle',
+  '#closeCasebook',
+  '#musicBtn',
+  '#sfxBtn',
+  '#viewpointBtn',
+  '#langBtn',
+  '#nowPlaying',
+  '#meters',
+  '.meter',
+  '.m-label',
+  '.m-say',
+  '.tab'
+];
 
 run(async browser => {
   const bad = [];
@@ -18,14 +32,14 @@ run(async browser => {
       AU.on.music = true;
       AU.cur = { id: 'hijaz' };
       auButtons();
+      if (typeof openCasebook === 'function') openCasebook();
     });
     const measure = () =>
       page.evaluate(
         sel =>
           sel.flatMap(s =>
             [...document.querySelectorAll(s)].map((e, i) => {
-              // (the casebook's tabs, where its bar is: below the scene on a narrow screen, they go down with a longer
-              // telling of it, as they should, but never move within their own bar)
+              // Content length may move the tab bar; language must not move individual tabs within it.
               const r = e.getBoundingClientRect(),
                 bar = s === '.tab' && e.closest('.casebook'),
                 top = bar ? bar.getBoundingClientRect().y : 0;

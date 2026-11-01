@@ -1,4 +1,3 @@
-// game/fates.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const fateOf = (a, ...k) => hashPick(a, S.salt, ...k);
 const fateRoll = (...k) => hash01(S.salt, ...k);
 const sayFate = (line, ...about) => bi(...(typeof line === 'function' ? line(...about) : line));
@@ -106,7 +105,7 @@ function endFate(c, ctx) {
   else t = sayFate(fateOf(END_LIFE[c.id][won ? 'win' : 'lose'], c.id));
   const love = S.romance;
   if (c.status === 'present' && c.role !== 'cult') {
-    if (love.you === c.id) t += ' ' + sayFate(away ? away.love : FATE_LOVE[c.id] || FATE_LOVE.any);
+    if (love.you === c.id) t += ' ' + sayFate(away ? away.love : FATE_LOVE[c.id]);
     else if (Ties.friend(c) && Ties.sweetOnYou(c)) t += ' ' + sayFate(away ? away.soft : FATE_SOFT[c.id] || FATE_SOFT.any);
     else if (Ties.friend(c))
       t +=
@@ -258,7 +257,7 @@ function endFateCult(c, { id: id, won: won, shot: shot }) {
     N = capS(ru.cf(c)),
     he = c.p,
     He = EP.He(c),
-    on = ru.gs(c, __text('text'), __text('text2'));
+    on = ru.gs(c, __text('heRu'), __text('sheRu'));
   const second = S.order.filter(x => C(x).role === 'cult' && C(x).status === 'present' && !(shot && shot.id === x)).indexOf(c.id) === 1;
   if (shot && shot.id === c.id) return bi(...TX.fates.diesWhereFellThe(n, he, N, c));
   if (id === 'burned') return second ? bi(...TX.fates.bodyIsTheOnly(n, c)) : bi(...TX.fates.isNeverFoundThe(n, c));
@@ -434,7 +433,12 @@ function youCodas(won, last = null, later = {}) {
   const gr = Ties.friendsLost().pop();
   if (gr) add('grave', gr, YW.grave);
   const g3 = S.fin && S.fin.g3,
-    left = S.fin ? S.fin.left.filter(id => !(g3 && g3.kind === 'comp' && g3.id === id) && C(id).role !== 'cult') : [],
+    dooms = S.ended === 'doom' ? doomFates() : {},
+    left = S.fin
+      ? S.fin.left.filter(
+          id => !(g3 && g3.kind === 'comp' && g3.id === id) && C(id).role !== 'cult' && !(dooms[id] && DOOM_GONE.has(dooms[id].kind))
+        )
+      : [],
     lb = left.length ? C(left[left.length - 1]) : null;
   if (lb) add('leftBelow', lb, YW.leftBelow);
   const fr = Ties.friendsNow().length;

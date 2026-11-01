@@ -832,15 +832,15 @@
         "В Куте вы ни разу не повысили голоса. Вы не поднимали лампу, держали мысли при себе и не открывали карт — и когда настал час, обряд меньше всего ждал удара именно от вас."
       ],
       "lose": [
-        "You waited for certainty at Kutha. It does not come to people who wait for it.",
-        "В Куте вы ждали уверенности. Она не приходит к тем, кто её ждёт."
+        "You waited for certainty at Kutha. The last evening came before it did.",
+        "В Куте вы ждали уверенности. Последний вечер наступил раньше."
       ]
     },
     "scholar": {
       "name": ["The Scholar", "Над табличками"],
       "win": [
-        "You beat it with grammar. Long nights over the tablets, the lamp turned low, the sign list propped against the inkpot: in the end you knew its name and its nature better than the people who served it.",
-        "Вы одолели его грамматикой. Долгие ночи над табличками, привёрнутая лампа, список знаков, прислонённый к чернильнице, — в конце концов вы знали его имя и природу лучше тех, кто ему служил."
+        "Long nights over the tablets, the lamp turned low, the sign list propped against the inkpot. You came out of Kutha alive. Some of those lines still need translating.",
+        "Долгие ночи над табличками, привёрнутая лампа, список знаков у чернильницы. Из Куты удалось вернуться. Некоторые строки ещё предстоит перевести."
       ],
       "lose": [
         "You read more of the old words than anyone alive. Some of them, it turns out, were reading you.",
@@ -872,8 +872,8 @@
     "confidant": {
       "name": ["The Confidant", "Разговоры по душам"],
       "win": [
-        "You won Kutha one conversation at a time: cups of coffee, confidences given and returned, the long talks after supper. When it mattered, the people you had trusted stood with you, and the ones you should not have trusted had long since given themselves away.",
-        "Вы выиграли Куту разговор за разговором: чашки кофе, доверие за доверие, долгие беседы после ужина. Когда пришёл час, те, кому вы поверили, встали рядом с вами, а те, кому верить не следовало, давно уже себя выдали."
+        "You won Kutha one conversation at a time: cups of coffee, confidences given and returned, the long talks after supper. When it mattered, enough of those conversations held. You would spend years wondering which of the others had been sincere.",
+        "Вы выиграли Куту разговор за разговором: чашки кофе, доверие за доверие, долгие беседы после ужина. Когда пришёл час, этих разговоров оказалось достаточно. Потом ещё много лет вы будете гадать, какие из остальных слов были искренними."
       ],
       "lose": [
         "You trusted the people of Kutha, and most of them deserved it. Most was not enough.",
@@ -892,7 +892,6 @@
       ]
     }
   },
-  "text": "Хамид",
   "oneOfThePickmen": ["one of the pickmen", "один из землекопов"],
   "nobodyOfTheCultIsLeft2": [
     "Nobody of the cult is left at large, and still something comes for you in the night, and finds two of you in the tent.",
@@ -903,5 +902,6 @@
     "Они приходят за вами ночью и находят в палатке двоих."
   ],
   "somethingCameForYouInThe": ["Something came for you in the night", "Ночью за вами что-то пришло"],
-  "theyCameForYouInThe": ["They came for you in the night", "Ночью за вами пришли"]
+  "theyCameForYouInThe": ["They came for you in the night", "Ночью за вами пришли"],
+  "hamidNameRu": "Хамид"
 }

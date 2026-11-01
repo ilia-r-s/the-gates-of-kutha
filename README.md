@@ -20,7 +20,7 @@ Crane's diary.
 Something under the mound is listening, too.
 
 _The Gates of Kutha_ is a choice-driven mystery about an archaeological expedition, the people in it, and the things
-an excavation brings to light.
+an excavation brings to light. The rite is already under way. Its servants need time, and your attention elsewhere.
 
 ---
 
@@ -30,21 +30,21 @@ Choose the training you brought to Iraq: philologist, former soldier, or occulti
 Excavate, translate the broken tablets, search the camp, or sit down with somebody who was awake last night.
 Each takes time. The work you leave undone waits for tomorrow, if there is a tomorrow.
 
-You can ask a question gently. You can ask it again. You can put your trust in a person who seems to need it.
-The conversation will end, and find a second life somewhere else in camp.
+You can ask a question gently. You can ask it again. You can put your trust in somebody who seems to need it.
+What you say may reach the rest of camp before you do.
 
 <p align="center">
-  <img src="docs/images/talk.png" alt="Ilse, furious after being pressed: Doctor. You are standing in my light. Ask me again in that tone, Doctor, and you can dig your own trench." width="760">
+  <img src="docs/images/talk.png" alt="A conversation with Ilse in the finds magazine, with the next questions beneath the scene" width="1040">
 </p>
 
 Professional courtesy has its limits.
 
-Your casebook keeps traces, habits, sightings and people's accounts of the night. Compare them. Make your own marks
-against the names. A witness may be mistaken; a liar may be hiding an ordinary shame. Even the thief has something
-to fear.
+Open your casebook when you need the map, the evidence, or a reminder of who said what. Compare traces, habits and
+accounts of the night. Make your own marks against the names. Then put the book away and ask another question.
+A witness may be mistaken; a liar may be hiding an ordinary shame. Even the thief has something to fear.
 
 <p align="center">
-  <img src="docs/images/casebook.png" alt="Two complete entries in the evidence notebook, recording traces and the people whose habits might fit them" width="460">
+  <img src="docs/images/casebook.png" alt="The open expedition casebook, with its map, evidence and notes over the scene" width="1040">
 </p>
 
 When you think you have a case, call an inquiry. Ask the camp to judge it with you. An accusation can take somebody
@@ -57,7 +57,7 @@ several. Footprints, a familiar scent, a little ash where it should not be. The 
 account.
 
 <p align="center">
-  <img src="docs/images/morning.png" alt="The first-light chapter of a night in camp: discoveries, grief and conflicting accounts" width="760">
+  <img src="docs/images/morning.png" alt="A complete night and morning in camp, with the night's aftermath and one strange sign" width="1040">
 </p>
 
 The seven have lives between your questions. Affection, suspicion, grief and gossip travel through camp. People
@@ -67,21 +67,21 @@ remember how you treated them, and what you said about somebody else. A trusted 
 
 The old titles disagree. So do the people who read them for you. Fit together the signs and the broken clay:
 what waits below has a name, and somewhere in the camp is the charm that might hold it there.
+There are hints of what it favors, too. A patient hand, an offering, a word spoken plainly. A sign can be misread.
 
 <p align="center">
-  <img src="docs/images/tablet.png" alt="A translated tablet fragment, with clues about the old titles and the things they fear" width="760">
+  <img src="docs/images/tablet.png" alt="A translated tablet fragment and the choices that follow its reading" width="1040">
 </p>
 
 When the gates open, choose who goes down with you. Bring what you have learned, what you have found, and whatever
 nerve you have left. The seven gates ask their price.
 
 <p align="center">
-  <img src="docs/images/below.png" alt="The first gate beneath the ziggurat, with Ashby following and a choice of how to take the stairs" width="760">
+  <img src="docs/images/below.png" alt="The first gate beneath the ziggurat, with Yusuf alone accompanying you and a choice of how to take the stairs" width="1040">
 </p>
 
-The roles, traces and fragments change with each season. At the end, the reckoning opens the case: what happened,
-who survived, and what your choices cost. A season code lets you return to the same arrangement and try another way
-through it.
+The roles, traces and fragments change with each expedition. At the end, the reckoning opens the case: what
+happened, who survived, and what your choices cost.
 
 ---
 

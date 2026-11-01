@@ -15,7 +15,7 @@ const Gossip = (() => {
   function temperGossip(s, g) {
     const t = Ties.pickByLike(s, g.pool, coin() ? -1 : 1),
       l = Ties.likes(s.id, t.id),
-      real = temperOf(t),
+      real = Knowledge.temper(s, t).value,
       v = toldTrue(s, { sure: g.sure, bias: Math.abs(l) })
         ? real
         : pick((l < 0 || temperOf(s) === 'suspicious' ? NEG : l > 0 ? POS : TEMPER_IDS).filter(k => k !== real));
@@ -27,8 +27,8 @@ const Gossip = (() => {
   function bondGossip(s, g) {
     const a = pick(g.pool),
       b = pick(g.pool.filter(o => o.id !== a.id)),
-      real = Ties.likes(a.id, b.id) + Ties.likes(b.id, a.id);
-    let close = real >= RULES.gossip.bond ? true : real <= -RULES.gossip.bond ? false : null;
+      impression = Knowledge.bond(s, a, b);
+    let close = impression.value;
     if (!toldTrue(s, { sure: g.sure }))
       close = misread(
         close,
@@ -66,7 +66,7 @@ const Gossip = (() => {
   function thinksGossip(s, g) {
     const t = Ties.pickByLike(s, g.pool, coin() ? -1 : 1),
       l = Ties.likes(s.id, t.id),
-      real = Ties.friend(t) ? 'good' : Ties.against(t) ? 'bad' : null;
+      real = Knowledge.opinion(s, t).value;
     let v = real;
     if (!toldTrue(s, { sure: g.sure, bias: Math.abs(l) })) {
       const lean = l > 0 ? 'good' : l < 0 || temperOf(s) === 'suspicious' ? 'bad' : null;
@@ -92,26 +92,44 @@ const Gossip = (() => {
     bad: [h => bi(...TX.gossip.theDoctorHasNot(h)), h => bi(...TX.gossip.hardlyKnowsTheDoctor(h)), h => bi(...TX.gossip.didYouHearDid(h))],
     kind: [h => bi(...TX.gossip.andTheDoctorGood(h)), h => bi(...TX.gossip.letThemTalkAbout(h))]
   };
-  const TALKED_OF = odds('the camp talks of a night in your tent', [
-      ['base', () => RULES.gossip.visit.odds],
-      ['* fading, each day after the first', v => RULES.gossip.visit.fade ** Math.max(0, S.day - v.day - 1)]
-    ]),
-    TOLD_BADLY = odds('a night in your tent, told badly', [
-      ['base', () => RULES.gossip.visit.bad],
-      ['+ spite, a step they dislike her', (s, h, l) => RULES.gossip.visit.spite * Math.max(0, -l)],
-      ['- a friend of hers, a step they like her', (s, h, l) => RULES.gossip.visit.friend * Math.max(0, l)],
-      ['+ jealous, sweet on you or on her', (s, h) => (Ties.sweetOnYou(s) || Ties.sweetOn(s.id, h.id) ? RULES.gossip.visit.jealous : 0)],
-      ['+ against you, a step', (s, h, l, tr) => RULES.gossip.visit.foe * Math.max(0, -tr)],
-      ['- your friend, a step past warm', (s, h, l, tr) => RULES.gossip.visit.ally * Math.max(0, tr - RULES.ties.friend)],
-      ['+ prudish by temperament', s => TP(s).prude],
-      ['+ a priest', s => (Ties.vowed(s) ? RULES.gossip.visit.vows : 0)],
-      ['clamp', () => [RULES.scale.least, RULES.scale.most]]
-    ]);
+  const TALKED_OF = Decisions.define({
+      id: 'gossip.visit.available',
+      action: 'repeat-visit',
+      authority: 'world',
+      subject: (v, s) => s,
+      object: v => v.id,
+      knowledge: ['world: agreed visit with a recorded morning appearance', 'world: elapsed time controls rumour availability'],
+      consequences: ['testimony'],
+      probability: odds('the camp talks of a night in your tent', [
+        ['base', () => RULES.gossip.visit.odds],
+        ['* fading, each day after the first', v => RULES.gossip.visit.fade ** Math.max(0, S.day - v.day - 1)]
+      ])
+    }),
+    TOLD_BADLY = Decisions.define({
+      id: 'gossip.visit.tone',
+      action: 'speak-unkindly',
+      authority: 'actor',
+      subject: s => s,
+      object: (s, h) => h,
+      knowledge: ['heard: available rumour of a morning departure', 'self: liking, attraction, player trust, temperament and vows'],
+      consequences: ['testimony', 'trust'],
+      probability: odds('a night in your tent, told badly', [
+        ['base', () => RULES.gossip.visit.bad],
+        ['+ spite, a step they dislike her', (s, h, l) => RULES.gossip.visit.spite * Math.max(0, -l)],
+        ['- a friend of hers, a step they like her', (s, h, l) => RULES.gossip.visit.friend * Math.max(0, l)],
+        ['+ jealous, sweet on you or on her', (s, h) => (Ties.sweetOnYou(s) || Ties.sweetOn(s.id, h.id) ? RULES.gossip.visit.jealous : 0)],
+        ['+ against you, a step', (s, h, l, tr) => RULES.gossip.visit.foe * Math.max(0, -tr)],
+        ['- your friend, a step past warm', (s, h, l, tr) => RULES.gossip.visit.ally * Math.max(0, tr - RULES.ties.friend)],
+        ['+ prudish by temperament', s => TP(s).prude],
+        ['+ a priest', s => (Ties.vowed(s) ? RULES.gossip.visit.vows : 0)],
+        ['clamp', () => [RULES.scale.least, RULES.scale.most]]
+      ])
+    });
   function visitGossip(s, g) {
     const v = S.log && S.log.visit;
     if (!v || !v.agreed || !v.morning || !S.chars[v.id]) return null;
     const h = C(v.id);
-    if (!isFree(h) || h.id === s.id || g.not.includes(h.id) || !TALKED_OF.roll(v)) return null;
+    if (!isFree(h) || h.id === s.id || g.not.includes(h.id) || !TALKED_OF.roll(v, s)) return null;
     const bad = TOLD_BADLY.roll(s, h, Ties.likes(s.id, h.id), Ties.trust(s)),
       k = bad ? 'bad' : 'kind';
     Record.testify(s.id, h.id, 'scandal', k);
@@ -217,11 +235,20 @@ const Gossip = (() => {
     return { text: sayPick(FEEL_SAY[k])(c, t), face: face };
   }
   const GOSSIP_YOU = { bad: TX.gossip.theDoctorBulliesPeople(), good: TX.gossip.ofAllOfUs() };
-  const HEARS_TALK_OF_YOU = odds('hears talk of you', [
-    ['base', bad => (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood)],
-    ['* heavy talk', (bad, heavy) => (heavy ? RULES.camp.heavy : 1)],
-    ['cap', () => RULES.scale.most]
-  ]);
+  const HEARS_TALK_OF_YOU = Decisions.define({
+    id: 'gossip.player.reception',
+    action: 'receive-player-rumour',
+    authority: 'world',
+    subject: (bad, heavy, h) => h,
+    object: 'player',
+    knowledge: ['heard: current public rumour from a liked speaker', 'world: the existing heavy-talk reception weight'],
+    consequences: ['trust'],
+    probability: odds('hears talk of you', [
+      ['base', bad => (bad ? RULES.rumours.listenBad : RULES.rumours.listenGood)],
+      ['* heavy talk', (bad, heavy) => (heavy ? RULES.camp.heavy : 1)],
+      ['cap', () => RULES.scale.most]
+    ])
+  });
   function ofYou() {
     const sly = c => c.role === 'cult' && temperOf(c) === 'calculating',
       U = RULES.rumours;
@@ -239,15 +266,22 @@ const Gossip = (() => {
       heard = Moments.hear(
         freeChars().filter(o => o.id !== s.id && Ties.fond(o.id, s.id)),
         () => ['trust', null, bad ? -1 : 1, HEARS_TALK_OF_YOU],
-        { cap: RULES.camp.cap, rollWhenFull: false, args: () => [bad, heavy] }
+        { cap: RULES.camp.cap, rollWhenFull: false, args: h => [bad, heavy, h] }
       ).moved,
       moved = heard.length ? heard[0][3] : [];
-    S.rumors.push({ day: S.day, kind: bad ? 'bad' : 'good', by: s.id, up: bad ? [] : moved, down: bad ? moved : [] });
+    S.rumors.push({
+      day: S.day,
+      kind: bad ? 'bad' : 'good',
+      by: s.id,
+      heardBy: freeChars().map(c => c.id),
+      up: bad ? [] : moved,
+      down: bad ? moved : []
+    });
     return `<p class="notice">${bi(...TX.gossip.overBreakfastYouCatch(s, said))}</p>` + (bad ? trustNote([], moved) : trustNote(moved, []));
   }
   function wordOf(c, kind, strength = 1) {
     if (S.pending && !S.pending.some(r => r.kind === kind && r.about === c.id))
-      S.pending.push({ day: S.day, kind: kind, about: c.id, strength: strength });
+      S.pending.push({ day: S.day, slot: S.slot, kind: kind, about: c.id, strength: strength });
   }
   const DEED_SAID = {
     pressed: c => __text('thatYouPressedHardA'),
@@ -286,7 +320,16 @@ const Gossip = (() => {
         net[id] = (net[id] || 0) + d;
       });
       if (!up.length && !down.length) return;
-      S.rumors.push({ day: S.day, kind: r.kind, about: r.about, up: up, down: down });
+      S.rumors.push({
+        day: S.day,
+        kind: r.kind,
+        about: r.about,
+        sourceDay: r.day,
+        sourceSlot: r.slot,
+        heardBy: freeChars().map(actor => actor.id),
+        up: up,
+        down: down
+      });
       said.push(DEED_SAID[r.kind](c));
     });
     const ids = Object.keys(net);

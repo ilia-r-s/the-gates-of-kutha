@@ -1,4 +1,3 @@
-// people/alibis.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const QUIET = ['canal', 'cemetery', 'ziggurat', 'trench'];
 function planAlibis(n, crimeLoc, actorId, target = null, how = 'watch') {
   const rec = { crimeLoc: crimeLoc, actor: actorId, truth: {}, claim: {}, saw: {}, afraid: [], secret: [] };
@@ -215,8 +214,11 @@ function sightLine(cl, sw, c, up = null) {
     home = sw.where === 'camp',
     hers = home && sw.to && S.chars[sw.to] ? sw.to : null,
     where = hers ? `${C(hers).short}’s tent` : home ? 'your tent' : LOCS[sw.where].ref,
-    wr = hers ? __text('g') : home ? __text('text') : ru.loc(sw.where, 'gen');
-  const sense = sw.cat === 'prints' ? ru.gs(c, __text('text2'), __text('text3')) : ru.gs(c, __text('text4'), __text('text5')),
+    wr = hers ? __text('g') : home ? __text('yourTentGenitiveRu') : ru.loc(sw.where, 'gen');
+  const sense =
+      sw.cat === 'prints'
+        ? ru.gs(c, __text('heardMasculineRu'), __text('heardFeminineRu'))
+        : ru.gs(c, __text('smelledMasculineRu'), __text('smelledFeminineRu')),
     [nf, nfRu] = tellOne('noFace', SAY.noFace)(c);
   if (cl.attacked) return __text('but');
   const awake = up == null ? upAllNight(cl, c) : up;

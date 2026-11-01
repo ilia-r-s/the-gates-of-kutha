@@ -1,7 +1,6 @@
-// Claims: who claims what, how often each kind of lie is told, and that every claim behaves as it should: true
-// Dreamers dream true, the cult's dreamers lie where it pays and tell the truth where it is cheap, a pretend Dreamer
-// guesses; hidden parts come out with trust; a false claim broken by pressing is given up now and then, the cult's as
-// anyone's; a sworn watch that fails is noticed in the morning. Every line is checked in both languages.
+// Claims and dream accuracy, recantations under trust/pressure, and failed sworn watches.
+// Counts truthful and mistaken reports separately; a true Dreamer's visions are also fallible.
+// Every returned line is checked in both languages.
 // usage: node test/claims.js [games]
 const { runFast: run, openFast: open, args } = require('./lib/harness');
 const N = args()._[0] || 300;

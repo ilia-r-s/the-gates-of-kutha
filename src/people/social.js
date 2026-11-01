@@ -1,4 +1,3 @@
-// people/social.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 const cultPair = (a, b) => a.role === 'cult' && b.role === 'cult';
 function victimWeights(npcs) {
   const cult = freeCult(),
@@ -9,20 +8,32 @@ function victimWeights(npcs) {
     cult.forEach(k => {
       x *= (1 - vw.cultLike * Ties.likes(k.id, v.id)) * Suspicion.threat.weight(v, k);
     });
-    x *= 1 - vw.scapegoat * Suspicion.suspectedBy(v).length;
+    x *= 1 - vw.scapegoat * Suspicion.threat.exposure(v).length;
+    if (Suspicion.knownAloud(v) && !Suspicion.threat.harm(v)) x *= 1 - RULES.influence.loudSpared;
     w[v.id] = Math.max(vw.floor, x);
   });
   return w;
 }
 const cultOf = (c, k) => (c.role === 'cult' && S.bg === 'occultist' ? RULES.cunning[k] : 0);
-const TAKES_CONFIDENCE = odds('takes your confidence', [
-  ['base', () => RULES.confide.odds],
-  ['+ trust in you', c => RULES.confide.trust * c.rapport],
-  ['+ temperament', c => TP(c).confide],
-  ['+ the cult, to an occultist', c => cultOf(c, 'listen')],
-  ['- confidences taken already', c => RULES.confide.again * Ties.confidences(c)],
-  ['clamp', () => [RULES.confide.min, RULES.confide.max]]
-]);
+const TAKES_CONFIDENCE = Decisions.define({
+  id: 'dialog.confidence',
+  action: 'accept-confidence',
+  subject: c => c.id,
+  object: 'player',
+  authority: 'actor',
+  knowledge: ['own trust, temperament and role', 'player background and confidences personally received'],
+  consequences: ['trust', 'confidence remembered', 'reply'],
+  features: { trust: 'number', temper: 'string', role: 'string', background: 'string', confidences: 'number' },
+  observe: c => ({ trust: c.rapport, temper: temperOf(c), role: c.role, background: S.bg, confidences: Ties.confidences(c) }),
+  probability: odds('takes your confidence', [
+    ['base', () => RULES.confide.odds],
+    ['+ trust in you', c => RULES.confide.trust * c.rapport],
+    ['+ temperament', c => TP(c).confide],
+    ['+ the cult, to an occultist', c => cultOf(c, 'listen')],
+    ['- confidences taken already', c => RULES.confide.again * Ties.confidences(c)],
+    ['clamp', () => [RULES.confide.min, RULES.confide.max]]
+  ])
+});
 const quoted = (lead, text) => lead + text + bi('”', '»');
 function breakfastBlame() {
   const free = freeChars(),
@@ -40,7 +51,9 @@ function cultNamesAloud(s, others) {
   const inno = others.filter(o => o.role !== 'cult'),
     t = busFor(s, others);
   if (t) return t;
-  return !inno.length || !chance(TP(s).frame) ? null : innocentBlames(s, inno);
+  // This is an already granted public opportunity. An honest member can voice a
+  // real grievance; willingness to fabricate in private must not silence them.
+  return inno.length ? innocentBlames(s, inno) : null;
 }
 function feudAgain() {
   const f = S.tenor.feud;
@@ -53,8 +66,11 @@ function feudAgain() {
 }
 function blameAloud(s, t, feud = false) {
   return Moments.blame('breakfast', s.id, t.id, () => {
-    const lead = feud ? bi(...TX.social.atBreakfastTheQuarrel(s, t)) : bi(...TX.social.overBreakfastSaysLoudly(s));
-    return `<p class="notice">${lead} ${(temperOf(s) === 'suspicious') === chance(RULES.talk.ownWay) ? bi(...TX.social.iSawGoOut(t, s)) : bi(...TX.social.iWillSayIt(t))}</p>`;
+    const lead = feud ? bi(...TX.social.atBreakfastTheQuarrel(s, t)) : bi(...TX.social.overBreakfastSaysLoudly(s)),
+      firsthand = (temperOf(s) === 'suspicious') === chance(RULES.talk.ownWay),
+      basis = firsthand ? Knowledge.outing(s, t) : null;
+    Object.assign(S.said[S.said.length - 1], { claim: basis ? 'sighting' : 'judgment', basis });
+    return `<p class="notice">${lead} ${basis ? bi(...TX.social.iSawGoOut(t, s)) : bi(...TX.social.iWillSayIt(t))}</p>`;
   });
 }
 function volunteerSighting() {
@@ -101,6 +117,7 @@ function consoled(c) {
   return bi(...TX.social.youSitWithA(c, v));
 }
 function griefFor(victim) {
+  Knowledge.publicLoss(victim);
   return (
     Moments.stir('grief', { about: victim }) +
     mourners(victim) +
@@ -112,15 +129,16 @@ function ontoSaid(victim) {
   const named = Suspicion.accusations(victim).filter(x => isFree(C(x.about)));
   return named.length && chance(RULES.camp.onto.odds) ? Moments.stir('onto', { about: named.pop().about, dead: victim }) : '';
 }
-function socialMorning(victim) {
+function socialMorning() {
   let h = chance(Math.min(1, room('talk') * visitTalk() * deedTalk())) ? brought(Gossip.rumours()) : '';
   h += brought(volunteerSighting());
-  const c = shuffle(freeChars()).find(o => chance(room('talk') * confessChance(o, !!victim)));
+  const c = shuffle(freeChars()).find(o => DROPS_PRETENCE.roll(o, 'morning'));
   if (c) h += brought(morningConfession(c));
   h += brought(feudAgain());
   h += brought(complaint());
   h += brought(wayTalk());
   h += brought(doubtTalk());
+  h += brought(CampInfluence.breakfast());
   const t = rateOf('talk');
   if (chance(room('talk') * clamp(RULES.morning.talk * t))) {
     const k = breakfastKind();
@@ -145,38 +163,44 @@ function complaint() {
 const WAY_TALK = {
   inquisitor: () => TX.social.theDoctorWillHave(),
   confidant: () => TX.social.theDoctorTellsEverything(),
-  scholar: s => TX.social.iHaveHeardThe(s),
+  scholar: () => TX.social.doctorStudiesTablets(),
   delver: () => TX.social.diggingForCraneAre(),
-  sleuth: (s, f) => TX.social.didYouKnowWas(f)
+  sleuth: (s, f) => TX.social.oftenSeenWithDoctor(f)
 };
 function wayTalk() {
   const K = RULES.counter,
     said = k => S.log.ways.some(w => w.k === k),
-    k = Object.keys(WAY_TALK)
-      .filter(x => !said(x) && cultReads(x) >= RULES.adapt.told)
-      .sort((a, b) => cultReads(b) - cultReads(a))[0];
-  if (!k || !freeChars().length) return '';
-  const t = S.turned && S.turned[k],
-    cultOdds = freeCult().length && t && t.day != null && S.day > t.day ? K.odds * cultReads(k) : 0,
-    camp = chance(room('talk') * K.camp),
-    cult = !camp && chance(room('talk') * cultOdds);
-  if (!camp && !cult) return '';
-  const friends = freeChars().filter(c => Ties.friend(c)),
-    f = k === 'sleuth' ? pick(friends) : null;
-  if (k === 'sleuth' && !f) return '';
-  const w = {};
-  freeChars()
-    .filter(c => !f || c.id !== f.id)
-    .forEach(c => {
-      w[c.id] = Math.abs(c.rapport) + RULES.rumours.talkBase;
-    });
-  if (!Object.keys(w).length) return '';
-  const s = C(wpick(w)),
+    eligible = freeChars()
+      .map(c => ({
+        c,
+        styles: Knowledge.styles(c, Object.keys(WAY_TALK)).filter(k => !said(k) && (k !== 'sleuth' || Knowledge.contacts(c).length))
+      }))
+      .filter(r => r.styles.length);
+  if (!eligible.length || !chance(room('talk') * K.camp)) return '';
+  const s = C(wpick(Object.fromEntries(eligible.map(({ c }) => [c.id, Math.abs(c.rapport) + RULES.rumours.talkBase])))),
+    styles = eligible.find(r => r.c.id === s.id).styles,
+    planned = k => s.role === 'cult' && S.turned?.[k]?.day != null && S.turned[k].day < S.day && cultReads(k) >= RULES.adapt.told,
+    k = wpick(boundedAim(styles, () => 1, planned, K.aim)),
+    cult = !!planned(k),
+    contact = k === 'sleuth' ? pick(Knowledge.contacts(s)) : null,
+    f = contact ? C(contact.id) : null,
     line = WAY_TALK[k](s, f),
     hear = freeChars().filter(o => o.id !== s.id && Ties.fond(o.id, s.id)),
     down = [];
-  S.log.ways.push({ day: S.day, k: k, by: s.id, cult: cult, about: f ? f.id : null });
-  if (k === 'confidant') friends.filter(o => o.id !== s.id && chance(K.cools) && Ties.moveTrust(o, -1)).forEach(o => down.push(o.id));
+  S.log.ways.push({
+    day: S.day,
+    k,
+    by: s.id,
+    cult,
+    about: f ? f.id : null,
+    basis: Knowledge.styleBasis(s, k),
+    contact: contact?.basis || null,
+    plan: cult ? { source: 'shared observations of player conduct', route: 'discussed among the cult', day: S.turned[k].day } : null
+  });
+  if (k === 'confidant')
+    freeChars()
+      .filter(o => o.id !== s.id && Ties.friend(o) && chance(K.cools) && Ties.moveTrust(o, -1))
+      .forEach(o => down.push(o.id));
   if (k === 'scholar' || k === 'delver') {
     Suspicion.suspectYou(vary(K.onYou));
     hear.filter(o => chance(K.thinks) && Ties.moveTrust(o, -1)).forEach(o => down.push(o.id));
@@ -186,23 +210,39 @@ function wayTalk() {
 }
 function doubtTalk() {
   const K = RULES.doubt,
-    plot = S.plots.find(p => p.kind === 'discredit' && !p.done && p.day < S.day),
-    lately = freeChars().filter(c => S.said.some(x => x.by === c.id && x.how === 'dream' && x.day >= S.day - K.lately)),
-    could = d => freeChars().filter(c => c.id !== d.id && !Ties.fond(c.id, d.id));
-  if (plot) plot.done = true;
-  let d = plot && isFree(C(plot.id)) ? C(plot.id) : null;
-  const cult = !!d && chance(room('talk') * K.cult);
-  if (!cult) {
-    if (!lately.length) return '';
-    d = pick(lately);
-    if (!chance(1 - (1 - Math.min(1, room('talk') * K.camp)) ** could(d).length)) return '';
-  }
-  const pool = could(d);
-  if (!pool.length) return '';
+    publicDream = c => S.said.filter(x => x.by === c.id && x.how === 'dream' && x.day >= S.day - K.lately).slice(-1)[0],
+    lately = freeChars().filter(publicDream),
+    targets = s => lately.filter(d => d.id !== s.id && !Ties.fond(s.id, d.id)),
+    pool = freeChars().filter(c => targets(c).length);
+  if (!pool.length || !chance(1 - (1 - Math.min(1, room('talk') * K.camp)) ** pool.length)) return '';
   const s = pick(pool),
+    plot =
+      s.role === 'cult'
+        ? S.plots.find(p => p.kind === 'discredit' && !p.done && p.day < S.day && p.until >= S.day && targets(s).some(d => d.id === p.id))
+        : null,
+    d = C(
+      wpick(
+        boundedAim(
+          targets(s),
+          () => 1,
+          c => plot && c.id === plot.id,
+          K.aim
+        )
+      )
+    ),
+    cult = !!plot && plot.id === d.id,
+    source = publicDream(d),
     k = sayPick([0, 1, 2]);
-  if (cult) plot.said = S.day;
-  S.log.doubts.push({ day: S.day, by: s.id, about: d.id, cult: cult, k: k });
+  if (cult) Object.assign(plot, { done: true, said: S.day });
+  S.log.doubts.push({
+    day: S.day,
+    by: s.id,
+    about: d.id,
+    cult,
+    k,
+    basis: { source: 'public dream', route: 'heard in camp', day: source.day, by: d.id },
+    plot: cult ? { by: plot.by, day: plot.day, route: 'a plan agreed by the cult at night' } : null
+  });
   freeChars()
     .filter(o => o.id !== d.id && o.id !== s.id && !Ties.fond(o.id, d.id) && !Suspicion.wonders(o, d))
     .forEach(o => chance(K.wonder) && Suspicion.move(o, d, 1));

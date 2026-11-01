@@ -1,0 +1,57 @@
+{
+  "secondVoice": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${s.short} returns to what ${f.short} said about ${t.short}. “There may be something in it.”"
+      },
+      {
+        "$template": "${ru.c(s)} возвращается к словам ${ru.c(f, \"g\")} о ${ru.c(t, \"p\")}. «В этом, пожалуй, что-то есть»."
+      }
+    ]
+  },
+  "evidenceDoubt": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${s.short} pauses over the ${style === \"scholar\" ? \"copied lines\" : style === \"sleuth\" ? \"marks from the scene\" : \"finds laid on the table\"}. “We ought to be careful what we make of these.”"
+      },
+      {
+        "$template": "${ru.c(s)} задерживает взгляд на ${style === \"scholar\" ? \"переписанных строках\" : style === \"sleuth\" ? \"зарисовках следов\" : \"разложенных находках\"}. «С выводами лучше не спешить»."
+      }
+    ]
+  },
+  "rememberedSource": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "${s.short} looks away from ${t.short}’s empty place. “It was ${f.short} who put that into my head. Or that is how I remember it.”"
+      },
+      {
+        "$template": "${ru.c(s)} отводит взгляд от пустого места ${ru.c(t, \"g\")}. «Эта мысль пришла мне в голову после слов ${ru.c(f, \"g\")}. Во всяком случае, я так помню»."
+      }
+    ]
+  },
+  "steerFor": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Before the hands go up, ${s.short} speaks quietly to those nearest. “I have stood by the doctor. I think we should hear this through.”"
+      },
+      {
+        "$template": "Прежде чем поднимутся руки, ${ru.c(s)} негромко обращается к тем, кто рядом. «Доктору я доверяю. Думаю, стоит выслушать всё до конца»."
+      }
+    ]
+  },
+  "steerAgainst": {
+    "$call": "bi",
+    "$args": [
+      {
+        "$template": "Before the hands go up, ${s.short} speaks quietly to those nearest. “I have stood by the doctor. That does not make every suspicion sound.”"
+      },
+      {
+        "$template": "Прежде чем поднимутся руки, ${ru.c(s)} негромко обращается к тем, кто рядом. «Доктору я доверяю. Но это ещё не делает каждое подозрение обоснованным»."
+      }
+    ]
+  }
+}

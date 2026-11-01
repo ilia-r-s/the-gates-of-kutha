@@ -1,5 +1,6 @@
-// ui/boot.js: recovered build 28.5.1. See tools/show.js for individual declarations.
 document.addEventListener('DOMContentLoaded', () => {
+  Viewpoint.init();
+  Session.init();
   langInit();
   initUI();
   bookInit();
