@@ -220,7 +220,9 @@ test('actual reply instrumentation preserves complete play and covers both roles
         });
       return { ended, state, trail, dice: TRACE, seed: _seed, words: _words };
     }
-    for (let g = 0; g < 64; g++) {
+    // Retain the original 64 expeditions. Quieter mornings change later routes;
+    // another fixed block keeps rare title replies covered in both role groups.
+    for (let g = 0; g < 128; g++) {
       const baseline = await before.page.evaluate(playReplySeason, g),
         measured = await after.page.evaluate(playReplySeason, g);
       assert.equal(baseline.ended, true, 'baseline season ' + g);
@@ -361,41 +363,46 @@ test('public second-voice policy reaches a natural recall opportunity without pr
   const { page, errors } = await openNode();
   try {
     await page.addScriptTag({ path: path.resolve(__dirname, '../sim/lib/public-inquiry.js') });
-    const result = await page.evaluate(() => {
-      // Earlier night-pacing/P07 routes are preserved in their study artifacts.
-      // The fallible nature doctrine adds an authorized setup draw. This route
-      // reaches Ilse's second voice, a real wrong vote and the next gathering.
-      const season = 413271940;
-      __T.start(0, false, season);
-      let eligible = 0;
-      const original = CampInfluence.breakfast;
-      CampInfluence.breakfast = function () {
-        for (const c of freeChars())
-          if (
-            !CampInfluence.records().some(r => r.by === c.id && r.day === S.day) &&
-            CampInfluence.records().some(
-              r =>
-                r.kind === 'second' &&
-                !r.recalled &&
-                r.day < S.day &&
-                isFree(C(r.by)) &&
-                r.listeners.includes(c.id) &&
-                S.log.accused.some(a => a.id === r.about && !a.right && a.day >= r.day) &&
-                S.inquiries.some(v => v.id === r.about && v.day >= r.day && v.back.includes(c.id))
-            )
-          )
-            eligible++;
-        return original.apply(this, arguments);
-      };
-      try {
-        const ended = __T.play(__publicInquiry(__T.rng(season ^ 31337)), { maxSteps: 1500 });
-        return { ended, eligible, inquiries: S.inquiries.length };
-      } finally {
-        CampInfluence.breakfast = original;
-      }
-    });
-    assert.equal(result.ended, true);
-    assert.ok(result.eligible > 0 && result.inquiries > 0, JSON.stringify(result));
+    // Keep the previous doctrine route and add a natural opportunity after the
+    // authorized pacing change. Both policies use only public observations.
+    const results = [];
+    for (const season of [413271940, 3664299901])
+      results.push(
+        await page.evaluate(season => {
+          __T.start(0, false, season);
+          let eligible = 0;
+          const original = CampInfluence.breakfast;
+          CampInfluence.breakfast = function () {
+            for (const c of freeChars())
+              if (
+                !CampInfluence.records().some(r => r.by === c.id && r.day === S.day) &&
+                CampInfluence.records().some(
+                  r =>
+                    r.kind === 'second' &&
+                    !r.recalled &&
+                    r.day < S.day &&
+                    isFree(C(r.by)) &&
+                    r.listeners.includes(c.id) &&
+                    S.log.accused.some(a => a.id === r.about && !a.right && a.day >= r.day) &&
+                    S.inquiries.some(v => v.id === r.about && v.day >= r.day && v.back.includes(c.id))
+                )
+              )
+                eligible++;
+            return original.apply(this, arguments);
+          };
+          try {
+            const ended = __T.play(__publicInquiry(__T.rng(season ^ 31337)), { maxSteps: 1500 });
+            return { ended, eligible, inquiries: S.inquiries.length };
+          } finally {
+            CampInfluence.breakfast = original;
+          }
+        }, season)
+      );
+    assert.ok(
+      results.every(r => r.ended),
+      'both expeditions finish'
+    );
+    assert.ok(results[1].eligible > 0 && results[1].inquiries > 0, JSON.stringify(results));
     assert.deepEqual(errors, []);
   } finally {
     await page.close();

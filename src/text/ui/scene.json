@@ -31,7 +31,7 @@
   },
   "nerveLoseAllOfItAnd": {
     "$call": "bi",
-    "$args": ["Nerve: lose all of it and you go mad", "Нервы: растеряете их совсем — сойдёте с ума"]
+    "$args": ["Nerve: lose all of it and you go mad", "Нервы: если они совсем сдадут, вы сойдёте с ума"]
   },
   "woundsTooManyAndYouDie": {
     "$call": "bi",
@@ -59,7 +59,7 @@
         "$template": " · searched ${enTimes(n)}"
       },
       {
-        "$template": " · обыскано ${ruTimes(n)}"
+        "$template": " · здесь уже искали ${ruTimes(n)}"
       }
     ]
   },

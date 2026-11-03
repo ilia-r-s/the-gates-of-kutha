@@ -1,18 +1,21 @@
 # Requirements
 
-Environment for local **29.0.0** development from the recovered **28.5.1** source and **28.5.2** maintenance baseline.
+Environment for **29.1.0**, following **29.0.0**, the recovered **28.5.1** source and **28.5.2** maintenance baseline.
 
 ## Playing
 
 One HTML file: plain JavaScript, inline SVG and synthesized Web Audio, without runtime packages or a server.
 The only outside requests are Google Fonts, with system-font fallbacks. Audio starts after a user gesture.
-Local storage remembers sound preferences, viewpoint, reached endings, language and one current expedition. The game remains
+Local storage remembers sound preferences, viewpoint, reached endings, language and one current expedition, including its
+five-track playlist and requested track. Reloading or reopening restores the track selection; playback starts afresh after
+audio is available. The game remains
 playable without storage, with a localized explanation that it cannot resume. Relocating the HTML or using a private
 session can change storage availability; file-URL persistence is browser-specific.
 
 Automated browser checks cover desktop and narrow/mobile viewports, both languages, mid-game switching and the
 no-JavaScript fallback. Real-input usability/resume checks run in Chrome, Firefox and WebKit; the
-[validation record](docs/research/2026-11-01-validation.md) identifies tested artifacts and counts. Real phones,
+[29.0.0 validation record](docs/research/2026-11-01-validation.md) and
+[29.1.0 review](docs/research/2026-11-02-text-and-pacing.md) identify tested artifacts and counts. Real phones,
 screen readers and the Safari application have not been verified; narrow viewports and Playwright WebKit are not
 substitutes for those checks.
 
@@ -20,6 +23,9 @@ Saves stay in the browser profile and origin; the HTML and GitHub Pages deployme
 Separate profiles/devices have independent expeditions. Tabs sharing the same profile/site share the one save,
 with stale-tab protection against overwriting newer progress. A linked seed can reproduce the starting arrangement
 without sharing subsequent choices or progress. Season-code controls remain hidden until explicitly revealed.
+The 29.1.0 pacing change alters seeded trajectories. Saved 29.0.0 expeditions cannot resume in this edition;
+the existing version guard explains the incompatibility instead of replaying commands under different rules.
+Persistent language, sound, viewpoint and reached-ending preferences are independent of the expedition record.
 
 ## Development
 
@@ -56,7 +62,8 @@ Chrome launches inside Codex's macOS `seatbelt` sandbox were verified to abort i
 `_RegisterApplication` before loading the game, producing system crash alerts. The
 harness now rejects that launch before spawning Chrome. Browser checks use an
 approved unsandboxed process and isolated profiles; a shared `KUTHA_BROWSER_WS`
-can be reused without launching another browser. Ordinary terminal and CI use are
+can be reused without launching another browser. Browser clients also run outside the sandbox, which blocks the local
+WebSocket connection. Ordinary terminal and CI use are
 unchanged. Node simulations do not require this permission.
 Adaptive resource admission uses Node's available-memory API plus optional macOS
 topology/pressure probes. `tools/resources.js` reserves interactive headroom;

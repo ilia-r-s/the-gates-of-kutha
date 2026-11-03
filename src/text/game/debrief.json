@@ -532,7 +532,7 @@
     "doubtSaid": {
       "$args": ["d", "k"],
       "$value": {
-        "$js": "[[`that ${d.short}’s dreams came out of a bottle`,`будто сны ${ru.c(d,\"g\")} берутся из бутылки`],[`that ${d.short} dreamt whatever an old grudge would have ${EP.him(d)} dream`,`будто ${ru.c(d)} видит во сне то, что ${ru.gs(d,\"ему\",\"ей\")} подсказывает старая обида`],[`that ${d.short}’s dreams were the heat talking`,`будто сны ${ru.c(d,\"g\")} — это говорит жара`]][k]"
+        "$js": "[[`that ${d.short}’s dreams came out of a bottle`,`будто сны ${ru.c(d,\"g\")} берутся из бутылки`],[`that ${d.short} dreamt whatever an old grudge would have ${EP.him(d)} dream`,`будто ${ru.c(d)} видит во сне то, что ${ru.gs(d,\"ему\",\"ей\")} подсказывает старая обида`],[`that ${d.short}’s dreams were the heat talking`,`будто сны ${ru.c(d,\"g\")} — от жары`]][k]"
       }
     },
     "meantLater": {
@@ -1243,7 +1243,7 @@
       "$args": ["n", "v"],
       "$value": [
         {
-          "$template": "On night ${n}, with nobody of the cult left at large, the power below came for ${v.name} by itself."
+          "$template": "On night ${n}, with no one from the cult left at large, the power below came for ${v.name} by itself."
         },
         {
           "$template": "В ночь ${n}, когда на свободе не осталось никого из секты, сила из-под земли сама пришла за ${ru.cf(v,\"i\")}."

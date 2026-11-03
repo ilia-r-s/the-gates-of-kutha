@@ -635,10 +635,10 @@
         "$args": ["m", "v"],
         "$value": [
           {
-            "$template": "${m.short} sits apart all morning, and will not speak of ${v.short}."
+            "$template": "${m.short} sits apart, and will not speak of ${v.short}."
           },
           {
-            "$template": "${ru.c(m)} всё утро сидит в стороне и не хочет говорить ${ru.ob(v)}."
+            "$template": "${ru.c(m)} сидит в стороне и не хочет говорить ${ru.ob(v)}."
           }
         ]
       },

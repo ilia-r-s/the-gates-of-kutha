@@ -172,7 +172,7 @@
     "byTheEndThere": {
       "$args": [],
       "$value": [
-        "By the end there was nobody of the cult left at large, and it was not the cult that beat you.",
+        "By the end there was no one from the cult left at large, and it was not the cult that beat you.",
         "Под конец на свободе не осталось никого из секты — и одолела вас не она."
       ]
     },
@@ -282,7 +282,7 @@
           "$template": "Season ${seedCode(S.seed)}: the same code deals it again."
         },
         {
-          "$template": "Сезон ${seedCode(S.seed)}: тот же код сдаст его заново."
+          "$template": "Сезон ${seedCode(S.seed)}: тот же код позволит начать его заново."
         }
       ]
     },

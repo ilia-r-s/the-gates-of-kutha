@@ -584,7 +584,7 @@
           "$template": "Whenever you publish, ${c.p} is the first to write, and the most generous."
         },
         {
-          "$template": "Всякий раз, когда вы что-то публикуете, ${ru.gs(c,\"он пишет вам первым\",\"она пишет вам первой\")} — и щедрее всех."
+          "$template": "Всякий раз, когда вы что-то публикуете, ${ru.gs(c,\"он пишет вам первым\",\"она пишет вам первой\")} — и не скупится на похвалу."
         }
       ]
     },
@@ -741,7 +741,7 @@
       ],
       "soft": [
         "She keeps the last photograph anyone took of you at Kutha, and shows it to no one.",
-        "Она хранит последний снимок, сделанный с вас в Куте, и никому его не показывает."
+        "Она хранит последний снимок, на котором вы запечатлены в Куте, и никому его не показывает."
       ],
       "friend": [
         {
@@ -1139,7 +1139,7 @@
               "$template": "Years later ${c.short} writes to tell you that ${c.p} lied to you about ${d?`night ${d}`:\"the night Crane died\"}. ${EP.He(c)} had been out, and had seen nothing, and had been afraid."
             },
             {
-              "$template": "Годы спустя ${ru.c(c)} пишет вам, что ${ru.gs(c,\"солгал\",\"солгала\")} вам о ${d?`ночи ${d}`:\"ночи гибели Крейна\"}: ${ru.gs(c,\"он был\",\"она была\")} не в лагере, ничего не ${ru.gs(c,\"видел\",\"видела\")} и очень ${ru.gs(c,\"боялся\",\"боялась\")}."
+              "$template": "Годы спустя ${ru.c(c)} пишет вам, что ${ru.gs(c,\"солгал\",\"солгала\")} вам насчёт ${d?`ночи ${d}`:\"ночи гибели Крейна\"}: ${ru.gs(c,\"он был\",\"она была\")} не в лагере, ничего не ${ru.gs(c,\"видел\",\"видела\")} и очень ${ru.gs(c,\"боялся\",\"боялась\")}."
             }
           ]
         }
@@ -2126,7 +2126,7 @@
       },
       "marked": [
         {
-          "$js": "dl(((e,r)=>[`${e.n} lives, burned down one side, and never again sits near a fire.`,`${r.N} выживает, с ожогами во весь бок, и больше никогда не садится у огня.`]))"
+          "$js": "dl(((e,r)=>[`${e.n} lives, burned down one side, and never again sits near a fire.`,`${r.N} выживает с обожжённым боком и больше никогда не садится у огня.`]))"
         },
         {
           "$js": "dl(((e,r)=>[`${e.n} comes out of it with ${e.his} eyebrows gone and ${e.his} hands blistered, and can never again look at the night sky without counting the stars.`,`${r.N} выходит из огня без бровей, с ладонями в волдырях, и больше никогда не может смотреть на ночное небо, не пересчитывая звёзд.`]))"
@@ -2145,7 +2145,7 @@
           "$js": "dl(((e,r)=>[`${e.n} drags the diggers’ children out of the burning reed huts, one after another, and lives, though ${e.his} hands are never right again.`,`${r.N} выносит детей землекопов из горящих тростниковых хижин, одного за другим, и выживает, хотя руки у ${r.nego} так и не заживают как следует.`]))"
         },
         {
-          "$js": "dl(((e,r)=>[`${e.n} keeps the people of the village end in the canal all night, up to their necks, while the plain bakes around them, and brings every one of them out alive.`,`Всю ночь ${r.n} держит людей с деревенского края в канале, по горло в воде, пока вокруг обжигается равнина, и выводит оттуда живыми всех до единого.`]))"
+          "$js": "dl(((e,r)=>[`${e.n} keeps the people of the village end in the canal all night, up to their necks, while the plain bakes around them, and brings every one of them out alive.`,`Всю ночь ${r.n} держит жителей деревенской окраины в канале, по горло в воде, пока вокруг обжигается равнина, и выводит оттуда живыми всех до единого.`]))"
         }
       ],
       "helpedDied": [
@@ -2396,7 +2396,7 @@
             "$js": "dl(((e,r)=>[`${e.n} drowns at the foot of E-meslam, in water that was not there an hour before.`,`${r.N} тонет у подножия Э-меслама — в воде, которой ещё час назад там не было.`]))"
           },
           {
-            "$js": "dl(((e,r)=>[`${e.n} is taken under by what turns below, the first of all, and the pilots see nothing of ${e.him} afterwards but a darker patch in the lake.`,`То, что ворочается в глубине, первым утягивает под воду ${r.na}, и потом лётчики не видят от ${r.nego} ничего, кроме тёмного пятна на озере.`]))"
+            "$js": "dl(((e,r)=>[`${e.n} is taken under by what turns below, the first of all, and the pilots see nothing of ${e.him} afterwards but a darker patch in the lake.`,`Первой жертвой того, что ворочается в глубине, становится ${r.n}; потом лётчики не видят от ${r.nego} ничего, кроме тёмного пятна на озере.`]))"
           }
         ],
         "waits": [
@@ -2473,7 +2473,7 @@
       ],
       "fled": [
         {
-          "$js": "dl(((e,r)=>[`${e.n} is gone north before the spring, and in every room ${e.he} sleeps in afterwards there is a comb on the threshold. In the mornings it is always still there.`,`${r.N} уезжает на север ещё до весны, и с тех пор в каждой комнате, где ${r.on} ночует, на пороге лежит гребень. По утрам гребень всегда на месте.`]))"
+          "$js": "dl(((e,r)=>[`${e.n} leaves for the north while there is still time, and in every room ${e.he} sleeps in afterwards there is a comb on the threshold. In the mornings it is always still there.`,`${r.N} уезжает на север, пока ещё можно уехать, и с тех пор в каждой комнате, где ${r.on} ночует, на пороге лежит гребень. По утрам гребень всегда на месте.`]))"
         },
         {
           "$js": "dl(((e,r)=>[`${e.n} takes the first boat out of Basra, and will never afterwards have a cradle in the house.`,`${r.N} уплывает первым же пароходом из Басры и больше никогда не держит в доме колыбели.`]))"

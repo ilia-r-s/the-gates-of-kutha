@@ -158,10 +158,10 @@
       "$args": ["h"],
       "$value": [
         {
-          "$template": "You have not been here a week, Doctor, and ${h.short} is already in your tent. The camp is talking, and not kindly."
+          "$template": "${h.short} is already in your tent, Doctor. The camp is talking, and not kindly."
         },
         {
-          "$template": "Вы здесь и недели нет, доктор, а ${ru.c(h)} уже у вас в палатке. Лагерь об этом говорит — и говорит недоброе."
+          "$template": "${ru.c(h)} уже у вас в палатке, доктор. Лагерь об этом говорит — и говорит недоброе."
         }
       ]
     },
@@ -213,10 +213,10 @@
       "$args": ["h"],
       "$value": [
         {
-          "$template": "The Doctor has not been here a week, and ${h.short} is already in the Doctor’s tent. In my day a lady waited to be courted."
+          "$template": "${h.short} is already in the Doctor’s tent. In my day a lady waited to be courted."
         },
         {
-          "$template": "Доктор здесь и недели нет, а ${ru.c(h)} уже в докторской палатке. В моё время дама ждала, пока за ней поухаживают."
+          "$template": "${ru.c(h)} уже в докторской палатке. В моё время дама ждала, пока за ней поухаживают."
         }
       ]
     },
@@ -293,7 +293,7 @@
           "$template": "${t.short} is the only one here who makes me laugh. Do not tell ${EP.him(t)} I said so."
         },
         {
-          "$template": "${ru.c(t)} — единственный человек здесь, с кем мне бывает смешно. Только не говорите ${ru.gs(t,\"ему\",\"ей\")}, что я так ${ru.gs(c,\"сказал\",\"сказала\")}."
+          "$template": "${ru.c(t)} — единственный человек здесь, который умеет меня рассмешить. Только не говорите ${ru.gs(t,\"ему\",\"ей\")}, что я так ${ru.gs(c,\"сказал\",\"сказала\")}."
         }
       ]
     },
@@ -420,7 +420,7 @@
           "$template": "Word has got round the camp ${listNames(said.map((x=>x[0])))}."
         },
         {
-          "$template": "По лагерю разошлось, ${ru.list(said.map((x=>x[1])))}."
+          "$template": "По лагерю разнёсся слух, ${ru.list(said.map((x=>x[1])))}."
         }
       ]
     },
@@ -454,7 +454,7 @@
         "$template": "Word got round ${en}"
       },
       {
-        "$template": "По лагерю разошлось, ${rus}"
+        "$template": "По лагерю разнёсся слух, ${rus}"
       }
     ]
   },

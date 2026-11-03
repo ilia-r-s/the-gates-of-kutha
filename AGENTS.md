@@ -2,17 +2,17 @@
 
 ## Scope and local tools
 
-The previous baseline is **28.5.2**, reconstructed from **28.5.1**. The owner has authorized local **29.0.0** work:
-the review fixes, archived gameplay plan, smarter and subtler cult, automatic resume, and a scene-first layout with
-a notebook overlay. Current behavior is described in [the rules](docs/rules.md); future work is in
-[the roadmap](docs/roadmap.md). Neural networks and learned actors are
-explicitly deferred from gameplay. The owner has authorized preparing interfaces and local experiment infrastructure
-for later learning, evaluation, rule distillation and application, with equal support for all actors' decisions.
-Cleanup must still preserve behavior and both dice streams; authorized gameplay changes need
-separate, reviewed baseline differences. The owner has now explicitly requested release of **29.0.0** after the
-agreed work and a further rigorous optimization/refactoring/test/review/bugfix pass. That authorizes committing,
-pushing and publishing this release through the existing workflow once those checks are complete; unrelated releases
-still need an explicit request. Speak to the owner in English.
+The current release is **29.1.0**, based on **29.0.0**; the earlier **28.5.2** maintenance baseline was reconstructed
+from **28.5.1**. This release includes the bilingual context review, clearer Russian action titles, session music
+persistence and lower chances of additional morning passages, with rare doubles still allowed. The owner explicitly
+authorized committing, pushing and deploying **29.1.0** after logical corrections, documentation and verification.
+Use the existing publication workflow; unrelated releases still need an explicit request. Speak to the owner in English.
+
+Current behavior is described in [the rules](docs/rules.md); future work is in [the roadmap](docs/roadmap.md).
+Neural networks and learned actors remain deferred from gameplay. Interfaces and local experiment infrastructure
+for later learning, evaluation, rule distillation and application are authorized, with equal support for all actors'
+decisions. Cleanup must preserve behavior and both dice streams; authorized gameplay changes need separate,
+reviewed baseline differences. Published 28.5.1 and 29.0.0 fixtures remain immutable; 29.1.0 has its own expectations.
 
 The uniform decision framework's initial migration preserved its selected gameplay baseline, visible output and
 both seeded streams exactly. Keep that independent proof separate from later gameplay changes. The owner then
@@ -120,7 +120,13 @@ The owner's design rules remain in force:
 2. **No probabilities or meters as numbers in play.** Nerve, wounds, trust and the rite are described in words.
    Choices describe what is at stake, without revealing odds.
 3. **Both languages work throughout.** Every visible string uses `bi` or translated tables. The player can switch
-   language at any point. Russian is an independent translation and never assigns the player a sex.
+   language at any point. Russian is an independent translation and never assigns the player a sex. Translations
+   may depart from the original wording and literal meaning: preserve the spirit, character voice and natural,
+   correct reading in the target language first. Keep consequential facts, clues, uncertainty and choice stakes
+   equivalent; check grammar and meaning in the complete rendered passage, including interpolated names and objects.
+   Trace each passage's delivery time and callers. A dawn report cannot describe an already-observed noon or afternoon;
+   do not repair that by inventing yesterday's event or a witness. Keep scene, notebook summary, tablet clue and later
+   recollection consistent, while retaining genuine reports of the preceding night.
 4. **Preserve the characters.** Camp romance is between a man and a woman; only women direct it toward the player.
    Pere Anselm keeps his vows.
 5. **No single tell.** A visible behavior's cult/innocent likelihood ratio should stay around 0.5–2. Verify with

@@ -278,7 +278,7 @@
           "$template": "<p class=\"horror\">You reach for ${theItem(burnt)}, and your hand closes on nothing. Across the circle ${thief.short} holds ${V(burnt,\"it\",\"them\")} up for you to see, and lets ${V(burnt,\"it\",\"them\")} fall into the brazier.</p>"
         },
         {
-          "$template": "<p class=\"horror\">Вы тянетесь за ${ru.item(burnt,\"i\")} — и рука сжимает пустоту. Через круг ${ru.c(thief)} поднимает ${ru.ig(burnt,\"его\",\"её\",\"его\",\"их\")}, чтобы вы видели, и роняет в жаровню.</p>"
+          "$template": "<p class=\"horror\">Вы тянетесь за ${ru.item(burnt,\"i\")} — и рука сжимает пустоту. По другую сторону круга ${ru.c(thief)} поднимает ${ru.ig(burnt,\"его\",\"её\",\"его\",\"их\")}, чтобы вы видели, и роняет в жаровню.</p>"
         }
       ]
     }

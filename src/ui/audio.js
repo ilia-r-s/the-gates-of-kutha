@@ -545,8 +545,19 @@ function dealPlaylist(avoid = []) {
 dealPlaylist();
 function trackNow() {
   if (S && ['finale', 'descent', 'sanctum'].includes(S.phase)) return 'deep';
-  if (S && S.phase === 'end') return AU.cur ? AU.cur.id : AU.playlist[0];
+  if (S && S.phase === 'end') return won_(S.ended) ? AU.playlist[0] : 'deep';
   return AU.playlist[Math.max(0, Math.min(4, ((S && S.day) || 1) - 1))];
+}
+function restorePlaylist(playlist, track) {
+  if (
+    Array.isArray(playlist) &&
+    playlist.length === 5 &&
+    new Set(playlist).size === playlist.length &&
+    playlist.every(id => DAY_TRACKS.includes(id))
+  )
+    AU.playlist = playlist.slice();
+  // A same-edition save may lack music data. Keep this page's deal and save it.
+  musicChange(track === 'deep' || AU.playlist.includes(track) ? track : trackNow(), null, true);
 }
 function musicPlay(id) {
   AU.want = id;

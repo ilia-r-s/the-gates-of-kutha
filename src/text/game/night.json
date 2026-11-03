@@ -14,8 +14,8 @@
     "nothingComesInThe": {
       "$args": [],
       "$value": [
-        "<p>Nothing comes in the night. At first light the camp counts itself twice over, and everyone is there. Nobody believes it.</p>",
-        "<p>Ночью ничего не происходит. На рассвете лагерь дважды пересчитывает себя — все на месте. И никто в это не верит.</p>"
+        "<p>At first light the camp counts itself twice over, and everyone is there. Nobody believes it.</p>",
+        "<p>На рассвете лагерь дважды пересчитывает себя — все на месте. И никто в это не верит.</p>"
       ]
     },
     "inTheSmallHours": {

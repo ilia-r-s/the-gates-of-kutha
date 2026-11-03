@@ -79,10 +79,10 @@
       "$args": ["t"],
       "$value": [
         {
-          "$template": "<p>One shot. Dogs all over the camp, lamps coming on, and you are back inside your own tent before the first of them reaches ${t.short}’s.</p>"
+          "$template": "<p>One shot. Dogs all over the camp, lamps coming on, and you are back inside your own tent before anyone reaches ${t.short}’s tent.</p>"
         },
         {
-          "$template": "<p>Один выстрел. Собаки по всему лагерю, загорающиеся лампы — а вы уже у себя в палатке прежде, чем первый из них добегает до палатки ${ru.c(t,\"g\")}.</p>"
+          "$template": "<p>Один выстрел. Собаки по всему лагерю, загорающиеся лампы — а вы уже у себя в палатке прежде, чем кто-нибудь добегает до палатки ${ru.c(t,\"g\")}.</p>"
         }
       ]
     },
@@ -302,7 +302,7 @@
   },
   "sureAndLoud": {
     "$call": "bi",
-    "$args": ["Sure, and loud", "Наверняка — но громко"]
+    "$args": ["Quick, but loud", "Быстро, но громко"]
   },
   "aKnifeFromTheCookHouse": {
     "$call": "bi",

@@ -2,6 +2,35 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { openNode } = require('./lib/harness');
 
+test('extra morning atmosphere is rarer than investigation additions and a second news event remains possible', async () => {
+  const { page, errors } = await openNode();
+  try {
+    const result = await page.evaluate(() => {
+      const rows = [];
+      for (let season = 0; season < 512; season++) {
+        newGame('Marlowe', 'philologist', false, season);
+        S.tenor.crowd = 1;
+        S.tenor.nightCrowd = 1;
+        TRACE = [];
+        const html = nightAtmosphere(RULES.night.dawnSign, () => '<p>An extra omen.</p>');
+        rows.push({ shown: !!html, odds: TRACE[0][1], count: TRACE.length, investigation: room() });
+      }
+      return { rows, second: TENOR.second, primary: RULES.night.dawnSign };
+    });
+    assert.equal(result.primary, 0.95, 'the first dawn clue retains its opportunity');
+    assert.ok(result.rows.some(r => r.shown) && result.rows.some(r => !r.shown), 'rare additions remain possible');
+    for (const row of result.rows) {
+      assert.ok(row.odds > 0 && row.odds <= 0.2, 'an additional atmosphere beat has a small chance');
+      assert.ok(row.odds < row.investigation, 'finds and testimony do not inherit the stronger damping');
+      assert.equal(row.count, 1, 'one seeded opportunity, without rejection sampling');
+    }
+    assert.ok(result.second > 0 && result.second <= 0.1, 'lower second-news chance without a hard cap');
+    assert.deepEqual(errors, []);
+  } finally {
+    await page.close();
+  }
+});
+
 test('night atmosphere spends only its own budget and preserves a single seeded opportunity', async () => {
   const { page, errors } = await openNode();
   try {
@@ -13,7 +42,7 @@ test('night atmosphere spends only its own budget and preserves a single seeded 
         S.tenor.nightCrowd = 2;
         let called = 0;
         const prose = _words,
-          expected = 0.6 * room(null, 2);
+          expected = 0.6 * room(null, 2, TENOR.nightCrowd);
         TRACE = [];
         const html = nightAtmosphere(0.6, () => {
           called++;
@@ -66,7 +95,7 @@ test('only added morning nature scenes use atmospheric pacing; visible observati
             channel,
             paced,
             html: !!html,
-            expected: RULES.natureSigns.channel[channel] * (paced ? room(null, 3) : 1),
+            expected: RULES.natureSigns.channel[channel] * (paced ? room(null, 3, TENOR.nightCrowd) : 1),
             first: rolls[0][1],
             records: NatureSigns.record().length - before,
             atmosphere: S.tenor.nightCrowd,

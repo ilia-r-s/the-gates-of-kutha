@@ -69,6 +69,8 @@ async function capture(page) {
     return {
       state,
       dice: [_seed, _words],
+      playlist: AU.playlist,
+      track: AU.want || trackNow(),
       lang,
       tab: S_ui.tab,
       ui: ['sceneTitle', 'sceneText', 'choices', 'mapDyn', 'tabPanel', 'sceneArt'].map(id => document.getElementById(id).innerHTML)
@@ -279,6 +281,7 @@ test('damaged, incompatible and divergent saves fail gracefully without trapping
     for (const [save, words] of [
       ['{bad json', /could not be resumed/],
       [JSON.stringify({ ...JSON.parse(good), release: '28.5.2' }), /another edition/],
+      [JSON.stringify({ ...JSON.parse(good), release: '29.0.0' }), /another edition/],
       [JSON.stringify({ ...JSON.parse(good), actions: [['choice', 99]] }), /could not be resumed/],
       [JSON.stringify({ ...JSON.parse(good), check: [0, 0, 0] }), /could not be resumed/]
     ]) {
@@ -382,6 +385,37 @@ test('a stale tab cannot overwrite a more recent expedition, and closing a tab r
         } finally {
           await other.close();
         }
+      },
+      {},
+      context
+    );
+  } finally {
+    await context.close();
+  }
+});
+
+test('closing every expedition tab and reopening restores the track set and resumes the requested music', async () => {
+  const context = await browser.newContext();
+  let saved;
+  try {
+    await withPage(
+      async p => {
+        await start(p);
+        await p.locator('#choices .choice').first().click();
+        await travel(p, 'camp');
+        saved = await capture(p);
+      },
+      {},
+      context
+    );
+    assert.equal(context.pages().length, 0);
+    await withPage(
+      async p => {
+        assert.deepEqual(await capture(p), saved, 'reopened expedition and music');
+        await openBook(p);
+        await p.waitForFunction(() => AU.cur?.id === AU.want);
+        assert.equal(await p.evaluate(() => AU.cur.id), saved.track, 'playback after a gesture');
+        assert.deepEqual(await p.evaluate(() => [_seed, _words]), saved.dice, 'audio does not consume either stream');
       },
       {},
       context

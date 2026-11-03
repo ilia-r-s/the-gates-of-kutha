@@ -75,7 +75,7 @@ async function main() {
             try {
               const value = original.apply(this, args),
                 dice = [_seed, _words];
-              after?.(value, args);
+              after?.(value, args, prior);
               if (_seed !== dice[0] || _words !== dice[1]) throw Error('Density observation consumed dice: ' + key);
               return value;
             } finally {
@@ -139,9 +139,14 @@ async function main() {
         watch(Gossip, 'ofYou', h => beat('breakfast conversation', 'clue', h));
         watch(Gossip, 'speak', h => beat('breakfast conversation', 'clue', h));
         watch(CampInfluence, 'breakfast', h => beat('camp influence', 'clue', h));
-        watch(window, 'dreamToYou', (h, [c]) => {
-          if (phase === 'breakfast dreams') beat('private character dream', 'clue', true, { by: c.id });
-        });
+        watch(
+          window,
+          'dreamToYou',
+          (h, [c], prior) => {
+            if (h && prior === 'breakfast dreams') beat('private character dream', 'clue', true, { by: c.id });
+          },
+          'private dream'
+        );
         watch(window, 'tellDream', (h, [c]) => {
           if (phase === 'breakfast dreams') beat('public character dream', 'clue', true, { by: c.id });
         });
@@ -174,6 +179,17 @@ async function main() {
             row.paragraphs = (html.match(/<p(?:\s|>)/g) || []).length - (html.match(/<p class="part"/g) || []).length;
             row.words = plain(html).split(/\s+/).filter(Boolean).length;
             row.omens = row.beats.filter(b => b.group === 'omen' || b.group === 'nature').length;
+            // A nature image inside the player's dream is not a second outdoor omen.
+            // Keep the broader historical `omens` count for checkpoint comparisons.
+            row.morningOmens = row.beats.filter(
+              b => b.group === 'omen' || ['nature omen', 'nature death', 'nature luck'].includes(b.kind)
+            ).length;
+            row.news = row.beats.filter(b => b.group === 'world').length;
+            row.dreams = row.beats.filter(b =>
+              ['player dream', 'private character dream', 'public character dream'].includes(b.kind)
+            ).length;
+            const dreamers = row.beats.filter(b => ['private character dream', 'public character dream'].includes(b.kind)).map(b => b.by);
+            if (new Set(dreamers).size !== dreamers.length) throw Error('A breakfast dream was counted more than once');
             row.optional = row.beats.filter(b => ['omen', 'nature', 'world', 'hazard'].includes(b.group)).length;
             row.clues = row.beats.filter(b => b.group === 'clue').length;
             row.consequences = row.beats.filter(b => b.group === 'consequence').length;
@@ -261,9 +277,16 @@ async function main() {
       words: distribution(rows.map(r => r.words)),
       optional: distribution(rows.map(r => r.optional)),
       omens: distribution(rows.map(r => r.omens)),
+      morningOmens: distribution(rows.map(r => r.morningOmens)),
+      news: distribution(rows.map(r => r.news)),
+      dreams: distribution(rows.map(r => r.dreams)),
       clues: distribution(rows.map(r => r.clues)),
       consequences: distribution(rows.map(r => r.consequences)),
       threeOrMoreOmens: rows.filter(r => r.omens >= 3).length,
+      multipleMorningOmens: rows.filter(r => r.morningOmens >= 2).length,
+      multipleNews: rows.filter(r => r.news >= 2).length,
+      multipleDreams: rows.filter(r => r.dreams >= 2).length,
+      multipleOmensAndNews: rows.filter(r => r.morningOmens >= 2 && r.news >= 2).length,
       fourOrMoreOptional: rows.filter(r => r.optional >= 4).length,
       kinds: rows
         .flatMap(r => r.beats)
@@ -317,6 +340,10 @@ async function main() {
                       words: r.words.mean,
                       optional: r.optional.mean,
                       omens: r.omens.mean,
+                      multipleMorningOmens: r.multipleMorningOmens,
+                      multipleNews: r.multipleNews,
+                      multipleDreams: r.multipleDreams,
+                      multipleOmensAndNews: r.multipleOmensAndNews,
                       threeOrMoreOmens: r.threeOrMoreOmens,
                       fourOrMoreOptional: r.fourOrMoreOptional
                     }

@@ -7,7 +7,7 @@ lists and superseded release plans are removed; they are not another specificati
 
 ## Learning and rule distillation
 
-Neural networks, training and learned gameplay are deferred beyond 29.0.0. The
+Neural networks, training and learned gameplay remain deferred beyond 29.1.0. The
 owner selected equal infrastructure support for every actor: player, individual
 camp members, the cult acting together, and justified supernatural decisions.
 This is not permission to install a training stack or replace production rules.

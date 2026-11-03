@@ -2,7 +2,7 @@
 const Session = (() => {
   const key = 'kutha.expedition',
     languageKey = 'kutha.language',
-    release = '29.0.0',
+    release = '29.1.0',
     maxActions = 20000;
   const messages = __text('messages');
   let journal = null,
@@ -71,7 +71,15 @@ const Session = (() => {
         warn('anotherTab');
         return;
       }
-      const data = { ...journal, lang: LANG, tab: S_ui.tab, seedOpen, check: checkpoint() };
+      const data = {
+        ...journal,
+        lang: LANG,
+        tab: S_ui.tab,
+        seedOpen,
+        playlist: AU.playlist,
+        track: AU.want || trackNow(),
+        check: checkpoint()
+      };
       const raw = JSON.stringify(data);
       localStorage.setItem(key, raw);
       stored = raw;
@@ -184,8 +192,10 @@ const Session = (() => {
     } finally {
       replaying = false;
     }
+    restorePlaylist(data.playlist, data.track);
     show(S_ui.scene);
     paintNotice();
+    save();
     return true;
   }
   function language() {

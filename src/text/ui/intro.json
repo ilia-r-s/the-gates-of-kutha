@@ -60,7 +60,7 @@
           "$template": "Professor Aldous Crane, director of the British expedition to Tell Ibrahim, the ancient city of Kutha, is dead. The Trustees have wired you to take over the season and to close the dig before the dark of the moon, ${seasonDays()[0]} from now."
         },
         {
-          "$template": "Профессор Олдос Крейн, глава британской экспедиции на Телль-Ибрагим — холм, под которым спит древняя Кута, — мёртв. Попечители телеграфируют вам: принять сезон и закрыть раскоп до новолуния. До него ${seasonDays()[1]}."
+          "$template": "Профессор Олдос Крейн, глава британской экспедиции на Телль-Ибрагим — холм, под которым спит древняя Кута, — мёртв. Попечители телеграфируют вам: возглавить экспедицию и закрыть раскоп до новолуния. До него ${seasonDays()[1]}."
         }
       ]
     },
@@ -73,7 +73,7 @@
     },
     "theCodeOfA": {
       "$args": [],
-      "$value": ["The code of a season deals it again, whoever you are.", "Код сезона сдаёт его заново, кем бы вы ни были."]
+      "$value": ["The code of a season deals it again, whoever you are.", "Код сезона позволяет начать его заново, кем бы вы ни были."]
     },
     "theTrusteesWantTheir": {
       "$args": [],

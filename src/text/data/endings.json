@@ -515,7 +515,7 @@
     "$call": "bi",
     "$args": [
       {
-        "$template": "Nobody of the cult is left at large, and still something comes for you in the night, and this time nothing stands between you and it. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}."
+        "$template": "No one from the cult is left at large, and still something comes for you in the night, and this time nothing stands between you and it. In the morning ${who[0]} finds your tent torn open, your cot empty, and ${tr[0]}."
       },
       {
         "$template": "Из секты на свободе не осталось никого — и всё же ночью за вами приходят, и на этот раз между вами и тем, что пришло, никого нет. Утром ${who[1]} находит вашу палатку распоротой, койку — пустой, а ${tr[1]}."
@@ -640,7 +640,7 @@
   "nobodyOfTheCultWasLeft": {
     "$call": "bi",
     "$args": [
-      "Nobody of the cult was left to finish the rite, and it finished itself. It had come too far to need a voice.",
+      "No one from the cult was left to finish the rite, and it finished itself. It had come too far to need a voice.",
       "Из секты не осталось никого, кто довершил бы обряд, — и он довершил себя сам. Он зашёл слишком далеко, чтобы нуждаться в голосе."
     ]
   },
@@ -724,8 +724,8 @@
   "thatSpringNoChildIsBorn": {
     "$call": "bi",
     "$args": [
-      "That spring no child is born alive in the villages along the canal. The midwives hang bronze heads over every door and leave combs and spindles on the thresholds, and in the mornings the combs are gone. The Health Service in Baghdad calls it an epidemic and sends quinine.",
-      "Той весной в деревнях вдоль канала не рождается ни одного живого ребёнка. Повитухи вешают над каждой дверью бронзовые головы и оставляют на порогах гребни и веретёна, а по утрам гребней уже нет. Санитарная служба в Багдаде объявляет эпидемию и присылает хинин."
+      "That spring few children are born alive in the villages along the canal. The midwives hang bronze heads over every door and leave combs and spindles on the thresholds, and in the mornings the combs are gone. The Health Service in Baghdad calls it an epidemic and sends quinine.",
+      "Той весной в деревнях вдоль канала почти не рождается живых детей. Повитухи вешают над каждой дверью бронзовые головы и оставляют на порогах гребни и веретёна, а по утрам гребней уже нет. Санитарная служба в Багдаде объявляет эпидемию и присылает хинин."
     ]
   },
   "sKnifeDoesItsWorkSlowly": {
@@ -894,7 +894,7 @@
   },
   "oneOfThePickmen": ["one of the pickmen", "один из землекопов"],
   "nobodyOfTheCultIsLeft2": [
-    "Nobody of the cult is left at large, and still something comes for you in the night, and finds two of you in the tent.",
+    "No one from the cult is left at large, and still something comes for you in the night, and finds two of you in the tent.",
     "Из секты на свободе не осталось никого — и всё же ночью за вами приходят и находят в палатке двоих."
   ],
   "theyComeForYouInThe2": [

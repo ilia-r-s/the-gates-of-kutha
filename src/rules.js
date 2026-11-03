@@ -349,7 +349,7 @@ const TENOR = {
   heatMax: 1,
   heavy: 0.9,
   told: 0.7,
-  second: 0.3,
+  second: 0.1,
   stirs: { horror: 0.5, rumour: 0.5 },
   soft: { base: 0.6, per: 0.4, min: 0.6, max: 1.4 },
   ramp: [0.7, 0.85, 1, 1, 1.1],
@@ -358,7 +358,8 @@ const TENOR = {
   numb: 0.35,
   feud: 0.4,
   crowd: 0.45,
-  crowdFav: 0.75
+  crowdFav: 0.75,
+  nightCrowd: 0.18
 };
 const RULES = {
   start: {

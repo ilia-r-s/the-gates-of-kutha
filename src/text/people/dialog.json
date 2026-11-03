@@ -215,7 +215,7 @@
     },
     "thereWasNoTrust": {
       "$args": [],
-      "$value": ["There was no trust left between you to lose.", "Терять между вами уже нечего."]
+      "$value": ["There was no trust left between you to lose.", "Доверия между вами и так уже не осталось."]
     },
     "somehowItDoesNot": {
       "$args": [],

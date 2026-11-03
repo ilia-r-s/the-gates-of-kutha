@@ -15,9 +15,11 @@ function dealTenor() {
   };
 }
 const tenorMood = () => (S && S.tenor ? S.tenor.mood : 'uneasy');
-const room = (s = null, used = S.tenor.crowd) => (s && TENOR.moods[S.tenor.mood][s] > 1 ? TENOR.crowdFav : TENOR.crowd) ** used;
+const room = (s = null, used = S.tenor.crowd, decay = s && TENOR.moods[S.tenor.mood][s] > 1 ? TENOR.crowdFav : TENOR.crowd) =>
+  decay ** used;
 // Atmospheric additions share the same crowd formula without spending the
 // separate opportunities for investigation finds and character testimony.
+// Their steeper decay allows rare doubles without crowding ordinary mornings.
 const NIGHT_ATMOSPHERE = Decisions.define({
   id: 'night.atmosphere',
   action: 'deliver-optional-atmosphere',
@@ -25,7 +27,7 @@ const NIGHT_ATMOSPHERE = Decisions.define({
   authority: 'world',
   knowledge: ['already delivered atmospheric passages and required night consequences'],
   consequences: ['optional passage delivered'],
-  probability: baseChance => baseChance * room(null, S.tenor.nightCrowd)
+  probability: baseChance => baseChance * room(null, S.tenor.nightCrowd, TENOR.nightCrowd)
 });
 function nightAtmosphere(baseChance, make) {
   if (!NIGHT_ATMOSPHERE.roll(baseChance)) return '';

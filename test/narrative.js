@@ -2,6 +2,80 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { openNode } = require('./lib/harness');
 
+test('daytime omens retain their observation date and do not report a future noon or invent yesterday', async () => {
+  const { page, errors } = await openNode();
+  try {
+    const result = await page.evaluate(() => {
+      const checked = [
+          ASPECTS.fire.signs[5],
+          ASPECTS.fire.signs[6],
+          ASPECTS.dust.signs[0],
+          ASPECTS.dust.signs[5],
+          ASPECTS.dust.signs[6],
+          ASPECTS.sea.signs[2],
+          ASPECTS.sea.signs[5],
+          ASPECTS.plague.signs[0],
+          ASPECTS.plague.signs[6],
+          ASPECTS.madness.signs[5]
+        ],
+        texts = checked.flatMap(s => s.texts),
+        seen = new Set(),
+        problems = [];
+      let records = 0;
+      for (let seed = 0; seed < 96; seed++) {
+        newGame('Marlowe', 'philologist', false, seed);
+        S.day = 2;
+        for (let n = 0; n < 16; n++) {
+          const count = S.omenLog.length,
+            text = nextOmen();
+          if (!texts.includes(text)) continue;
+          seen.add(text);
+          if (S.omenLog.length > count) {
+            const record = S.omenLog.at(-1);
+            records++;
+            if (record.day !== 2) problems.push('Omen recorded for the wrong day');
+            for (const lang of ['en', 'ru']) {
+              LANG = lang;
+              const dice = [_seed, _words],
+                passage = X(bi(text)),
+                before = X(bookOmens());
+              S.day++;
+              const after = X(bookOmens());
+              S.day--;
+              if (!before.includes(passage) || !after.includes(passage)) problems.push('Notebook changed the recorded observation');
+              if (dice[0] !== _seed || dice[1] !== _words) problems.push('Reading the omen consumed dice');
+            }
+          }
+        }
+      }
+      const passages = ['en', 'ru'].flatMap(lang => {
+        LANG = lang;
+        return [
+          ...checked.flatMap(s => [s.short, s.formula, ...s.texts]),
+          ...EVENTS.filter(e => ['shadows', 'mirage', 'song'].includes(e.id)).map(e => e.text),
+          bi(...TX.events.theShamalBlowsOn()),
+          bi(...TX.events.theDiggersSitBy()),
+          ...SAY.hardest.map(f => bi(...f(CHARS[0], CHARS[1])))
+        ].map(t => ({ lang, text: X(bi(t)) }));
+      });
+      return { problems, records, covered: seen.size, expected: texts.length, passages };
+    });
+    assert.deepEqual(result.problems, []);
+    assert.ok(result.records > 50, 'natural omen selection must exercise the dated notebook');
+    assert.equal(result.covered, result.expected, 'all variants of the reviewed omens were generated');
+    for (const { lang, text } of result.passages) {
+      assert.doesNotMatch(
+        text,
+        /yesterday|noon|midday|afternoon|sunset|dusk|all morning|all day|вчера|полд[её]н|полуд|послеполуд|закат|сумерк|всё утро|весь день/i,
+        `${lang}: ${text}`
+      );
+    }
+    assert.deepEqual(errors, []);
+  } finally {
+    await page.close();
+  }
+});
+
 test('a companion lost in the doom cannot also fetch help at noon', async () => {
   const { page, errors } = await openNode();
   try {

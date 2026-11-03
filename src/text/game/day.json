@@ -68,7 +68,7 @@
     },
     "readTheGroundBefore": {
       "$args": [],
-      "$value": ["Read the ground before the wind and the workmen do", "Прочесть землю, пока её не замёл ветер и не затоптали рабочие"]
+      "$value": ["Read the ground before the wind and the workmen do", "Проверить следы, пока их не замёл ветер и не затоптали рабочие"]
     },
     "tabletsSignsObjectsAnd": {
       "$args": [],
@@ -329,11 +329,11 @@
   },
   "examineTheScene": {
     "$call": "bi",
-    "$args": ["Examine the scene", "Осмотреть место"]
+    "$args": ["Examine the scene", "Изучить место нападения"]
   },
   "searchTheArea": {
     "$call": "bi",
-    "$args": ["Search the area", "Обыскать место"]
+    "$args": ["Search the area", "Обыскать местность"]
   },
   "speakWithI": {
     "$call": "bi",
@@ -434,7 +434,7 @@
         "$js": "\"Searching: \"+LOCS[l].name"
       },
       {
-        "$js": "\"Поиски: \"+ru.loc(l)"
+        "$js": "\"Поиск предметов: \"+ru.loc(l)"
       }
     ]
   },

@@ -22,6 +22,7 @@ is not permission to change gameplay.
 | --- | --- | --- |
 | Do signs help choose actions below? | [Difficulty and nature signs](2026-11-01-balance-nature.md) | `world/nature.js`, `game/below.js`; `test/nature.js`, `sim/nature.js`, `sim/difficulty.js`. Six traceable channels, fallible interpretation; overall win benefit remains unestablished. |
 | How can nights feel less crowded? | [Quieter nights](2026-11-01-night-pacing.md) | `NIGHT_ATMOSPHERE` in `game/tenor.js`; `test/night-pacing.js`, `sim/night-density.js`. Primary clues and required consequences remain. |
+| How are natural translations, scene chronology and rare morning doubles maintained? | [29.1.0: text, pacing and session music](2026-11-02-text-and-pacing.md) | Rechecked bilingual passages and clearer action titles; dated omen regression; separate text/dice proof; morning-density and observer comparisons; playlist persistence. |
 | Which prose changes preserve the voice? | [Bilingual editorial decisions](2026-11-01-editorial.md) | Keyed catalogs, `tools/text-review.js`; `test/narrative.js`, `expressions.js`, bilingual forced/golden captures. Includes approved before/after examples. |
 | How are art, music and interface validated? | [Presentation and persistence](2026-11-01-presentation.md) | `ui/viewpoint.js`, `session.js`, `book.js`; `test/viewpoint.js`, `usability.js`, `pictures.js`; reproducible local art/audio tools. |
 
@@ -32,7 +33,7 @@ is not permission to change gameplay.
 | Can shared decisions preserve the existing game? | [Uniform decision migration](2026-11-01-uniform-decisions.md) | `core/decisions.js`; `sim/framework.js`, `test/decisions.js`. Independent 96-expedition exact proof before separately authorized gameplay changes. |
 | What is implemented for future learning? | [Migration/experiment contracts](2026-11-01-uniform-decisions.md), [future roadmap](../roadmap.md) | `sim/decisions.js`, typed tree adapter and accepted-result replay; `test/decision-policy.js`. No model/training in shipped gameplay. |
 | How does the Mac remain responsive? | [Native macOS workflow](2026-11-01-macos-workflow.md) | `tools/resources.js`, `test/run.js`; `test/resources.js`. Adaptive admission, combined memory budgets and clean incomplete failures. |
-| What passed, and what remains uncertain? | [29.0.0 validation](2026-11-01-validation.md) | Full suite, original-fixture preservation, current release fixtures, actual browser checks and artifact-specific measurements. |
+| What passed, and what remains uncertain? | [29.1.0 release review](2026-11-02-text-and-pacing.md#evidence-and-reproduction), [29.0.0 validation](2026-11-01-validation.md) | Full suite, preserved historical fixtures, separately reviewed current fixtures, actual browser checks and artifact-specific measurements. |
 
 ## Historical mechanics
 

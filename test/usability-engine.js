@@ -186,6 +186,75 @@ test('recorded choices reconstruct complete expeditions and live scene closures 
     return problems;
   }));
 
+test('the saved expedition restores its playlist and phase-appropriate music without either seeded stream', () =>
+  check(() => {
+    const problems = [],
+      storage = new Map();
+    localStorage = {
+      getItem: key => storage.get(key) || null,
+      setItem: (key, value) => storage.set(key, String(value)),
+      removeItem: key => storage.delete(key)
+    };
+    // The Node adapter disables audio; observe the requested track here and
+    // exercise actual audio activation/reloads in usability.js.
+    musicChange = id => {
+      AU.want = id;
+    };
+    Session.init();
+    __T.start(0, false, 4242);
+    const policy = __T.policies.human(__T.rng(4261)),
+      phases = new Set();
+    let laterDay = false;
+    for (let step = 0; step < 1500; step++) {
+      const phase = S.phase;
+      if (!phases.has(phase) || (!laterDay && S.day > 1)) {
+        phases.add(phase);
+        laterDay ||= S.day > 1;
+        Session.save();
+        const playlist = [...AU.playlist],
+          wanted = AU.want || trackNow(),
+          dice = [_seed, _words];
+        // A fresh page has unrelated presentation randomness and no playing track.
+        AU.playlist = [...playlist].reverse();
+        AU.cur = null;
+        AU.want = null;
+        if (!Session.restore()) problems.push('could not restore ' + phase);
+        if (JSON.stringify(AU.playlist) !== JSON.stringify(playlist)) problems.push('playlist changed at ' + phase);
+        if (AU.want !== wanted) problems.push('wrong music at ' + phase + ': ' + AU.want + ' instead of ' + wanted);
+        if (JSON.stringify([_seed, _words]) !== JSON.stringify(dice)) problems.push('music restoration consumed dice');
+      }
+      if (S.phase === 'end') break;
+      const buttons = __T.buttons();
+      if (!buttons.length) break;
+      (policy(buttons) || buttons[0]).click();
+    }
+    if (!laterDay || !phases.has('end')) problems.push('missing later-day or ending coverage');
+    for (const playlist of [
+      undefined,
+      ['deep'],
+      ['bayati', 'bayati', 'bayati', 'bayati', 'bayati'],
+      ['bad', 'river', 'hijaz', 'saba', 'kiln']
+    ]) {
+      const saved = JSON.parse(storage.get('kutha.expedition'));
+      saved.playlist = playlist;
+      storage.set('kutha.expedition', JSON.stringify(saved));
+      const fallback = [...AU.playlist];
+      if (!Session.restore()) problems.push('optional presentation data broke progress');
+      if (JSON.stringify(AU.playlist) !== JSON.stringify(fallback)) problems.push('invalid playlist replaced the valid fallback');
+      const upgraded = JSON.parse(storage.get('kutha.expedition'));
+      if (JSON.stringify(upgraded.playlist) !== JSON.stringify(fallback)) problems.push('fallback playlist was not saved');
+    }
+    for (const track of [undefined, 'unknown', {}, DAY_TRACKS.find(id => !AU.playlist.includes(id))]) {
+      const saved = JSON.parse(storage.get('kutha.expedition'));
+      saved.track = track;
+      storage.set('kutha.expedition', JSON.stringify(saved));
+      const dice = [_seed, _words];
+      if (!Session.restore() || AU.want !== trackNow()) problems.push('invalid or missing track did not use phase fallback');
+      if (JSON.stringify([_seed, _words]) !== JSON.stringify(dice)) problems.push('track fallback consumed dice');
+    }
+    return problems;
+  }));
+
 test('music restores the original Bayati timing and keeps every track step without game dice', () =>
   check(() => {
     const problems = [],

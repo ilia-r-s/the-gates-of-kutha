@@ -142,8 +142,8 @@
     },
     "water": {
       "ok": [
-        "Someone has salted the water in your jar. You find out at the second mouthful, and are sick until noon.",
-        "Воду в вашем кувшине кто-то подсолил. Вы понимаете это со второго глотка и до полудня мучаетесь тошнотой."
+        "Someone has salted the water in your jar. You find out at the second mouthful, and are sick for hours.",
+        "Воду в вашем кувшине кто-то подсолил. Вы понимаете это со второго глотка и несколько часов мучаетесь тошнотой."
       ],
       "foiled": [
         "The water in your jar tastes of salt. You spit it out in time. Someone has been in your tent.",

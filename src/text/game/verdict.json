@@ -61,7 +61,7 @@
           "$template": "“You sent ${w.short} away on less. Not again, Doctor.”"
         },
         {
-          "$template": "«${capS(ru.c(w,\"a\"))} вы отослали и с меньшим. Больше — нет, доктор»."
+          "$template": "«Чтобы отослать ${ru.c(w,\"a\")}, вам хватило и меньших улик. Больше — нет, доктор»."
         }
       ]
     },

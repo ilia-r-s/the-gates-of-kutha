@@ -4,6 +4,35 @@ Every build of _The Gates of Kutha_, newest first. The build number is set in `p
 notebook. The single workflow tests pull requests and builds pushed to `main`; deployment is restricted to `main` non-PR events. Builds before
 26.1.0 came before this repository.
 
+## 29.1.0 — 2026-11-03
+
+**Words in context.** Reviewed English and Russian prose against the scenes that deliver it. Morning signs no
+longer describe an already-observed noon or afternoon, or move today's event to yesterday. Their notebook labels
+and tablet formulas agree with the observations. Removed unsupported timing from morning grief, weather and
+gossip; corrected Russian grammar, idioms and interpolated names, and brought recollections into line with the
+scenes they recall. A quiet night no longer denies dreams or sabotage. The Russian actions are now
+«Изучить место нападения» and «Обыскать местность». The project guideline puts spirit, voice and natural reading
+ahead of literal translation, while preserving consequential facts, clues and uncertainty.
+
+**More room in the morning.** Additional omen/nature passages and a second news event have lower chances;
+rare doubles remain possible. Primary dawn clues, testimony, dreams and required consequences keep their
+opportunities. In matched 1,024-expedition samples, multiple outdoor passages fell from 20.33% to 6.32% of
+displayed mornings, and double news from 2.60% to 1.05%. The [review](docs/research/2026-11-02-text-and-pacing.md)
+gives denominators, outcome checks and limitations. This is pacing adjustment, not a new cult strategy.
+
+**The same session music.** The five daytime tracks and requested current track now travel with the expedition's
+existing local save. Reloading or reopening restores the selection after replay without consuming either seeded
+stream. Playback starts afresh when audio becomes available. Invalid or missing music fields have a validated
+fallback. The pacing change makes 29.0.0 expedition saves incompatible with 29.1.0; the existing edition notice
+explains this. Language, sound and viewpoint preferences remain independent.
+
+**Verification.** Editorial/music preservation and intentional pacing differences have separate fixed-seed proofs.
+The follow-up chronology review preserves all actions, non-text state and both streams in 48 regression seasons.
+New 29.1.0 fixtures retain all original sample counts; published 29.0.0 and recovered original fixtures are
+unchanged and protected against recording. The morning-density diagnostic counts each dream once. Browser
+coverage includes closing every expedition tab and reopening it with the same music. README images were
+recaptured from genuine default-view play. See the [release evidence](docs/research/2026-11-02-text-and-pacing.md#evidence-and-reproduction).
+
 ## 29.0.0 — 2026-11-01
 
 **The scene and the notebook.** Illustration, story and choices lead the screen. Map, people, evidence, omens, kit

@@ -2,8 +2,9 @@
 
 This report records its named development checkpoints. Later actor-knowledge and
 object-reaction changes are separate; consult [current rules](../rules.md) and
-[release validation](2026-11-01-validation.md) for the final implementation and
-checks. Preserve the reported artifacts, seeds and denominators when reproducing
+[29.0.0 validation](2026-11-01-validation.md) for that release's implementation and
+checks. The subsequent [29.1.0 pacing and text review](2026-11-02-text-and-pacing.md)
+has separate measurements. Preserve the reported artifacts, seeds and denominators when reproducing
 these measurements; a current-build rerun is a new measurement.
 
 The owner asked for substantially fewer crowded nights and a quieter, genuine

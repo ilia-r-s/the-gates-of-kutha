@@ -1,6 +1,6 @@
-# Current rules companion — 29.0.0
+# Current rules companion — 29.1.0
 
-This describes 29.0.0's systems and
+This describes 29.1.0's systems and
 their knowledge boundaries. The complete tuning table is `src/rules.js`, browsable
 with `node tools/show.js RULES.night.target`, for example. The older
 [mechanics record](research/2026-10-25-mechanics-27.md) remains a historical snapshot;
@@ -187,34 +187,44 @@ that simplifies sign framing without changing the clues or their reliability.
 ## Quieter nights
 
 Additional morning omens and nature images share a separate atmospheric count,
-using the existing diminishing crowd formula. The primary dawn clue keeps its
+using the shared diminishing crowd formula with a decay of `TENOR.nightCrowd`
+(0.18 per delivered passage or burden unit). Investigation keeps its existing
+0.45 decay, or 0.75 for the favoured strand. The primary dawn clue keeps its
 original opportunity and then spends one unit; already delivered night events
 and grief add a burden before optional extras are considered. Only delivered
-passages spend further units. This makes stacked images rare without a hard cap.
+passages spend further units. The secondary news multiplier is `TENOR.second`
+(0.1). The ordinary chance bounds still apply: doubles remain possible, with no
+hard cap. An omen within a world event remains part of that event.
 
 Finds, character testimony and ordinary social opportunities retain their separate
 budget. Deaths, physical traces, guest/deed consequences and urgent rite warnings
-are still shown. A prototype that crowded out those clue opportunities was
-rejected. In the selected 2,000-expedition sample, three-or-more-omen mornings fell
-from 28.74% to 2.35%; the comparable puzzle check retained 24% patron identification.
-See the [night-pacing report](research/2026-11-01-night-pacing.md) for denominators,
-other policies and limits. The README now shows a complete genuine first night
-with one omen, including the actual attack aftermath and trace.
+are still shown. The owner selected lower chances with rare doubles on 2 November.
+In matched 1,024-expedition samples, multiple outdoor omen/nature passages fell
+from 689/3,389 displayed mornings to 216/3,417; double news fell from 88 to 36.
+See the [current review](research/2026-11-02-text-and-pacing.md) for definitions,
+other policies and limits, and the [earlier pacing report](research/2026-11-01-night-pacing.md)
+for the separate initial change and rejected prototypes.
 
 ## Resuming and reproducibility
 
 One current expedition is saved locally after completed actions. A validated
 command journal restores closures, both dice streams and the exact scene/state;
-language is preserved independently. Incompatible or corrupt saves fail visibly.
+the expedition's five-track playlist and requested track are saved with it.
+Playback restarts that track after audio becomes available; its playback position
+is not saved. A same-edition save without music data receives a valid playlist on first
+restore. Language is preserved independently. Incompatible or corrupt saves fail visibly.
 A stale tab cannot overwrite a newer expedition. A deliberate new expedition
 is available in the notebook. No save synchronization or server is involved.
 
-29.0.0 deliberately changes setup and gameplay dice order, including new
+29.0.0 deliberately changed setup and gameplay dice order, including new
 knowledge/sign/influence decisions and removal of the old discarded face roll.
-The same code is reproducible within this version, but is not a promise to
-reproduce a 28.5.2 expedition. Original fixtures stay intact; 29 expectations
-are separate and reviewed. Isolated presentation/cache and hazard cleanup are
-checked against the original 48-season fingerprints.
+29.1.0 separately reduces atmospheric/news probabilities. A season code is reproducible
+within this edition; it does not promise the same expedition as 29.0.0 or 28.5.2.
+The existing save-version guard rejects a 29.0.0 command journal with a visible explanation.
+Published original and 29.0.0 fixtures stay intact; reviewed 29.1.0 expectations are separate.
+The editorial/music preservation proof is independent of the pacing comparison; the
+follow-up chronology fixes preserve the selected actions, non-text state and both streams
+in all 48 regression seasons. See the [release review](research/2026-11-02-text-and-pacing.md).
 
 Neural networks and learned actors are explicitly deferred. The owner-authorized
 uniform framework now names 58 decisions and shares action/resolution/effect

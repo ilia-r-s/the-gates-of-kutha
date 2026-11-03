@@ -254,15 +254,15 @@
           "texts": [
             "Smoke is rising from the barley by the canal, thin and steady, though nothing there is burning.",
             "The herdsmen walked through the smoking stubble this morning and found the ground cold and every stalk unburnt.",
-            "All morning a field west of the tell smokes like a dying fire. When the boys run out to it, there is nothing to put out."
+            "A field west of the tell smokes like a dying fire. When the boys run out to it, there is nothing to put out."
           ]
         },
         {
           "short": "the sun rises the colour of blood",
-          "formula": "the sun comes up red as blood and is dim at noon",
+          "formula": "the sun rises red as blood and gives little light",
           "texts": [
-            "The sun came up red as a wound this morning, and stayed red until noon.",
-            "At dawn the sun is the colour of blood, and at noon you can look straight at it.",
+            "The sun came up red as a wound this morning. Its light is strangely dim.",
+            "The sun rose the colour of blood. You can look straight at its dull red disc.",
             "The men will not start work: the sun rose bloody, and the old ones say a day begun so is a day for burying."
           ]
         },
@@ -291,7 +291,7 @@
           "formula": "the birds of the night gather and turn their faces to the mountain",
           "texts": [
             "Owls have come to roost along Trench B, dozens of them, silent, all facing the mound.",
-            "At dusk the owls come again, more of them than yesterday, and settle in a line along the spoil heap, every face turned to the mound.",
+            "Owls crowd the spoil heap in a silent line, every face turned to the mound.",
             "The pickmen count forty owls on the edge of the trench this morning. Not one of them looks at the men. They are all looking at the mound."
           ]
         },
@@ -332,21 +332,21 @@
           ]
         },
         {
-          "short": "no bird sings at noon",
-          "formula": "at the height of the day no bird is heard in the land",
+          "short": "no bird sings in daylight",
+          "formula": "in the light of the sun no bird is heard in the land",
           "texts": [
-            "At noon every bird on the tell fell silent at once, the sparrows, the doves, the crows, and stayed silent for an hour.",
-            "The noon silence again: not a bird, not an insect. The men put down their tools without being told.",
-            "The birds in the palms by the canal stopped singing at midday, all together, as if a door had closed on them."
+            "Every bird on the tell falls silent at once, the sparrows, the doves, the crows. The silence holds.",
+            "Silence falls over the tell: not a bird, not an insect. The men put down their tools without being told.",
+            "The birds in the palms by the canal stop singing, all together, as if a door has closed on them."
           ]
         },
         {
           "short": "a shadow falls where no one stands",
           "formula": "a shadow is seen upon the wall, and no one stands before it",
           "texts": [
-            "In the afternoon light a shadow lay across the wall of the dig-house, the shadow of a tall man, and nobody stood there.",
+            "A shadow lies across the sunlit wall of the dig-house, the shadow of a tall man, and nobody stands there.",
             "The pickmen point at the spoil heap: a shadow lies on it, long and thin, and nothing stands between it and the sun.",
-            "At sunset there were nine shadows by the trench and eight men."
+            "There are nine shadows by the trench and eight men."
           ]
         },
         {
@@ -392,7 +392,7 @@
           "formula": "the four winds rise together and pull the house four ways",
           "texts": [
             "A wind blew from all four quarters at once, and the tents strained four ways.",
-            "All morning the wind blows from every side at once, and the dust devils on the tell spin both ways.",
+            "The wind blows from every side at once, and the dust devils on the tell spin both ways.",
             "The wind came from the north and the south and the east and the west together, and the tent ropes sang four notes."
           ]
         },
@@ -418,9 +418,9 @@
           "short": "the canal runs backwards",
           "formula": "the river turns and runs back towards its source",
           "texts": [
-            "For an hour this morning the canal ran backwards, north against the fall of the land, and then went on as before.",
+            "The canal runs backwards, north against the fall of the land, and then goes on as before.",
             "The boatmen say the current turned in the night and carried their boats back upstream to where they started.",
-            "Reeds and rubbish drift upstream past the camp all afternoon. The water is running back to where it came from."
+            "Reeds and rubbish drift upstream past the camp. The water is running back to where it came from."
           ]
         },
         {
@@ -540,7 +540,7 @@
           "texts": [
             "Flies came down on the camp in the night, so thick that the tents are black with them, and not one of them makes a sound.",
             "The cook serves breakfast under a cloth: the flies are on everything this morning, thick as soot, and they will not move for a hand.",
-            "A black cloud of flies hangs over Trench B all morning. The men work inside it, and come out with flies in their hair and their mouths."
+            "A black cloud of flies hangs over Trench B. The men work inside it, and come out with flies in their hair and their mouths."
           ]
         },
         {
@@ -592,7 +592,7 @@
           "short": "dark spots come up on the skin overnight",
           "formula": "black spots come out upon a man’s hands, and he does not sicken",
           "texts": [
-            "Three of the pickmen woke with black spots on their hands, each the size of a coin. By noon the spots had gone.",
+            "Three of the pickmen woke with black spots on their hands, each the size of a coin. The spots fade as they show you, leaving the skin unmarked.",
             "Half the village has come out in spots overnight, dark as bruises, on the backs of the hands. Nobody feels ill.",
             "The waterboy holds out his arms to show you: they are speckled black from wrist to elbow, and he says it does not hurt."
           ]
@@ -670,7 +670,7 @@
           "short": "people forget their own names",
           "formula": "a man forgets his own name and asks it of his neighbour",
           "texts": [
-            "At roll-call three of the pickmen could not say their own names. By noon they had them back, and did not remember losing them.",
+            "At roll-call three of the pickmen could not say their own names. A moment later they had them back, and did not remember losing them.",
             "A woman in the village has forgotten her children’s names, and they hers. They sit together in the doorway, polite as strangers.",
             "The waterboy came to your tent this morning and asked you, very politely, who he was."
           ]
@@ -1080,7 +1080,7 @@
         "shadows": 2
       },
       "text": {
-        "$template": "A mirage stands over the desert all morning: a city of seven tiers, its gates open."
+        "$template": "A mirage stands over the desert: a city of seven tiers, its gates open."
       }
     },
     {
@@ -1181,7 +1181,7 @@
       "id": "shadows",
       "strand": "dread",
       "text": {
-        "$template": "At noon, for the space of a breath, E-meslam throws seven shadows, one from each of its stages, and all of them point the same way."
+        "$template": "For the space of a breath, E-meslam throws seven shadows, one from each of its stages, and all of them point the same way."
       }
     },
     {
@@ -1195,7 +1195,7 @@
       "id": "song",
       "strand": "talk",
       "text": {
-        "$template": "The diggers have made up a song about the camp, and they sing it in the trench all morning."
+        "$template": "The diggers have made up a song about the camp, and they sing it as they start work in the trench."
       }
     }
   ],

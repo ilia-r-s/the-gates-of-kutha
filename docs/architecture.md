@@ -5,11 +5,12 @@ whole program, then follow the relevant section instead of reading the generated
 HTML. The game is one local, bilingual, seeded narrative simulation. It has no
 server, runtime catalog loader or external game engine.
 
-**Status:** the 29.0.0 gameplay work includes actor knowledge, camp influence,
-scene-first presentation, automatic resume and quieter nights. The uniform
-decision framework and local experiment/replay tools are implemented without
-changing the selected gameplay. See the [future roadmap](roadmap.md)
-and [verification evidence](research/2026-11-01-validation.md). Neural inference,
+**Status:** 29.1.0 builds on 29.0.0's actor knowledge, camp influence,
+scene-first presentation and automatic resume, with contextual text repairs,
+rarer additional morning passages and saved session music. The uniform decision
+framework's independent preservation proof precedes the separately authorized gameplay changes.
+See the [future roadmap](roadmap.md), [29.0.0 verification](research/2026-11-01-validation.md)
+and [29.1.0 review](research/2026-11-02-text-and-pacing.md). Neural inference,
 training and adoption of learned behavior remain deferred.
 
 ## Reading routes
@@ -88,7 +89,10 @@ state. A complete replay check therefore compares more than `S` alone.
 5. **Dawn and breakfast.** Day/time advance, temporary pressure eases, consequences
    and evidence are delivered, then optional camp voices and news occur. A death,
    physical trace, guest/deed consequence or urgent rite warning must not vanish
-   merely because optional atmosphere is crowded.
+   merely because optional atmosphere is crowded. `NIGHT_ATMOSPHERE` uses the
+   shared `room()` decay formula with its own count and `TENOR.nightCrowd` factor;
+   investigation and testimony keep their separate, less restrictive budget.
+   `TENOR.second` controls the extra world-news opportunity, without a hard cap.
 6. **Finale and ending.** The date or rite can force the descent. Companions,
    equipment, acquired clues and chosen approaches affect real encounters and
    the final attempt. Endings and the debrief explain actual recorded outcomes;
@@ -282,12 +286,19 @@ objects. The rejected full-height activity renderer is removed.
 Visible prose lives in keyed `src/text/**/*.json` catalogs. `__text` is expanded
 at build time in the original lexical scope. `bi`/translated tables preserve both
 languages so switching does not replay an action. Russian wording never assigns
-the player a sex. Dynamic translation caches reset between expeditions.
+the player a sex. Translate for spirit, character voice and natural reading while
+preserving consequential facts, uncertainty and clues. Trace the actual delivery context:
+`dawn` advances the day before `theMorning` calls `nextOmen`, which also serves
+daytime searches and news. `omenLog.day` records when the clue was encountered;
+`bookOmens` retains that date and passage. A first-light observation cannot already
+know noon's outcome. Keep its short label and tablet formula consistent without
+inventing yesterday's event or a witness; genuine preceding-night reports remain valid.
+Dynamic translation caches reset between expeditions.
 
 SVG portraits/scenes are code-native. `artFor` derives a presentation description;
 audio scheduling and mood mapping are separate. Neither changes world state or
-seeded randomness. README images come from actual seeded routes in
-`test/fixtures/pictures-29.0.0.json`, photographed by `test/pictures.js`; never
+seeded randomness. README images come from actual seeded play using
+the retained `test/fixtures/pictures-29.0.0.json` routes, recaptured for 29.1.0 by `test/pictures.js`; never
 fabricate a quieter outcome by deleting event text from a capture. Reply expression
 palettes follow the current utterance's explicit intent, independent of its
 greeting. Serious refusals cannot become cheerful merely through high trust;
@@ -309,13 +320,23 @@ link does not expose code diagnostics or block ordinary play.
 `Session` saves one current expedition as start parameters plus accepted player
 commands. Replay reconstructs scene closures and shared references by running
 those commands through the real game. A checkpoint includes normalized state,
-scene and both RNG positions. Language/notebook preferences are restored too.
+scene and both RNG positions. Language/notebook preferences and the five-track
+session playlist and requested track are restored too. Audio validates the
+optional music data and restores the track after replay, without
+replaying sound cues or consuming either seeded stream. A same-edition save without a
+playlist, or one with invalid playlist data, keeps the fresh page's valid selection
+and saves it with the expedition. If the requested track is missing or invalid,
+audio selects it from the current day and phase. Playback restarts the track rather than saving
+an audio-clock position; the global music/effect toggles remain local preferences.
 
 Only the outer completed action is appended. Replay suppresses presentation
 events and does not append another journal. Invalid schemas, incompatible/corrupt
 saves, unavailable storage and stale tabs have explicit handling. A stale tab
 cannot overwrite a newer expedition. Do not replace this with a raw JSON dump of
 `S`: callbacks and other runtime state would be lost.
+The release identifier is 29.1.0. The changed pacing means 29.0.0 command journals
+are incompatible and receive the existing other-edition notice. Music-field fallback
+does not bypass this version guard or checkpoint validation.
 
 For later experimental policies, replay must use the accepted policy result,
 never query the model again. Decision schemas and build/rule identity belong in
@@ -328,7 +349,7 @@ experimental-policy save format.
 ## Experiments, learning and distilled rules
 
 The owner requires equal architectural support for all actors. Models are not
-part of normal 29.0.0 gameplay. Prepare interchangeable policy boundaries rather
+part of normal gameplay. Prepare interchangeable policy boundaries rather
 than adding a special cult-only engine or a training dependency to the game.
 
 The implemented local loop is: capture an actor's legitimate observation and legal choices;
@@ -496,4 +517,4 @@ correctness and required coverage. Keep detailed raw diagnostics in ignored
 `.local/`, durable checks in `test/`/`sim/`, and concise findings in indexed docs.
 Do not introduce repeated builds/browser launches, duplicate state or giant
 unindexed transcripts. Publication requires an explicit request; the owner has
-authorized the 29.0.0 release after its agreed work, review and final checks.
+authorized the 29.1.0 release after logical corrections, documentation and final checks.

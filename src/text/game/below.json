@@ -4,14 +4,14 @@
       "$args": [],
       "$value": [
         "The bread tastes of ash, and the water of nothing at all. For a moment you know the power below the way its servants know it.",
-        "Хлеб отдаёт золой, а вода ничем. На миг вы знаете силу внизу так, как знают её слуги."
+        "Хлеб отдаёт золой, а у воды нет вкуса. На миг вы знаете силу внизу так, как знают её слуги."
       ]
     },
     "theBreadTastesOf2": {
       "$args": [],
       "$value": [
         "The bread tastes of ash, and the water of nothing at all. For a moment you almost know something, and then it is gone.",
-        "Хлеб отдаёт золой, а вода ничем. На миг вы почти что-то понимаете — и всё ускользает."
+        "Хлеб отдаёт золой, а у воды нет вкуса. На миг вы почти что-то понимаете — и всё ускользает."
       ]
     },
     "youAnswerTheVoice": {
@@ -530,8 +530,8 @@
     "youLitThePower": {
       "$args": [],
       "$value": [
-        "you lit the power’s own passage with an electric torch, and it drew back",
-        "вы осветили электрическим фонариком проход, сотворённый самой силой, и оно отступило"
+        "you lit the power’s own passage with an electric torch, and whatever was inside drew back",
+        "вы осветили электрическим фонариком проход, сотворённый самой силой, и то, что было внутри, отступило"
       ]
     },
     "theTorchFlickersAnd": {
@@ -659,12 +659,15 @@
       "$args": [],
       "$value": [
         "The flame goes out with a sound like a held breath let go, and the statue’s shadow goes out with it.",
-        "Пламя гаснет со звуком отпущенного вдоха, и вместе с ним гаснет тень статуи."
+        "Пламя гаснет со звуком долгого выдоха, и вместе с ним гаснет тень статуи."
       ]
     },
     "youPutOutThe": {
       "$args": [],
-      "$value": ["you put out the brazier below, and its shadow with it", "вы погасили жаровню внизу, а с ней и её тень"]
+      "$value": [
+        "you put out the brazier below, and the statue’s shadow vanished with the flame",
+        "вы погасили жаровню внизу, и вместе с пламенем исчезла тень статуи"
+      ]
     },
     "theWaterTurnsTo": {
       "$args": [],
@@ -750,7 +753,10 @@
     },
     "youLeftAGift2": {
       "$args": [],
-      "$value": ["you left a gift in the cradle below, and it was given back", "вы оставили дар в колыбели внизу, и его вернули"]
+      "$value": [
+        "you left a gift in the cradle below, and something tugged at your coat",
+        "вы оставили дар в колыбели внизу, и что-то потянуло вас за пальто"
+      ]
     },
     "thereIsNothingIn": {
       "$args": [],

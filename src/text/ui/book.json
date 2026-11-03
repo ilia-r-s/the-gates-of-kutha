@@ -36,7 +36,7 @@
       "$args": [],
       "$value": [
         "An attack in the night usually leaves a trace at the scene. Examine a scene the next day to test it.",
-        "Ночное нападение обычно оставляет на месте след. Осмотрите место на следующий день, чтобы его проверить."
+        "Ночное нападение обычно оставляет на месте след. На следующий день выберите «Изучить место нападения», чтобы его проверить."
       ]
     },
     "askPeopleWhereThey": {
@@ -102,7 +102,7 @@
       "$args": ["d", "c"],
       "$value": [
         {
-          "$template": "(said otherwise on day ${d}, and came clean of it)"
+          "$template": "(said otherwise on day ${d}, and admitted the lie)"
         },
         {
           "$template": "(в день ${d} ${ru.gs(c,\"говорил\",\"говорила\")} иное — и ${ru.gs(c,\"сам признался\",\"сама призналась\")} во лжи)"
@@ -228,7 +228,7 @@
       "$args": [],
       "$value": [
         "· given on the title screen, this code deals the same season again",
-        "· введённый на титульном экране, этот код сдаст тот же сезон заново"
+        "· введённый на титульном экране, этот код позволит заново начать тот же сезон"
       ]
     },
     "aCharmHiddenIn": {
@@ -607,7 +607,7 @@
   },
   "nothingYetSearchTheSite": {
     "$call": "bi",
-    "$args": ["Nothing yet. Search the site.", "Пока ничего. Обыщите раскоп."]
+    "$args": ["Nothing yet. Search the site.", "Пока ничего. Ищите предметы и таблички на раскопе."]
   },
   "tabletFragments": {
     "$call": "bi",
@@ -627,7 +627,7 @@
   },
   "searched": {
     "$call": "bi",
-    "$args": ["Searched", "Обыскано"]
+    "$args": ["Searched", "Поиски предметов"]
   },
   "TRUST_SAY": {
     "0": ["reserved", "сдержанно"],

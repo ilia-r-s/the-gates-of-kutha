@@ -7,7 +7,7 @@
           "$template": "${c.short} tells you plainly what ${c.p} thinks of your trench sections, which is not much."
         },
         {
-          "$template": "${ru.c(c)} прямо говорит, что думает о ваших разрезах траншеи, — а думает ${ru.gs(c,\"он\",\"она\")} о них немного."
+          "$template": "${ru.c(c)} прямо говорит, что думает о ваших разрезах траншеи, — и невысокого ${ru.gs(c,\"он\",\"она\")} о них мнения."
         }
       ]
     },

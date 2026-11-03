@@ -231,7 +231,8 @@ reuse of this baseline result.
 ## Separate 29.0.0 expectations and reviewed differences
 
 The original files in `test/golden/` and `test/fixtures/seasons.json` are unchanged.
-Current expectations live under their respective `29.0.0/` directories. Recording
+That release's expectations live under their respective `29.0.0/` directories.
+The later [29.1.0 review](2026-11-02-text-and-pacing.md) preserves them and records a separate set. Recording
 with the original selector is rejected. Both `test/seeds.js` and `test/parity.js`
 accept `--page=<artifact> --baseline=original`; golden/forced tests accept the same
 selectors. Against the preserved 28.5.2 artifact, all 48 original fingerprints,

@@ -18,7 +18,7 @@
           "$template": "${c.short} says it lightly, and does not quite meet your eye."
         },
         {
-          "$template": "${ru.c(c)} говорит это небрежно — и не вполне смотрит вам в глаза."
+          "$template": "${ru.c(c)} говорит это небрежно — и смотрит чуть мимо вас."
         }
       ]
     },

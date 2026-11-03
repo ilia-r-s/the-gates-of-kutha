@@ -14,16 +14,13 @@
     "theDiggersSitBy": {
       "$args": [],
       "$value": [
-        "The diggers sit by their tents with their arms folded, and the trenches stand empty all day.",
-        "Землекопы сидят у своих палаток, скрестив руки, и траншеи весь день пустуют."
+        "The diggers sit by their tents with their arms folded, and the trenches stand empty.",
+        "Землекопы сидят у своих палаток, скрестив руки, и траншеи пустуют."
       ]
     },
     "theShamalBlowsOn": {
       "$args": [],
-      "$value": [
-        "The shamal blows on. By noon you cannot see the tell from the tents.",
-        "Шамаль не стихает. К полудню из лагеря уже не видно холма."
-      ]
+      "$value": ["The shamal blows on. You cannot see the tell from the tents.", "Шамаль не стихает. Из лагеря не видно холма."]
     },
     "onlyToday": {
       "$args": [],
@@ -173,7 +170,10 @@
     },
     "andUnderTheParaffin": {
       "$args": [],
-      "$value": ["And under the paraffin, a flask of brandy with no name on it.", "А под керосином — фляжка бренди без имени владельца."]
+      "$value": [
+        "And under the paraffin tins, a flask of brandy with no name on it.",
+        "А под жестянками с керосином — фляжка бренди без имени владельца."
+      ]
     },
     "whenHeHasGone": {
       "$args": [],
@@ -244,6 +244,6 @@
   },
   "itBlowsOverByNoon": {
     "$call": "bi",
-    "$args": ["It blows over by noon.", "К полудню всё утихает."]
+    "$args": ["It soon blows over.", "Вскоре всё утихает."]
   }
 }

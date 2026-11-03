@@ -1,11 +1,13 @@
 # Developing The Gates of Kutha
 
-The current release is **29.0.0**, developed from the single-commit
+The current release is **29.1.0**, following **29.0.0** and the single-commit
 **28.5.2 baseline** on `main`. The source was recovered from **28.5.1**,
 first reproducing the preserved HTML byte for byte. Subsequent authorized
 cleanup preserves behavior and seeded replays while allowing different HTML bytes. Intentional 29 gameplay changes
 have separate versioned fixtures; original recordings remain historical evidence. [The recovery record](docs/recovery.md)
 documents both milestones. The build reads editable source, catalogs and package metadata; it needs no reference HTML.
+The [29.1.0 review](docs/research/2026-11-02-text-and-pacing.md) records the text/context corrections,
+separately measured morning pacing and session playlist persistence.
 
 ## Setup
 
@@ -39,6 +41,8 @@ trigger system crash dialogs. The harness blocks that known failure before
 starting Chrome. Run browser checks through an approved unsandboxed process;
 `KUTHA_BROWSER_WS` lets the runner and standalone checks reuse its isolated test
 server. The runner does not close a borrowed server. Keep Node checks sandboxed.
+The sandbox also blocks connections to the server's local WebSocket, so browser clients must use the approved
+unsandboxed process too.
 
 ```sh
 node build.js --check                  # compile in memory; write nothing
@@ -123,8 +127,15 @@ Most values are ordinary JSON. Tagged values preserve expressions that need thei
 | `{"$call": "bi", "$args": ["Hello", "Здравствуйте"]}` | Bilingual call; `oneOf` is also supported. |
 | `{"$js": "expression"}` | Expression or factory needing lexical scope. |
 
-Catalogs are trusted source templates. Preserve logic identifiers and expressions during prose edits. Keep both
-languages valid. `TX.<namespace>.<key>` is the runtime API, initialized in the recovered order. Compiler, text expansion,
+Catalogs are trusted source templates. Preserve logic identifiers and expressions during prose edits. Translate for
+the spirit, character voice and natural reading, not literal correspondence: wording and literal meaning may differ
+between languages. Preserve consequential facts, clues, uncertainty and choice stakes. Check complete rendered
+sentences, especially Russian cases and agreement around interpolated names and objects; never assign the player a sex.
+Trace delivery through every caller: `nextOmen` is used at dawn, in news and during daytime searches, while its
+passage is later quoted in `bookOmens`. Keep the observation, recorded day, short label and tablet formula consistent.
+Remove unsupported clock claims instead of inventing an earlier day or a reporting witness. A genuine night report
+may refer to the preceding night. `test/narrative.js` checks the repaired omen families and their dated notebook entries.
+`TX.<namespace>.<key>` is the runtime API, initialized in the recovered order. Compiler, text expansion,
 audit and symbol inspection share `tools/syntax.js` rather than maintaining independent parsers or walkers.
 
 ## Tests and performance
@@ -175,9 +186,9 @@ Golden transcripts, forced captures and `test/fixtures/seasons.json` were record
 Never rewrite them to pass a cleanup regression. `node test/golden.js dump --lang=ru --out=.local/transcript.json`
 saves raw captures for diagnosis. Normal tests never write fixtures. `test/replay.js` reproduces a failing season code.
 
-`test/lib/baselines.js` selects the current 29 fixture directories or the immutable original set. Golden/forced
-commands accept `--baseline=original`; `KUTHA_BASELINE=original` selects it for seed/parity checks against a preserved
-original artifact. Recording into the original set is refused. For an authorized behavioral release,
+`test/lib/baselines.js` selects `29.1.0/`, the published `29.0.0/` set or the immutable original set. Golden/forced
+commands accept `--baseline=original` or `--baseline=29.0.0`; `KUTHA_BASELINE` selects the same sets for seed/parity
+checks against the matching preserved artifact. Recording into either published historical set is refused. For an authorized behavioral release,
 `node test/baselines.js --original=<preserved-28.html> --file=<candidate.html> --out=.local/review/differences.json --write`
 first verifies all original fingerprints independently, then records the new set and reports first choice/die
 differences and changed state fields. Inspect that report; a different hash alone is not an explanation.
@@ -189,7 +200,7 @@ npm run pictures
 node test/pictures.js --only=talk,tablet
 ```
 
-The script replays fixed, ordinary player choices in `test/fixtures/pictures-29.0.0.json`, using Chrome and local fonts.
+The 29.1.0 images reuse the verified ordinary-choice routes in `test/fixtures/pictures-29.0.0.json`, using Chrome and local fonts.
 The original routes remain in `test/fixtures/pictures.json`; `--fixture=<path>` selects another preserved set.
 It verifies each scene and expression, then photographs complete artwork, dialogue, decisions or notebook cards at
 2× resolution. Crops omit the HUD and unrelated panels; the dawn image keeps one complete chapter, and the notebook
@@ -215,7 +226,10 @@ The exact paired-Bernoulli method requires one independent focal observation per
 trials and effective alpha at least 10⁻¹². Other observations retain season-clustered inference. See the
 [rare-behavior report](docs/research/2026-11-01-rare-cult-behaviors.md) for declared seeds, sample counts and remaining gaps.
 `sim/night-density.js` measures delivered morning material, including normal and busy nights; its paired method and
-selected atmospheric budget are documented in the [night-pacing report](docs/research/2026-11-01-night-pacing.md).
+selected atmospheric budget are documented in the [current text/pacing review](docs/research/2026-11-02-text-and-pacing.md).
+`morningOmens`, `news` and `dreams` distinguish outdoor passages, world events and actual dream reports. A private
+dream is counted once, although its recording path calls the shared public-testimony helper. The older `omens`
+field also includes nature imagery embedded in dreams; retain that distinction when comparing historical reports.
 
 `node tools/presentation-review.js` creates labelled art/music proposals and real-play layout captures under
 `.local/review/`; see the [presentation review](docs/research/2026-11-01-presentation.md). It never modifies production assets.
@@ -257,4 +271,4 @@ the duplicate rulebook and obsolete plans/reviews have been removed. Current num
 29 changes explained in [the current rules companion](docs/rules.md). Earlier [research](docs/research/README.md)
 retains its measured artifacts and limitations; completed plans were consolidated into current rules, research and
 the [future roadmap](docs/roadmap.md). Neural networks and learned actors remain deferred. Committing, pushing,
-deployment and publication require an explicit request; the owner has authorized the checked 29.0.0 release.
+deployment and publication require an explicit request; the owner has authorized the checked 29.1.0 release.

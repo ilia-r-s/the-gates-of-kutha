@@ -145,7 +145,7 @@
           "$template": "<p>In the small hours the dogs start up all along the lines, and someone runs past your tent and away into the dark. ${h.short} sits up, and you hold her until it is light.</p>"
         },
         {
-          "$template": "<p>Под утро по всему лагерю заходятся собаки, и кто-то пробегает мимо вашей палатки и исчезает в темноте. ${ru.c(h)} садится на койке, и вы держите её в руках до самого рассвета.</p>"
+          "$template": "<p>Под утро по всему лагерю заходятся собаки, и кто-то пробегает мимо вашей палатки и исчезает в темноте. ${ru.c(h)} садится на койке, и вы обнимаете её и не отпускаете до самого рассвета.</p>"
         }
       ]
     },
